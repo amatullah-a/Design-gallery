@@ -1,0 +1,2604 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>School Calendar - Mount Sackville Secondary School</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- React 18 & ReactDOM 18 -->
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+  
+  <!-- Babel for JSX -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <style>
+    body {
+      font-family: 'Work Sans', system-ui, -apple-system, sans-serif;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    @keyframes scaleUp {
+      from { opacity: 0; transform: scale(0.96) translateY(6px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+    .animate-fadeIn {
+      animation: fadeIn 0.18s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    .animate-scaleUp {
+      animation: scaleUp 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    @media print {
+      body { background: white !important; color: black !important; }
+      .print\:hidden { display: none !important; }
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-900 antialiased selection:bg-blue-600 selection:text-white">
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState, useMemo, useEffect } = React;
+
+    // --- ICON HELPER COMPONENT (SVG-based) ---
+    const Icon = ({ name, className = "w-4 h-4" }) => {
+      const icons = {
+        Phone: <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>,
+        Mail: <><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></>,
+        Clock: <><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></>,
+        ExternalLink: <><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></>,
+        Calendar: <><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></>,
+        Menu: <><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></>,
+        X: <><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></>,
+        ShieldCheck: <><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></>,
+        ChevronLeft: <polyline points="15 18 9 12 15 6"/>,
+        ChevronRight: <polyline points="9 18 15 12 9 6"/>,
+        ChevronDown: <polyline points="6 9 12 15 18 9"/>,
+        Search: <><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></>,
+        RotateCcw: <><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></>,
+        List: <><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></>,
+        SlidersHorizontal: <><line x1="21" y1="4" x2="14" y2="4"/><line x1="10" y1="4" x2="3" y2="4"/><line x1="21" y1="12" x2="12" y2="12"/><line x1="8" y1="12" x2="3" y2="12"/><line x1="21" y1="20" x2="16" y2="20"/><line x1="12" y1="20" x2="3" y2="20"/><line x1="14" y1="2" x2="14" y2="6"/><line x1="8" y1="10" x2="8" y2="14"/><line x1="16" y1="18" x2="16" y2="22"/></>,
+        CalendarOff: <><path d="M4.2 4.2A2 2 0 0 0 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 1.8-1.1"/><path d="M16 2v4"/><path d="M8 2v1"/><path d="M3 10h7"/><path d="M21 10v10a2 2 0 0 1-2 2H9.8"/><line x1="1" y1="1" x2="23" y2="23"/></>,
+        Users: <><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></>,
+        GraduationCap: <><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></>,
+        FileText: <><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></>,
+        Trophy: <><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2z"/></>,
+        Compass: <><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></>,
+        Sparkles: <><path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3Z"/><path d="M20 3v4"/><path d="M22 5h-4"/></>,
+        MapPin: <><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></>,
+        ArrowRight: <><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></>,
+        Download: <><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></>,
+        Copy: <><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></>,
+        Check: <polyline points="20 6 9 17 4 12"/>,
+        Printer: <><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></>,
+        Info: <><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></>,
+        UserCheck: <><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><polyline points="17 11 19 13 23 9"/></>,
+        CalendarRange: <><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><path d="M17 14h-6"/><path d="M13 18H7"/></>,
+        Smartphone: <><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></>,
+        Globe: <><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></>,
+        Instagram: <><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></>,
+        Twitter: <path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"/>,
+        MousePointerClick: <><path d="m9 9 5 12 1.8-5.2L21 14Z"/><path d="M7.2 2.2 8 5.1"/><path d="m5.1 7.2-2.9-.8"/><path d="M14 4.1 12 6"/><path d="m6 12-1.9 2"/></>
+      };
+
+      return (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className={className}
+        >
+          {icons[name] || icons.Calendar}
+        </svg>
+      );
+    };
+
+    // Category Icon component
+    const CategoryIcon = ({ categoryId, className = "w-3.5 h-3.5" }) => {
+      const mapping = {
+        closures: 'CalendarOff',
+        meetings: 'Users',
+        induction: 'GraduationCap',
+        exams: 'FileText',
+        sports: 'Trophy',
+        guidance: 'Compass',
+        arts: 'Sparkles',
+      };
+      return <Icon name={mapping[categoryId] || 'Calendar'} className={className} />;
+    };
+
+    // --- DATA DEFINITIONS ---
+    const EVENT_CATEGORIES = {
+      closures: {
+        id: 'closures',
+        name: 'School Closures & Holidays',
+        shortLabel: 'Closure',
+        description: 'Bank holidays, staff training days, and mid-term / term breaks.',
+        dotColor: 'bg-[#EF4444]',
+        bgLight: 'bg-red-50',
+        textDark: 'text-red-700',
+        borderColor: 'border-red-200',
+        barBg: 'bg-red-100 text-red-800 border-red-300',
+        colorName: 'Red',
+        hex: '#EF4444',
+        rgb: '239, 68, 68',
+      },
+      meetings: {
+        id: 'meetings',
+        name: 'Parent Teacher Meetings',
+        shortLabel: 'PTM',
+        description: 'Scheduled consultation evenings for parents, guardians, and subject teachers.',
+        dotColor: 'bg-[#8B5CF6]',
+        bgLight: 'bg-violet-50',
+        textDark: 'text-violet-700',
+        borderColor: 'border-violet-200',
+        barBg: 'bg-violet-100 text-violet-800 border-violet-300',
+        colorName: 'Purple',
+        hex: '#8B5CF6',
+        rgb: '139, 92, 246',
+      },
+      induction: {
+        id: 'induction',
+        name: 'Induction & Term Dates',
+        shortLabel: 'Term/Induction',
+        description: 'Orientation mornings, year-group inductions, and reopening schedules.',
+        dotColor: 'bg-[#3B82F6]',
+        bgLight: 'bg-blue-50',
+        textDark: 'text-blue-700',
+        borderColor: 'border-blue-200',
+        barBg: 'bg-blue-100 text-blue-800 border-blue-300',
+        colorName: 'Blue',
+        hex: '#3B82F6',
+        rgb: '59, 130, 246',
+      },
+      exams: {
+        id: 'exams',
+        name: 'Examinations & Assessments',
+        shortLabel: 'Exams',
+        description: 'House exams, state exam mock tests, CBA deadlines, and assessments.',
+        dotColor: 'bg-[#F97316]',
+        bgLight: 'bg-orange-50',
+        textDark: 'text-orange-800',
+        borderColor: 'border-orange-200',
+        barBg: 'bg-orange-100 text-orange-900 border-orange-300',
+        colorName: 'Orange',
+        hex: '#F97316',
+        rgb: '249, 115, 22',
+      },
+      sports: {
+        id: 'sports',
+        name: 'Sports & Extracurricular',
+        shortLabel: 'Sports',
+        description: 'Fixtures, hockey, athletics, basketball, debating, and club activities.',
+        dotColor: 'bg-[#22C55E]',
+        bgLight: 'bg-green-50',
+        textDark: 'text-green-700',
+        borderColor: 'border-green-200',
+        barBg: 'bg-green-100 text-green-800 border-green-300',
+        colorName: 'Green',
+        hex: '#22C55E',
+        rgb: '34, 197, 94',
+      },
+      guidance: {
+        id: 'guidance',
+        name: 'Guidance & Transition Year',
+        shortLabel: 'Guidance/TY',
+        description: 'TY work experience, career exhibitions, guest speakers, and CAO evenings.',
+        dotColor: 'bg-[#14B8A6]',
+        bgLight: 'bg-teal-50',
+        textDark: 'text-teal-800',
+        borderColor: 'border-teal-200',
+        barBg: 'bg-teal-100 text-teal-900 border-teal-300',
+        colorName: 'Teal',
+        hex: '#14B8A6',
+        rgb: '20, 184, 166',
+      },
+      arts: {
+        id: 'arts',
+        name: 'Arts, Culture & Community',
+        shortLabel: 'Culture/Arts',
+        description: 'School musical, choral performances, science fair, and charity events.',
+        dotColor: 'bg-[#A855F7]',
+        bgLight: 'bg-purple-50',
+        textDark: 'text-purple-700',
+        borderColor: 'border-purple-200',
+        barBg: 'bg-purple-100 text-purple-800 border-purple-300',
+        colorName: 'Violet',
+        hex: '#A855F7',
+        rgb: '168, 85, 247',
+      },
+    };
+
+    const INITIAL_SCHOOL_EVENTS = [
+      // AUGUST 2026
+      {
+        id: 'ev-01',
+        title: '1st Year Induction & Welcome Morning',
+        startDate: '2026-08-27',
+        startTime: '09:00 AM',
+        endTime: '12:00 PM',
+        categoryId: 'induction',
+        targetYears: ['1st Year'],
+        location: 'Main School Hall & Base Classrooms',
+        description: 'Welcome orientation for all incoming First Year students. Meet Year Head, Tutors, and Lighthouse Leaders (6th Year Mentors), receive lockers, tablet set-up guidance, and timetable.',
+        organizer: '1st Year Head & Guidance Team',
+        important: true,
+        notes: 'Students should wear full school uniform and bring pencil case and school bag.',
+      },
+      {
+        id: 'ev-02',
+        title: '5th Year & LCA 1 Induction',
+        startDate: '2026-08-27',
+        startTime: '11:00 AM',
+        endTime: '12:00 PM',
+        categoryId: 'induction',
+        targetYears: ['5th Year'],
+        location: 'Assembly Hall',
+        description: 'Orientation session for all students entering Senior Cycle 5th Year and Leaving Certificate Applied (LCA 1). Review of subject allocations and academic expectations.',
+        organizer: 'Senior Cycle Coordinator',
+      },
+      {
+        id: 'ev-03',
+        title: '3rd Year Induction',
+        startDate: '2026-08-28',
+        startTime: '11:15 AM',
+        endTime: '12:15 PM',
+        categoryId: 'induction',
+        targetYears: ['3rd Year'],
+        location: 'Study Hall',
+        description: 'Briefing for incoming 3rd Year students focusing on Junior Cycle Classroom-Based Assessments (CBAs), project timelines, and study schedules.',
+        organizer: '3rd Year Head',
+      },
+      {
+        id: 'ev-04',
+        title: '6th Year & LCA 2 Induction',
+        startDate: '2026-08-28',
+        startTime: '12:15 PM',
+        endTime: '01:15 PM',
+        categoryId: 'induction',
+        targetYears: ['6th Year & LCA'],
+        location: 'Assembly Hall',
+        description: 'Final year introductory meeting outlining Leaving Certificate preparation, CAO guidance deadlines, study routines, and student leadership roles.',
+        organizer: '6th Year Head & Principal',
+        important: true,
+      },
+      {
+        id: 'ev-05',
+        title: 'Induction for 1st, 3rd, 5th, & 6th Years',
+        startDate: '2026-08-31',
+        startTime: '09:00 AM',
+        endTime: '01:20 PM',
+        categoryId: 'induction',
+        targetYears: ['1st Year', '3rd Year', '5th Year', '6th Year & LCA'],
+        location: 'Main School Campus',
+        description: 'Half-day timetable for 1st, 3rd, 5th and 6th years. Morning tutor check-in followed by introductory core subject classes.',
+        organizer: 'School Administration',
+      },
+      {
+        id: 'ev-06',
+        title: '2nd Year Induction',
+        startDate: '2026-08-31',
+        startTime: '11:30 AM',
+        endTime: '12:30 PM',
+        categoryId: 'induction',
+        targetYears: ['2nd Year'],
+        location: 'Pichet Library / Room 12',
+        description: 'Assembly and timetable distribution for Second Year students.',
+        organizer: '2nd Year Head',
+      },
+      {
+        id: 'ev-07',
+        title: 'Transition Year Induction',
+        startDate: '2026-08-31',
+        startTime: '12:15 PM',
+        endTime: '01:15 PM',
+        categoryId: 'guidance',
+        targetYears: ['Transition Year'],
+        location: 'Concert Hall',
+        description: 'Orientation for Transition Year students. Overview of core modules, community action, Gaisce Awards, musical production, and work experience placements.',
+        organizer: 'TY Coordinator - Ms. Gallagher',
+        important: true,
+      },
+      // SEPTEMBER 2026
+      {
+        id: 'ev-08',
+        title: 'Full School Reopening - Normal Timetable',
+        startDate: '2026-09-01',
+        startTime: '08:45 AM',
+        endTime: '03:45 PM',
+        categoryId: 'induction',
+        targetYears: ['All Years'],
+        location: 'Full Campus',
+        description: 'All year groups (1st to 6th Year) return for full day classes according to the published standard school timetable.',
+        organizer: 'Principal & Deputy Principal',
+      },
+      {
+        id: 'ev-09',
+        title: '1st Year Parents Information Evening',
+        startDate: '2026-09-08',
+        startTime: '07:00 PM',
+        endTime: '08:30 PM',
+        categoryId: 'meetings',
+        targetYears: ['1st Year'],
+        location: 'Main Sports Hall & Online Stream',
+        description: 'Information evening for parents and guardians of First Year students. Introduction to the school community, VSware portal access, curriculum support, and pastoral care structures.',
+        organizer: 'Principal & Parents Association',
+        actionRequired: 'Please register via VSware App RSVP',
+      },
+      {
+        id: 'ev-10',
+        title: 'Senior Hockey & Athletics Trials',
+        startDate: '2026-09-15',
+        startTime: '03:45 PM',
+        endTime: '05:15 PM',
+        categoryId: 'sports',
+        targetYears: ['Transition Year', '5th Year', '6th Year & LCA'],
+        location: 'Mount Sackville Astro Pitch',
+        description: 'Open squad selections for Leinster Senior Cup hockey, cross country runners, and senior basketball squads. Shin guards and mouth guards mandatory.',
+        organizer: 'Physical Education & Sports Dept',
+      },
+      {
+        id: 'ev-19-1',
+        title: 'Debating Society Workshop',
+        startDate: '2026-09-19',
+        startTime: '10:00 AM',
+        endTime: '12:00 PM',
+        categoryId: 'arts',
+        targetYears: ['All Years'],
+        location: 'Room 24',
+        description: 'An introductory workshop for students interested in joining the school debating society.',
+        organizer: 'English Department',
+      },
+      {
+        id: 'ev-19-2',
+        title: 'Under 16s Basketball Tournament',
+        startDate: '2026-09-19',
+        startTime: '09:30 AM',
+        endTime: '02:00 PM',
+        categoryId: 'sports',
+        targetYears: ['3rd Year', 'Transition Year'],
+        location: 'Main Sports Hall',
+        description: 'Regional under 16s basketball tournament hosted by Mount Sackville.',
+        organizer: 'Physical Education Dept',
+      },
+      {
+        id: 'ev-19-3',
+        title: 'Study Skills Seminar',
+        startDate: '2026-09-19',
+        startTime: '11:00 AM',
+        endTime: '01:00 PM',
+        categoryId: 'guidance',
+        targetYears: ['6th Year & LCA'],
+        location: 'Study Hall',
+        description: 'Intensive study skills and exam preparation seminar for Leaving Certificate students.',
+        organizer: 'Guidance Counselling Dept',
+      },
+      {
+        id: 'ev-19-4',
+        title: 'Weekend Charity Car Wash',
+        startDate: '2026-09-19',
+        startTime: '10:00 AM',
+        endTime: '04:00 PM',
+        categoryId: 'arts',
+        targetYears: ['Transition Year'],
+        location: 'Main Car Park',
+        description: 'Transition Year students organizing a car wash to raise funds for local charities.',
+        organizer: 'TY Coordinator',
+      },
+      {
+        id: 'ev-19-5',
+        title: 'Staff Planning Meeting',
+        startDate: '2026-09-19',
+        startTime: '09:00 AM',
+        endTime: '10:30 AM',
+        categoryId: 'meetings',
+        targetYears: ['Staff'],
+        location: 'Staff Room',
+        description: 'Optional weekend planning meeting for upcoming term activities.',
+        organizer: 'Principal',
+      },
+      {
+        id: 'ev-11',
+        title: 'Transition Year Musical Auditions: Callbacks',
+        startDate: '2026-09-21',
+        startTime: '01:30 PM',
+        endTime: '04:30 PM',
+        categoryId: 'arts',
+        targetYears: ['Transition Year'],
+        location: 'Drama & Music Studios',
+        description: 'Auditions for principal singing, acting, and dance ensemble roles in the annual Mount Sackville TY Musical production.',
+        organizer: 'Music & Performing Arts Department',
+      },
+      {
+        id: 'ev-12',
+        title: 'Higher Options Careers Exhibition Trip',
+        startDate: '2026-09-23',
+        startTime: '09:00 AM',
+        endTime: '02:00 PM',
+        categoryId: 'guidance',
+        targetYears: ['6th Year & LCA'],
+        location: 'RDS Simmonscourt, Dublin',
+        description: 'Annual field trip for 6th Year students attending Ireland\'s premier higher education and career exhibition. Over 150 Irish and international universities present.',
+        organizer: 'Guidance Counselling Dept',
+      },
+      {
+        id: 'ev-13',
+        title: 'School Closed (Discretionary Day)',
+        startDate: '2026-09-28',
+        isAllDay: true,
+        categoryId: 'closures',
+        targetYears: ['All Years'],
+        location: 'School Closed',
+        description: 'School is closed for all students and teaching staff on Monday 28th September 2026.',
+        organizer: 'Board of Management',
+        important: true,
+      },
+      // OCTOBER 2026
+      {
+        id: 'ev-14',
+        title: 'Amber Flag Mental Health Awareness Day',
+        startDate: '2026-10-02',
+        startTime: '09:00 AM',
+        endTime: '03:30 PM',
+        categoryId: 'arts',
+        targetYears: ['All Years'],
+        location: 'Courtyard & Classrooms',
+        description: 'Special school-wide positive mental health workshop organized by the student Amber Flag Committee. Non-uniform day supporting Pieta House.',
+        organizer: 'Amber Flag Committee',
+      },
+      {
+        id: 'ev-15',
+        title: '3rd Year Parent Teacher Meeting',
+        startDate: '2026-10-12',
+        startTime: '04:15 PM',
+        endTime: '06:45 PM',
+        categoryId: 'meetings',
+        targetYears: ['3rd Year'],
+        location: 'Main Assembly Hall & Gymnasium',
+        description: 'Parent Teacher Consultation Meeting for parents and guardians of Third Year students. Discussion on progress, CBA feedback, and mock exam preparation.',
+        organizer: 'Year Head & Administration',
+        important: true,
+        actionRequired: 'Book appointment slots on VSware portal by Oct 8',
+      },
+      {
+        id: 'ev-16',
+        title: 'Autumn Choral & Orchestral Concert',
+        startDate: '2026-10-22',
+        startTime: '07:00 PM',
+        endTime: '09:00 PM',
+        categoryId: 'arts',
+        targetYears: ['All Years'],
+        location: 'School Chapel & Concert Hall',
+        description: 'Performances by Mount Sackville Senior and Junior Choirs, Trad Group, and String Ensemble celebrating the feast day of Sisters of St. Joseph of Cluny.',
+        organizer: 'Music Faculty',
+      },
+      {
+        id: 'ev-17',
+        title: 'October Mid-Term Break (School Closed)',
+        startDate: '2026-10-26',
+        endDate: '2026-10-30',
+        isAllDay: true,
+        categoryId: 'closures',
+        targetYears: ['All Years'],
+        location: 'School Closed',
+        description: 'Autumn Mid-Term Break. School is closed from Monday 26th October to Friday 30th October 2026 inclusive. School reopens on Monday 2nd November.',
+        organizer: 'Department of Education Schedule',
+        important: true,
+      },
+      // NOVEMBER 2026
+      {
+        id: 'ev-18',
+        title: 'School Reopens - Term 1 Resumes',
+        startDate: '2026-11-02',
+        startTime: '08:45 AM',
+        endTime: '03:45 PM',
+        categoryId: 'induction',
+        targetYears: ['All Years'],
+        location: 'Campus Wide',
+        description: 'All classes resume after the October break.',
+        organizer: 'Principal\'s Office',
+      },
+      {
+        id: 'ev-19',
+        title: '6th Year Parent Teacher Meeting',
+        startDate: '2026-11-10',
+        startTime: '04:15 PM',
+        endTime: '06:45 PM',
+        categoryId: 'meetings',
+        targetYears: ['6th Year & LCA'],
+        location: 'Main Sports Hall',
+        description: 'Vital consultation evening for Leaving Certificate candidates and parents. In-depth review of academic targets, orals, practical projects, and CAO options.',
+        organizer: '6th Year Head & Guidance Department',
+        important: true,
+      },
+      {
+        id: 'ev-20',
+        title: 'Annual Science Week STEM Fair',
+        startDate: '2026-11-12',
+        startTime: '10:00 AM',
+        endTime: '03:00 PM',
+        categoryId: 'arts',
+        targetYears: ['1st Year', '2nd Year', 'Transition Year'],
+        location: 'Science Laboratories 1 - 4',
+        description: 'Interactive science demonstrations, Young Scientist exhibition rehearsals, coding workshops, and guest speakers from Trinity College Dublin.',
+        organizer: 'Science Department',
+      },
+      {
+        id: 'ev-21',
+        title: '5th Year Parent Teacher Meeting',
+        startDate: '2026-11-19',
+        startTime: '04:15 PM',
+        endTime: '06:45 PM',
+        categoryId: 'meetings',
+        targetYears: ['5th Year'],
+        location: 'Assembly Hall',
+        description: 'Progress evaluation for 5th Year and LCA 1 students with subject teachers.',
+        organizer: '5th Year Head',
+      },
+      {
+        id: 'ev-22',
+        title: 'Junior Cycle JCT Staff Training Day (School Closed)',
+        startDate: '2026-11-27',
+        isAllDay: true,
+        categoryId: 'closures',
+        targetYears: ['All Years'],
+        location: 'School Closed for Students',
+        description: 'Department of Education designated whole-school Junior Cycle staff continuing professional development day. No classes for students.',
+        organizer: 'Board of Management & JCT',
+        important: true,
+      },
+      // DECEMBER 2026
+      {
+        id: 'ev-23',
+        title: 'Winter House Assessment Examinations',
+        startDate: '2026-12-07',
+        endDate: '2026-12-11',
+        isAllDay: true,
+        categoryId: 'exams',
+        targetYears: ['1st Year', '2nd Year', '5th Year'],
+        location: 'Gymnasium & Examination Classrooms',
+        description: 'Winter terminal examinations for First, Second, and Fifth Year students. Specific exam timetables will be issued via the school portal.',
+        organizer: 'Exams Secretary & Academic Dean',
+        important: true,
+      },
+      {
+        id: 'ev-24',
+        title: 'Christmas Carol Service & Festive Charity Market',
+        startDate: '2026-12-15',
+        startTime: '06:30 PM',
+        endTime: '09:00 PM',
+        categoryId: 'arts',
+        targetYears: ['All Years'],
+        location: 'Mount Sackville Chapel & Courtyard',
+        description: 'Traditional candlelit carol service featuring scripture readings, carols with student choirs, and festive craft stalls supporting St. Vincent de Paul.',
+        organizer: 'Religious Education Dept & Parents Association',
+      },
+      {
+        id: 'ev-25',
+        title: 'Christmas Holidays (School Closes at 12:00 PM)',
+        startDate: '2026-12-22',
+        endDate: '2027-01-05',
+        isAllDay: true,
+        categoryId: 'closures',
+        targetYears: ['All Years'],
+        location: 'School Closed',
+        description: 'School finishes for the Christmas holidays on Tuesday 22nd December at 12:00 PM and will reopen on Wednesday 6th January 2027.',
+        organizer: 'Department of Education Schedule',
+        important: true,
+      },
+      // JANUARY 2027
+      {
+        id: 'ev-26',
+        title: 'School Reopens - Term 2 Begins',
+        startDate: '2027-01-06',
+        startTime: '08:45 AM',
+        endTime: '03:45 PM',
+        categoryId: 'induction',
+        targetYears: ['All Years'],
+        location: 'Full Campus',
+        description: 'All students return after Christmas break. New timetable adjustments and term 2 subject plans distributed.',
+        organizer: 'Principal\'s Office',
+      },
+      {
+        id: 'ev-27',
+        title: '6th Year Mock Examinations',
+        startDate: '2027-01-11',
+        endDate: '2027-01-22',
+        isAllDay: true,
+        categoryId: 'exams',
+        targetYears: ['6th Year & LCA'],
+        location: 'Gymnasium & Examination Classrooms',
+        description: 'Two-week mock Leaving Certificate examinations for all 6th Year and LCA students. Full exam conditions apply. Individual timetables via VSware.',
+        organizer: 'Exams Secretary',
+        important: true,
+      },
+      {
+        id: 'ev-28',
+        title: '1st & 2nd Year Parent Teacher Meeting',
+        startDate: '2027-01-25',
+        startTime: '04:15 PM',
+        endTime: '07:00 PM',
+        categoryId: 'meetings',
+        targetYears: ['1st Year', '2nd Year'],
+        location: 'Main Assembly Hall',
+        description: 'Consultation evening for parents and guardians of First and Second Year students. Please book appointment slots on VSware by Jan 20.',
+        organizer: 'Year Heads & Administration',
+        important: true,
+        actionRequired: 'Book appointment slots on VSware portal by Jan 20',
+      },
+      {
+        id: 'ev-29',
+        title: 'Leinster Schools Hockey Cup – Round 1',
+        startDate: '2027-01-28',
+        startTime: '02:00 PM',
+        endTime: '04:30 PM',
+        categoryId: 'sports',
+        targetYears: ['5th Year', '6th Year & LCA'],
+        location: 'Mount Sackville Astro Pitch',
+        description: 'First round of the Leinster Schools Senior Cup hockey competition. Home fixture – all supporters welcome.',
+        organizer: 'Physical Education Dept',
+      },
+      // FEBRUARY 2027
+      {
+        id: 'ev-30',
+        title: 'TY Work Experience Week 1',
+        startDate: '2027-02-01',
+        endDate: '2027-02-05',
+        isAllDay: true,
+        categoryId: 'guidance',
+        targetYears: ['Transition Year'],
+        location: 'Various Work Placements',
+        description: 'First block of Transition Year work experience. Students are placed in local businesses, hospitals, law firms, and community organisations.',
+        organizer: 'TY Coordinator - Ms. Gallagher',
+        important: true,
+      },
+      {
+        id: 'ev-31',
+        title: 'Science Fair – Young Scientist Preparation',
+        startDate: '2027-02-03',
+        startTime: '10:00 AM',
+        endTime: '03:00 PM',
+        categoryId: 'arts',
+        targetYears: ['1st Year', '2nd Year', '3rd Year'],
+        location: 'Science Laboratories 1–4',
+        description: 'Annual in-school science fair showcasing student research projects. Judges from UCD and TU Dublin in attendance.',
+        organizer: 'Science Department',
+      },
+      {
+        id: 'ev-32',
+        title: 'February Mid-Term Break (School Closed)',
+        startDate: '2027-02-15',
+        endDate: '2027-02-19',
+        isAllDay: true,
+        categoryId: 'closures',
+        targetYears: ['All Years'],
+        location: 'School Closed',
+        description: 'Spring mid-term break. School is closed Monday 15th to Friday 19th February inclusive. School reopens Monday 22nd February.',
+        organizer: 'Department of Education Schedule',
+        important: true,
+      },
+      {
+        id: 'ev-33',
+        title: 'Careers Open Night',
+        startDate: '2027-02-22',
+        startTime: '06:30 PM',
+        endTime: '08:30 PM',
+        categoryId: 'guidance',
+        targetYears: ['5th Year', '6th Year & LCA', 'Transition Year'],
+        location: 'Main Sports Hall',
+        description: 'Annual careers evening featuring guest speakers from medicine, law, engineering, arts, and tech industries sharing career pathways and college advice.',
+        organizer: 'Guidance Counselling Dept',
+      },
+      // MARCH 2027
+      {
+        id: 'ev-34',
+        title: 'School Closed – St. Patrick\'s Day',
+        startDate: '2027-03-17',
+        isAllDay: true,
+        categoryId: 'closures',
+        targetYears: ['All Years'],
+        location: 'School Closed',
+        description: 'National public holiday. School is closed on Wednesday 17th March in observance of St. Patrick\'s Day.',
+        organizer: 'Board of Management',
+        important: true,
+      },
+      {
+        id: 'ev-35',
+        title: 'TY Musical Production – "Mamma Mia!"',
+        startDate: '2027-03-18',
+        endDate: '2027-03-20',
+        startTime: '07:00 PM',
+        endTime: '09:30 PM',
+        categoryId: 'arts',
+        targetYears: ['Transition Year'],
+        location: 'School Concert Hall',
+        description: 'Three-night run of the annual Transition Year musical. This year\'s production is "Mamma Mia!" with live orchestra, full costumes and professional lighting. Tickets available via the school office.',
+        organizer: 'Music & Performing Arts Department',
+        important: true,
+      },
+      {
+        id: 'ev-36',
+        title: 'Junior Cycle Mock Assessments',
+        startDate: '2027-03-08',
+        endDate: '2027-03-12',
+        isAllDay: true,
+        categoryId: 'exams',
+        targetYears: ['3rd Year'],
+        location: 'Examination Classrooms',
+        description: 'Week-long mock Junior Cycle examinations for all 3rd Year students. Covers English, Irish, Maths and core subjects. Results issued within two weeks.',
+        organizer: 'Exams Secretary & Academic Dean',
+        important: true,
+      },
+      {
+        id: 'ev-37',
+        title: 'Debating Competition – Leinster Finals',
+        startDate: '2027-03-24',
+        startTime: '01:00 PM',
+        endTime: '05:00 PM',
+        categoryId: 'arts',
+        targetYears: ['All Years'],
+        location: 'Gonzaga College, Dublin',
+        description: 'Mount Sackville Debating team competes in Leinster Schools Finals. Topic to be announced two weeks prior. Travel arrangements circulated via VSware.',
+        organizer: 'English Department',
+      },
+      // APRIL 2027
+      {
+        id: 'ev-38',
+        title: 'Easter Holidays (School Closed)',
+        startDate: '2027-04-01',
+        endDate: '2027-04-14',
+        isAllDay: true,
+        categoryId: 'closures',
+        targetYears: ['All Years'],
+        location: 'School Closed',
+        description: 'Easter school holiday break from Wednesday 1st April to Monday 14th April inclusive. School reopens Tuesday 15th April.',
+        organizer: 'Department of Education Schedule',
+        important: true,
+      },
+      {
+        id: 'ev-39',
+        title: 'Leaving Cert Oral Examinations – Irish & MFL',
+        startDate: '2027-04-21',
+        endDate: '2027-04-25',
+        isAllDay: true,
+        categoryId: 'exams',
+        targetYears: ['6th Year & LCA'],
+        location: 'Language Rooms 1–6',
+        description: 'State-run Leaving Certificate oral examinations in Irish and Modern Foreign Languages (French, Spanish, German). Individual student timetables issued by SEC.',
+        organizer: 'State Examinations Commission',
+        important: true,
+      },
+      {
+        id: 'ev-40',
+        title: 'TY Work Experience Week 2',
+        startDate: '2027-04-28',
+        endDate: '2027-04-30',
+        isAllDay: true,
+        categoryId: 'guidance',
+        targetYears: ['Transition Year'],
+        location: 'Various Work Placements',
+        description: 'Second block of Transition Year work experience. Students continue placements and compile their work experience journals for portfolio assessment.',
+        organizer: 'TY Coordinator - Ms. Gallagher',
+      },
+      {
+        id: 'ev-41',
+        title: 'Athletics Track & Field Day',
+        startDate: '2027-04-09',
+        startTime: '09:00 AM',
+        endTime: '03:30 PM',
+        categoryId: 'sports',
+        targetYears: ['All Years'],
+        location: 'Morton Stadium, Santry',
+        description: 'Annual whole-school Athletics Day at Morton Stadium. Inter-house competition across sprints, relays, long jump, high jump, shot putt and javelin.',
+        organizer: 'Physical Education & Sports Dept',
+        important: true,
+      },
+      // MAY 2027
+      {
+        id: 'ev-42',
+        title: 'Leaving Certificate Written Examinations Begin',
+        startDate: '2027-05-07',
+        endDate: '2027-05-27',
+        isAllDay: true,
+        categoryId: 'exams',
+        targetYears: ['6th Year & LCA'],
+        location: 'State Examination Centres',
+        description: 'State Leaving Certificate written examinations commence. Individual student timetables from the State Examinations Commission. Best of luck to all 6th Year and LCA students!',
+        organizer: 'State Examinations Commission',
+        important: true,
+      },
+      {
+        id: 'ev-43',
+        title: '4th & 5th Year House Exams',
+        startDate: '2027-05-17',
+        endDate: '2027-05-23',
+        isAllDay: true,
+        categoryId: 'exams',
+        targetYears: ['Transition Year', '5th Year'],
+        location: 'Gymnasium & Examination Classrooms',
+        description: 'End-of-year assessments for Transition Year and Fifth Year. TY students assessed via module portfolios and written tests; 5th Year sit formal examinations.',
+        organizer: 'Exams Secretary',
+      },
+      {
+        id: 'ev-44',
+        title: 'CAO Change of Mind Deadline',
+        startDate: '2027-05-01',
+        startTime: '05:15 PM',
+        endTime: '05:15 PM',
+        categoryId: 'guidance',
+        targetYears: ['6th Year & LCA'],
+        location: 'Online – cao.ie',
+        description: 'Last date for 6th Year students to change CAO course preferences on cao.ie without late fee. Guidance counsellors available all day for one-to-one support.',
+        organizer: 'Guidance Counselling Dept',
+        important: true,
+        actionRequired: 'Log in to cao.ie before 5:15 PM',
+      },
+      {
+        id: 'ev-45',
+        title: 'Senior Basketball Finals – Leinster',
+        startDate: '2027-05-06',
+        startTime: '11:00 AM',
+        endTime: '04:00 PM',
+        categoryId: 'sports',
+        targetYears: ['5th Year', '6th Year & LCA'],
+        location: 'National Basketball Arena, Tallaght',
+        description: 'Leinster Schools Senior Basketball Finals. Mount Sackville senior team competing for the provincial title.',
+        organizer: 'Physical Education Dept',
+      },
+      // JUNE 2027
+      {
+        id: 'ev-46',
+        title: '1st–4th Year End-of-Year Assessments',
+        startDate: '2027-06-02',
+        endDate: '2027-06-06',
+        isAllDay: true,
+        categoryId: 'exams',
+        targetYears: ['1st Year', '2nd Year', '3rd Year'],
+        location: 'Gymnasium & Classrooms',
+        description: 'Summer terminal assessments for all Junior Cycle year groups. Results contribute to school progress reports issued before summer break.',
+        organizer: 'Exams Secretary & Academic Dean',
+        important: true,
+      },
+      {
+        id: 'ev-47',
+        title: 'Awards Evening & Senior Prize Giving',
+        startDate: '2027-06-10',
+        startTime: '07:00 PM',
+        endTime: '09:30 PM',
+        categoryId: 'arts',
+        targetYears: ['All Years'],
+        location: 'School Concert Hall',
+        description: 'Annual awards ceremony recognising academic achievement, sporting excellence, community service, and leadership. Certificates and trophies presented by Board of Management.',
+        organizer: 'Principal & Board of Management',
+        important: true,
+      },
+      {
+        id: 'ev-48',
+        title: 'TY Graduation Ceremony',
+        startDate: '2027-06-12',
+        startTime: '02:00 PM',
+        endTime: '04:30 PM',
+        categoryId: 'arts',
+        targetYears: ['Transition Year'],
+        location: 'School Chapel & Courtyard',
+        description: 'Celebration of the Transition Year class completing their programme. Includes TY film screening, portfolio exhibition, and graduation certificates.',
+        organizer: 'TY Coordinator - Ms. Gallagher',
+      },
+      {
+        id: 'ev-49',
+        title: 'Summer Holidays (School Closes)',
+        startDate: '2027-06-18',
+        isAllDay: true,
+        categoryId: 'closures',
+        targetYears: ['All Years'],
+        location: 'School Closed',
+        description: 'School year ends on Wednesday 18th June 2027. Students in 1st–5th Year return in August/September 2027 for the new academic year.',
+        organizer: 'Department of Education Schedule',
+        important: true,
+      },
+      {
+        id: 'ev-50',
+        title: 'Cross-Country Championships',
+        startDate: '2026-10-08',
+        startTime: '10:00 AM',
+        endTime: '01:30 PM',
+        categoryId: 'sports',
+        targetYears: ['1st Year', '2nd Year', '3rd Year', 'Transition Year'],
+        location: 'St. Anne\'s Park, Raheny',
+        description: 'Leinster Schools Cross-Country Championships. Junior and Intermediate squads representing Mount Sackville.',
+        organizer: 'Physical Education & Sports Dept',
+      },
+      {
+        id: 'ev-51',
+        title: 'Wellbeing & Mental Health Day',
+        startDate: '2026-10-15',
+        startTime: '09:00 AM',
+        endTime: '03:30 PM',
+        categoryId: 'arts',
+        targetYears: ['All Years'],
+        location: 'Courtyard, Hall & Classrooms',
+        description: 'A full school day dedicated to student wellbeing with workshops on mindfulness, nutrition, digital wellness and peer support led by external facilitators.',
+        organizer: 'SPHE Department & Student Council',
+      },
+      {
+        id: 'ev-52',
+        title: 'Open Night for Prospective 1st Years',
+        startDate: '2026-11-05',
+        startTime: '06:30 PM',
+        endTime: '08:30 PM',
+        categoryId: 'induction',
+        targetYears: ['All Years'],
+        location: 'Full Campus',
+        description: 'Annual open evening for families considering Mount Sackville for their daughter\'s secondary education. Guided tours, subject demonstrations, and Q&A with Principal.',
+        organizer: 'Principal & Admissions Team',
+        important: true,
+      },
+      {
+        id: 'ev-53',
+        title: 'Transition Year Information Evening',
+        startDate: '2026-11-17',
+        startTime: '06:30 PM',
+        endTime: '07:45 PM',
+        categoryId: 'guidance',
+        targetYears: ['3rd Year'],
+        location: 'Assembly Hall',
+        description: 'Information evening for 3rd Year parents and students on the Transition Year programme, application process, and module choices for next academic year.',
+        organizer: 'TY Coordinator & Guidance Dept',
+      },
+      {
+        id: 'ev-54',
+        title: 'Grandparents\' & Special Friends\' Day',
+        startDate: '2026-12-04',
+        startTime: '10:00 AM',
+        endTime: '12:00 PM',
+        categoryId: 'arts',
+        targetYears: ['1st Year'],
+        location: 'School Hall & Classrooms',
+        description: 'Annual celebration inviting grandparents and special friends of First Year students to visit the school, attend a short ceremony, and tour the campus.',
+        organizer: 'Year Head & Parents Association',
+      },
+      {
+        id: 'ev-55',
+        title: '3rd Year CBA 1 Deadlines',
+        startDate: '2026-10-30',
+        isAllDay: true,
+        categoryId: 'exams',
+        targetYears: ['3rd Year'],
+        location: 'Subject Classrooms',
+        description: 'Classroom-Based Assessment 1 (CBA 1) final submission date for all 3rd Year students. Subject teachers confirm completion status before mid-term break.',
+        organizer: 'Academic Dean',
+        important: true,
+      },
+      {
+        id: 'ev-56',
+        title: 'Junior Cycle Results & Report Day',
+        startDate: '2026-09-04',
+        startTime: '09:00 AM',
+        endTime: '01:00 PM',
+        categoryId: 'induction',
+        targetYears: ['3rd Year'],
+        location: 'Assembly Hall',
+        description: 'Junior Cycle Profile of Achievement (JCPA) results and report collection morning. Students collect results with parents. Guidance counsellors on hand.',
+        organizer: 'Principal & Guidance Department',
+        important: true,
+      },
+      // --- MULTI-EVENT DATES ---
+      // Oct 2 – paired with Amber Flag Day
+      {
+        id: 'ev-m01',
+        title: 'Junior Hockey Trials',
+        startDate: '2026-10-02',
+        startTime: '03:45 PM',
+        endTime: '05:30 PM',
+        categoryId: 'sports',
+        targetYears: ['1st Year', '2nd Year'],
+        location: 'Mount Sackville Astro Pitch',
+        description: 'Open trials for the Junior Hockey squad for Leinster Cup. All 1st and 2nd Year students welcome.',
+        organizer: 'Physical Education Dept',
+      },
+      // Oct 8 – paired with Cross-Country
+      {
+        id: 'ev-m02',
+        title: 'Student Council Election',
+        startDate: '2026-10-08',
+        startTime: '09:00 AM',
+        endTime: '12:00 PM',
+        categoryId: 'arts',
+        targetYears: ['All Years'],
+        location: 'Homerooms',
+        description: 'Annual Student Council elections. Nominated candidates from each year group present manifestos during tutor period. Voting via class ballot.',
+        organizer: 'Deputy Principal',
+      },
+      // Oct 12 – paired with 3rd Year PTM
+      {
+        id: 'ev-m03',
+        title: 'Autumn Uniform & Book Check',
+        startDate: '2026-10-12',
+        startTime: '09:00 AM',
+        endTime: '10:30 AM',
+        categoryId: 'induction',
+        targetYears: ['All Years'],
+        location: 'Tutor Rooms',
+        description: 'Routine uniform and required textbook check carried out by tutors during morning period as per school code of conduct.',
+        organizer: 'Year Heads',
+      },
+      // Oct 15 – paired with Wellbeing Day
+      {
+        id: 'ev-m04',
+        title: 'Guest Speaker: Dr. Aoife Carroll – Nutrition',
+        startDate: '2026-10-15',
+        startTime: '11:00 AM',
+        endTime: '12:00 PM',
+        categoryId: 'guidance',
+        targetYears: ['Transition Year', '5th Year'],
+        location: 'Assembly Hall',
+        description: 'Registered dietitian Dr. Aoife Carroll presents on sport nutrition, gut health, and the link between diet and academic performance.',
+        organizer: 'SPHE Department',
+      },
+      {
+        id: 'ev-m05',
+        title: 'Choir Rehearsal – Autumn Concert',
+        startDate: '2026-10-15',
+        startTime: '01:30 PM',
+        endTime: '03:00 PM',
+        categoryId: 'arts',
+        targetYears: ['All Years'],
+        location: 'Music Room 2',
+        description: 'Mandatory full-choir rehearsal for all members preparing for the October Autumn Choral Concert.',
+        organizer: 'Music Faculty',
+      },
+      // Oct 22 – paired with Autumn Concert
+      {
+        id: 'ev-m06',
+        title: 'Senior Maths Problem-Solving Workshop',
+        startDate: '2026-10-22',
+        startTime: '09:30 AM',
+        endTime: '11:30 AM',
+        categoryId: 'exams',
+        targetYears: ['5th Year', '6th Year & LCA'],
+        location: 'Room 8',
+        description: 'Pre-exam Leaving Certificate Maths Higher Level problem-solving session with external tutor. Focus on Paper 2 calculus and statistics.',
+        organizer: 'Maths Department',
+      },
+      // Nov 5 – paired with Open Night
+      {
+        id: 'ev-m07',
+        title: 'TY Charity Bake Sale',
+        startDate: '2026-11-05',
+        startTime: '11:00 AM',
+        endTime: '01:30 PM',
+        categoryId: 'arts',
+        targetYears: ['Transition Year'],
+        location: 'School Canteen',
+        description: 'TY students run a charity bake sale during lunch break to raise funds for the Irish Cancer Society.',
+        organizer: 'TY Coordinator',
+      },
+      // Nov 12 – paired with Science Week
+      {
+        id: 'ev-m08',
+        title: 'Irish Language Drama Festival',
+        startDate: '2026-11-12',
+        startTime: '01:30 PM',
+        endTime: '04:00 PM',
+        categoryId: 'arts',
+        targetYears: ['1st Year', '2nd Year', '3rd Year'],
+        location: 'Drama Studio',
+        description: 'Short Irish-language drama performances by Junior Cycle students as part of the school\'s Irish language enrichment programme.',
+        organizer: 'Irish Department',
+      },
+      // Nov 17 – paired with TY Info Evening
+      {
+        id: 'ev-m09',
+        title: 'Mock CAO Application Workshop',
+        startDate: '2026-11-17',
+        startTime: '10:00 AM',
+        endTime: '11:30 AM',
+        categoryId: 'guidance',
+        targetYears: ['6th Year & LCA'],
+        location: 'Computer Room 1',
+        description: 'Hands-on workshop guiding 6th Year students through the CAO online application system. Guidance counsellors walk through course selection, points requirements, and supporting documentation.',
+        organizer: 'Guidance Counselling Dept',
+      },
+      // Dec 4 – paired with Grandparents Day
+      {
+        id: 'ev-m10',
+        title: 'Christmas Art & Craft Exhibition',
+        startDate: '2026-12-04',
+        startTime: '12:30 PM',
+        endTime: '03:00 PM',
+        categoryId: 'arts',
+        targetYears: ['All Years'],
+        location: 'Art Rooms & Main Corridor',
+        description: 'End-of-term art exhibition displaying student artwork, craft projects, and photography from September to December. Open to all students and visitors.',
+        organizer: 'Art Department',
+      },
+      // Jan 6 – paired with School Reopens
+      {
+        id: 'ev-m11',
+        title: 'New Year Goal-Setting Assembly',
+        startDate: '2027-01-06',
+        startTime: '09:00 AM',
+        endTime: '09:45 AM',
+        categoryId: 'induction',
+        targetYears: ['All Years'],
+        location: 'Assembly Hall',
+        description: 'Whole-school assembly to welcome students back for Term 2. Principal addresses student wellbeing, academic targets, and key dates for the second half of the year.',
+        organizer: 'Principal\'s Office',
+      },
+      // Jan 28 – paired with Hockey Cup Round 1
+      {
+        id: 'ev-m12',
+        title: '5th Year Parent Teacher Meeting',
+        startDate: '2027-01-28',
+        startTime: '04:15 PM',
+        endTime: '06:45 PM',
+        categoryId: 'meetings',
+        targetYears: ['5th Year'],
+        location: 'Assembly Hall',
+        description: 'Consultation evening for 5th Year parents and guardians. Subject teachers provide progress reports and discuss Leaving Certificate preparation strategies.',
+        organizer: '5th Year Head & Administration',
+        important: true,
+        actionRequired: 'Book appointment slots on VSware portal by Jan 23',
+      },
+      // Feb 22 – paired with Careers Open Night
+      {
+        id: 'ev-m13',
+        title: '2nd Year Geography Field Trip',
+        startDate: '2027-02-22',
+        startTime: '08:30 AM',
+        endTime: '03:00 PM',
+        categoryId: 'guidance',
+        targetYears: ['2nd Year'],
+        location: 'Bray Head, Co. Wicklow',
+        description: 'Junior Cycle Geography field trip to Bray Head for coastal erosion and cliff profiling studies. Permission slips and €8 contribution required.',
+        organizer: 'Geography Department',
+      },
+      // Mar 24 – paired with Debating Finals
+      {
+        id: 'ev-m14',
+        title: 'Easter Retreat – 6th Year',
+        startDate: '2027-03-24',
+        startTime: '09:00 AM',
+        endTime: '01:30 PM',
+        categoryId: 'arts',
+        targetYears: ['6th Year & LCA'],
+        location: 'School Chapel',
+        description: 'Annual pre-Easter spiritual retreat for Leaving Certificate students. Guided reflection, group activities, and time to decompress ahead of the exam season.',
+        organizer: 'Chaplaincy & Religious Education Dept',
+      },
+      // Apr 9 – paired with Athletics Day
+      {
+        id: 'ev-m15',
+        title: '1st Year "Buddy Programme" Session',
+        startDate: '2027-04-09',
+        startTime: '11:00 AM',
+        endTime: '12:00 PM',
+        categoryId: 'induction',
+        targetYears: ['1st Year', '6th Year & LCA'],
+        location: 'Classrooms & Courtyard',
+        description: 'Monthly buddy session pairing 1st Year students with their 6th Year Lighthouse Leaders for mentorship, study tips, and social activity.',
+        organizer: '1st Year Head & Lighthouse Leaders Programme',
+      },
+      // May 6 – paired with Basketball Finals
+      {
+        id: 'ev-m16',
+        title: 'Guidance One-to-One Appointments – CAO',
+        startDate: '2027-05-06',
+        startTime: '09:00 AM',
+        endTime: '03:30 PM',
+        categoryId: 'guidance',
+        targetYears: ['6th Year & LCA'],
+        location: 'Guidance Office',
+        description: 'Full-day block of individual guidance appointments for 6th Year students to finalise CAO preferences and discuss results day strategy.',
+        organizer: 'Guidance Counselling Dept',
+      },
+      // Jun 10 – paired with Awards Evening
+      {
+        id: 'ev-m17',
+        title: 'School Yearbook Distribution',
+        startDate: '2027-06-10',
+        startTime: '12:30 PM',
+        endTime: '01:30 PM',
+        categoryId: 'arts',
+        targetYears: ['All Years'],
+        location: 'Main Corridor',
+        description: 'Annual school yearbook distributed to all students. Yearbook produced by the Student Yearbook Committee with photos from throughout the 2026–27 academic year.',
+        organizer: 'Student Yearbook Committee',
+      },
+      // Jun 12 – paired with TY Graduation
+      {
+        id: 'ev-m18',
+        title: '5th Year Subject Choice Interviews',
+        startDate: '2027-06-12',
+        startTime: '09:00 AM',
+        endTime: '12:00 PM',
+        categoryId: 'guidance',
+        targetYears: ['Transition Year'],
+        location: 'Guidance Office & Meeting Rooms',
+        description: 'Individual subject choice interviews for Transition Year students selecting Leaving Certificate subjects for 5th Year.',
+        organizer: 'Guidance Counselling Dept',
+      },
+    ];
+
+
+    const TODAY_ISO_STRING = formatDateToISO(new Date());
+
+    // --- UTILITY FUNCTIONS ---
+    function formatDateToISO(d) {
+      const y = d.getFullYear();
+      const m = String(d.getMonth() + 1).padStart(2, '0');
+      const day = String(d.getDate()).padStart(2, '0');
+      return `${y}-${m}-${day}`;
+    }
+
+    function formatFullDate(dateString) {
+      if (!dateString) return '';
+      const [year, month, day] = dateString.split('-').map(Number);
+      const d = new Date(year, month - 1, day);
+      return d.toLocaleDateString('en-IE', {
+        weekday: 'long',
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric',
+      });
+    }
+
+    function isDateInRange(targetDateStr, startDateStr, endDateStr) {
+      if (!endDateStr) {
+        return targetDateStr === startDateStr;
+      }
+      return targetDateStr >= startDateStr && targetDateStr <= endDateStr;
+    }
+
+    function getMonthDaysGrid(currentDate, events) {
+      const year = currentDate.getFullYear();
+      const month = currentDate.getMonth();
+      const firstDay = new Date(year, month, 1);
+      const lastDay = new Date(year, month + 1, 0);
+
+      const getDayIndex = (d) => (d.getDay() + 6) % 7; // Mon = 0
+      const startDayOffset = getDayIndex(firstDay);
+      const totalDaysCurrentMonth = lastDay.getDate();
+      const cells = [];
+
+      // Prev month trailing days
+      const prevMonthLastDay = new Date(year, month, 0).getDate();
+      for (let i = startDayOffset - 1; i >= 0; i--) {
+        const dayNum = prevMonthLastDay - i;
+        const d = new Date(year, month - 1, dayNum);
+        const dateStr = formatDateToISO(d);
+        const matchedEvents = events.filter((ev) => isDateInRange(dateStr, ev.startDate, ev.endDate));
+        cells.push({
+          date: d,
+          dateString: dateStr,
+          dayNumber: dayNum,
+          isCurrentMonth: false,
+          isToday: dateStr === TODAY_ISO_STRING,
+          isWeekend: d.getDay() === 0 || d.getDay() === 6,
+          events: matchedEvents,
+        });
+      }
+
+      // Current month days
+      for (let i = 1; i <= totalDaysCurrentMonth; i++) {
+        const d = new Date(year, month, i);
+        const dateStr = formatDateToISO(d);
+        const matchedEvents = events.filter((ev) => isDateInRange(dateStr, ev.startDate, ev.endDate));
+        cells.push({
+          date: d,
+          dateString: dateStr,
+          dayNumber: i,
+          isCurrentMonth: true,
+          isToday: dateStr === TODAY_ISO_STRING,
+          isWeekend: d.getDay() === 0 || d.getDay() === 6,
+          events: matchedEvents,
+        });
+      }
+
+      // Next month leading days
+      const targetTotal = cells.length + ((7 - (cells.length % 7)) % 7);
+      const daysNeeded = (targetTotal < 35 ? 35 : targetTotal) - cells.length;
+      for (let i = 1; i <= daysNeeded; i++) {
+        const d = new Date(year, month + 1, i);
+        const dateStr = formatDateToISO(d);
+        const matchedEvents = events.filter((ev) => isDateInRange(dateStr, ev.startDate, ev.endDate));
+        cells.push({
+          date: d,
+          dateString: dateStr,
+          dayNumber: i,
+          isCurrentMonth: false,
+          isToday: dateStr === TODAY_ISO_STRING,
+          isWeekend: d.getDay() === 0 || d.getDay() === 6,
+          events: matchedEvents,
+        });
+      }
+
+      return cells;
+    }
+
+    function getMonthWeeksGrid(currentDate, events) {
+      const allCells = getMonthDaysGrid(currentDate, events);
+      const weeks = [];
+
+      for (let i = 0; i < allCells.length; i += 7) {
+        const weekDays = allCells.slice(i, i + 7);
+        if (weekDays.length < 7) break;
+        const weekStartStr = weekDays[0].dateString;
+        const weekEndStr = weekDays[6].dateString;
+
+        const multiDaySegments = [];
+        const singleEventsByDate = {};
+        weekDays.forEach((day) => {
+          singleEventsByDate[day.dateString] = [];
+        });
+
+        const seenMultiDayIds = new Set();
+        events.forEach((ev) => {
+          const isMulti = Boolean(ev.endDate && ev.endDate !== ev.startDate);
+          const evEnd = ev.endDate || ev.startDate;
+          const overlapsWeek = ev.startDate <= weekEndStr && evEnd >= weekStartStr;
+          if (!overlapsWeek) return;
+
+          if (isMulti) {
+            if (!seenMultiDayIds.has(ev.id)) {
+              seenMultiDayIds.add(ev.id);
+              let startIdx = 0;
+              for (let col = 0; col < 7; col++) {
+                if (weekDays[col].dateString >= ev.startDate) {
+                  startIdx = col;
+                  break;
+                }
+              }
+              if (ev.startDate < weekStartStr) startIdx = 0;
+
+              let endIdx = 6;
+              for (let col = 6; col >= 0; col--) {
+                if (weekDays[col].dateString <= evEnd) {
+                  endIdx = col;
+                  break;
+                }
+              }
+              if (evEnd > weekEndStr) endIdx = 6;
+
+              multiDaySegments.push({
+                event: ev,
+                startIndex: startIdx,
+                span: Math.max(1, endIdx - startIdx + 1),
+                isStart: ev.startDate >= weekStartStr,
+                isEnd: evEnd <= weekEndStr,
+              });
+            }
+          } else {
+            if (singleEventsByDate[ev.startDate]) {
+              singleEventsByDate[ev.startDate].push(ev);
+            }
+          }
+        });
+
+        weeks.push({
+          weekIndex: Math.floor(i / 7),
+          days: weekDays,
+          multiDaySegments,
+          singleEventsByDate,
+        });
+      }
+      return weeks;
+    }
+
+    function generateGoogleCalendarUrl(event) {
+      const title = encodeURIComponent(event.title);
+      const details = encodeURIComponent(
+        `${event.description}\n\nTarget Group: ${event.targetYears.join(', ')}\nLocation: ${event.location}\nOrganizer: ${event.organizer || 'Mount Sackville School'}`
+      );
+      const location = encodeURIComponent(event.location);
+      const startFormatted = event.startDate.replace(/-/g, '');
+      const endD = new Date(event.endDate || event.startDate);
+      endD.setDate(endD.getDate() + 1);
+      const nextDay = formatDateToISO(endD).replace(/-/g, '');
+      return `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&details=${details}&location=${location}&dates=${startFormatted}/${nextDay}`;
+    }
+
+    function downloadICSFile(event) {
+      const start = event.startDate.replace(/-/g, '');
+      const end = (event.endDate || event.startDate).replace(/-/g, '');
+      const icsContent = [
+        'BEGIN:VCALENDAR',
+        'VERSION:2.0',
+        'PRODID:-//Mount Sackville Secondary School//School Calendar//EN',
+        'CALSCALE:GREGORIAN',
+        'BEGIN:VEVENT',
+        `UID:${event.id}-${Date.now()}@mountsackville.ie`,
+        `DTSTAMP:${new Date().toISOString().replace(/[-:]/g, '').split('.')[0]}Z`,
+        `DTSTART;VALUE=DATE:${start}`,
+        `DTEND;VALUE=DATE:${end}`,
+        `SUMMARY:${event.title}`,
+        `DESCRIPTION:${event.description.replace(/\n/g, '\\n')}`,
+        `LOCATION:${event.location}`,
+        'STATUS:CONFIRMED',
+        'END:VEVENT',
+        'END:VCALENDAR',
+      ].join('\r\n');
+
+      const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${event.title.toLowerCase().replace(/[^a-z0-9]/g, '_')}.ics`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+
+    // --- COMPONENTS ---
+
+    // Header Component
+    const Header = ({ academicYear, onOpenSubscribe }) => {
+      const [mobileNavOpen, setMobileNavOpen] = useState(false);
+
+      return (
+        <header className="w-full bg-white border-b border-slate-200 shadow-xs print:hidden">
+          {/* Top Utility Bar */}
+          <div className="bg-[#08328d] text-white text-xs py-2 px-4 sm:px-6 lg:px-8">
+            <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3">
+              <div className="flex flex-wrap items-center gap-4 sm:gap-6 text-slate-100">
+                <a href="tel:+353018214061" className="flex items-center gap-1.5 hover:text-white transition-colors">
+                  <Icon name="Phone" className="w-3.5 h-3.5 text-blue-200" />
+                  <span>+353 (01) 821 4061</span>
+                </a>
+                <a href="mailto:info@mountsackville.ie" className="flex items-center gap-1.5 hover:text-white transition-colors">
+                  <Icon name="Mail" className="w-3.5 h-3.5 text-blue-200" />
+                  <span>info@mountsackville.ie</span>
+                </a>
+                <span className="hidden md:flex items-center gap-1.5 text-slate-300">
+                  <Icon name="Clock" className="w-3.5 h-3.5 text-blue-200" />
+                  <span>Mon – Fri 8:30 AM – 4:30 PM</span>
+                </span>
+              </div>
+              <div className="flex items-center gap-3 sm:gap-4 text-xs">
+                <span className="hidden lg:inline-block px-2 py-0.5 rounded bg-blue-900/60 text-blue-200 font-medium">
+                  School Portals:
+                </span>
+                <a href="https://mountsackville.vsware.ie" target="_blank" rel="noreferrer" className="px-2 py-0.5 rounded bg-white/10 hover:bg-white/20 transition text-slate-100 hover:text-white flex items-center gap-1 font-medium">
+                  VSware <Icon name="ExternalLink" className="w-2.5 h-2.5 opacity-70" />
+                </a>
+                <a href="https://www.tyro.ie" target="_blank" rel="noreferrer" className="hidden sm:flex px-2 py-0.5 rounded bg-white/10 hover:bg-white/20 transition text-slate-100 hover:text-white items-center gap-1">
+                  Tyro
+                </a>
+                <button 
+                  onClick={onOpenSubscribe} 
+                  className="px-2.5 py-0.5 rounded bg-amber-400 text-slate-900 hover:bg-amber-300 font-bold transition flex items-center gap-1"
+                >
+                  <Icon name="Calendar" className="w-3 h-3" />
+                  <span>Sync iCal</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Main Branding Bar */}
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 sm:py-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3 sm:gap-4">
+                <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl bg-[#08328d] text-white flex items-center justify-center p-2 shadow-xs shrink-0">
+                  <div className="relative flex flex-col items-center justify-center text-center">
+                    <span className="font-serif font-bold tracking-widest text-amber-300 text-base leading-none">MS</span>
+                    <span className="text-[8px] uppercase tracking-wider font-semibold text-blue-200 mt-0.5">1864</span>
+                  </div>
+                </div>
+                <div>
+                  <div className="flex items-center gap-2">
+                    <h1 className="text-lg sm:text-xl md:text-2xl font-bold tracking-tight text-slate-900 font-serif">
+                      Mount Sackville
+                    </h1>
+                    <span className="hidden sm:inline-flex items-center gap-1 text-[11px] font-medium text-slate-700 bg-slate-100 border border-slate-200 px-2 py-0.5 rounded-md">
+                      <Icon name="ShieldCheck" className="w-3 h-3 text-slate-500" /> Cluny Education
+                    </span>
+                  </div>
+                  <p className="text-xs sm:text-sm font-medium text-slate-600">
+                    Secondary School • Chapelizod, Dublin
+                  </p>
+                </div>
+              </div>
+
+              <div className="hidden sm:flex items-center gap-2">
+                <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 text-slate-800 border border-slate-200">
+                  <Icon name="Calendar" className="w-3.5 h-3.5 text-[#08328d]" />
+                  Academic Year {academicYear}
+                </span>
+              </div>
+
+              <div className="flex items-center gap-2 sm:hidden">
+                <button
+                  onClick={() => setMobileNavOpen(!mobileNavOpen)}
+                  className="p-2 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition"
+                  aria-label="Toggle navigation menu"
+                >
+                  <Icon name={mobileNavOpen ? "X" : "Menu"} className="w-6 h-6" />
+                </button>
+              </div>
+            </div>
+
+            {mobileNavOpen && (
+              <div className="mt-3 pt-3 border-t border-slate-200 sm:hidden flex flex-col gap-2 pb-2">
+                <div className="grid grid-cols-2 gap-2 text-xs font-medium text-slate-700">
+                  <span className="p-2 rounded-md bg-slate-50">Home</span>
+                  <span className="p-2 rounded-md bg-blue-50 text-[#08328d] font-semibold">School Calendar</span>
+                  <span className="p-2 rounded-md bg-slate-50">Parent Portal</span>
+                  <button onClick={onOpenSubscribe} className="p-2 rounded-md bg-amber-100 text-amber-900 font-bold text-left">
+                    Subscribe iCal
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Sub-banner */}
+          <div className="bg-slate-100/80 border-t border-b border-slate-200 py-2.5 px-4 sm:px-6 lg:px-8">
+            <div className="max-w-7xl mx-auto flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <div className="flex items-center gap-2 text-xs text-slate-500">
+                <span>Home</span>
+                <span>/</span>
+                <span>Our School</span>
+                <span>/</span>
+                <span className="text-[#08328d] font-semibold">Calendar & Key Dates</span>
+              </div>
+              <div className="flex items-center gap-2.5">
+                <span className="text-xs text-slate-600">
+                  Live updates for parents, students & staff
+                </span>
+              </div>
+            </div>
+          </div>
+        </header>
+      );
+    };
+
+    // Calendar Controls Component
+    const CalendarControls = ({
+      currentDate,
+      onPrevMonth,
+      onNextMonth,
+      onToday,
+      onDateChange,
+      viewMode,
+      onViewModeChange,
+      searchQuery,
+      onSearchChange,
+      selectedCategories,
+      onApplyCategories,
+      onSelectAllCategories,
+      selectedYear,
+      onSelectYear,
+      categoryCounts,
+      totalFilteredCount,
+    }) => {
+      const [categoriesDropdownOpen, setCategoriesDropdownOpen] = useState(false);
+      const [yearDropdownOpen, setYearDropdownOpen] = useState(false);
+      const [pendingCategories, setPendingCategories] = useState(selectedCategories);
+      const [monthDropdownOpen, setMonthDropdownOpen] = useState(false);
+      const currentMonthName = currentDate.toLocaleDateString('en-IE', { month: 'long' });
+      const currentYearNum = currentDate.getFullYear();
+      const isAllCategoriesSelected = selectedCategories.length === Object.keys(EVENT_CATEGORIES).length;
+      const isCurrentMonthViewed = currentDate.getFullYear() === 2026 && currentDate.getMonth() === 8;
+
+      const YEAR_GROUPS = [
+        'All',
+        '1st Year',
+        '2nd Year',
+        '3rd Year',
+        'Transition Year',
+        '5th Year',
+        '6th Year & LCA',
+      ];
+
+      return (
+        <div className="w-full bg-white rounded-xl border border-slate-200/90 shadow-2xs p-3.5 sm:p-4 space-y-3.5">
+          {/* Top Bar: Nav, Filters, View Switcher */}
+          <div className="flex flex-col lg:flex-row items-center justify-between gap-4 py-1">
+            
+            {/* Left: Month Navigation & Today */}
+            <div className="flex items-center justify-between w-full lg:w-auto gap-2 shrink-0">
+              <div className="flex items-center">
+                <button
+                  onClick={onPrevMonth}
+                  aria-label="Previous month"
+                  className="p-2 lg:p-1.5 focus:outline-none rounded-full text-slate-400 hover:text-slate-800 hover:bg-slate-100 transition cursor-pointer flex items-center justify-center"
+                >
+                  <Icon name="ChevronLeft" className="w-5 h-5 sm:w-6 sm:h-6" />
+                </button>
+
+                <div className="relative mx-1">
+                  <button
+                    onClick={() => setMonthDropdownOpen(!monthDropdownOpen)}
+                    className="focus:outline-none text-base sm:text-xl font-bold text-slate-800 tracking-tight hover:text-[#08328d] hover:bg-slate-50 transition cursor-pointer text-center rounded-lg py-1 px-1 sm:px-2 flex items-center justify-center gap-1 sm:gap-1.5 w-32 sm:w-44 lg:w-52"
+                  >
+                    {currentMonthName} {currentYearNum}
+                    <Icon name="Calendar" className="w-4 h-4 sm:w-5 sm:h-5 text-slate-400" />
+                  </button>
+
+                  {monthDropdownOpen && (
+                    <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-52 sm:w-56 bg-white border border-slate-200 rounded-xl shadow-xl z-50 py-1.5 animate-fadeIn max-h-72 overflow-y-auto">
+                      {[
+                        { y: 2026, m: 7, label: "August 2026" },
+                        { y: 2026, m: 8, label: "September 2026" },
+                        { y: 2026, m: 9, label: "October 2026" },
+                        { y: 2026, m: 10, label: "November 2026" },
+                        { y: 2026, m: 11, label: "December 2026" },
+                        { y: 2027, m: 0, label: "January 2027" },
+                        { y: 2027, m: 1, label: "February 2027" },
+                        { y: 2027, m: 2, label: "March 2027" },
+                        { y: 2027, m: 3, label: "April 2027" },
+                        { y: 2027, m: 4, label: "May 2027" },
+                        { y: 2027, m: 5, label: "June 2027" },
+                        { y: 2027, m: 6, label: "July 2027" }
+                      ].map(opt => {
+                         const isSelected = currentDate.getFullYear() === opt.y && currentDate.getMonth() === opt.m;
+                         return (
+                           <button
+                             key={`${opt.y}-${opt.m}`}
+                             onClick={() => {
+                               onDateChange(new Date(opt.y, opt.m, 1));
+                               setMonthDropdownOpen(false);
+                             }}
+                             className={`w-full text-left px-4 py-2 hover:bg-slate-50 transition text-sm flex items-center justify-between cursor-pointer border-b border-slate-50 last:border-b-0 ${isSelected ? 'font-bold text-[#08328d] bg-blue-50/40' : 'font-medium text-slate-700'}`}
+                           >
+                             {opt.label}
+                             {isSelected && <Icon name="Check" className="w-4 h-4 text-[#08328d]" />}
+                           </button>
+                         )
+                      })}
+                    </div>
+                  )}
+                </div>
+
+                <button
+                  onClick={onNextMonth}
+                  aria-label="Next month"
+                  className="p-2 lg:p-1.5 focus:outline-none rounded-full text-slate-400 hover:text-slate-800 hover:bg-slate-100 transition cursor-pointer flex items-center justify-center"
+                >
+                  <Icon name="ChevronRight" className="w-5 h-5 sm:w-6 sm:h-6" />
+                </button>
+              </div>
+
+              <button
+                onClick={onToday}
+                className="block px-2.5 py-1.5 sm:px-4 sm:py-2 lg:px-3 lg:py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-bold text-slate-600 hover:bg-slate-50 hover:text-slate-900 shadow-2xs transition cursor-pointer shrink-0"
+              >
+                Today
+              </button>
+            </div>
+
+            {/* Middle: Year Dropdown, Categories Dropdown, Search */}
+            <div className="flex flex-col lg:flex-row items-center justify-center lg:justify-start gap-2 lg:gap-3 w-full lg:w-auto flex-1 lg:justify-center">
+              <div className="grid grid-cols-2 gap-2 w-full lg:flex lg:w-auto lg:gap-3">
+                {/* Year Dropdown */}
+                <div className="relative">
+                  <button
+                    onClick={() => setYearDropdownOpen(!yearDropdownOpen)}
+                    className="w-full text-xs bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 font-medium px-3 py-2 lg:py-1.5 rounded-lg flex items-center justify-center lg:justify-start gap-1.5 transition cursor-pointer shadow-xs"
+                >
+                  <Icon name="Users" className="w-3.5 h-3.5" />
+                  <span className="hidden lg:inline">Year: {selectedYear === 'All' ? 'All' : selectedYear}</span>
+                  <span className="lg:hidden">Year</span>
+                  <Icon name="ChevronLeft" className={`w-3.5 h-3.5 text-slate-400 transition-transform ${yearDropdownOpen ? 'rotate-90' : '-rotate-90'}`} />
+                </button>
+
+                {yearDropdownOpen && (
+                  <div className="absolute left-0 lg:left-1/2 lg:-translate-x-1/2 top-full mt-2 w-56 bg-white rounded-xl border border-slate-200 shadow-xl z-20 py-1.5 animate-fadeIn">
+                    {YEAR_GROUPS.map((yg) => {
+                      const isSelected = selectedYear === yg;
+                      return (
+                        <button
+                          key={yg}
+                          onClick={() => {
+                            onSelectYear(yg);
+                            setYearDropdownOpen(false);
+                          }}
+                          className={`w-full text-left px-4 py-2 hover:bg-slate-50 transition border-b border-slate-50 last:border-b-0 flex items-center justify-between cursor-pointer ${isSelected ? 'bg-blue-50/40' : ''}`}
+                        >
+                          <span className={`text-sm ${isSelected ? 'font-bold text-[#08328d]' : 'font-medium text-slate-700'}`}>
+                            {yg === 'All' ? 'All Years' : yg}
+                          </span>
+                          {isSelected && <Icon name="Check" className="w-4 h-4 text-[#08328d]" />}
+                        </button>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+
+              {/* Categories Dropdown */}
+              <div className="relative">
+                <button
+                  onClick={() => {
+                    if (!categoriesDropdownOpen) setPendingCategories(selectedCategories);
+                    setCategoriesDropdownOpen(!categoriesDropdownOpen);
+                  }}
+                  className="w-full text-xs bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 font-medium px-3 py-2 lg:py-1.5 rounded-lg flex items-center justify-center lg:justify-start gap-1.5 transition cursor-pointer shadow-xs"
+                >
+                  <Icon name="SlidersHorizontal" className="w-3.5 h-3.5" />
+                  <span className="hidden sm:inline">Categories</span>
+                  <span className="sm:hidden">Cat.</span>
+                  <Icon name="ChevronLeft" className={`w-3.5 h-3.5 text-slate-400 transition-transform ${categoriesDropdownOpen ? 'rotate-90' : '-rotate-90'}`} />
+                </button>
+
+                {categoriesDropdownOpen && (
+                  <div className="absolute right-0 lg:left-1/2 lg:-translate-x-1/2 top-full mt-2 w-72 sm:w-[320px] bg-white rounded-xl border border-slate-200 shadow-xl z-20 flex flex-col max-h-96 animate-fadeIn">
+                    <div className="overflow-y-auto py-2">
+                      <label className="flex items-center gap-3 px-4 py-2.5 hover:bg-slate-50 cursor-pointer transition border-b border-slate-200 bg-slate-50/50">
+                        <div className="flex items-center h-5">
+                          <input
+                            type="checkbox"
+                            checked={pendingCategories.length === Object.keys(EVENT_CATEGORIES).length}
+                            ref={(input) => {
+                              if (input) {
+                                input.indeterminate = pendingCategories.length > 0 && pendingCategories.length < Object.keys(EVENT_CATEGORIES).length;
+                              }
+                            }}
+                            onChange={() => {
+                              if (pendingCategories.length === Object.keys(EVENT_CATEGORIES).length) {
+                                setPendingCategories([]);
+                              } else {
+                                setPendingCategories(Object.keys(EVENT_CATEGORIES));
+                              }
+                            }}
+                            className="w-4 h-4 text-blue-600 rounded border-slate-300 focus:ring-blue-500 cursor-pointer"
+                          />
+                        </div>
+                        <div className="flex-1 flex items-center gap-2">
+                          <span className="text-sm font-bold text-slate-900 leading-none">Select / Deselect All</span>
+                        </div>
+                      </label>
+                      {Object.values(EVENT_CATEGORIES).map((cat) => {
+                        const isSelected = pendingCategories.includes(cat.id);
+                        const count = categoryCounts[cat.id] || 0;
+                        return (
+                          <label
+                            key={cat.id}
+                            className="flex items-center gap-3 px-4 py-2.5 hover:bg-slate-50 cursor-pointer transition border-b border-slate-50 last:border-b-0"
+                          >
+                            <div className="flex items-center h-5">
+                              <input
+                                type="checkbox"
+                                checked={isSelected}
+                                onChange={() => {
+                                  setPendingCategories(prev => {
+                                    if (prev.includes(cat.id)) {
+                                      return prev.filter(id => id !== cat.id);
+                                    }
+                                    return [...prev, cat.id];
+                                  });
+                                }}
+                                className="w-4 h-4 text-blue-600 rounded border-slate-300 focus:ring-blue-500 cursor-pointer"
+                              />
+                            </div>
+                            <div className="flex-1 flex items-center gap-2">
+                              <CategoryIcon categoryId={cat.id} className={`w-4 h-4 ${cat.textDark}`} />
+                              <span className="text-sm font-semibold text-slate-900 leading-none">{cat.name}</span>
+                            </div>
+                            <div className="shrink-0 text-xs font-mono bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded flex items-center justify-center">
+                              {count}
+                            </div>
+                          </label>
+                        );
+                      })}
+                    </div>
+                    <div className="p-3 border-t border-slate-100 bg-slate-50 rounded-b-xl flex justify-end gap-3 items-center">
+                      <button
+                        onClick={() => {
+                          onApplyCategories(pendingCategories);
+                          setCategoriesDropdownOpen(false);
+                        }}
+                        className="px-4 py-1.5 bg-[#08328d] text-white text-xs font-bold rounded-lg hover:bg-blue-800 transition cursor-pointer shadow-xs"
+                      >
+                        Apply
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              </div>
+
+              {/* Search */}
+              <div className="relative w-full lg:w-56 shrink-0 grow lg:grow-0">
+                <Icon name="Search" className="w-3 h-3 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => onSearchChange(e.target.value)}
+                  placeholder="Search events..."
+                  className="w-full pl-9 pr-7 py-2 lg:py-1.5 text-xs bg-slate-50/50 border border-slate-200/60 rounded-full focus:bg-white focus:outline-none focus:ring-1 focus:ring-slate-300 transition placeholder:text-slate-400 text-slate-700 shadow-xs"
+                />
+                {searchQuery && (
+                  <button
+                    onClick={() => onSearchChange('')}
+                    className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 text-xs"
+                  >
+                    ✕
+                  </button>
+                )}
+              </div>
+            </div>
+
+            {/* Right: View Toggle */}
+            <div className="flex items-center justify-center lg:justify-end w-full lg:w-auto shrink-0 mt-2 lg:mt-0">
+              <div className="flex items-center w-full lg:w-auto gap-1 bg-slate-100/50 p-1 rounded-xl border border-slate-200/50 text-xs">
+                <button
+                  onClick={() => onViewModeChange('month')}
+                  className={`flex-1 lg:flex-none flex items-center justify-center gap-1.5 px-3 py-2 lg:py-1.5 rounded-lg transition cursor-pointer ${
+                    viewMode === 'month'
+                      ? 'bg-white text-[#08328d] font-bold shadow-sm ring-1 ring-slate-900/5'
+                      : 'text-slate-500 font-medium hover:text-slate-800 hover:bg-white/50'
+                  }`}
+                >
+                  <Icon name="Calendar" className="w-3.5 h-3.5" />
+                  <span>Calendar</span>
+                </button>
+                <button
+                  onClick={() => onViewModeChange('list')}
+                  className={`flex-1 lg:flex-none flex items-center justify-center gap-1.5 px-3 py-2 lg:py-1.5 rounded-lg transition cursor-pointer ${
+                    viewMode === 'list'
+                      ? 'bg-white text-[#08328d] font-bold shadow-sm ring-1 ring-slate-900/5'
+                      : 'text-slate-500 font-medium hover:text-slate-800 hover:bg-white/50'
+                  }`}
+                >
+                  <Icon name="List" className="w-3.5 h-3.5" />
+                  <span>List</span>
+                </button>
+              </div>
+            </div>
+
+          </div>
+
+
+        </div>
+      );
+    };
+
+    // Month View Component
+    const MonthView = ({ currentDate, events, onSelectEvent }) => {
+      const [expandedDay, setExpandedDay] = useState(null);
+      const [expandedEventId, setExpandedEventId] = useState(null);
+      const [selectedEmptyDay, setSelectedEmptyDay] = useState(null);
+      const weekRows = getMonthWeeksGrid(currentDate, events);
+
+      const WEEKDAYS = [
+        { short: 'Mon', full: 'Monday' },
+        { short: 'Tue', full: 'Tuesday' },
+        { short: 'Wed', full: 'Wednesday' },
+        { short: 'Thu', full: 'Thursday' },
+        { short: 'Fri', full: 'Friday' },
+        { short: 'Sat', full: 'Saturday' },
+        { short: 'Sun', full: 'Sunday' },
+      ];
+
+      return (
+        <div className="w-full bg-white rounded-xl border border-slate-300 shadow-2xs overflow-hidden select-none">
+          {/* Weekday Header */}
+          <div className="grid grid-cols-7 border-b border-slate-200 bg-slate-100 text-[14px] font-semibold text-slate-600">
+            {WEEKDAYS.map((day) => {
+              const todayDate = new Date(); const todayDayShorts = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat']; const todayShort = todayDayShorts[todayDate.getDay()]; const isTodayColumn = day.short === todayShort && currentDate.getFullYear() === todayDate.getFullYear() && currentDate.getMonth() === todayDate.getMonth();
+              const isWeekend = day.short === 'Sat' || day.short === 'Sun';
+              const isSaturday = day.short === 'Sat';
+              return (
+                <div
+                  key={day.short}
+                  className={`py-2 px-1 text-center border-r last:border-r-0 border-slate-200/70 transition-colors ${
+                    isTodayColumn 
+                      ? 'bg-blue-50/80 text-[#08328d] font-bold' 
+                      : isWeekend 
+                        ? 'bg-slate-50 text-slate-400' 
+                        : 'text-slate-700'
+                  } ${isSaturday ? 'border-l-2 border-slate-300' : ''}`}
+                >
+                  <div className="flex items-center justify-center gap-1">
+                    <span className="hidden sm:inline">{day.full}</span>
+                    <span className="sm:hidden">{day.short}</span>
+                    {isTodayColumn && <span className="w-1.5 h-1.5 rounded-full bg-[#08328d] hidden md:inline-block" />}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Calendar Rows */}
+          <div className="divide-y divide-slate-200">
+            {weekRows.map((week, wIndex) => (
+              <div key={`week-${week.weekIndex}`} className="flex flex-col bg-white">
+                {/* Day Cells Grid */}
+                <div className="grid grid-cols-7 divide-x divide-slate-200">
+                  {week.days.map((dayCell, dIndex) => {
+                    const isBottomLeft = wIndex === weekRows.length - 1 && dIndex === 0;
+                    const isBottomRight = wIndex === weekRows.length - 1 && dIndex === 6;
+                    const isHoliday = dayCell.events.some(ev => ev.categoryId === 'closures');
+                    const dayEvents = dayCell.events.filter(e => e.categoryId !== 'closures');
+                    const visibleLimit = 2;
+                    const visibleEvents = dayEvents.slice(0, visibleLimit);
+                    const overflowCount = Math.max(0, dayEvents.length - visibleLimit);
+
+                    return (
+                      <div
+                        key={dayCell.dateString}
+                        onClick={() => {
+                          if (!dayCell.isCurrentMonth) return;
+                          if (dayCell.events.length === 0) {
+                            setSelectedEmptyDay(prev => prev === dayCell.dateString ? null : dayCell.dateString);
+                            return;
+                          }
+                          const isSameDay = expandedDay?.dateString === dayCell.dateString;
+                          setExpandedDay(isSameDay ? null : dayCell);
+                          setExpandedEventId(null);
+                          setSelectedEmptyDay(null);
+                        }}
+                        className={`relative min-h-[64px] sm:min-h-[80px] p-1.5 sm:p-2 flex flex-col justify-between transition-colors cursor-pointer ${
+                          isBottomLeft ? 'rounded-bl-xl' : ''
+                        } ${isBottomRight ? 'rounded-br-xl' : ''} ${
+                          dayCell.isToday
+                            ? 'hover:bg-slate-50/50 shadow-[inset_0_4px_0_0_#08328d] z-10'
+                            : isHoliday
+                            ? 'hover:bg-slate-50/50 shadow-[inset_0_4px_0_0_#dc2626] z-10'
+                            : dayCell.isCurrentMonth
+                            ? dayCell.isWeekend
+                              ? 'bg-slate-50/40 hover:bg-slate-50/70'
+                              : 'bg-white hover:bg-slate-50/50'
+                            : 'bg-slate-50/70 text-slate-400'
+                        } ${dIndex === 5 && !dayCell.isToday && !isHoliday ? 'border-l-2 border-slate-300' : ''} ${!dayCell.isCurrentMonth ? 'bg-white cursor-default' : ''}`}
+                      >
+
+                        {dayCell.isCurrentMonth && <>
+                        {/* Day Header */}
+                        <div className="flex items-center justify-between gap-1 mb-1.5">
+                          <div className="flex flex-wrap items-start gap-1.5">
+                            {/* Date Number Container */}
+                            <div className="flex flex-col items-center">
+                              <span
+                                className={`inline-flex items-center justify-center font-bold transition-all text-[16px] ${
+                                  dayCell.isToday
+                                    ? 'w-8 h-8 rounded-full bg-[#08328d] text-white'
+                                    : isHoliday
+                                    ? 'w-8 h-8 rounded-full bg-red-600 text-white'
+                                    : `w-6 h-6 rounded-md ${dayCell.isCurrentMonth ? dayCell.isWeekend ? 'text-slate-600' : 'text-slate-800' : 'text-slate-300'}`
+                                }`}
+                              >
+                                {dayCell.dayNumber}
+                              </span>
+                            </div>
+
+                            {/* Pill Badge */}
+                            {dayCell.isToday && (
+                              <span className="mt-0.5 inline-flex items-center text-[9px] font-bold uppercase tracking-wider text-[#08328d] px-1.5 py-0.5 rounded">
+                                <span>Today</span>
+                              </span>
+                            )}
+                            {isHoliday && !dayCell.isToday && (
+                              <span className="mt-0.5 inline-flex items-center text-[9px] font-bold uppercase tracking-wider text-red-700 px-1.5 py-0.5 rounded">
+                                <span>Holiday</span>
+                              </span>
+                            )}
+                          </div>
+                        </div>
+
+                        {/* Event Indicators */}
+                        <div className="flex-1 flex flex-row flex-wrap content-end items-end justify-start gap-1 overflow-hidden">
+                          {visibleEvents.map((ev, idx) => {
+                            const cat = EVENT_CATEGORIES[ev.categoryId];
+                            return (
+                              <div
+                                key={`${ev.id}-${idx}`}
+                                className={`rounded p-1 border flex items-center justify-center ${cat.bgLight} ${cat.textDark} ${cat.borderColor}`}
+                                title={`${ev.title} - ${ev.startTime || 'All day'}`}
+                              >
+                                <CategoryIcon categoryId={ev.categoryId} className={`w-3.5 h-3.5 shrink-0 ${cat.textDark}`} />
+                              </div>
+                            );
+                          })}
+
+                          {overflowCount > 0 && (
+                            <div className="text-[10px] font-bold text-slate-600 bg-slate-100 px-1.5 py-1 rounded flex items-center justify-center whitespace-nowrap">
+                              +{overflowCount} More
+                            </div>
+                          )}
+                          {dayCell.events.length === 0 && !isHoliday && selectedEmptyDay === dayCell.dateString && (
+                            <span className="text-[10px] text-slate-300 select-none mt-auto">No events</span>
+                          )}
+                        </div>
+                        </>}
+                      </div>
+                    );
+                  })}
+                </div>
+
+                {/* Inline Expanded Day List for This Week */}
+                {expandedDay && week.days.some(d => d.dateString === expandedDay.dateString) && (() => {
+                  const selectedCol = week.days.findIndex(day => day.dateString === expandedDay.dateString);
+                  const tailLeft = `calc(${((selectedCol + 0.5) * 100) / 7}% - 8px)`;
+                  return (
+                    <div className="relative border-t-2 border-slate-400 bg-slate-50 px-3 py-3 animate-fadeIn">
+                      <div
+                        className="absolute top-0 h-4 w-4 -translate-y-1/2 rotate-45 border-t-2 border-l-2 border-slate-400 bg-slate-50"
+                        style={{ left: tailLeft }}
+                      />
+                      <div className="flex items-center justify-end pb-2">
+                        <button onClick={() => { setExpandedDay(null); setExpandedEventId(null); }} className="px-2 py-1 rounded-md text-xs font-semibold text-slate-500 hover:text-slate-900 hover:bg-slate-200/50 transition cursor-pointer">
+                          Close
+                        </button>
+                      </div>
+                      
+                      <div className="space-y-2">
+                        {(
+                          [...expandedDay.events].sort((a, b) => {
+                              if (!a.startTime && !b.startTime) return 0;
+                              if (!a.startTime) return -1;
+                              if (!b.startTime) return 1;
+                              const toMins = t => {
+                                const [time, period] = t.split(' ');
+                                let [h, m] = time.split(':').map(Number);
+                                if (period === 'PM' && h !== 12) h += 12;
+                                if (period === 'AM' && h === 12) h = 0;
+                                return h * 60 + m;
+                              };
+                              return toMins(a.startTime) - toMins(b.startTime);
+                            }).map((ev) => {
+                            const cat = EVENT_CATEGORIES[ev.categoryId];
+                            const isExpanded = expandedEventId === ev.id;
+                            return (
+                              <div
+                                key={ev.id}
+                                onClick={() => setExpandedEventId(isExpanded ? null : ev.id)}
+                                className="group bg-white border border-slate-200 rounded-lg p-3 cursor-pointer hover:border-slate-300 hover:bg-slate-50/50 transition-colors"
+                                role="button"
+                                tabIndex="0"
+                                aria-expanded={isExpanded}
+                                onKeyDown={(event) => {
+                                  if (event.key === 'Enter' || event.key === ' ') {
+                                    event.preventDefault();
+                                    setExpandedEventId(isExpanded ? null : ev.id);
+                                  }
+                                }}
+                              >
+                                <div className="flex w-full items-start justify-between gap-2 min-w-0">
+                                  <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2 min-w-0 flex-1">
+                                    {/* Title row */}
+                                    <div className="flex items-center gap-2 min-w-0">
+                                      <CategoryIcon categoryId={ev.categoryId} className={`w-4 h-4 shrink-0 ${cat.textDark}`} />
+                                      <h4 className={`text-[15px] font-bold ${cat.textDark} transition-colors`}>{ev.title}</h4>
+                                    </div>
+                                    {/* Meta row — wraps on mobile, inline on sm+ */}
+                                    <div className="flex items-center flex-wrap gap-x-2 gap-y-1 text-[12px] sm:text-[13px] text-slate-500 pl-6 sm:pl-0">
+                                      <span className="hidden sm:inline text-slate-300 shrink-0">&middot;</span>
+                                      {ev.startTime ? (
+                                        <span className="flex items-center gap-1 shrink-0"><Icon name="Clock" className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-slate-400" />{ev.startTime}</span>
+                                      ) : (
+                                        <span className="flex items-center gap-1 shrink-0"><Icon name="Clock" className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-slate-400" />All Day</span>
+                                      )}
+                                      {ev.targetYears && ev.targetYears.length > 0 && (
+                                        <>
+                                          <span className="text-slate-300 shrink-0">&middot;</span>
+                                          <span className="flex items-center gap-1 shrink-0"><Icon name="Users" className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-slate-400" />{ev.targetYears.join(', ')}</span>
+                                        </>
+                                      )}
+                                      {ev.location && (
+                                        <>
+                                          <span className="text-slate-300 shrink-0">&middot;</span>
+                                          <span className="flex items-center gap-1 min-w-0"><Icon name="MapPin" className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-slate-400 shrink-0" /><span className="truncate">{ev.location}</span></span>
+                                        </>
+                                      )}
+                                    </div>
+                                  </div>
+                                  <Icon name="ChevronDown" className={`w-5 h-5 mr-1 shrink-0 text-slate-400 transition-transform mt-0.5 ${isExpanded ? 'rotate-180' : ''}`} />
+                                </div>
+                                {isExpanded && (
+                                  <div className="pl-4 pt-2 text-sm leading-relaxed text-slate-600">
+                                    {ev.description}
+                                  </div>
+                                )}
+                              </div>
+                            );
+                          })
+                        )}
+                      </div>
+                    </div>
+                  );
+                })()}
+              </div>
+            ))}
+          </div>
+        </div>
+      );
+    };
+
+    // Timeline List View Component
+    const TimelineListView = ({ events, onSelectEvent, onResetFilters }) => {
+      const sortedEvents = [...events].sort((a, b) => a.startDate.localeCompare(b.startDate));
+      const groupedByMonth = [];
+      const monthMap = new Map();
+
+      sortedEvents.forEach((ev) => {
+        const [year, month] = ev.startDate.split('-');
+        const dateObj = new Date(Number(year), Number(month) - 1, 1);
+        const monthKey = dateObj.toLocaleDateString('en-IE', { month: 'long', year: 'numeric' });
+        if (!monthMap.has(monthKey)) {
+          monthMap.set(monthKey, []);
+          groupedByMonth.push({ monthLabel: monthKey, items: monthMap.get(monthKey) });
+        }
+        monthMap.get(monthKey).push(ev);
+      });
+
+      if (sortedEvents.length === 0) {
+        return (
+          <div className="bg-white rounded-xl border border-slate-200 p-12 text-center space-y-3">
+            <div className="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center mx-auto text-slate-400">
+              <Icon name="Calendar" className="w-6 h-6" />
+            </div>
+            <h3 className="text-base font-bold text-slate-800">No events found</h3>
+            <p className="text-xs text-slate-500 max-w-sm mx-auto">No calendar events match the active search or filter criteria.</p>
+            {onResetFilters && (
+              <button onClick={onResetFilters} className="text-xs font-semibold text-slate-900 bg-slate-100 hover:bg-slate-200 px-3 py-1.5 rounded-lg transition cursor-pointer">
+                Reset all filters
+              </button>
+            )}
+          </div>
+        );
+      }
+
+      return (
+        <div className="space-y-6">
+          {groupedByMonth.map(({ monthLabel, items }) => (
+            <div key={monthLabel} className="bg-white rounded-xl border border-slate-200 shadow-2xs overflow-hidden">
+              <div className="px-5 py-3 bg-slate-50/80 border-b border-slate-200 flex items-center justify-between">
+                <h3 className="text-sm font-bold text-slate-900 tracking-tight flex items-center gap-2">
+                  <Icon name="CalendarRange" className="w-4 h-4 text-slate-500" />
+                  <span>{monthLabel}</span>
+                </h3>
+                <span className="text-[11px] font-semibold text-slate-500">{items.length} {items.length === 1 ? 'event' : 'events'}</span>
+              </div>
+
+              <div className="divide-y divide-slate-100">
+                {items.map((ev) => {
+                  const cat = EVENT_CATEGORIES[ev.categoryId];
+                  const isMultiDay = Boolean(ev.endDate && ev.endDate !== ev.startDate);
+                  const isToday = ev.startDate === TODAY_ISO_STRING;
+                  const isHoliday = ev.categoryId === 'closures';
+                  const startDateObj = new Date(ev.startDate);
+                  const dayOfWeek = startDateObj.toLocaleDateString('en-IE', { weekday: 'short' });
+                  const dayOfMonth = startDateObj.getDate();
+
+                  return (
+                    <div
+                      key={ev.id}
+                      onClick={() => onSelectEvent(ev)}
+                      style={{ borderLeftColor: isToday ? '#08328d' : cat.hex }}
+                      className={`p-4 sm:px-5 sm:py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 transition cursor-pointer group ${
+                        isToday ? 'bg-blue-50/40 hover:bg-blue-50/70 border-l-4' : 'bg-white hover:bg-slate-50/60 border-l-4'
+                      }`}
+                    >
+                      <div className="flex items-start sm:items-center gap-3.5">
+                        <div className={`w-14 sm:w-16 text-center shrink-0 py-1 px-1 rounded-lg ${isToday ? 'bg-blue-100/80 border border-blue-300' : isHoliday ? 'bg-red-100 border border-red-300' : ''}`}>
+                          <span className={`text-[10px] font-bold uppercase tracking-wider block ${isToday ? 'text-[#08328d]' : isHoliday ? 'text-red-700' : 'text-slate-400'}`}>
+                            {isToday ? 'Today' : isHoliday ? 'Holiday' : dayOfWeek}
+                          </span>
+                          <span className={`text-lg font-bold leading-tight block ${isToday ? 'text-[#08328d]' : isHoliday ? 'text-red-700' : 'text-slate-900'}`}>
+                            {dayOfMonth}
+                          </span>
+                        </div>
+
+                        <div className="hidden sm:block w-px h-10 bg-slate-200 shrink-0" />
+
+                        <div className="space-y-1">
+                          <div className="flex flex-wrap items-center gap-2">
+                            {!isHoliday && (
+                              <span className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[11px] font-semibold border ${cat.bgLight} ${cat.textDark} ${cat.borderColor}`}>
+                                <CategoryIcon categoryId={ev.categoryId} className="w-3.5 h-3.5" />
+                                <span>{cat.name}</span>
+                              </span>
+                            )}
+
+                            <span className="text-[11px] text-slate-500 flex items-center gap-1">
+                              <Icon name="Users" className="w-3 h-3 text-slate-400" />
+                              {ev.targetYears.join(', ')}
+                            </span>
+                          </div>
+                          <h4 className="text-sm font-bold text-slate-900 group-hover:text-slate-950 transition">{ev.title}</h4>
+                          <p className="text-xs text-slate-600 line-clamp-1 max-w-2xl">{ev.description}</p>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center justify-between sm:justify-end gap-4 text-xs text-slate-500 shrink-0">
+                        <div className="flex flex-col sm:items-end text-left sm:text-right gap-0.5">
+                          <span className="flex items-center gap-1 font-medium text-slate-700">
+                            <Icon name="Clock" className="w-3.5 h-3.5 text-slate-400" />
+                            {ev.startTime ? `${ev.startTime} – ${ev.endTime || ''}` : 'All Day'}
+                          </span>
+
+                        </div>
+                        <button className="p-1.5 rounded-lg text-slate-400 group-hover:text-slate-900 transition">
+                          <Icon name="ArrowRight" className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
+        </div>
+      );
+    };
+
+    // Event Drawer / Modal Component
+    const EventModal = ({ event, onClose }) => {
+      if (!event) return null;
+
+      const category = EVENT_CATEGORIES[event.categoryId];
+
+      return (
+        <div className="fixed inset-0 z-[100] bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 transition-opacity animate-fadeIn" onClick={onClose}>
+          <div className="w-full max-w-md bg-white rounded-3xl border border-slate-200 shadow-2xl flex flex-col overflow-hidden animate-scaleUp" onClick={(e) => e.stopPropagation()}>
+            <div className="px-5 pt-5 pb-3.5 sm:px-6 sm:pt-6 sm:pb-4 border-b border-slate-100 flex items-start justify-between gap-4 relative bg-slate-50/50">
+              <div className="space-y-2 flex-1 pr-4">
+                {category && (
+                  <span className={`inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-full border ${category.bgLight} ${category.textDark} ${category.borderColor}`}>
+                    <CategoryIcon categoryId={event.categoryId} className="w-3 h-3" />
+                    <span>{category.name}</span>
+                  </span>
+                )}
+                <h3 className="text-lg sm:text-xl font-bold text-slate-900 leading-tight">
+                  {event.title}
+                </h3>
+              </div>
+              <button 
+                onClick={onClose} 
+                className="p-1.5 -mr-1.5 -mt-1.5 rounded-full text-slate-400 hover:text-slate-900 hover:bg-slate-200/60 transition cursor-pointer shrink-0"
+              >
+                <Icon name="X" className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="px-5 pt-3.5 pb-5 sm:px-6 sm:pt-4 sm:pb-6 space-y-5">
+              <div className="space-y-3">
+                <div className="flex items-center gap-3 text-sm text-slate-700 font-medium">
+                  <div className="flex items-center justify-center p-1.5 bg-slate-50 text-slate-500 border border-slate-200 rounded-md shrink-0">
+                    <Icon name="CalendarRange" className="w-4 h-4" />
+                  </div>
+                  <span>
+                    {formatFullDate(event.startDate)}
+                    {event.endDate && event.endDate !== event.startDate && (
+                      <span className="font-normal text-slate-500"> — {formatFullDate(event.endDate)}</span>
+                    )}
+                  </span>
+                </div>
+
+                <div className="flex items-center gap-3 text-sm text-slate-700 font-medium">
+                  <div className="flex items-center justify-center p-1.5 bg-slate-50 text-slate-500 border border-slate-200 rounded-md shrink-0">
+                    <Icon name="Clock" className="w-4 h-4" />
+                  </div>
+                  <span>
+                    {event.startTime ? `${event.startTime}${event.endTime ? ` – ${event.endTime}` : ''}` : 'All Day'}
+                  </span>
+                </div>
+
+              </div>
+              
+              <div className="text-sm text-slate-600 leading-relaxed pt-2 border-t border-slate-100">
+                {event.description}
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    };
+
+    // Subscribe Modal Component
+    const SubscribeModal = ({ isOpen, onClose, events }) => {
+      const [copiedUrl, setCopiedUrl] = useState(false);
+      if (!isOpen) return null;
+
+      const webcalUrl = 'webcal://mountsackville.ie/calendar/feed.ics';
+      const httpsUrl = 'https://mountsackville.ie/calendar/feed.ics';
+
+      const handleCopy = (text) => {
+        navigator.clipboard.writeText(text);
+        setCopiedUrl(true);
+        setTimeout(() => setCopiedUrl(false), 2000);
+      };
+
+      const handleDownloadFullICS = () => {
+        const calendarLines = [
+          'BEGIN:VCALENDAR',
+          'VERSION:2.0',
+          'PRODID:-//Mount Sackville Secondary School//Academic Calendar 2026-2027//EN',
+          'CALSCALE:GREGORIAN',
+          'X-WR-CALNAME:Mount Sackville School Calendar',
+          'X-WR-TIMEZONE:Europe/Dublin',
+        ];
+
+        events.forEach((ev) => {
+          const start = ev.startDate.replace(/-/g, '');
+          const end = (ev.endDate || ev.startDate).replace(/-/g, '');
+          calendarLines.push(
+            'BEGIN:VEVENT',
+            `UID:${ev.id}@mountsackville.ie`,
+            `DTSTAMP:${new Date().toISOString().replace(/[-:]/g, '').split('.')[0]}Z`,
+            `DTSTART;VALUE=DATE:${start}`,
+            `DTEND;VALUE=DATE:${end}`,
+            `SUMMARY:${ev.title}`,
+            `DESCRIPTION:${ev.description.replace(/\n/g, '\\n')}`,
+            `LOCATION:${ev.location}`,
+            'STATUS:CONFIRMED',
+            'END:VEVENT'
+          );
+        });
+
+        calendarLines.push('END:VCALENDAR');
+        const blob = new Blob([calendarLines.join('\r\n')], { type: 'text/calendar;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'mount_sackville_calendar_2026_2027.ics';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      };
+
+      return (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-xs animate-fadeIn" onClick={onClose}>
+          <div className="bg-white rounded-2xl border border-slate-200 shadow-2xl max-w-lg w-full overflow-hidden animate-scaleUp" onClick={(e) => e.stopPropagation()}>
+            <div className="bg-[#08328d] p-6 text-white flex items-start justify-between">
+              <div className="space-y-1">
+                <div className="flex items-center gap-2">
+                  <Icon name="Calendar" className="w-5 h-5 text-amber-300" />
+                  <h3 className="text-lg font-bold">Subscribe & Sync Calendar</h3>
+                </div>
+                <p className="text-xs text-blue-100">Mount Sackville Secondary School • Academic Year 2026–2027</p>
+              </div>
+              <button onClick={onClose} className="p-1 rounded-lg text-blue-200 hover:text-white transition">
+                <Icon name="X" className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="p-6 space-y-5 text-xs text-slate-600">
+              <p className="leading-relaxed">
+                Subscribe directly to live calendar updates so parent-teacher meetings, school holidays, and examinations appear seamlessly on your phone or laptop.
+              </p>
+
+              <div className="p-3.5 rounded-xl border border-slate-200 bg-slate-50 space-y-2">
+                <div className="flex items-center justify-between font-bold text-slate-800 text-xs">
+                  <span className="flex items-center gap-1.5">
+                    <Icon name="Smartphone" className="w-4 h-4 text-[#08328d]" /> iPhone / iPad / Mac Calendar
+                  </span>
+                  <a href={webcalUrl} className="px-2.5 py-1 rounded bg-[#08328d] text-white hover:bg-blue-900 font-semibold transition">
+                    1-Click Subscribe
+                  </a>
+                </div>
+                <p className="text-[11px] text-slate-500">Directly integrates into default iOS/macOS Calendar app with automatic push updates.</p>
+              </div>
+
+              <div className="p-3.5 rounded-xl border border-slate-200 bg-slate-50 space-y-2">
+                <div className="flex items-center justify-between font-bold text-slate-800 text-xs">
+                  <span className="flex items-center gap-1.5">
+                    <Icon name="Globe" className="w-4 h-4 text-[#08328d]" /> Google Calendar / Android
+                  </span>
+                  <button onClick={() => handleCopy(httpsUrl)} className="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-white border border-slate-300 hover:bg-slate-100 font-semibold text-slate-700 transition cursor-pointer">
+                    <Icon name={copiedUrl ? "Check" : "Copy"} className="w-3 h-3" />
+                    <span>{copiedUrl ? 'Copied Link' : 'Copy Feed URL'}</span>
+                  </button>
+                </div>
+                <p className="text-[11px] text-slate-500">In Google Calendar, click "+" next to Other Calendars &gt; "From URL" and paste link.</p>
+              </div>
+
+              <div className="p-3.5 rounded-xl border border-slate-200 bg-slate-50 flex items-center justify-between gap-3">
+                <div>
+                  <span className="font-bold text-slate-800 block">Download iCal (.ics) File</span>
+                  <span className="text-[11px] text-slate-500">Offline file containing all academic year dates for Outlook or calendar apps.</span>
+                </div>
+                <button onClick={handleDownloadFullICS} className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-semibold transition cursor-pointer">
+                  <Icon name="Download" className="w-3.5 h-3.5" /> Download
+                </button>
+              </div>
+            </div>
+
+            <div className="p-4 bg-slate-50 border-t border-slate-100 text-right">
+              <button onClick={onClose} className="px-4 py-2 text-xs font-bold text-slate-700 bg-white border border-slate-200 hover:bg-slate-100 rounded-lg transition cursor-pointer">
+                Done
+              </button>
+            </div>
+          </div>
+        </div>
+      );
+    };
+
+    // Footer Component
+    const Footer = () => (
+      <footer className="w-full bg-[#08328d] text-white mt-16 print:hidden">
+        <div className="h-1.5 w-full bg-[#d91a01]" />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-12">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-center text-center md:text-left">
+            <div className="space-y-2 text-xs text-blue-100">
+              <h4 className="text-base font-bold text-white tracking-tight">
+                Mount Sackville Secondary School
+              </h4>
+              <p className="text-slate-200">Chapelizod, Dublin 20, D20 X627</p>
+              <div className="flex flex-col sm:flex-row items-center justify-center md:justify-start gap-3 pt-1">
+                <a href="tel:+353018214061" className="hover:text-white flex items-center gap-1 transition">
+                  <Icon name="Phone" className="w-3.5 h-3.5 text-amber-400" />
+                  <span>+353 (01) 821 4061</span>
+                </a>
+                <span className="hidden sm:inline opacity-40">|</span>
+                <a href="mailto:info@mountsackville.ie" className="hover:text-white flex items-center gap-1 transition">
+                  <Icon name="Mail" className="w-3.5 h-3.5 text-amber-400" />
+                  <span>info@mountsackville.ie</span>
+                </a>
+              </div>
+            </div>
+
+            <div className="flex flex-col items-center justify-center">
+              <div className="w-16 h-16 rounded-2xl bg-white/10 border border-white/20 p-2 flex flex-col items-center justify-center text-center shadow-inner">
+                <span className="font-black tracking-widest text-amber-300 text-xl leading-none">MS</span>
+                <span className="text-[8px] uppercase tracking-widest font-semibold text-blue-200 mt-1">Est. 1864</span>
+              </div>
+              <p className="text-[11px] text-blue-200 mt-2 italic">
+                Fides • Spes • Caritas
+              </p>
+            </div>
+
+            <div className="flex flex-col items-center md:items-end space-y-3">
+              <div className="flex items-center gap-3">
+                <a href="https://www.instagram.com/mountsackvillesecondaryschool/" target="_blank" rel="noreferrer" aria-label="Instagram" className="p-2 rounded-xl bg-white/10 hover:bg-white/20 text-blue-100 hover:text-white transition">
+                  <Icon name="Instagram" className="w-4 h-4" />
+                </a>
+                <a href="https://twitter.com" target="_blank" rel="noreferrer" aria-label="Twitter" className="p-2 rounded-xl bg-white/10 hover:bg-white/20 text-blue-100 hover:text-white transition">
+                  <Icon name="Twitter" className="w-4 h-4" />
+                </a>
+                <a href="#app" className="p-2 rounded-xl bg-white/10 hover:bg-white/20 text-blue-100 hover:text-white transition flex items-center gap-1.5 text-xs font-semibold">
+                  <Icon name="Smartphone" className="w-4 h-4" />
+                  <span>School App</span>
+                </a>
+              </div>
+              <div className="text-[11px] text-blue-200">
+                Under the trusteeship of the Sisters of St. Joseph of Cluny
+              </div>
+            </div>
+          </div>
+
+          <div className="mt-8 pt-6 border-t border-blue-800/80 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-blue-200">
+            <p>© 2026 Mount Sackville Secondary School. All Rights Reserved.</p>
+            <div className="flex items-center gap-4">
+              <a href="#privacy" className="hover:text-white transition">Privacy Policy</a>
+              <span>•</span>
+              <a href="#cookie" className="hover:text-white transition">Cookie Policy</a>
+            </div>
+          </div>
+        </div>
+      </footer>
+    );
+
+    // --- MAIN APP COMPONENT ---
+    function App() {
+      const [viewMode, setViewMode] = useState(() => (typeof window !== 'undefined' && window.innerWidth < 768) ? 'list' : 'month');
+      const [currentDate, setCurrentDate] = useState(new Date(2026, 8, 17));
+      const [searchQuery, setSearchQuery] = useState('');
+      const [selectedCategories, setSelectedCategories] = useState(Object.keys(EVENT_CATEGORIES));
+      const [selectedYear, setSelectedYear] = useState('All');
+      const [selectedEvent, setSelectedEvent] = useState(null);
+      const [isSubscribeOpen, setIsSubscribeOpen] = useState(false);
+
+      const filteredEvents = useMemo(() => {
+        return INITIAL_SCHOOL_EVENTS.filter((ev) => {
+          if (!selectedCategories.includes(ev.categoryId)) return false;
+          if (selectedYear !== 'All') {
+            const matchesYear = ev.targetYears.includes(selectedYear) || ev.targetYears.includes('All Years');
+            if (!matchesYear) return false;
+          }
+          if (searchQuery.trim() !== '') {
+            const q = searchQuery.toLowerCase().trim();
+            const cat = EVENT_CATEGORIES[ev.categoryId];
+            const matchTitle = ev.title.toLowerCase().includes(q);
+            const matchDesc = ev.description.toLowerCase().includes(q);
+            const matchLoc = ev.location.toLowerCase().includes(q);
+            const matchCat = cat?.name.toLowerCase().includes(q) || false;
+            const matchYear = ev.targetYears.some((y) => y.toLowerCase().includes(q));
+            if (!matchTitle && !matchDesc && !matchLoc && !matchCat && !matchYear) return false;
+          }
+          return true;
+        });
+      }, [selectedCategories, selectedYear, searchQuery]);
+
+      const categoryCounts = useMemo(() => {
+        const counts = { closures: 0, meetings: 0, induction: 0, exams: 0, sports: 0, guidance: 0, arts: 0 };
+        INITIAL_SCHOOL_EVENTS.forEach((ev) => {
+          if (counts[ev.categoryId] !== undefined) counts[ev.categoryId]++;
+        });
+        return counts;
+      }, []);
+
+      const handlePrevMonth = () => setCurrentDate((prev) => new Date(prev.getFullYear(), prev.getMonth() - 1, 1));
+      const handleNextMonth = () => setCurrentDate((prev) => new Date(prev.getFullYear(), prev.getMonth() + 1, 1));
+      const handleToday = () => setCurrentDate(new Date(2026, 8, 17));
+
+      const handleApplyCategories = (newCategories) => {
+        setSelectedCategories(newCategories);
+      };
+
+      const handleSelectAllCategories = () => setSelectedCategories(Object.keys(EVENT_CATEGORIES));
+
+      const handleResetFilters = () => {
+        setSearchQuery('');
+        setSelectedCategories(Object.keys(EVENT_CATEGORIES));
+        setSelectedYear('All');
+      };
+
+      return (
+        <div className="min-h-screen flex flex-col bg-[#f8fafc] text-slate-900 font-sans antialiased">
+          <Header academicYear="2026–2027" onOpenSubscribe={() => setIsSubscribeOpen(true)} />
+
+          <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-5 space-y-3.5">
+            <CalendarControls
+              currentDate={currentDate}
+              onPrevMonth={handlePrevMonth}
+              onNextMonth={handleNextMonth}
+              onToday={handleToday}
+              onDateChange={setCurrentDate}
+              viewMode={viewMode}
+              onViewModeChange={setViewMode}
+              searchQuery={searchQuery}
+              onSearchChange={setSearchQuery}
+              selectedCategories={selectedCategories}
+              onApplyCategories={handleApplyCategories}
+              onSelectAllCategories={handleSelectAllCategories}
+              selectedYear={selectedYear}
+              onSelectYear={setSelectedYear}
+              categoryCounts={categoryCounts}
+              totalFilteredCount={filteredEvents.length}
+            />
+
+            {viewMode === 'month' ? (
+              <div className="space-y-2.5">
+                <MonthView
+                  currentDate={currentDate}
+                  events={filteredEvents}
+                  onSelectEvent={(ev) => setSelectedEvent(ev)}
+                />
+
+              </div>
+            ) : (
+              <TimelineListView
+                events={filteredEvents.filter(ev => {
+                  const currentMonthStr = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}`;
+                  const evStartMonthStr = ev.startDate.substring(0, 7);
+                  const evEndMonthStr = ev.endDate ? ev.endDate.substring(0, 7) : evStartMonthStr;
+                  return evStartMonthStr <= currentMonthStr && evEndMonthStr >= currentMonthStr;
+                })}
+                onSelectEvent={(ev) => setSelectedEvent(ev)}
+                onResetFilters={handleResetFilters}
+              />
+            )}
+          </main>
+
+          <EventModal event={selectedEvent} onClose={() => setSelectedEvent(null)} />
+          <SubscribeModal isOpen={isSubscribeOpen} onClose={() => setIsSubscribeOpen(false)} events={INITIAL_SCHOOL_EVENTS} />
+          <Footer />
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+  </script>
+</body>
+</html>
