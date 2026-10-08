@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>School Dashboard - Settings</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc; /* gray-50 */
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+        .sidebar-link-active {
+            background-color: #f3f4f6;
+            color: #111827;
+            border-left: 3px solid #1f2d37;
+        }
+
+        .table-header { 
+            font-size: 0.75rem; 
+        }
+
+        .form-select, .form-input {
+            border: 1px solid #cbd5e1;
+            border-radius: 0.375rem;
+            padding: 0.5rem 0.75rem;
+            font-size: 0.875rem;
+            color: #475569;
+            background-color: white;
+            transition: all 0.2s;
+            width: 100%;
+        }
+        .form-select:focus, .form-input:focus {
+            outline: none;
+            border-color: #64748b;
+            box-shadow: 0 0 0 1px #64748b;
+        }
+
+        /* Animations */
+        @keyframes slideInRight {
+            from { transform: translateX(100%); }
+            to { transform: translateX(0); }
+        }
+        .animate-slideInRight { animation: slideInRight 0.3s ease-out; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .animate-fadeIn { animation: fadeIn 0.2s ease-out; }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-slideDown { animation: slideDown 0.2s ease-out; }
+
+        .glass-overlay {
+            backdrop-filter: blur(2px);
+        }
+    </style>
+</head>
+<!-- Changed min-h-screen to h-screen to ensure sidebar takes full height -->
+<body class="text-gray-900 h-screen overflow-hidden flex">
+
+    <!-- Toast Container -->
+    <div id="toast-container" class="fixed top-4 right-4 z-[60] flex flex-col gap-2 pointer-events-none">
+        <!-- Toasts will be injected here via JS -->
+    </div>
+
+    <!-- Sidebar -->
+    <aside id="sidebar" class="hidden md:flex w-64 flex-col bg-white border-r border-gray-200 transition-all duration-300 fixed md:relative z-30 h-full shadow-xl md:shadow-none inset-y-0 left-0">
+        <div class="h-16 flex items-center justify-center border-b border-gray-200 flex-shrink-0 relative">
+            <h1 class="text-lg font-bold text-gray-700">Test App School 2</h1>
+            <button onclick="toggleSidebar()" class="md:hidden absolute right-4 text-gray-500 hover:text-gray-700">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+        </div>
+
+        <nav class="flex-1 overflow-y-auto">
+            <ul class="py-4 px-2 text-sm text-gray-600">
+                <li>
+                    <a href="#" class="flex items-center space-x-3 px-3 py-2.5 rounded-md hover:bg-gray-100 transition-colors">
+                        <i data-lucide="layout-dashboard" class="w-4 h-4"></i>
+                        <span>App Engagement Overview</span>
+                    </a>
+                </li>
+                <li class="my-1">
+                    <a href="#" class="flex items-center space-x-3 px-3 py-2.5 rounded-md hover:bg-gray-100 transition-colors">
+                        <i data-lucide="calendar-check" class="w-4 h-4"></i>
+                        <span>Attendance Overview</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="flex items-center space-x-3 px-3 py-2.5 rounded-md hover:bg-gray-100 transition-colors justify-between group">
+                        <div class="flex items-center space-x-3">
+                            <i data-lucide="message-square" class="w-4 h-4"></i>
+                            <span>Note from Parent</span>
+                        </div>
+                        <span class="bg-gray-900 text-white text-[10px] rounded-full h-5 w-5 flex items-center justify-center group-hover:bg-gray-700">1</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="flex items-center space-x-3 px-3 py-2.5 rounded-md hover:bg-gray-100 transition-colors">
+                        <i data-lucide="gavel" class="w-4 h-4"></i>
+                        <span>Detention</span>
+                    </a>
+                </li>
+                
+                <!-- Personal Notification Dropdown -->
+                <li>
+                    <button onclick="toggleSubmenu('personal-submenu')" class="w-full flex items-center justify-between space-x-3 px-3 py-2.5 rounded-md hover:bg-gray-100 text-left transition-colors">
+                        <span class="flex items-center space-x-3">
+                            <i data-lucide="user-check" class="w-4 h-4"></i>
+                            <span>Personal Notification</span>
+                        </span>
+                        <div class="flex items-center gap-2">
+                            <span class="bg-gray-900 text-white text-[10px] rounded-full h-5 w-5 flex items-center justify-center">2</span>
+                            <i id="personal-submenu-icon" data-lucide="chevron-down" class="w-4 h-4 transition-transform duration-200"></i>
+                        </div>
+                    </button>
+                    <ul id="personal-submenu" class="pl-6 pt-1 text-gray-500 hidden animate-slideDown">
+                        <li><a href="#" class="flex items-center space-x-3 px-3 py-2 rounded-md hover:bg-gray-100"><i data-lucide="bell-ring" class="w-4 h-4"></i><span>Manage Notifications</span></a></li>
+                        <li><a href="#" class="flex items-center space-x-3 px-3 py-2 rounded-md hover:bg-gray-100"><i data-lucide="file-text" class="w-4 h-4"></i><span>PN Templates</span></a></li>
+                    </ul>
+                </li>
+
+                <li><a href="#" class="flex items-center space-x-3 px-3 py-2.5 rounded-md hover:bg-gray-100 transition-colors"><i data-lucide="sunset" class="w-4 h-4"></i><span>Evening Study</span></a></li>
+                <li><a href="#" class="flex items-center space-x-3 px-3 py-2.5 rounded-md hover:bg-gray-100 transition-colors"><i data-lucide="briefcase" class="w-5 h-5"></i><span>Senior Management and Year Heads</span></a></li>
+                
+                <!-- Active Settings Tab -->
+                <li>
+                    <a href="#" class="flex items-center space-x-3 px-3 py-2.5 rounded-md sidebar-link-active bg-gray-100 text-gray-900 font-medium border-l-[3px] border-gray-800 transition-colors">
+                        <i data-lucide="settings" class="w-5 h-5"></i>
+                        <span>Settings</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+
+    <!-- Mobile Sidebar Overlay -->
+    <div id="sidebar-overlay" onclick="toggleSidebar()" class="fixed inset-0 bg-black/20 z-20 hidden glass-overlay md:hidden"></div>
+
+    <!-- Main Content Wrapper -->
+    <div class="flex-1 flex flex-col min-w-0 bg-white h-screen overflow-hidden relative">
+        
+        <!-- Header -->
+        <header class="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-6 flex-shrink-0 sticky top-0 z-10">
+            <!-- Left Section -->
+            <div class="flex items-center gap-4 flex-1">
+                <div class="flex items-center space-x-3 text-gray-600">
+                    <button onclick="toggleSidebar()" class="p-1 rounded-md hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-300 md:hidden">
+                        <i data-lucide="menu" class="w-5 h-5"></i>
+                    </button>
+                    <i data-lucide="home" class="w-5 h-5 cursor-pointer hover:text-gray-800 hidden md:block"></i>
+                </div>
+                
+                <!-- Search Bar -->
+                <div class="relative w-full max-w-md hidden md:block">
+                    <i data-lucide="search" class="w-4 h-4 absolute top-1/2 left-3 -translate-y-1/2 text-gray-400"></i>
+                    <input type="text" placeholder="Search student name" class="w-full pl-9 pr-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-gray-500 transition-shadow">
+                </div>
+            </div>
+
+            <!-- Right Section: Profile -->
+            <div class="flex items-center gap-3">
+                <div class="relative md:hidden">
+                    <i data-lucide="search" class="w-5 h-5 text-gray-500"></i>
+                </div>
+                <button class="p-2 rounded-full hover:bg-gray-100 text-gray-600 border border-gray-200 transition-colors">
+                    <i data-lucide="user" class="w-5 h-5"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Page Content -->
+        <main class="flex-1 flex flex-col p-6 bg-gray-50 overflow-auto">
+            <div class="max-w-5xl mx-auto w-full space-y-6">
+                
+                <h2 class="text-2xl font-bold text-gray-900">Settings</h2>
+
+                <!-- Disabled ARF Settings Card -->
+                <div class="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
+                    <!-- Header Bar -->
+                    <div class="px-6 py-4 border-b border-gray-100 flex justify-between items-center bg-white">
+                        <div>
+                            <h3 class="text-lg font-semibold text-gray-900">Disable ARF Setting</h3>
+                            <p class="text-sm text-gray-500 mt-1">Define dates where <span class="font-bold text-gray-700">ARF won't be sent</span>. Weekends are automatically filtered out.</p>
+                        </div>
+                        
+                        <!-- Add Action Button -->
+                        <button onclick="toggleArfForm()" class="flex items-center gap-2 bg-gray-900 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-gray-800 transition-colors shadow-sm">
+                            <i data-lucide="plus" class="w-4 h-4"></i>
+                            <span>Add</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Data Table Card -->
+                <div class="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
+                    <div class="w-full overflow-x-auto">
+                        <table class="w-full text-left border-collapse min-w-[600px]">
+                            <thead>
+                                <tr class="bg-gray-50 text-gray-500 text-xs uppercase font-semibold tracking-wider border-b border-gray-200">
+                                    <th class="px-6 py-4 font-semibold">SR NO.</th>
+                                    <th class="px-6 py-4 font-semibold">DISABLE ARF DATE</th>
+                                    <th class="px-6 py-4 font-semibold">CLASS YEARS</th>
+                                    <th class="px-6 py-4 font-semibold">CREATED BY</th>
+                                    <th class="px-6 py-4 font-semibold">CREATED ON</th>
+                                    <th class="px-6 py-4 text-right font-semibold">ACTION</th>
+                                </tr>
+                            </thead>
+                            <tbody id="arf-table-body" class="divide-y divide-gray-100 bg-white">
+                                <!-- Rows will be injected here via JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- ARF Form Side Sheet -->
+    <div id="arf-form-sheet" class="fixed inset-0 z-50 flex justify-end hidden">
+        <div onclick="toggleArfForm()" class="absolute inset-0 bg-black/40 backdrop-blur-sm transition-opacity animate-fadeIn"></div>
+        
+        <div class="bg-white w-full max-w-md h-full shadow-2xl relative flex flex-col transform animate-slideInRight z-10">
+            <!-- Header -->
+            <div class="px-6 py-4 flex justify-between items-center flex-shrink-0 border-b border-gray-100">
+                <h3 class="text-lg font-bold text-gray-800">Add Disable ARF Setting</h3>
+                <button onclick="toggleArfForm()" class="text-gray-400 hover:text-gray-600 p-2 rounded-full hover:bg-gray-100 transition-colors">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+            
+            <!-- Content -->
+            <div class="p-6 space-y-6 overflow-y-auto flex-1">
+                
+                <!-- Multi-select Class Years -->
+                <div class="space-y-1.5 relative arf-year-select-container">
+                    <label class="block text-gray-700 font-medium text-sm">Select Class Years:</label>
+                    
+                    <!-- Multi Select Trigger -->
+                    <div onclick="toggleArfYearDropdown()" class="form-input w-full flex flex-wrap gap-2 min-h-[42px] cursor-pointer items-center relative pr-8 bg-white hover:border-gray-400">
+                        <div id="selected-years-container" class="flex flex-wrap gap-2">
+                            <span class="text-gray-400 text-sm">Click to select years...</span>
+                        </div>
+                        <i id="year-dropdown-arrow" data-lucide="chevron-down" class="w-4 h-4 text-gray-400 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none transition-transform duration-200"></i>
+                    </div>
+
+                    <!-- Dropdown Menu -->
+                    <div id="arf-year-dropdown" class="absolute top-full left-0 w-full mt-1 bg-white border border-gray-200 rounded-md shadow-lg z-30 max-h-48 overflow-y-auto hidden animate-slideDown">
+                        <!-- Options generated by JS -->
+                    </div>
+                    
+                    <p class="text-xs text-gray-500">Select the years for which ARF should be disabled.</p>
+                </div>
+
+                <!-- Start Date -->
+                <div class="space-y-1.5">
+                    <label class="block text-gray-700 font-medium text-sm">Start Date:</label>
+                    <input type="date" id="arf-start-date" class="form-input w-full text-gray-600 h-[42px]">
+                </div>
+
+                <!-- End Date -->
+                <div class="space-y-1.5">
+                    <label class="block text-gray-700 font-medium text-sm">End Date:</label>
+                    <input type="date" id="arf-end-date" class="form-input w-full text-gray-600 h-[42px]">
+                </div>
+
+                <!-- Buttons -->
+                <div class="flex justify-end gap-3 pt-4">
+                    <button onclick="toggleArfForm()" class="px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-md transition-colors border border-gray-300 bg-white">Cancel</button>
+                    <button onclick="submitArfEntry()" class="bg-gray-900 text-white px-6 py-2 rounded-md text-sm font-medium hover:bg-gray-800 shadow-md transition-all hover:shadow-lg flex items-center gap-2">
+                        <span>Submit Dates</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript Logic -->
+    <script>
+        // --- State ---
+        const availableYears = ['1st Year', '2nd Year', '3rd Year', '4th Year', '5th Year', '6th Year'];
+        let selectedArfYears = [];
+        let arfEntries = [
+            { id: 1, startDate: '2025-01-10', endDate: '2025-01-15', classYears: ['1st Year', '2nd Year'], createdBy: 'Admin', createdOn: '2024-12-01' },
+            { id: 2, startDate: '2025-03-20', endDate: '2025-03-25', classYears: ['6th Year'], createdBy: 'Principal', createdOn: '2024-12-05' },
+            { id: 3, startDate: '2025-04-12', endDate: '2025-04-18', classYears: ['3rd Year', '4th Year'], createdBy: 'Vice Principal', createdOn: '2024-12-10' },
+            { id: 4, startDate: '2025-05-01', endDate: '2025-05-05', classYears: ['1st Year', '5th Year'], createdBy: 'Admin', createdOn: '2024-12-15' },
+            { id: 5, startDate: '2025-06-15', endDate: '2025-06-20', classYears: ['2nd Year', '3rd Year', '6th Year'], createdBy: 'Year Head', createdOn: '2024-12-20' }
+        ];
+
+        // --- Initialization ---
+        document.addEventListener('DOMContentLoaded', () => {
+            renderTable();
+            renderYearOptions();
+            lucide.createIcons();
+        });
+
+        // --- UI Toggles ---
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebar-overlay');
+            sidebar.classList.toggle('hidden');
+            sidebar.classList.toggle('flex');
+            overlay.classList.toggle('hidden');
+        }
+
+        function toggleSubmenu(id) {
+            const submenu = document.getElementById(id);
+            const icon = document.getElementById(id + '-icon');
+            submenu.classList.toggle('hidden');
+            icon.classList.toggle('rotate-180');
+        }
+
+        function toggleArfForm() {
+            const sheet = document.getElementById('arf-form-sheet');
+            sheet.classList.toggle('hidden');
+            
+            // Reset form if closing? Optional. Keeping state for now.
+            if(sheet.classList.contains('hidden')) {
+                // Reset dropdowns
+                document.getElementById('arf-year-dropdown').classList.add('hidden');
+            }
+        }
+
+        // --- ARF Year Multi-select Logic ---
+        function toggleArfYearDropdown() {
+            const dropdown = document.getElementById('arf-year-dropdown');
+            const arrow = document.getElementById('year-dropdown-arrow');
+            dropdown.classList.toggle('hidden');
+            arrow.classList.toggle('rotate-180');
+        }
+
+        function toggleYearSelection(year) {
+            if (selectedArfYears.includes(year)) {
+                selectedArfYears = selectedArfYears.filter(y => y !== year);
+            } else {
+                selectedArfYears.push(year);
+            }
+            renderSelectedYears();
+            renderYearOptions(); // Re-render to show checkmarks
+        }
+
+        function removeYear(year, event) {
+            if(event) event.stopPropagation();
+            selectedArfYears = selectedArfYears.filter(y => y !== year);
+            renderSelectedYears();
+            renderYearOptions();
+        }
+
+        function renderSelectedYears() {
+            const container = document.getElementById('selected-years-container');
+            if (selectedArfYears.length === 0) {
+                container.innerHTML = '<span class="text-gray-400 text-sm">Click to select years...</span>';
+                return;
+            }
+            
+            container.innerHTML = selectedArfYears.map(year => `
+                <span class="bg-blue-50 text-blue-700 border border-blue-100 text-xs px-2 py-1 rounded-md flex items-center gap-1 font-medium animate-fadeIn">
+                    ${year}
+                    <i onclick="removeYear('${year}', event)" data-lucide="x" class="w-3 h-3 hover:text-red-500 cursor-pointer transition-colors"></i>
+                </span>
+            `).join('');
+            lucide.createIcons();
+        }
+
+        function renderYearOptions() {
+            const dropdown = document.getElementById('arf-year-dropdown');
+            dropdown.innerHTML = availableYears.map(year => `
+                <div onclick="toggleYearSelection('${year}')" class="px-4 py-2 hover:bg-gray-50 cursor-pointer flex items-center justify-between group transition-colors">
+                    <span class="text-sm text-gray-700 group-hover:text-gray-900">${year}</span>
+                    ${selectedArfYears.includes(year) ? '<i data-lucide="check" class="w-4 h-4 text-green-600 animate-fadeIn"></i>' : ''}
+                </div>
+            `).join('');
+            lucide.createIcons();
+        }
+
+        // --- Table Logic ---
+        function renderTable() {
+            const tbody = document.getElementById('arf-table-body');
+            
+            if (arfEntries.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="px-6 py-12 text-center text-sm text-gray-500 italic">
+                            No excluded dates have been added yet.
+                        </td>
+                    </tr>`;
+                return;
+            }
+
+            tbody.innerHTML = arfEntries.map(entry => `
+                <tr class="hover:bg-gray-50 transition-colors border-b border-gray-50 last:border-none">
+                    <td class="px-6 py-4 text-sm text-gray-900">${entry.id}</td>
+                    <td class="px-6 py-4 text-sm text-gray-600">
+                        ${formatDate(entry.startDate)} to ${formatDate(entry.endDate)}
+                    </td>
+                    <td class="px-6 py-4">
+                        <div class="flex flex-wrap gap-1">
+                            ${entry.classYears.map(y => `
+                                <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-50 text-blue-700 border border-blue-100">
+                                    ${y}
+                                </span>
+                            `).join('')}
+                        </div>
+                    </td>
+                    <td class="px-6 py-4 text-sm text-gray-600">${entry.createdBy}</td>
+                    <td class="px-6 py-4 text-sm text-gray-600">${entry.createdOn}</td>
+                    <td class="px-6 py-4 text-right">
+                        <button onclick="deleteArfEntry(${entry.id})" class="text-red-500 hover:text-red-700 p-1.5 rounded-md hover:bg-red-50 transition-colors relative group" title="Delete this setting">
+                            <i data-lucide="trash-2" class="w-4 h-4"></i>
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+            lucide.createIcons();
+        }
+
+        function formatDate(dateStr) {
+            // Simple formatter, assumes YYYY-MM-DD
+            if(!dateStr) return '';
+            const [y, m, d] = dateStr.split('-');
+            return `${d}-${m}-${y}`;
+        }
+
+        // --- Data Operations ---
+        function submitArfEntry() {
+            const startDate = document.getElementById('arf-start-date').value;
+            const endDate = document.getElementById('arf-end-date').value;
+
+            if (!startDate || !endDate || selectedArfYears.length === 0) {
+                showToast('Please fill all fields', 'error');
+                return;
+            }
+
+            const newEntry = {
+                id: Math.floor(Math.random() * 10000),
+                startDate: startDate,
+                endDate: endDate,
+                classYears: [...selectedArfYears],
+                createdBy: 'Current User',
+                createdOn: new Date().toISOString().split('T')[0]
+            };
+
+            // Add to beginning
+            arfEntries.unshift(newEntry);
+            
+            showToast('ARF dates added successfully', 'success');
+            renderTable();
+            
+            // Reset and Close
+            document.getElementById('arf-start-date').value = '';
+            document.getElementById('arf-end-date').value = '';
+            selectedArfYears = [];
+            renderSelectedYears();
+            renderYearOptions();
+            toggleArfForm();
+        }
+
+        function deleteArfEntry(id) {
+            arfEntries = arfEntries.filter(e => e.id !== id);
+            renderTable();
+            showToast('ARF setting deleted successfully', 'success');
+        }
+
+        // --- Toasts ---
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            const id = Date.now();
+            
+            const toastHtml = `
+                <div id="toast-${id}" class="bg-white border-l-4 ${type === 'success' ? 'border-green-500' : 'border-red-500'} shadow-lg rounded-md p-4 flex items-center gap-3 animate-slideInRight pointer-events-auto min-w-[300px] transition-all duration-300">
+                    <div class="${type === 'success' ? 'text-green-500' : 'text-red-500'}">
+                        <i data-lucide="${type === 'success' ? 'check-circle' : 'alert-circle'}" class="w-5 h-5"></i>
+                    </div>
+                    <div class="flex-1">
+                        <h4 class="text-sm font-medium text-gray-900">${type === 'success' ? 'Success' : 'Error'}</h4>
+                        <p class="text-sm text-gray-500">${message}</p>
+                    </div>
+                    <button onclick="removeToast(${id})" class="text-gray-400 hover:text-gray-600 transition-colors">
+                        <i data-lucide="x" class="w-4 h-4"></i>
+                    </button>
+                </div>
+            `;
+            
+            // Insert at the bottom (append)
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = toastHtml;
+            const toastEl = tempDiv.firstElementChild;
+            
+            container.appendChild(toastEl);
+            lucide.createIcons();
+
+            // Auto remove
+            setTimeout(() => removeToast(id), 3000);
+        }
+
+        function removeToast(id) {
+            const toast = document.getElementById(`toast-${id}`);
+            if (toast) {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateX(100%)';
+                setTimeout(() => toast.remove(), 300);
+            }
+        }
+
+        // Close dropdowns on click outside
+        document.addEventListener('click', (event) => {
+            const dropdown = document.getElementById('arf-year-dropdown');
+            const trigger = dropdown.previousElementSibling;
+            if (!dropdown.classList.contains('hidden') && 
+                !dropdown.contains(event.target) && 
+                !trigger.contains(event.target)) {
+                toggleArfYearDropdown();
+            }
+        });
+
+    </script>
+</body>
+</html>

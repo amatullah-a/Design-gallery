@@ -1,0 +1,2057 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Profile - Master-Detail Layout</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --background: #FFFFFF;
+            --foreground: #0E1015;
+            --primary: #171B29;
+            --primary-foreground: #F8FAFC;
+            --secondary: #F2F5F8;
+            --secondary-foreground: #171B29;
+            --border: #E5E7EB;
+            --input: #E5E7EB;
+            --card: #FFFFFF;
+
+            --success: #D7FFBF;
+            --success-text: #61AF32;
+            --fail: #FFD3D3;
+            --fail-text: #E36E6E;
+            --pending: #F0F0F0;
+            --pending-text: #939393;
+            --destructive: #E11D48;
+            --destructive-foreground: #F8FAFC;
+            --warning-yellow: #FFDD57;
+
+            --sidebar-background: #FAFAFA;
+            --sidebar-foreground: #404245;
+            --sidebar-accent: #F5F6F7;
+            --sidebar-border: #E3E7ED;
+            --sidebar-ring: #2D89FF;
+
+            --chart-1: #E96C42;
+            --chart-2: #2A8778;
+            --chart-3: #27414F;
+            --chart-4: #E1B257;
+            --chart-5: #EB894A;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--background);
+            color: var(--foreground);
+        }
+        .sidebar {
+            background-color: var(--sidebar-background);
+            border-right-color: var(--sidebar-border);
+        }
+        .sidebar-link {
+            color: var(--sidebar-foreground);
+        }
+        .sidebar-link:hover {
+            background-color: var(--sidebar-accent);
+        }
+        .sidebar-link-active {
+            background-color: var(--sidebar-accent);
+            color: var(--primary);
+            border-left: 3px solid var(--sidebar-ring);
+            font-weight: 600;
+        }
+        .card {
+            background-color: var(--card);
+            border-color: var(--border);
+        }
+        .primary-btn {
+            background-color: var(--primary);
+            color: var(--primary-foreground);
+            border-color: var(--primary);
+        }
+        .primary-btn:hover {
+            opacity: 0.9;
+        }
+
+        .outline-btn {
+            background-color: transparent;
+            color: var(--primary);
+            border: 1px solid var(--primary);
+        }
+        .outline-btn:hover {
+            background-color: var(--primary);
+            color: var(--primary-foreground);
+        }
+
+        .rotate-180 { transform: rotate(180deg); }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #e2e8f0; }
+        ::-webkit-scrollbar-thumb { background: #94a3b8; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #64748b; }
+
+        .content-view {
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .tab-btn.active {
+            border-color: var(--primary);
+            color: var(--foreground);
+        }
+        
+        /* Tab Dropdown */
+        .tab-dropdown-container {
+            position: relative;
+            display: inline-block;
+        }
+
+        .tab-dropdown {
+            display: none;
+            position: absolute;
+            background-color: var(--card);
+            min-width: 260px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.1);
+            z-index: 10;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            margin-top: -2px; /* Overlap with the bottom border */
+            overflow: hidden;
+            animation: fadeInDropdown 0.2s ease-in-out;
+        }
+
+        @keyframes fadeInDropdown {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .tab-dropdown-container:hover .tab-dropdown {
+            display: block;
+        }
+
+        .tab-dropdown-item {
+            color: var(--foreground);
+            padding: 10px 16px;
+            text-decoration: none;
+            display: block;
+            text-align: left;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .tab-dropdown-item:hover {
+            background-color: var(--secondary);
+        }
+
+        .tab-navigation-bar {
+            border-bottom: 2px solid var(--border);
+        }
+
+        .tab-btn {
+            border-bottom: 2px solid transparent;
+            margin-bottom: -2px; /* Align with parent border */
+        }
+        
+        /* Tooltip styles */
+        [data-tooltip] {
+            position: relative;
+            cursor: pointer;
+        }
+        
+        [data-tooltip]::before {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 8px 12px;
+            border-radius: 6px;
+            background-color: #FFFFFF;
+            color: #1F2937;
+            font-size: 0.875rem;
+            white-space: nowrap;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid #E5E7EB;
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity 0.2s;
+            z-index: 1000;
+            pointer-events: none;
+        }
+        
+        [data-tooltip]:hover::before {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        /* Status Badges */
+        .status-success { background-color: var(--success); color: var(--success-text); }
+        .status-fail { background-color: var(--fail); color: var(--fail-text); }
+        .status-pending { background-color: var(--pending); color: var(--pending-text); }
+
+        .destructive-btn {
+            background-color: var(--destructive);
+            color: var(--destructive-foreground);
+        }
+        .destructive-btn:hover {
+            opacity: 0.9;
+        }
+        
+        /* Toggle Switch */
+        .toggle-bg { background-color: #ef4444; }
+        .toggle-bg:after {
+            content: ''; position: absolute; top: 0.125rem; left: 0.125rem; background-color: white; border-radius: 9999px; height: 1.25rem; width: 1.25rem; transition: all 0.2s;
+        }
+        input:checked + .toggle-bg:after { transform: translateX(1.25rem); }
+        input:checked + .toggle-bg { background-color: #22c55e; }
+    </style>
+</head>
+<body class="">
+    <div id="student-profile-layout" class="flex h-screen">
+        <!-- Sidebar -->
+        <aside id="sidebar" class="sidebar hidden md:flex w-64 flex-col border-r transition-all duration-300">
+              <div class="h-16 flex items-center justify-center border-b" style="border-color: var(--border);">
+                  <h1 class="text-xl font-bold text-gray-700">Test App School 2</h1>
+              </div>
+            <nav class="flex-1 overflow-y-auto">
+                <ul class="py-4 px-2 text-base">
+                    <li><a href="#" class="sidebar-link flex items-center space-x-3 px-3 py-2.5 rounded-md"><i data-lucide="layout-dashboard" class="w-4 h-4"></i><span>App Engagement Overview</span></a></li>
+                    <li><a href="#" class="sidebar-link flex items-center space-x-3 px-3 py-2.5 rounded-md"><i data-lucide="calendar-check" class="w-4 h-4"></i><span>Attendance Overview</span></a></li>
+                    <li><a href="#" class="sidebar-link flex items-center space-x-3 px-3 py-2.5 rounded-md"><i data-lucide="message-square" class="w-4 h-4"></i><span>Note from Parent</span></a></li>
+                    <li><a href="#" class="sidebar-link flex items-center space-x-3 px-3 py-2.5 rounded-md"><i data-lucide="gavel" class="w-4 h-4"></i><span>Detention</span></a></li>
+                    <li><a href="#" class="sidebar-link flex items-center space-x-3 px-3 py-2.5 rounded-md"><i data-lucide="user-check" class="w-4 h-4"></i><span>Personal Notification</span></a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <div class="flex-1 flex flex-col min-w-0">
+            <!-- Header -->
+            <header class="card h-16 border-b flex items-center justify-between px-6 flex-shrink-0">
+                <div id="update-status" class="flex items-center text-sm text-gray-500 cursor-pointer hover:text-gray-800 transition-colors" onclick="manualRefreshTime()">
+                    <i data-lucide="refresh-cw" class="w-4 h-4 mr-2"></i>
+                    <span id="last-updated-time">Last updated just now</span>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <a href="https://docs.google.com/document/d/1UtFP5ZR1mSKOyNRfMfkG4_hYgk-YAjUF/edit?usp=sharing&ouid=106218443932927681732&rtpof=true&sd=true" target="_blank" class="text-sm font-medium text-blue-800 bg-blue-100 border border-blue-300 rounded-md px-3 py-1.5 hover:bg-blue-200">Developer Notes</a>
+                    <button class="w-9 h-9 bg-white rounded-full flex items-center justify-center text-gray-600 hover:bg-gray-100 border" style="border-color: var(--border)">
+                        <i data-lucide="user" class="w-5 h-5"></i>
+                    </button>
+                </div>
+            </header>
+
+             <!-- Sticky Student Info Card -->
+            <div class="bg-secondary px-4 sm:px-6 lg:px-8 pt-4 sm:pt-6 lg:pt-8">
+                <div class="card p-4 rounded-lg border">
+                    <div class="md:flex md:items-center h-full">
+                        <div class="flex items-center flex-grow">
+                            <img class="h-16 w-16 rounded-full object-cover" src="https://placehold.co/100x100/E2E8F0/4A5568?text=AV" alt="Student Avatar">
+                            <div class="ml-4">
+                                <div class="flex items-center space-x-2">
+                                    <h1 class="text-2xl font-bold text-gray-800">Amelia Vance</h1>
+                                    <button type="button" onclick="openStudentNameEditModal()" class="p-1 rounded-full hover:bg-gray-200 transition-colors focus:outline-none" data-tooltip="Edit Student Details">
+                                        <i data-lucide="edit" class="w-5 h-5 text-gray-500 hover:text-blue-600"></i>
+                                    </button>
+                                </div>
+                                <p class="text-base text-gray-500 mt-1">(6, 6B)</p>
+                            </div>
+                        </div>
+                        <div class="mt-4 md:mt-0 md:ml-6 flex items-center space-x-2">
+                            <button onclick="openAbsenceRequestModal()" class="outline-btn flex items-center justify-center px-4 py-2 text-base font-medium rounded-md"><i data-lucide="send" class="w-4 h-4 mr-2"></i> Send Absence Request</button>
+                            <button onclick="openSendPnModal()" class="outline-btn flex items-center justify-center px-4 py-2 text-base font-medium rounded-md"><i data-lucide="send" class="w-4 h-4 mr-2"></i> Send PN</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Scrollable Content Area -->
+            <main class="flex-1 overflow-y-auto overflow-x-hidden bg-secondary px-4 sm:px-6 lg:px-8 pb-4 sm:pb-6 lg:pb-8">
+                <div class="h-full flex flex-col pt-6">
+                    <!-- Point of Contact & Settings Section -->
+                    <div class="grid grid-cols-1 gap-6 mb-6">
+                        <div class="card rounded-lg border">
+                            <div class="grid grid-cols-1 md:grid-cols-2">
+                                 <div class="p-4">
+                                    <h2 class="text-lg font-bold text-gray-800 mb-3">Point of contact</h2>
+                                    <div class="space-y-3">
+                                        <div class="flex items-center">
+                                            <div class="flex-shrink-0 h-8 w-8 rounded-full bg-gray-100 flex items-center justify-center text-xs font-medium text-gray-600">DK</div>
+                                            <div class="ml-3 flex-grow">
+                                                <p class="text-base font-medium text-gray-800 flex items-center">
+                                                    Declan Kelly 
+                                                    <span class="text-xs text-gray-500 bg-gray-100 px-2 py-0.5 rounded-full ml-1">Primary</span>
+                                                    <span class="inline-flex ml-1.5" data-tooltip="App user">
+                                                        <i data-lucide="info" class="w-3 h-3 text-gray-400"></i>
+                                                    </span>
+                                                </p>
+                                            </div>
+                                            <p class="ml-4 text-sm text-gray-600 flex items-center">
+                                                <i data-lucide="phone" class="w-4 h-4 mr-1.5 text-gray-400"></i>
+                                                <span data-tooltip="Copy number" class="cursor-pointer hover:text-blue-600" onclick="copyToClipboard('+3537028650595')">+353 7028650595</span>
+                                            </p>
+                                        </div>
+                                        <div class="flex items-center">
+                                            <div class="flex-shrink-0 h-8 w-8 rounded-full bg-gray-100 flex items-center justify-center text-xs font-medium text-gray-600">FK</div>
+                                            <div class="ml-3 flex-grow">
+                                                <p class="text-base font-medium text-gray-800 flex items-center">
+                                                    Finn Kelly 
+                                                    <span class="text-xs text-gray-500 bg-gray-100 px-2 py-0.5 rounded-full ml-1">Secondary</span>
+                                                    <span class="inline-flex ml-1.5" data-tooltip="Non-app user">
+                                                        <i data-lucide="info" class="w-3 h-3 text-gray-400"></i>
+                                                    </span>
+                                                </p>
+                                            </div>
+                                            <p class="ml-4 text-sm text-gray-600 flex items-center">
+                                                <i data-lucide="phone" class="w-4 h-4 mr-1.5 text-gray-400"></i>
+                                                <span data-tooltip="Copy number" class="cursor-pointer hover:text-blue-600" onclick="copyToClipboard('+3539145434001')">+353 9145434001</span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                 <div class="p-4 border-l" style="border-color: var(--border);">
+                                    <div class="flex justify-between items-center mb-3">
+                                        <h2 class="text-lg font-bold text-gray-800">Settings</h2>
+                                        <a href="javascript:void(0)" onclick="openSettingsModal()" class="inline-flex items-center text-sm font-medium text-blue-600 hover:underline">
+                                            More settings
+                                            <i data-lucide="chevron-right" class="w-4 h-4 ml-1"></i>
+                                        </a>
+                                    </div>
+            <!-- KEEP ONLY ESSENTIAL SETTINGS HERE -->
+            <div class="flex items-start justify-between">
+                <div class="pr-2">
+                    <p class="font-medium text-base text-gray-800 flex items-center">TUSLA Personal Notifications
+                        <span class="inline-flex" data-tooltip="Enable to send TUSLA personal notifications automatically when thresholds are met.">
+                            <i data-lucide="info" class="w-3 h-3 ml-1.5 text-gray-400"></i>
+                        </span>
+                    </p>
+                    <p class="text-sm text-gray-500 mt-0.5 leading-relaxed hidden">Enable to send TUSLA personal notifications automatically when thresholds are met.</p>
+                </div>
+                <label for="tusla-toggle" class="flex items-center cursor-pointer flex-shrink-0 pt-0.5">
+                    <div class="relative">
+                        <input type="checkbox" id="tusla-toggle" class="sr-only" checked onchange="handleTuslaToggle(this)">
+                        <div class="toggle-bg block w-11 h-6 rounded-full transition-colors"></div>
+                    </div>
+                </label>
+            </div>
+            <div class="flex items-start justify-between mt-4">
+                <div class="pr-2">
+                    <p class="font-medium text-base text-gray-800 flex items-center">Absence Requests
+                        <span class="inline-flex" data-tooltip="When enabled, parents/guardians will receive unexplained absence notifications.">
+                            <i data-lucide="info" class="w-3 h-3 ml-1.5 text-gray-400"></i>
+                        </span>
+                    </p>
+                    <p class="text-sm text-gray-500 mt-0.5 leading-relaxed hidden">When enabled, parents/guardians will receive unexplained absence notifications.</p>
+                    <a href="#" class="text-sm text-gray-900 hover:underline">Click to view students excluded from ARF alerts</a>
+                </div>
+                <label for="absence-requests-toggle" class="flex items-center cursor-pointer flex-shrink-0 pt-0.5">
+                    <div class="relative">
+                        <input type="checkbox" id="absence-requests-toggle" class="sr-only" checked>
+                        <div class="toggle-bg block w-11 h-6 rounded-full transition-colors"></div>
+                    </div>
+                </label>
+            </div>
+        </div>
+    </div>
+</div>                
+
+                    <!-- Modules Container with Tab Navigation -->
+                    <div class="card p-6 rounded-lg border flex-1">
+                        <!-- Tab Navigation Bar -->
+                        <div class="tab-navigation-bar">
+                            <nav class="flex flex-wrap" aria-label="Tabs">
+                                <div class="tab-dropdown-container">
+                                    <button id="tab-btn-forms" onclick="showTabContent('forms')" class="tab-btn whitespace-nowrap py-4 px-3 font-bold text-base text-gray-500 hover:text-gray-700">Forms</button>
+                                    <div class="tab-dropdown">
+                                        <a class="tab-dropdown-item" onclick="handleSubmoduleClick('forms', 'Consent Forms & Surveys')">Consent Forms & Surveys</a>
+                                        <a class="tab-dropdown-item" onclick="handleSubmoduleClick('forms', 'Picture Permissions')">Picture Permissions</a>
+                                        <a class="tab-dropdown-item" onclick="handleSubmoduleClick('forms', 'CHY')">CHY</a>
+                                        <a class="tab-dropdown-item" onclick="handleSubmoduleClick('forms', 'Medical Forms')">Medical Forms</a>
+                                    </div>
+                                </div>
+                            </nav>
+                        </div>
+                        
+                        <!-- Tab Content Area -->
+                        <div id="tab-content-container" class="py-6">
+                            <!-- Content for each tab will be injected here -->
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Edit Student Modal - UPDATED -->
+<div id="edit-student-modal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50 flex items-center justify-center p-4">
+    <div class="relative mx-auto p-5 border w-full max-w-7xl shadow-lg rounded-md bg-white">
+        <div class="flex items-center justify-between mb-3 pb-3 border-b">
+            <div class="flex items-center">
+                <img class="h-10 w-10 rounded-full object-cover" src="https://placehold.co/100x100/E2E8F0/4A5568?text=AV" alt="Student Avatar">
+                <h3 class="text-lg leading-6 font-medium text-gray-900 ml-3">Edit Student Information</h3>
+            </div>
+            <button onclick="closeEditStudentModal()" class="p-1 rounded-full hover:bg-gray-200">
+                <i data-lucide="x" class="w-5 h-5 text-gray-500"></i>
+            </button>
+        </div>
+        <form class="space-y-3" id="edit-student-form">
+            <!-- Section 1: Student Identity -->
+            <div class="p-3 border rounded-lg shadow-sm bg-gray-50">
+                <h4 class="text-base font-semibold text-gray-800 mb-2">Student Identity</h4>
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
+                    <div>
+                        <label class="text-sm font-medium text-gray-700 flex items-end h-8">Student ID <i data-lucide="info" class="w-3 h-3 ml-1 text-gray-400 mb-0.5"></i></label>
+                        <input type="text" id="edit-student-id" class="mt-0 w-full px-3 py-1.5 text-base border rounded-md focus:outline-none focus:ring-1 focus:ring-gray-500" style="border-color: var(--input)" value="STU001">
+                    </div>
+                    <div>
+                        <label class="text-sm font-medium text-gray-700 flex items-end h-8">SSID (Optional)</label>
+                        <input type="text" id="edit-student-ssid" class="mt-0 w-full px-3 py-1.5 text-base border rounded-md focus:outline-none focus:ring-1 focus:ring-gray-500" style="border-color: var(--input)" placeholder="Enter SSID">
+                    </div>
+                    <div>
+                        <label class="text-sm font-medium text-gray-700 flex items-end h-8">Date of Birth (Optional)</label>
+                        <input type="date" id="edit-student-dob" class="mt-0 w-full px-3 py-1.5 text-base border rounded-md focus:outline-none focus:ring-1 focus:ring-gray-500" style="border-color: var(--input)">
+                    </div>
+                    <div>
+                        <label class="text-sm font-medium text-gray-700 flex items-end h-8">Debtors ledger number (Optional)</label>
+                        <input type="text" id="edit-student-debtor" class="mt-0 w-full px-3 py-1.5 text-base border rounded-md focus:outline-none focus:ring-1 focus:ring-gray-500" style="border-color: var(--input)" placeholder="Enter ledger number">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 2: Student Information -->
+            <div class="p-3 border rounded-lg shadow-sm bg-gray-50">
+                <h4 class="text-base font-semibold text-gray-800 mb-2">Student Information</h4>
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
+                    <div>
+                        <label class="text-sm font-medium text-gray-700 flex items-end h-8">Student First Name</label>
+                        <input type="text" id="edit-student-first-name" class="mt-0 w-full px-3 py-1.5 text-base border rounded-md focus:outline-none focus:ring-1 focus:ring-gray-500" style="border-color: var(--input)" value="Amelia">
+                    </div>
+                    <div>
+                        <label class="text-sm font-medium text-gray-700 flex items-end h-8">Student Last Name</label>
+                        <input type="text" id="edit-student-last-name" class="mt-0 w-full px-3 py-1.5 text-base border rounded-md focus:outline-none focus:ring-1 focus:ring-gray-500" style="border-color: var(--input)" value="Vance">
+                    </div>
+                    <div>
+                        <label class="text-sm font-medium text-gray-700 flex items-end h-8">Year</label>
+                        <select id="edit-student-year" class="mt-0 w-full px-3 py-1.5 text-base border rounded-md focus:outline-none focus:ring-1 focus:ring-gray-500" style="border-color: var(--input)">
+                            <option value="">Select Year</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6" selected>6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            <option value="10">10</option>
+                            <option value="11">11</option>
+                            <option value="12">12</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="text-sm font-medium text-gray-700 flex items-end h-8">Class</label>
+                        <select id="edit-student-class" class="mt-0 w-full px-3 py-1.5 text-base border rounded-md focus:outline-none focus:ring-1 focus:ring-gray-500" style="border-color: var(--input)">
+                            <option value="">Select Class</option>
+                            <option value="1A">1A</option>
+                            <option value="1B">1B</option>
+                            <option value="2A">2A</option>
+                            <option value="2B">2B</option>
+                            <option value="3A">3A</option>
+                            <option value="3B">3B</option>
+                            <option value="4A">4A</option>
+                            <option value="4B">4B</option>
+                            <option value="5A">5A</option>
+                            <option value="5B">5B</option>
+                            <option value="6A">6A</option>
+                            <option value="6B" selected>6B</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            
+<!-- Section 3: Primary Contact -->
+                <div class="p-3 border rounded-lg shadow-sm bg-gray-50">
+                    <h4 class="text-base font-semibold text-gray-800 mb-2">Primary Contact</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
+                        <div>
+                            <label class="text-sm font-medium text-gray-700 flex items-end h-8">Primary Contact/Guardian First Name</label>
+                            <input type="text" id="edit-primary-first-name" class="mt-0 w-full px-3 py-1.5 text-base border rounded-md bg-gray-200 cursor-not-allowed" style="border-color: var(--input)" disabled>
+                        </div>
+                        <div>
+                            <label class="text-sm font-medium text-gray-700 flex items-end h-8">Primary Contact/Guardian Last Name</label>
+                            <input type="text" id="edit-primary-last-name" class="mt-0 w-full px-3 py-1.5 text-base border rounded-md bg-gray-200 cursor-not-allowed" style="border-color: var(--input)" disabled>
+                        </div>
+                        <div>
+                            <label class="text-sm font-medium text-gray-700 flex items-end h-8">Primary Contact/Guardian Country Code</label>
+                            <select id="edit-primary-country-code" class="mt-0 w-full px-3 py-1.5 text-base border rounded-md bg-gray-200 cursor-not-allowed" style="border-color: var(--input)" disabled>
+                                <option>Select Country code</option>
+                                <option>+1</option>
+                                <option>+91</option>
+                                <option selected>+353</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="text-sm font-medium text-gray-700 flex items-end h-8">Primary Contact/Guardian Mobile No.</label>
+                            <input type="text" id="edit-primary-mobile" class="mt-0 w-full px-3 py-1.5 text-base border rounded-md" style="border-color: var(--input)">
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-3 mt-3">
+                        <div>
+                            <label class="text-sm font-medium text-gray-700 flex items-end h-8">Primary Contact/Guardian MIS Username</label>
+                            <input type="text" id="edit-primary-username" class="mt-0 w-full px-3 py-1.5 text-base border rounded-md bg-gray-200 cursor-not-allowed" style="border-color: var(--input)" disabled>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-3 border rounded-lg shadow-sm bg-gray-50">
+                    <h4 class="text-base font-semibold text-gray-800 mb-2">Secondary Contact</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
+                        <div>
+                            <label class="text-sm font-medium text-gray-700 flex items-end h-8">Secondary Contact/Guardian First Name</label>
+                            <input type="text" id="edit-secondary-first-name" class="mt-0 w-full px-3 py-1.5 text-base border rounded-md bg-gray-200 cursor-not-allowed" style="border-color: var(--input)" disabled>
+                        </div>
+                        <div>
+                            <label class="text-sm font-medium text-gray-700 flex items-end h-8">Secondary Contact/Guardian Last Name</label>
+                            <input type="text" id="edit-secondary-last-name" class="mt-0 w-full px-3 py-1.5 text-base border rounded-md bg-gray-200 cursor-not-allowed" style="border-color: var(--input)" disabled>
+                        </div>
+                        <div>
+                            <label class="text-sm font-medium text-gray-700 flex items-end h-8">Secondary Contact/Guardian Country Code</label>
+                            <select id="edit-secondary-country-code" class="mt-0 w-full px-3 py-1.5 text-base border rounded-md bg-gray-200 cursor-not-allowed" style="border-color: var(--input)" disabled>
+                                <option>Select Country code</option>
+                                <option>+1</option>
+                                <option>+91</option>
+                                <option selected>+353</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="text-sm font-medium text-gray-700 flex items-end h-8">Secondary Contact/Guardian Mobile No.</label>
+                            <input type="text" id="edit-secondary-mobile" class="mt-0 w-full px-3 py-1.5 text-base border rounded-md" style="border-color: var(--input)">
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-3 mt-3">
+                        <div>
+                            <label class="text-sm font-medium text-gray-700 flex items-end h-8">Secondary Contact/Guardian MIS Username</label>
+                            <input type="text" id="edit-secondary-username" class="mt-0 w-full px-3 py-1.5 text-base border rounded-md bg-gray-200 cursor-not-allowed" style="border-color: var(--input)" disabled>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pt-3 flex justify-end gap-2">
+                    <button type="button" onclick="closeEditStudentModal()" class="px-6 py-2 bg-gray-100 text-base font-medium rounded-md hover:bg-gray-200 border border-gray-300">
+                        Cancel
+                    </button>
+                    <button type="button" id="edit-student-save-btn" onclick="submitStudentEdit()" class="px-6 py-2 primary-btn text-base font-medium rounded-md opacity-50 cursor-not-allowed" disabled>
+                        Save Changes
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- More Settings Modal -->
+    <div id="more-settings-modal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50 flex items-center justify-center p-4">
+        <div class="relative mx-auto p-6 border w-full max-w-lg shadow-lg rounded-md bg-white">
+            <div class="text-left">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-xl leading-6 font-bold text-gray-900">Additional Settings</h3>
+                    <button onclick="closeSettingsModal()" class="p-1 rounded-full hover:bg-gray-200">
+                        <i data-lucide="x" class="w-5 h-5 text-gray-500"></i>
+                    </button>
+                </div>
+                <div class="mt-2 space-y-4">
+                    <!-- Late Note Requests (moved from main settings) -->
+                    <div class="flex items-start justify-between mt-4">
+                        <div class="pr-2">
+                            <p class="font-medium text-base text-gray-800 flex items-center">Late Note Requests
+                                <span class="inline-flex" data-tooltip="When enabled, the Parent/Guardian will receive Unexplained Late Notifications.">
+                                    <i data-lucide="info" class="w-3 h-3 ml-1.5 text-gray-400"></i>
+                                </span>
+                            </p>
+                            <p class="text-sm text-gray-500 mt-0.5 leading-relaxed hidden">When enabled, the Parent/Guardian will receive Unexplained Late Notifications.</p>
+                            <a href="#" class="text-sm text-gray-900 hover:underline">Click to view students excluded from LNR alerts</a>
+                        </div>
+                        <label for="late-note-requests-toggle" class="flex items-center cursor-pointer flex-shrink-0 pt-0.5">
+                            <div class="relative">
+                                <input type="checkbox" id="late-note-requests-toggle" class="sr-only" checked>
+                                <div class="toggle-bg block w-11 h-6 rounded-full transition-colors"></div>
+                            </div>
+                        </label>
+                    </div>
+                    
+                    <div class="flex items-start justify-between py-3 border-b" style="border-color: var(--border)">
+                        <div class="pr-2">
+                            <p class="font-medium text-base text-gray-800 flex items-center">Late Arrival Notifications
+                                <span class="inline-flex" data-tooltip="Receive notifications when the student arrives late to school.">
+                                    <i data-lucide="info" class="w-3 h-3 ml-1.5 text-gray-400"></i>
+                                </span>
+                            </p>
+                            <p class="text-sm text-gray-500 mt-0.5 leading-relaxed hidden">Receive notifications when the student arrives late to school.</p>
+                        </div>
+                        <label for="late-arrival-toggle" class="flex items-center cursor-pointer flex-shrink-0 pt-0.5">
+                            <div class="relative">
+                                <input type="checkbox" id="late-arrival-toggle" class="sr-only" checked>
+                                <div class="toggle-bg block w-11 h-6 rounded-full transition-colors"></div>
+                            </div>
+                        </label>
+                    </div>
+
+                    <div class="flex items-start justify-between py-3 border-b" style="border-color: var(--border)">
+                        <div class="pr-2">
+                            <p class="font-medium text-base text-gray-800 flex items-center">Leave Permission Request
+                                <span class="inline-flex" data-tooltip="Receive notifications for permission to leave requests and sign-outs.">
+                                    <i data-lucide="info" class="w-3 h-3 ml-1.5 text-gray-400"></i>
+                                </span>
+                            </p>
+                            <p class="text-sm text-gray-500 mt-0.5 leading-relaxed hidden">Receive notifications for permission to leave requests and sign-outs.</p>
+                        </div>
+                        <label for="early-departure-toggle" class="flex items-center cursor-pointer flex-shrink-0 pt-0.5">
+                            <div class="relative">
+                                <input type="checkbox" id="early-departure-toggle" class="sr-only">
+                                <div class="toggle-bg block w-11 h-6 rounded-full transition-colors"></div>
+                            </div>
+                        </label>
+                    </div>
+                    
+                    <div class="flex items-start justify-between py-3 border-b" style="border-color: var(--border)">
+                        <div class="pr-2">
+                            <p class="font-medium text-base text-gray-800">Fee Payment Reminders</p>
+                            <p class="text-sm text-gray-500 mt-0.5 leading-relaxed">Enable reminders for upcoming school fee payments.</p>
+                        </div>
+                        <label for="fee-payment-toggle" class="flex items-center cursor-pointer flex-shrink-0 pt-0.5">
+                            <div class="relative">
+                                <input type="checkbox" id="fee-payment-toggle" class="sr-only" checked>
+                                <div class="toggle-bg block w-11 h-6 rounded-full transition-colors"></div>
+                            </div>
+                        </label>
+                    </div>
+
+                    <!-- Email Reminders (Coming Soon) -->
+                    <div class="flex items-start justify-between py-3 opacity-50">
+                        <div class="pr-2">
+                            <p class="font-medium text-base text-gray-800 flex items-center">
+                                Email Reminders
+                                <span class="ml-2 text-xs bg-yellow-200 text-yellow-800 px-2 py-0.5 rounded-full">Coming Soon</span>
+                            </p>
+                            <p class="text-sm text-gray-500 mt-0.5 leading-relaxed">Set up and manage automated email reminders for parents.</p>
+                        </div>
+                        <label class="flex items-center cursor-not-allowed flex-shrink-0 pt-0.5">
+                            <div class="relative">
+                                <input type="checkbox" class="sr-only" disabled>
+                                <div class="toggle-bg block w-11 h-6 rounded-full transition-colors"></div>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+                <div class="items-center pt-3 mt-4 text-right">
+                    <button onclick="closeSettingsModal()" class="px-6 py-2 primary-btn text-base font-medium rounded-md">
+                        Done
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Send PN Modal -->
+    <div id="send-pn-modal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50 flex items-center justify-center p-4">
+        <div class="relative mx-auto p-6 border w-full max-w-lg shadow-lg rounded-md bg-white">
+            <div class="text-left">
+                <div class="flex items-center mb-3">
+                    <i data-lucide="send" class="w-6 h-6 mr-3 text-gray-700"></i>
+                    <h3 class="text-xl leading-6 font-bold text-gray-900">Send Personal Notification</h3>
+                </div>
+                <div class="mt-2">
+                    <p class="text-base text-gray-500">Choose which notification channel to use for sending your personal notification.</p>
+                </div>
+                <div class="mt-6 space-y-3">
+                    <button onclick="openComposePnModal('Primary')" class="w-full text-left p-4 rounded-lg border border-gray-300 bg-gray-100 hover:bg-gray-200 transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                        <p class="font-bold text-lg text-gray-800">Primary</p>
+                        <p class="text-base text-gray-500">Send to primary contact (Declan Kelly)</p>
+                    </button>
+                    <button onclick="openComposePnModal('Secondary')" class="w-full text-left p-4 rounded-lg border border-gray-300 bg-gray-100 hover:bg-gray-200 transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                        <p class="font-bold text-lg text-gray-800">Secondary</p>
+                        <p class="text-base text-gray-500">Send to secondary contact (Finn Kelly)</p>
+                    </button>
+                    <button onclick="openComposePnModal('Both')" class="w-full text-left p-4 rounded-lg border border-gray-300 bg-gray-100 hover:bg-gray-200 transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                        <p class="font-bold text-lg text-gray-800">Both</p>
+                        <p class="text-base text-gray-500">Send to both contacts</p>
+                    </button>
+                </div>
+                <div class="items-center pt-3 mt-4 text-right">
+                    <button onclick="closeSendPnModal()" class="px-5 py-2 bg-gray-100 text-base font-medium rounded-md hover:bg-gray-200 border border-gray-300">
+                        Cancel
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Compose PN Modal -->
+    <div id="compose-pn-modal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50 flex items-center justify-center p-4">
+        <div class="relative mx-auto p-6 border w-full max-w-xl shadow-lg rounded-md bg-white">
+            <div class="text-left">
+                <div class="flex items-center justify-between mb-4 pb-4 border-b">
+                    <h3 class="text-xl leading-6 font-bold text-gray-900">Compose Notification</h3>
+                    <button onclick="closeComposePnModal()" class="p-1 rounded-full hover:bg-gray-200">
+                        <i data-lucide="x" class="w-5 h-5 text-gray-500"></i>
+                    </button>
+                </div>
+                <div class="mt-4 space-y-4">
+                    <div>
+                        <label for="compose-pn-recipient" class="text-sm font-medium text-gray-700">To</label>
+                        <p id="compose-pn-recipient" class="mt-1 text-base font-semibold text-gray-800 p-2 bg-gray-100 rounded-md"></p>
+                    </div>
+                    <div>
+                        <label for="compose-pn-title" class="text-sm font-medium text-gray-700">Title</label>
+                        <input type="text" id="compose-pn-title" class="mt-1 w-full px-3 py-2 text-base border rounded-md focus:outline-none focus:ring-1 focus:ring-gray-500" style="border-color: var(--input)">
+                    </div>
+                    <div>
+                        <label for="compose-pn-body" class="text-sm font-medium text-gray-700">Message</label>
+                        <textarea id="compose-pn-body" rows="6" class="mt-1 w-full px-3 py-2 text-base border rounded-md focus:outline-none focus:ring-1 focus:ring-gray-500" style="border-color: var(--input)" placeholder="Enter your message here..."></textarea>
+                    </div>
+                </div>
+                <div class="mt-6 flex justify-between items-center">
+                    <button class="flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border rounded-md hover:bg-gray-50" style="border-color: var(--border)">
+                        <i data-lucide="file-text" class="w-4 h-4 mr-2"></i> Use Template
+                    </button>
+                    <div class="flex items-center gap-2">
+                        <button onclick="closeComposePnModal()" class="px-5 py-2 bg-gray-100 text-base font-medium rounded-md hover:bg-gray-200 border border-gray-300">
+                            Cancel
+                        </button>
+                        <button onclick="sendNotification()" class="primary-btn flex items-center justify-center px-5 py-2 text-base font-medium rounded-md">
+                            <i data-lucide="send" class="w-4 h-4 mr-2"></i> Send Notification
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- START: Medical Form Details Modal -->
+    <div id="medical-form-details-modal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-[100] flex items-center justify-center p-4">
+        <div class="relative mx-auto border w-full max-w-5xl shadow-lg rounded-md bg-white max-h-[90vh] flex flex-col">
+            <!-- Modal Header -->
+            <div class="flex items-center justify-between p-4 border-b">
+                <h3 class="text-xl leading-6 font-bold text-gray-900">Details</h3>
+                <button onclick="closeMedicalFormDetailsModal()" class="p-1 rounded-full hover:bg-gray-200">
+                    <i data-lucide="x" class="w-5 h-5 text-gray-500"></i>
+                </button>
+            </div>
+
+            <!-- Scrollable Content -->
+            <div class="p-6 overflow-y-auto flex-1 space-y-6" id="medical-form-modal-content">
+                <!-- Content will be injected here via JS -->
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="p-4 border-t flex justify-end">
+                <button onclick="closeMedicalFormDetailsModal()" class="px-5 py-2 bg-gray-100 text-base font-medium rounded-md hover:bg-gray-200 border border-gray-300">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+    <!-- END: Medical Form Details Modal -->
+
+    <!-- Remove Consent Form Modal -->
+    <div id="remove-consent-form-modal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50 flex items-center justify-center p-4">
+        <div class="relative mx-auto p-6 border w-full max-w-md shadow-lg rounded-md bg-white">
+            <div class="text-left">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-xl leading-6 font-bold text-gray-900 flex items-center">
+                        <i data-lucide="alert-triangle" class="w-6 h-6 mr-3 text-yellow-500"></i>
+                        Remove Form
+                    </h3>
+                    <button onclick="closeRemoveConsentFormModal()" class="p-1 rounded-full hover:bg-gray-200">
+                        <i data-lucide="x" class="w-5 h-5 text-gray-500"></i>
+                    </button>
+                </div>
+                <div class="mt-2">
+                    <h3 class="text-xl leading-6 font-bold text-gray-900">Are you sure you want to remove this form item?</h3>
+                    <p id="remove-consent-form-name" class="mt-3 p-3 bg-yellow-50 border border-yellow-200 rounded-md text-yellow-800 font-medium"></p>
+                    <p class="mt-3 text-sm text-gray-500">This action cannot be undone.</p>
+                </div>
+                <div class="mt-6 flex justify-end items-center gap-2">
+                    <button onclick="closeRemoveConsentFormModal()" class="px-5 py-2 bg-gray-100 text-base font-medium rounded-md hover:bg-gray-200 border border-gray-300">
+                        Cancel
+                    </button>
+                    <button onclick="handleConfirmRemoveConsentForm()" class="destructive-btn flex items-center justify-center px-5 py-2 text-base font-medium rounded-md">
+                        <i data-lucide="trash-2" class="w-4 h-4 mr-2"></i>
+                        Remove
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Delete CHY Form Modal -->
+    <div id="delete-chy-form-modal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-75 overflow-y-auto h-full w-full z-[60] flex items-center justify-center p-4">
+        <div class="relative mx-auto p-8 border w-full max-w-md shadow-lg rounded-2xl bg-white">
+            <div class="text-center">
+                <h3 class="text-xl leading-6 font-bold text-gray-900">Are you sure you want to delete this CHY form?</h3>
+                <p id="delete-chy-form-name" class="mt-2 text-gray-500"></p>
+                <div class="items-center pt-3 mt-6 flex justify-center gap-4">
+                    <button onclick="closeDeleteChyFormModal()" class="px-8 py-3 bg-white text-base font-semibold rounded-lg hover:bg-gray-100 border-2 border-gray-300">
+                        Cancel
+                    </button>
+                    <button id="delete-chy-form-confirm-btn" class="px-8 py-3 destructive-btn text-base font-semibold rounded-lg">
+                        Continue
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Absence Request Modal -->
+    <div id="absence-request-modal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50 flex items-center justify-center p-4">
+        <div class="relative mx-auto p-6 border w-full max-w-lg shadow-lg rounded-md bg-white">
+            <div class="text-left">
+                <div class="flex items-center justify-between mb-4 pb-4 border-b">
+                    <h3 class="text-xl leading-6 font-bold text-gray-900 flex items-center">
+                        <i data-lucide="file-plus-2" class="w-6 h-6 mr-3 text-gray-700"></i>
+                        Send Absence Request Form
+                    </h3>
+                    <button onclick="closeAbsenceRequestModal()" class="p-1 rounded-full hover:bg-gray-200">
+                        <i data-lucide="x" class="w-5 h-5 text-gray-500"></i>
+                    </button>
+                </div>
+                <div class="mt-2 space-y-4">
+                    <p class="text-base text-gray-600">Please select the date of absence you would like to send the form for.</p>
+                    <div>
+                        <label for="absence-date" class="text-sm font-medium text-gray-700">Date of Absence</label>
+                        <input type="date" id="absence-date" class="mt-1 w-full px-3 py-2 text-base border rounded-md focus:outline-none focus:ring-1 focus:ring-gray-500" style="border-color: var(--input)">
+                    </div>
+                </div>
+                <div class="mt-6 flex justify-end items-center gap-2">
+                    <button onclick="closeAbsenceRequestModal()" class="px-5 py-2 bg-gray-100 text-base font-medium rounded-md hover:bg-gray-200 border border-gray-300">
+                        Cancel
+                    </button>
+                    <button onclick="sendAbsenceRequest()" class="primary-btn flex items-center justify-center px-5 py-2 text-base font-medium rounded-md">
+                        <i data-lucide="send" class="w-4 h-4 mr-2"></i> Submit
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast-notification" class="hidden fixed top-5 right-5 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg transition-all duration-300 ease-in-out transform translate-x-full" style="opacity: 0;">
+        <div class="flex items-center">
+            <i data-lucide="check-circle" class="w-5 h-5 mr-3"></i>
+            <span id="toast-message"></span>
+        </div>
+    </div>
+
+    <script>
+        // --- START: Medical Forms Data ---
+        const medicalFormsData = [
+            {
+                sno: 1,
+                primaryContact: "Deccan Kelly",
+                secondaryContact: "Finn Kelly",
+                hasCondition: true,
+                lastModified: "13 Oct 2025, 3:14 PM",
+                status: "Submitted",
+                acknowledgedBy: "Kritika Wadhwa",
+                acknowledgedDate: "26 Nov 2025, 5:22 AM",
+                ackStatus: "Acknowledged",
+                details: {
+                    studentName: "Roberto Roberts",
+                    lastModified: "13 Oct 2025, 3:14 PM",
+                    emergencyContacts: [
+                        { label: "Emergency Contact Name 1", value: "Kvkvk" },
+                        { label: "Emergency Contact Name 2", value: "Ysufkvk" },
+                        { label: "Emergency Contact No 1", value: "09061819" },
+                        { label: "Emergency Contact No 2", value: "90518161818188" }
+                    ],
+                    doctor: {
+                        name: "Jeksksms",
+                        contact: "94849464440",
+                        address: "Hsnskss"
+                    },
+                    condition: {
+                        has: true,
+                        diagnosis: "Sjjsks",
+                        signs: "Jskks",
+                        triggers: "Ejsksk",
+                        other: "Eusie"
+                    },
+                    routine: {
+                        has: true,
+                        schoolHours: "Usjjs",
+                        outsideSchool: "Hejej"
+                    },
+                    regularMed: { na: true, desc: "", dose: "" },
+                    emergencyMed: { na: true, name: "", protocol: "" },
+                    medStorage: { na: false, leftInOffice: false }, 
+                    special: { na: true, details: "" },
+                    allergy: { has: true, details: "Hsjsk" },
+                    gpTreatment: false,
+                    permissions: {
+                        firstAid: true,
+                        medicalAssistance: true,
+                        gpMedication: true,
+                        nonPrescription: true
+                    },
+                    otherInfo: { has: true, details: "Jekekkeke" }
+                }
+            },
+            {
+                sno: 2,
+                primaryContact: "Declan Kelly",
+                secondaryContact: "Finn Kelly",
+                hasCondition: true,
+                lastModified: "30 Sep 2025, 7:12 AM",
+                status: "Submitted",
+                acknowledgedBy: "Lee Ryan",
+                acknowledgedDate: "30 Sep 2025, 7:13 AM",
+                ackStatus: "Acknowledged",
+                details: {
+                    studentName: "Amelia Vance",
+                    lastModified: "30 Sep 2025, 7:12 AM",
+                    emergencyContacts: [
+                        { label: "Emergency Contact Name 1", value: "Declan Kelly" },
+                        { label: "Emergency Contact Name 2", value: "Finn Kelly" },
+                        { label: "Emergency Contact No 1", value: "7028650595" },
+                        { label: "Emergency Contact No 2", value: "9145434001" }
+                    ],
+                    doctor: { name: "Dr. Smith", contact: "123456789", address: "Main St" },
+                    condition: { has: true, diagnosis: "Asthma", signs: "Wheezing", triggers: "Dust", other: "Inhaler needed" },
+                    routine: { has: false },
+                    regularMed: { na: true },
+                    emergencyMed: { na: false, name: "Inhaler", protocol: "2 puffs" },
+                    medStorage: { na: false, leftInOffice: true },
+                    special: { na: true },
+                    allergy: { has: false },
+                    gpTreatment: false,
+                    permissions: { firstAid: true, medicalAssistance: true, gpMedication: true, nonPrescription: true },
+                    otherInfo: { has: false }
+                }
+            }
+        ];
+        // --- END: Medical Forms Data ---
+
+        const submodulesData = {
+            forms: { title: 'Forms', items: ['Consent Forms & Surveys', 'Picture Permissions', 'CHY', 'Medical Forms'] },
+        };
+
+        const consentFormsData = [
+            { sno: 1, title: 'Annual Field Trip Permission (2025-26)', userType: 'Parent/Guardian', published: 'Published', lastModifiedBy: 'Admin Office', lastModifiedOn: '01 Sep 2025, 09:00 AM', submissionEndDate: '15 Sep 2025', totalForms: 1, pendingForms: 0, submittedForms: 1, optout: 0 },
+            { sno: 2, title: 'Acceptable Use Policy for IT', userType: 'Student & Parent', published: 'Published', lastModifiedBy: 'IT Department', lastModifiedOn: '28 Aug 2025, 11:30 AM', submissionEndDate: '10 Sep 2025', totalForms: 1, pendingForms: 0, submittedForms: 1, optout: 0 },
+            { sno: 3, title: 'Photography & Media Consent 2025-26', userType: 'Parent/Guardian', published: 'Published', lastModifiedBy: 'Admin Office', lastModifiedOn: '28 Aug 2025, 09:15 AM', submissionEndDate: '10 Sep 2025', totalForms: 1, pendingForms: 1, submittedForms: 0, optout: 0 },
+            { sno: 4, title: 'Transition Year Work Experience Survey', userType: 'Student', published: 'Draft', lastModifiedBy: 'Ms. Murphy', lastModifiedOn: '05 Oct 2025, 02:15 PM', submissionEndDate: '', totalForms: 0, pendingForms: 0, submittedForms: 0, optout: 0 },
+            { sno: 5, title: 'Locker Rental Agreement', userType: 'Student', published: 'Published', lastModifiedBy: 'Admin Office', lastModifiedOn: '29 Aug 2025, 04:00 PM', submissionEndDate: '05 Sep 2025', totalForms: 1, pendingForms: 0, submittedForms: 1, optout: 0 },
+            { sno: 6, title: 'Parent-Teacher Meeting Availability', userType: 'Parent/Guardian', published: 'Published', lastModifiedBy: 'Admin Office', lastModifiedOn: '06 Oct 2025, 10:00 AM', submissionEndDate: '10 Oct 2025', totalForms: 1, pendingForms: 1, submittedForms: 0, optout: 0 },
+            { sno: 7, title: 'Sports Team Tryouts Sign-up (Winter)', userType: 'Student', published: 'Draft', lastModifiedBy: 'Mr. Byrne', lastModifiedOn: '02 Oct 2025, 03:00 PM', submissionEndDate: '', totalForms: 0, pendingForms: 0, submittedForms: 0, optout: 0 },
+            { sno: 8, title: 'Voluntary Contribution 2025-26 Survey', userType: 'Parent/Guardian', published: 'Published', lastModifiedBy: 'Admin Office', lastModifiedOn: '15 Sep 2025, 11:00 AM', submissionEndDate: '30 Sep 2025', totalForms: 1, pendingForms: 0, submittedForms: 1, optout: 0 },
+        ];
+
+        const picturePermissionsData = [
+            { sno: 1, status: 'Granted', lastModifiedBy: 'Admin Office' },
+            { sno: 2, status: 'Not Granted', lastModifiedBy: 'Admin Office' },
+        ];
+
+        const chyFormsData = [
+            { sno: 1, year: 2026, published: true, createdOn: '26 Jun 2025, 8:07 AM', lastModifiedOn: '23 Sep 2025, 3:35 PM', totalForms: 5, pendingForms: 4, submittedForms: 1 },
+            { sno: 2, year: 2025, published: true, createdOn: '18 Sep 2025, 11:00 AM', lastModifiedOn: '18 Sep 2025, 11:00 AM', totalForms: 24, pendingForms: 23, submittedForms: 1 },
+            { sno: 3, year: 2024, published: true, createdOn: '28 Aug 2025, 1:02 PM', lastModifiedOn: '28 Aug 2025, 1:02 PM', totalForms: 23, pendingForms: 22, submittedForms: 1 },
+            { sno: 4, year: 2015, published: true, createdOn: '13 Aug 2025, 3:02 PM', lastModifiedOn: '13 Aug 2025, 3:02 PM', totalForms: 1, pendingForms: 1, submittedForms: 0 },
+            { sno: 5, year: 2020, published: true, createdOn: '11 Jul 2025, 8:31 AM', lastModifiedOn: '11 Jul 2025, 8:31 AM', totalForms: 9, pendingForms: 8, submittedForms: 1 }
+        ];
+
+        let consentFormsSearch = '';
+        let consentFormsStatusFilter = 'Selected';
+        let picturePermissionsFilter = 'Select Status';
+        let consentFormsToRemove = [];
+        let chyFormsSearch = '';
+        let chyFormsToDelete = [];
+
+        // --- RESTORED: Student Data ---
+        const currentStudentData = {
+            id: 1,
+            studentId: 'STU-2025-045',
+            ssid: '1234567A',
+            dob: '2009-05-10',
+            firstName: 'Amelia',
+            lastName: 'Vance',
+            year: 10,
+            'class': '5B',
+            primaryFirstName: 'Declan',
+            primaryLastName: 'Kelly',
+            primaryMobile: '7028650595',
+            primaryCountryCode: '+353',
+            primaryUsername: 'declan.kelly',
+            secondaryFirstName: 'Finn',
+            secondaryLastName: 'Kelly',
+            secondaryMobile: '9145434001',
+            secondaryCountryCode: '+353',
+            secondaryUsername: 'finn.kelly'
+        };
+
+        // --- RESTORED: Function for TUSLA Toggle ---
+        function handleTuslaToggle(toggle) {
+            const enabled = toggle.checked;
+            if (enabled) {
+                showToast(`TUSLA Personal Notifications enabled.`);
+            } else {
+                showToast(`TUSLA Personal Notifications disabled.`);
+            }
+            console.log('TUSLA preference set to:', enabled ? 'auto' : 'manual');
+        }
+
+        function handleSubmoduleClick(moduleId, submoduleName, subFilter = null) {
+            setActiveTab(moduleId);
+
+            if (moduleId === 'forms' && submoduleName === 'Consent Forms & Surveys') {
+                renderConsentForms();
+                return;
+            }
+
+            if (moduleId === 'forms' && submoduleName === 'Picture Permissions') {
+                renderPicturePermissions();
+                return;
+            }
+
+            if (moduleId === 'forms' && submoduleName === 'CHY') {
+                renderChyForms();
+                return;
+            }
+
+            if (moduleId === 'forms' && submoduleName === 'Medical Forms') {
+                renderMedicalForms();
+                return;
+            }
+            
+            // Fallback for other modules
+            const container = document.getElementById('tab-content-container');
+            container.innerHTML = `
+                <div class="content-view">
+                    <h2 class="text-2xl font-bold text-gray-800">${submoduleName}</h2>
+                    <p class="mt-4 text-gray-500">Content for ${submoduleName} goes here.</p>
+                </div>`;
+            lucide.createIcons();
+        }
+        
+        function showTabContent(moduleId) {
+            setActiveTab(moduleId);
+            const container = document.getElementById('tab-content-container');
+            const data = submodulesData[moduleId];
+            let content = `<div class="content-view"><h2 class="text-2xl font-bold text-gray-800 mb-6">${data.title}</h2>`;
+            if (data.items.length > 0) {
+                 content += '<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">';
+                 data.items.forEach(item => {
+                     content += `
+                         <button onclick="handleSubmoduleClick('${moduleId}', '${item}')" class="flex items-center justify-center text-center p-5 rounded-lg border hover:shadow-lg hover:border-gray-300 hover:-translate-y-0.5 transition-all" style="background-color: var(--secondary); border-color: var(--border);">
+                             <span class="font-bold text-lg text-gray-700">${item}</span>
+                         </button>`;
+                 });
+                 content += '</div>';
+            }
+            content += '</div>';
+            container.innerHTML = content;
+            lucide.createIcons();
+        }
+
+        function renderConsentForms() {
+            const container = document.getElementById('tab-content-container');
+            
+            let filteredData = consentFormsData;
+            if (consentFormsStatusFilter !== 'Selected') {
+                filteredData = filteredData.filter(form => form.published === consentFormsStatusFilter);
+            }
+            if (consentFormsSearch.trim() !== '') {
+                const searchTerm = consentFormsSearch.toLowerCase();
+                filteredData = filteredData.filter(form => 
+                    form.title.toLowerCase().includes(searchTerm) ||
+                    form.lastModifiedBy.toLowerCase().includes(searchTerm)
+                );
+            }
+
+            const totalForms = filteredData.length;
+            const pendingForms = filteredData.filter(form => form.pendingForms > 0).length;
+
+            let tableRows = '';
+            filteredData.forEach(row => {
+                const publishedBadge = row.published === 'Published'
+                    ? `<span class="status-success px-2 py-1 text-xs font-semibold rounded-full">${row.published}</span>`
+                    : `<span class="status-pending px-2 py-1 text-xs font-semibold rounded-full">${row.published}</span>`;
+                
+                let displayUserType = 'Student';
+                if (row.userType.includes('Parent') || row.userType.includes('Guardian')) {
+                    displayUserType = 'Parent/Guardian';
+                }
+
+                const submittedStatus = row.submittedForms > 0 ? 'Yes' : 'No';
+                const optoutStatus = row.optout > 0 ? 'Yes' : 'No';
+                
+                let consentStatus = 'N/A';
+                let consentStatusClass = 'bg-gray-100 text-gray-800';
+                
+                if (row.submittedForms > 0) {
+                    consentStatus = 'Yes';
+                    consentStatusClass = 'bg-green-100 text-green-800';
+                } else if (row.pendingForms > 0) {
+                    consentStatus = 'No';
+                    consentStatusClass = 'bg-red-100 text-red-800';
+                }
+
+                tableRows += `
+                    <tr class="border-b hover:bg-gray-50" style="border-color: var(--border)">
+                        <td class="py-3 px-4"><input type="checkbox" class="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500 consent-form-checkbox"></td>
+                        <td class="py-3 px-4 text-sm text-gray-600">${row.sno}</td>
+                        <td class="py-3 px-4 text-sm text-gray-800 font-medium">${row.title}</td>
+                        <td class="py-3 px-4 text-sm text-gray-600">${displayUserType}</td>
+                        <td class="py-3 px-4">${publishedBadge}</td>
+                        <td class="py-3 px-4 text-sm text-gray-600">${row.lastModifiedBy}</td>
+                        <td class="py-3 px-4 text-sm text-gray-600">${row.lastModifiedOn}</td>
+                        <td class="py-3 px-4 text-sm text-gray-600">${row.submissionEndDate}</td>
+                        <td class="py-3 px-4 text-center"><i data-lucide="file-text" class="w-4 h-4 text-gray-500 cursor-pointer hover:text-blue-600" data-tooltip="Preview Form"></i></td>
+                        <td class="py-3 px-4 text-center">
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${consentStatusClass}">
+                                ${consentStatus}
+                            </span>
+                        </td>
+                        <td class="py-3 px-4 text-sm text-center text-gray-600">${submittedStatus}</td>
+                        <td class="py-3 px-4 text-sm text-center text-gray-600">${optoutStatus}</td>
+                    </tr>
+                `;
+            });
+
+           container.innerHTML = `
+            <div class="content-view">
+                <button onclick="showTabContent('forms')" class="flex items-center text-base font-medium text-gray-600 hover:text-gray-800 mb-6">
+                    <i data-lucide="arrow-left" class="w-4 h-4 mr-2"></i>
+                    Back to Forms
+                </button>
+                <div class="card rounded-lg border">
+                    <div class="p-4 border-b" style="border-color: var(--border)">
+                        <div class="flex flex-wrap items-center justify-between gap-4">
+                            <h2 class="text-xl font-bold text-gray-800">Manage Forms</h2>
+                            <div class="flex items-center gap-4">
+                                <div class="bg-blue-50 border border-blue-200 rounded-lg px-4 py-2 flex items-center space-x-4">
+                                    <div class="text-center">
+                                        <div class="text-sm font-medium text-blue-700">Total Forms</div>
+                                        <div class="text-lg font-bold text-blue-900">${totalForms}</div>
+                                    </div>
+                                    <div class="h-8 w-px bg-blue-300"></div>
+                                    <div class="text-center">
+                                        <div class="text-sm font-medium text-blue-700">Pending Forms</div>
+                                        <div class="text-lg font-bold text-blue-900">${pendingForms}</div>
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <button onclick="openRemoveConsentFormModal()" class="destructive-btn flex items-center px-4 py-2 text-sm font-medium rounded-md"><i data-lucide="x-circle" class="w-4 h-4 mr-2"></i>Remove</button>
+                                    <button class="flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border rounded-md hover:bg-gray-50" style="border-color: var(--border)"><i data-lucide="download" class="w-4 h-4 mr-2"></i>Export</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-4">
+                            <div class="relative w-full max-w-sm">
+                                <i data-lucide="search" class="w-4 h-4 absolute top-1/2 left-3 -translate-y-1/2 text-gray-400"></i>
+                                <input type="text" placeholder="Search forms by title or modifier..." class="w-full pl-9 pr-3 py-2 text-sm border rounded-md focus:outline-none focus:ring-1 focus:ring-gray-500" style="border-color: var(--input)" value="${consentFormsSearch}" oninput="setConsentFormsSearch(this.value)">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full">
+                            <thead>
+                                <tr class="bg-gray-50 text-left">
+                                    <th class="py-2 px-4 w-12"><input type="checkbox" id="select-all-consent-forms" class="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"></th>
+                                    <th class="py-2 px-4 text-sm font-semibold text-gray-600">S.No.</th>
+                                    <th class="py-2 px-4 text-sm font-semibold text-gray-600">Title</th>
+                                    <th class="py-2 px-4 text-sm font-semibold text-gray-600">User Type</th>
+                                    <th class="py-2 px-4 text-sm font-semibold text-gray-600">
+                                        Published
+                                        <div class="relative mt-1">
+                                            <select class="appearance-none w-full px-2 py-1 pr-8 text-sm border rounded-md focus:outline-none focus:ring-1 focus:ring-gray-500 text-gray-500" style="border-color: var(--input)" onchange="setConsentFormsStatusFilter(this.value)">
+                                                <option ${consentFormsStatusFilter === 'Selected' ? 'selected' : ''}>Selected</option>
+                                                <option ${consentFormsStatusFilter === 'Published' ? 'selected' : ''}>Published</option>
+                                                <option ${consentFormsStatusFilter === 'Pending' ? 'selected' : ''}>Pending</option>
+                                                <option ${consentFormsStatusFilter === 'Draft' ? 'selected' : ''}>Draft</option>
+                                            </select>
+                                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                                                <i data-lucide="chevron-down" class="w-4 h-4"></i>
+                                            </div>
+                                        </div>
+                                    </th>
+                                    <th class="py-2 px-4 text-sm font-semibold text-gray-600">Last Modified By</th>
+                                    <th class="py-2 px-4 text-sm font-semibold text-gray-600">Last Modified On</th>
+                                    <th class="py-2 px-4 text-sm font-semibold text-gray-600">Last Date of Form Submission</th>
+                                    <th class="py-2 px-4 text-sm font-semibold text-gray-600 text-center">Form Preview</th>
+                                    <th class="py-2 px-4 text-sm font-semibold text-gray-600 text-center">Consent Status</th>
+                                    <th class="py-2 px-4 text-sm font-semibold text-gray-600 text-center">Submitted</th>
+                                    <th class="py-2 px-4 text-sm font-semibold text-gray-600 text-center">Optout</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y" style="border-color: var(--border);">${tableRows}</tbody>
+                        </table>
+                    </div>
+                    <div class="p-4 text-base text-gray-600 font-medium bg-secondary border-t" style="border-color: var(--border)">
+                        Total : ${filteredData.length}
+                    </div>
+                </div>
+            </div>
+        `;
+            
+            const selectAllConsentCheckbox = document.getElementById('select-all-consent-forms');
+            if (selectAllConsentCheckbox) {
+                selectAllConsentCheckbox.addEventListener('click', function() {
+                    const itemCheckboxes = document.querySelectorAll('.consent-form-checkbox');
+                    itemCheckboxes.forEach(checkbox => {
+                        checkbox.checked = this.checked;
+                    });
+                });
+            }
+
+            lucide.createIcons();
+        }
+
+        function renderPicturePermissions() {
+            const container = document.getElementById('tab-content-container');
+
+            let filteredData = picturePermissionsData;
+            if (picturePermissionsFilter === 'Granted') {
+                filteredData = picturePermissionsData.filter(p => p.status === 'Granted');
+            } else if (picturePermissionsFilter === 'Not Granted') {
+                filteredData = picturePermissionsData.filter(p => p.status === 'Not Granted');
+            }
+
+            let tableRows = '';
+            filteredData.forEach(row => {
+                const statusBadge = row.status === 'Granted'
+                    ? `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">${row.status}</span>`
+                    : `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">${row.status}</span>`;
+                
+                tableRows += `
+                    <tr class="border-b hover:bg-gray-50" style="border-color: var(--border)">
+                        <td class="py-3 px-4"><input type="checkbox" class="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500 picture-permission-checkbox"></td>
+                        <td class="py-3 px-4 text-sm text-gray-600">${row.sno}</td>
+                        <td class="py-3 px-4">${statusBadge}</td>
+                        <td class="py-3 px-4 text-sm text-gray-600">${row.lastModifiedBy}</td>
+                    </tr>
+                `;
+            });
+
+            container.innerHTML = `
+                <div class="content-view">
+                    <button onclick="showTabContent('forms')" class="flex items-center text-base font-medium text-gray-600 hover:text-gray-800 mb-6">
+                        <i data-lucide="arrow-left" class="w-4 h-4 mr-2"></i>
+                        Back to Forms
+                    </button>
+                    <div class="card rounded-lg border">
+                        <div class="p-4 border-b" style="border-color: var(--border)">
+                            <div class="flex flex-wrap items-center justify-between gap-4 mb-4">
+                                <h2 class="text-xl font-bold text-gray-800">Picture Permissions List</h2>
+                                <div class="flex items-center gap-2">
+                                    <button class="flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border rounded-md hover:bg-gray-50" style="border-color: var(--border)"><i data-lucide="download" class="w-4 h-4 mr-2"></i>Export</button>
+                                </div>
+                            </div>
+                            <div class="flex flex-wrap items-center gap-4">
+                                <select class="w-full sm:w-auto px-3 py-2 text-sm border rounded-md focus:outline-none focus:ring-1 focus:ring-gray-500" style="border-color: var(--input)" onchange="setPicturePermissionsFilter(this.value)">
+                                    <option ${picturePermissionsFilter === 'Select Status' ? 'selected' : ''}>Select Status</option>
+                                    <option ${picturePermissionsFilter === 'Granted' ? 'selected' : ''}>Granted</option>
+                                    <option ${picturePermissionsFilter === 'Not Granted' ? 'selected' : ''}>Not Granted</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full">
+                                <thead>
+                                    <tr class="bg-slate-200 text-left">
+                                        <th class="py-2 px-4 w-12"><input type="checkbox" id="select-all-picture-permissions" class="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"></th>
+                                        <th class="py-2 px-4 text-sm font-semibold text-gray-600">S.No.</th>
+                                        <th class="py-2 px-4 text-sm font-semibold text-gray-600">Picture Permission Status</th>
+                                        <th class="py-2 px-4 text-sm font-semibold text-gray-600">Last Modified By</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y" style="border-color: var(--border);">${tableRows}</tbody>
+                            </table>
+                        </div>
+                        <div class="p-4 text-base text-gray-600 font-medium bg-secondary border-t" style="border-color: var(--border)">
+                            Total: ${filteredData.length}
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            const selectAllCheckbox = document.getElementById('select-all-picture-permissions');
+            if (selectAllCheckbox) {
+                selectAllCheckbox.addEventListener('click', function() {
+                    const itemCheckboxes = document.querySelectorAll('.picture-permission-checkbox');
+                    itemCheckboxes.forEach(checkbox => {
+                        checkbox.checked = this.checked;
+                    });
+                });
+            }
+
+            lucide.createIcons();
+        }
+
+        function renderChyForms() {
+            const container = document.getElementById('tab-content-container');
+            
+            let filteredData = chyFormsData;
+            if (chyFormsSearch.trim() !== '') {
+                const term = chyFormsSearch.toLowerCase();
+                filteredData = filteredData.filter(row => row.year.toString().includes(term));
+            }
+
+            let tableRows = '';
+            filteredData.forEach(row => {
+                const publishedBadge = row.published 
+                    ? `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">Yes</span>`
+                    : `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">No</span>`;
+
+                tableRows += `
+                    <tr class="border-b hover:bg-gray-50" style="border-color: var(--border)">
+                        <td class="py-3 px-4"><input type="checkbox" class="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500 chy-form-checkbox"></td>
+                        <td class="py-3 px-4 text-sm text-gray-600">${row.sno}</td>
+                        <td class="py-3 px-4 text-sm text-gray-800 font-medium">${row.year}</td>
+                        <td class="py-3 px-4">${publishedBadge}</td>
+                        <td class="py-3 px-4 text-sm text-gray-600">${row.createdOn}</td>
+                        <td class="py-3 px-4 text-sm text-gray-600">${row.lastModifiedOn}</td>
+                        <td class="py-3 px-4 text-sm text-center text-gray-600">${row.totalForms}</td>
+                        <td class="py-3 px-4 text-sm text-center text-gray-600">${row.pendingForms}</td>
+                        <td class="py-3 px-4 text-sm text-center text-gray-600">${row.submittedForms}</td>
+                    </tr>
+                `;
+            });
+
+            container.innerHTML = `
+                <div class="content-view">
+                    <button onclick="showTabContent('forms')" class="flex items-center text-base font-medium text-gray-600 hover:text-gray-800 mb-6">
+                        <i data-lucide="arrow-left" class="w-4 h-4 mr-2"></i>
+                        Back to Forms
+                    </button>
+                    <div class="card rounded-lg border">
+                        <div class="p-4 border-b" style="border-color: var(--border)">
+                            <div class="flex flex-wrap items-center justify-between gap-4">
+                                <h2 class="text-xl font-bold text-gray-800">Manage CHY Forms</h2>
+                                <div class="relative w-full max-w-sm">
+                                    <i data-lucide="search" class="w-4 h-4 absolute top-1/2 left-3 -translate-y-1/2 text-gray-400"></i>
+                                    <input type="text" placeholder="Search by Year..." class="w-full pl-9 pr-3 py-2 text-sm border rounded-md focus:outline-none focus:ring-1 focus:ring-gray-500" style="border-color: var(--input)" value="${chyFormsSearch}" oninput="setChyFormsSearch(this.value)">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full">
+                                <thead>
+                                    <tr class="bg-slate-200 text-left">
+                                        <th class="py-2 px-4 w-12"><input type="checkbox" id="select-all-chy-forms" class="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"></th>
+                                        <th class="py-2 px-4 text-sm font-semibold text-gray-600">S.No.</th>
+                                        <th class="py-2 px-4 text-sm font-semibold text-gray-600">Year</th>
+                                        <th class="py-2 px-4 text-sm font-semibold text-gray-600">Published</th>
+                                        <th class="py-2 px-4 text-sm font-semibold text-gray-600">Created On</th>
+                                        <th class="py-2 px-4 text-sm font-semibold text-gray-600">Last Modified On</th>
+                                        <th class="py-2 px-4 text-sm font-semibold text-gray-600 text-center">Total Forms</th>
+                                        <th class="py-2 px-4 text-sm font-semibold text-gray-600 text-center">Pending Forms</th>
+                                        <th class="py-2 px-4 text-sm font-semibold text-gray-600 text-center">Submitted Forms</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y" style="border-color: var(--border);">${tableRows}</tbody>
+                            </table>
+                        </div>
+                        <div class="p-4 text-base text-gray-600 font-medium bg-secondary border-t" style="border-color: var(--border)">
+                            Total : ${filteredData.length}
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            const selectAllCheckbox = document.getElementById('select-all-chy-forms');
+            if (selectAllCheckbox) {
+                selectAllCheckbox.addEventListener('click', function() {
+                    const itemCheckboxes = document.querySelectorAll('.chy-form-checkbox');
+                    itemCheckboxes.forEach(checkbox => {
+                        checkbox.checked = this.checked;
+                    });
+                });
+            }
+
+            lucide.createIcons();
+        }
+
+        function renderMedicalForms() {
+            const container = document.getElementById('tab-content-container');
+            
+            let tableRows = '';
+            medicalFormsData.forEach((row, index) => {
+                tableRows += `
+                    <tr class="hover:bg-gray-50 border-b" style="border-color: var(--border)">
+                        <td class="py-3 px-4"><input type="checkbox" class="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500 medical-form-checkbox"></td>
+                        <td class="p-3 text-gray-600">${row.sno}</td>
+                        <td class="p-3 text-gray-600">${row.primaryContact}</td>
+                        <td class="p-3 text-gray-600">${row.secondaryContact}</td>
+                        <td class="p-3 text-center text-red-500"><i data-lucide="ambulance" class="w-5 h-5 mx-auto"></i></td>
+                        <td class="p-3 text-gray-600">${row.lastModified}</td>
+                        <td class="p-3"><span class="bg-sky-500 text-white px-2 py-1 rounded text-xs font-medium">${row.status}</span></td>
+                        <td class="p-3 text-center"><i data-lucide="file-down" class="w-5 h-5 mx-auto text-gray-500 cursor-pointer hover:text-blue-600"></i></td>
+                        <td class="p-3 text-gray-600 text-sm"><div class="font-medium">${row.acknowledgedBy}</div><div class="text-xs text-gray-500">${row.acknowledgedDate}</div></td>
+                        <td class="p-3"><span class="bg-gray-400 text-white px-2 py-1 rounded text-xs font-medium">${row.ackStatus}</span></td>
+                        <td class="p-3 text-center">
+                            <button type="button" onclick="openMedicalFormDetailsModal(${index})" class="p-1 hover:bg-gray-200 rounded-full transition-colors focus:outline-none">
+                                <i data-lucide="eye" class="w-5 h-5 text-gray-500 hover:text-blue-600"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            });
+
+            container.innerHTML = `
+            <div class="content-view">
+                <button onclick="showTabContent('forms')" class="flex items-center text-base font-medium text-gray-600 hover:text-gray-800 mb-6">
+                    <i data-lucide="arrow-left" class="w-4 h-4 mr-2"></i>
+                    Back to Forms
+                </button>
+                <div class="card rounded-lg border">
+                    <div class="p-4 border-b" style="border-color: var(--border)">
+                <div class="content-view">
+                    <div class="flex items-center justify-between mb-6">
+                      <div>
+                        <h2 class="text-2xl font-bold text-gray-800">Medical Form</h2>
+                      </div>
+                      <div class="flex gap-3">
+                        <button class="flex items-center gap-2 px-4 py-2 text-sm font-medium border rounded-md bg-white hover:bg-gray-50" style="border-color: var(--border)">
+                          <i data-lucide="download" class="w-4 h-4"></i>
+                          Export
+                        </button>
+                      </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                      <select class="w-full px-3 py-2 text-sm border rounded-md" style="border-color: var(--input)">
+                        <option value="">Submitted</option>
+                        <option value="not submitted">Not submitted</option>
+                      </select>
+                      <select class="w-full px-3 py-2 text-sm border rounded-md" style="border-color: var(--input)">
+                        <option value="">Medical Condition</option>
+                        <option value="no medical condition">No medical condition</option>
+                      </select>
+                      <input type="text" placeholder="Search Primary Contact" class="w-full px-3 py-2 text-sm border rounded-md" style="border-color: var(--input)">
+                      <select class="w-full px-3 py-2 text-sm border rounded-md" style="border-color: var(--input)">
+                        <option value="">Select Acknowledged</option>
+                        <option value="acknowledged">Acknowledged</option>
+                        <option value="not acknowledged">Not Acknowledged</option>
+                      </select>
+                    </div>
+
+                    <div class="flex gap-3 mb-6 justify-end">
+                      <button class="flex items-center gap-2 px-4 py-2 text-sm font-medium primary-btn border border-transparent rounded-md">
+                        <i data-lucide="search" class="w-4 h-4"></i> Search
+                      </button>
+                      <button class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border rounded-md hover:bg-gray-50" style="border-color: var(--border)">Reset</button>
+                    </div>
+
+                    <div class="card rounded-lg border overflow-hidden">
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-sm">
+                                <thead class="bg-gray-100 border-b" style="border-color: var(--border)">
+                                    <tr class="bg-slate-200 text-left">
+                                        <th class="py-2 px-4 w-12"><input type="checkbox" id="select-all-medical-forms" class="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"></th>
+                                        <th class="p-3 font-semibold text-gray-600 text-left">Sr.No.</th>
+                                        <th class="p-3 font-semibold text-gray-600 text-left">Primary Contact Name</th>
+                                        <th class="p-3 font-semibold text-gray-600 text-left">Secondary Contact Name</th>
+                                        <th class="p-3 font-semibold text-gray-600 text-center">Medical Condition</th>
+                                        <th class="p-3 font-semibold text-gray-600 text-left">Last Modified By</th>
+                                        <th class="p-3 font-semibold text-gray-600 text-left">Submission Status</th>
+                                        <th class="p-3 font-semibold text-gray-600 text-center">Download PDF</th>
+                                        <th class="p-3 font-semibold text-gray-600 text-left">Acknowledged teacher details</th>
+                                        <th class="p-3 font-semibold text-gray-600 text-left">Acknowledged Status Entry</th>
+                                        <th class="p-3 font-semibold text-gray-600 text-center">View</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y" style="border-color: var(--border)">
+                                    ${tableRows}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            const selectAllCheckbox = document.getElementById('select-all-medical-forms');
+            if (selectAllCheckbox) {
+                selectAllCheckbox.addEventListener('click', function() {
+                    const itemCheckboxes = document.querySelectorAll('.medical-form-checkbox');
+                    itemCheckboxes.forEach(checkbox => {
+                        checkbox.checked = this.checked;
+                    });
+                });
+            }
+
+            lucide.createIcons();
+        }
+
+        function openMedicalFormDetailsModal(index) {
+            console.log("Opening modal for index:", index);
+            if (!medicalFormsData || !medicalFormsData[index]) {
+                alert("Error: No data found.");
+                return;
+            }
+
+            const data = medicalFormsData[index].details;
+            const modal = document.getElementById('medical-form-details-modal');
+            const content = document.getElementById('medical-form-modal-content');
+            
+            const radioGroup = (name, value) => `
+                <div class="flex items-center space-x-4 mt-1">
+                    <label class="flex items-center space-x-2">
+                        <input type="radio" name="${name}_${index}" ${value === true ? 'checked' : ''} disabled class="text-blue-600 focus:ring-blue-500">
+                        <span class="text-sm text-gray-700">Yes</span>
+                    </label>
+                    <label class="flex items-center space-x-2">
+                        <input type="radio" name="${name}_${index}" ${value === false ? 'checked' : ''} disabled class="text-blue-600 focus:ring-blue-500">
+                        <span class="text-sm text-gray-700">No</span>
+                    </label>
+                </div>
+            `;
+
+            const sectionHeader = (title) => `
+                <div class="bg-sky-100 px-4 py-2 mt-6 mb-3 rounded-sm border-l-4 border-sky-500">
+                    <h4 class="text-sm font-bold text-sky-800 flex items-center"><i data-lucide="chevron-up" class="w-4 h-4 mr-2"></i> ${title}</h4>
+                </div>
+            `;
+
+            const emergencyContacts = data.emergencyContacts || [];
+            const doctor = data.doctor || {};
+            const condition = data.condition || { has: false };
+            const routine = data.routine || { has: false };
+            const regularMed = data.regularMed || { na: true };
+            const emergencyMed = data.emergencyMed || { na: true };
+            const medStorage = data.medStorage || { na: true };
+            const special = data.special || { na: true };
+            const allergy = data.allergy || { has: false };
+            const permissions = data.permissions || {};
+            const otherInfo = data.otherInfo || { has: false };
+
+            content.innerHTML = `
+                <div class="text-sm text-gray-600 mb-4">
+                    <p><span class="font-bold text-gray-800">Student Name :</span> ${data.studentName || '-'}</p>
+                    <p class="mt-1"><span class="font-bold text-gray-800">Last Modified By :</span> ${data.lastModified || '-'}</p>
+                </div>
+
+                ${sectionHeader('Emergency Contact Details')}
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                    ${emergencyContacts.map(c => `<div><span class="font-bold text-gray-800">${c.label} :</span> <span class="text-gray-600">${c.value || '-'}</span></div>`).join('')}
+                </div>
+
+                ${sectionHeader('Doctor details')}
+                <div class="space-y-2 text-sm">
+                    <p><span class="font-bold text-gray-800">Doctor Name :</span> ${doctor.name || '-'}</p>
+                    <p><span class="font-bold text-gray-800">Contact No :</span> ${doctor.contact || '-'}</p>
+                    <p><span class="font-bold text-gray-800">Address No :</span> ${doctor.address || '-'}</p>
+                </div>
+
+                ${sectionHeader('Does your student have any disability or medical conditions?')}
+                <div class="space-y-3 text-sm">
+                    ${radioGroup('hasCondition', condition.has)}
+                    ${condition.has ? `<div class="ml-1 space-y-2 mt-3"><p><span class="font-bold text-gray-800">Diagnosis:</span> ${condition.diagnosis || '-'}</p><p><span class="font-bold text-gray-800">Signs/Symptoms:</span> ${condition.signs || '-'}</p><p><span class="font-bold text-gray-800">Triggers:</span> ${condition.triggers || '-'}</p><p><span class="font-bold text-gray-800">Other details:</span> ${condition.other || '-'}</p></div>` : ''}
+                </div>
+
+                ${sectionHeader('Does your student have a routine healthcare requirement?')}
+                <div class="space-y-3 text-sm">
+                    ${radioGroup('routineHealthcare', routine.has)}
+                    ${routine.has ? `<div class="ml-1 space-y-2 mt-3"><p><span class="font-bold text-gray-800">During school hours:</span> ${routine.schoolHours || '-'}</p><p><span class="font-bold text-gray-800">Outside school hours:</span> ${routine.outsideSchool || '-'}</p></div>` : ''}
+                </div>
+
+                ${sectionHeader('Regular medication (taken during school hours):')}
+                <div class="space-y-3 text-sm">
+                    <div class="flex items-center space-x-2"><input type="checkbox" ${regularMed.na ? 'checked' : ''} disabled class="text-blue-600 rounded"><span class="font-bold text-gray-800">Non Applicable</span></div>
+                    ${!regularMed.na ? `<div class="ml-1 space-y-2"><p><span class="font-bold text-gray-800">Medication/Description:</span> ${regularMed.desc || '-'}</p><p><span class="font-bold text-gray-800">Dose:</span> ${regularMed.dose || '-'}</p></div>` : ''}
+                </div>
+
+                ${sectionHeader('Emergency medication - please fill out full details including dosage:')}
+                <div class="space-y-3 text-sm">
+                    <div class="flex items-center space-x-2"><input type="checkbox" ${emergencyMed.na ? 'checked' : ''} disabled class="text-blue-600 rounded"><span class="font-bold text-gray-800">Non Applicable</span></div>
+                    ${!emergencyMed.na ? `<div class="ml-1 space-y-2"><p><span class="font-bold text-gray-800">Medication:</span> ${emergencyMed.name || '-'}</p><p><span class="font-bold text-gray-800">Protocol:</span> ${emergencyMed.protocol || '-'}</p></div>` : ''}
+                </div>
+
+                ${sectionHeader('Has this medication been left in school office?')}
+                <div class="space-y-2 text-sm">
+                    <div class="flex items-center space-x-2"><input type="checkbox" ${medStorage.na ? 'checked' : ''} disabled class="text-blue-600 rounded"><span class="font-bold text-gray-800">Non Applicable</span></div>
+                    ${!medStorage.na ? radioGroup('inOffice', medStorage.leftInOffice) : ''}
+                </div>
+
+                ${sectionHeader('Special considerations - activities etc:')}
+                <div class="space-y-3 text-sm">
+                    <div class="flex items-center space-x-2"><input type="checkbox" ${special.na ? 'checked' : ''} disabled class="text-blue-600 rounded"><span class="font-bold text-gray-800">Non Applicable</span></div>
+                    ${!special.na ? `<p><span class="font-bold text-gray-800">Details:</span> ${special.details || '-'}</p>` : ''}
+                </div>
+
+                ${sectionHeader('Does your student suffer from any type of allergy?')}
+                <div class="space-y-3 text-sm">
+                    ${radioGroup('hasAllergy', allergy.has)}
+                    ${allergy.has ? `<p class="mt-2"><span class="font-bold text-gray-800">Details:</span> ${allergy.details || '-'}</p>` : ''}
+                </div>
+
+                ${sectionHeader('Is your student currently receiving treatment from a GP or other doctor?')}
+                <div class="text-sm">${radioGroup('gpTreatment', data.gpTreatment)}</div>
+
+                ${sectionHeader('Emergency First Aid')}
+                <div class="text-sm">${radioGroup('firstAid', permissions.firstAid)}</div>
+
+                ${sectionHeader('Medical Assistance')}
+                <div class="text-sm">${radioGroup('medAssist', permissions.medicalAssistance)}</div>
+
+                ${sectionHeader('Medication as prescribed by GP')}
+                <div class="text-sm">${radioGroup('gpMed', permissions.gpMedication)}</div>
+
+                ${sectionHeader('Non-prescription medication')}
+                <div class="text-sm">${radioGroup('nonPrescript', permissions.nonPrescription)}</div>
+
+                ${sectionHeader('Is there any other information about your student that you think is relevant for us to know?')}
+                <div class="space-y-3 text-sm">
+                    ${radioGroup('otherInfo', otherInfo.has)}
+                    ${otherInfo.has ? `<p class="mt-2"><span class="font-bold text-gray-800">Details:</span> ${otherInfo.details || '-'}</p>` : ''}
+                </div>
+            `;
+
+            modal.classList.remove('hidden');
+            modal.style.display = 'flex'; 
+            lucide.createIcons();
+        }
+
+        function closeMedicalFormDetailsModal() {
+            const modal = document.getElementById('medical-form-details-modal');
+            modal.classList.add('hidden');
+            modal.style.display = ''; 
+        }
+
+        function openStudentNameEditModal() {
+            openEditStudentModal(currentStudentData);
+        }
+
+        function openEditStudentModal(data) {
+            if (!data) return;
+
+            // Pre-populate student fields
+            document.getElementById('edit-student-id').value = data.studentId || '';
+            document.getElementById('edit-student-ssid').value = data.ssid || '';
+            document.getElementById('edit-student-debtor').value = '';
+            document.getElementById('edit-student-dob').value = data.dob || '';
+            document.getElementById('edit-student-first-name').value = data.firstName || '';
+            document.getElementById('edit-student-last-name').value = data.lastName || '';
+            document.getElementById('edit-student-year').value = data.year || '';
+            document.getElementById('edit-student-class').value = data['class'] || '';
+
+            // Pre-populate primary contact fields
+            document.getElementById('edit-primary-first-name').value = data.primaryFirstName || '';
+            document.getElementById('edit-primary-last-name').value = data.primaryLastName || '';
+            document.getElementById('edit-primary-country-code').value = data.primaryCountryCode || '';
+            
+            // Store original value
+            const primaryMobileInput = document.getElementById('edit-primary-mobile');
+            primaryMobileInput.value = data.primaryMobile || '';
+            primaryMobileInput.dataset.originalValue = data.primaryMobile || '';
+            primaryMobileInput.oninput = checkEditStudentFormChanges;
+            
+            document.getElementById('edit-primary-username').value = data.primaryUsername || '';
+
+            // Pre-populate secondary contact fields
+            document.getElementById('edit-secondary-first-name').value = data.secondaryFirstName || '';
+            document.getElementById('edit-secondary-last-name').value = data.secondaryLastName || '';
+            document.getElementById('edit-secondary-country-code').value = data.secondaryCountryCode || '';
+            
+            // Store original value
+            const secondaryMobileInput = document.getElementById('edit-secondary-mobile');
+            secondaryMobileInput.value = data.secondaryMobile || '';
+            secondaryMobileInput.dataset.originalValue = data.secondaryMobile || '';
+            secondaryMobileInput.oninput = checkEditStudentFormChanges;
+
+            document.getElementById('edit-secondary-username').value = data.secondaryUsername || '';
+
+            const saveBtn = document.getElementById('edit-student-save-btn');
+            if (saveBtn) {
+                saveBtn.disabled = true;
+                saveBtn.classList.add('opacity-50', 'cursor-not-allowed');
+                saveBtn.classList.remove('opacity-100', 'cursor-pointer');
+            }
+
+            const modal = document.getElementById('edit-student-modal');
+            modal.classList.remove('hidden');
+        }
+
+        function closeEditStudentModal() {
+            const modal = document.getElementById('edit-student-modal');
+            modal.classList.add('hidden');
+        }
+
+        function checkEditStudentFormChanges() {
+            const primaryMobileInput = document.getElementById('edit-primary-mobile');
+            const secondaryMobileInput = document.getElementById('edit-secondary-mobile');
+            const saveBtn = document.getElementById('edit-student-save-btn');
+            
+            if (!primaryMobileInput || !secondaryMobileInput || !saveBtn) return;
+
+            const primaryChanged = primaryMobileInput.value !== primaryMobileInput.dataset.originalValue;
+            const secondaryChanged = secondaryMobileInput.value !== secondaryMobileInput.dataset.originalValue;
+
+            if (primaryChanged || secondaryChanged) {
+                saveBtn.disabled = false;
+                saveBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+                saveBtn.classList.add('opacity-100', 'cursor-pointer');
+            } else {
+                saveBtn.disabled = true;
+                saveBtn.classList.add('opacity-50', 'cursor-not-allowed');
+                saveBtn.classList.remove('opacity-100', 'cursor-pointer');
+            }
+        }
+
+        function submitStudentEdit() {
+            // Update local state to reflect changes (mock persistence)
+            const primaryMobileInput = document.getElementById('edit-primary-mobile');
+            const secondaryMobileInput = document.getElementById('edit-secondary-mobile');
+            
+            if (primaryMobileInput) currentStudentData.primaryMobile = primaryMobileInput.value;
+            if (secondaryMobileInput) currentStudentData.secondaryMobile = secondaryMobileInput.value;
+
+            closeEditStudentModal();
+            showToast('Student details updated successfully!');
+        }
+
+        function setConsentFormsSearch(value) {
+            consentFormsSearch = value;
+            renderConsentForms();
+        }
+        function setConsentFormsStatusFilter(value) {
+            consentFormsStatusFilter = value;
+            renderConsentForms();
+        }
+        function setPicturePermissionsFilter(value) {
+            picturePermissionsFilter = value;
+            renderPicturePermissions();
+        }
+        function setChyFormsSearch(value) {
+            chyFormsSearch = value;
+            renderChyForms();
+        }
+        function handleConfirmDeleteChyForm() {
+            if (chyFormsToDelete.length === 0) return;
+
+            console.log(`Deleting ${chyFormsToDelete.length} CHY forms`);
+            
+            const idsToDelete = new Set(chyFormsToDelete.map(f => f.sno));
+            const originalCount = chyFormsData.length;
+            const newChyFormsData = chyFormsData.filter(form => !idsToDelete.has(form.sno));
+            
+            chyFormsData.length = 0; 
+            Array.prototype.push.apply(chyFormsData, newChyFormsData);
+
+            console.log(`${originalCount - chyFormsData.length} forms removed from mock data.`);
+            renderChyForms();
+            
+            closeDeleteChyFormModal();
+            showToast(`${originalCount - chyFormsData.length} form(s) deleted successfully.`, 'success');
+        }
+
+        function openDeleteChyFormModal() {
+            const modal = document.getElementById('delete-chy-form-modal');
+            const nameEl = document.getElementById('delete-chy-form-name');
+            const checkedBoxes = document.querySelectorAll('.chy-form-checkbox:checked');
+            
+            chyFormsToDelete = Array.from(checkedBoxes).map(cb => {
+                const row = cb.closest('tr');
+                const sno = row.querySelector('td:nth-child(2)').textContent;
+                const year = row.querySelector('td:nth-child(3)').textContent;
+                return { sno: parseInt(sno), year: year };
+            });
+
+            if (chyFormsToDelete.length === 0) {
+                showToast('Please select at least one form to delete.', 'fail');
+                return;
+            }
+
+            if (chyFormsToDelete.length === 1) {
+                nameEl.textContent = `Form: CHY ${chyFormsToDelete[0].year} (S.No. ${chyFormsToDelete[0].sno})`;
+            } else {
+                nameEl.textContent = `You are about to delete ${chyFormsToDelete.length} forms.`;
+            }
+            
+            if (modal) modal.classList.remove('hidden');
+        }
+
+        function closeDeleteChyFormModal() {
+            const modal = document.getElementById('delete-chy-form-modal');
+            if (modal) modal.classList.add('hidden');
+            const nameEl = document.getElementById('delete-chy-form-name');
+            if (nameEl) nameEl.textContent = '';
+            chyFormsToDelete = [];
+        }
+
+        function openRemoveConsentFormModal() {
+            const modal = document.getElementById('remove-consent-form-modal');
+            const nameEl = document.getElementById('remove-consent-form-name');
+            const checkedBoxes = document.querySelectorAll('.consent-form-checkbox:checked');
+            
+            consentFormsToRemove = Array.from(checkedBoxes).map(cb => {
+                const row = cb.closest('tr');
+                const sno = row.querySelector('td:nth-child(2)').textContent;
+                const title = row.querySelector('td:nth-child(3)').textContent;
+                return { sno: parseInt(sno), title: title };
+            });
+
+            if (consentFormsToRemove.length === 0) {
+                showToast('Please select at least one form to remove.', 'fail');
+                return;
+            }
+
+            if (consentFormsToRemove.length === 1) {
+                nameEl.textContent = `Form: ${consentFormsToRemove[0].title} (S.No. ${consentFormsToRemove[0].sno})`;
+            } else {
+                nameEl.textContent = `You are about to remove ${consentFormsToRemove.length} forms.`;
+            }
+            
+            if (modal) modal.classList.remove('hidden');
+        }
+
+        function closeRemoveConsentFormModal() {
+            const modal = document.getElementById('remove-consent-form-modal');
+            if (modal) modal.classList.add('hidden');
+            const nameEl = document.getElementById('remove-consent-form-name');
+            if (nameEl) nameEl.textContent = '';
+            consentFormsToRemove = [];
+        }
+
+        function handleConfirmRemoveConsentForm() {
+            if (consentFormsToRemove.length === 0) return;
+
+            const idsToDelete = new Set(consentFormsToRemove.map(f => f.sno));
+            const originalCount = consentFormsData.length;
+            const newConsentFormsData = consentFormsData.filter(form => !idsToDelete.has(form.sno));
+            
+            consentFormsData.length = 0; 
+            Array.prototype.push.apply(consentFormsData, newConsentFormsData);
+
+            renderConsentForms();
+            closeRemoveConsentFormModal();
+            showToast(`${originalCount - consentFormsData.length} form(s) removed successfully.`, 'success');
+        }
+
+        function showToast(message, status = 'success') {
+            const toast = document.getElementById('toast-notification');
+            const toastMessage = document.getElementById('toast-message');
+            const toastIcon = toast.querySelector('i');
+
+            toastMessage.textContent = message;
+            toast.classList.remove('bg-green-500', 'bg-red-500');
+            
+            if (status === 'success') {
+                toast.classList.add('bg-green-500');
+                if (toastIcon) toastIcon.setAttribute('data-lucide', 'check-circle');
+            } else if (status === 'fail') {
+                toast.classList.add('bg-red-500');
+                if (toastIcon) toastIcon.setAttribute('data-lucide', 'x-circle');
+            }
+            
+            if (toastIcon) lucide.createIcons();
+
+            toast.classList.remove('hidden');
+            setTimeout(() => {
+                toast.style.opacity = '1';
+                toast.classList.remove('translate-x-full');
+            }, 10);
+
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.classList.add('translate-x-full');
+                setTimeout(() => {
+                    toast.classList.add('hidden');
+                }, 300);
+            }, 3000);
+        }
+
+        // --- Helper Functions ---
+        function setActiveTab(moduleId) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            const mainTabBtn = document.getElementById(`tab-btn-${moduleId}`);
+            if (mainTabBtn) mainTabBtn.classList.add('active');
+        }
+
+        function manualRefreshTime() {
+            updateRelativeTime();
+            const icon = document.querySelector('#update-status i');
+            if(icon) {
+               icon.classList.add('animate-spin');
+               setTimeout(() => icon.classList.remove('animate-spin'), 1000);
+            }
+        }
+
+        function copyToClipboard(textToCopy) {
+            const tempTextArea = document.createElement('textarea');
+            tempTextArea.value = textToCopy;
+            document.body.appendChild(tempTextArea);
+            tempTextArea.select();
+            try {
+                const successful = document.execCommand('copy');
+                const msg = successful ? 'Number copied to clipboard!' : 'Failed to copy number.';
+                const status = successful ? 'success' : 'fail';
+                showToast(msg, status);
+            } catch (err) {
+                console.error('Fallback: Oops, unable to copy', err);
+                showToast('Failed to copy number.', 'fail');
+            }
+            document.body.removeChild(tempTextArea);
+        }
+
+        let lastUpdateTime = new Date();
+        function updateRelativeTime() {
+            const updateTimeElement = document.getElementById('last-updated-time');
+            if (!updateTimeElement) return;
+
+            const now = new Date();
+            const secondsPast = Math.round((now - lastUpdateTime) / 1000);
+
+            if (secondsPast < 60) {
+                updateTimeElement.textContent = `Last updated just now`;
+            } else if (secondsPast < 3600) {
+                const minutes = Math.floor(secondsPast / 60);
+                updateTimeElement.textContent = `Last updated ${minutes} minute${minutes > 1 ? 's' : ''} ago`;
+            } else {
+                const hours = Math.floor(secondsPast / 3600);
+                 updateTimeElement.textContent = `Last updated ${hours} hour${hours > 1 ? 's' : ''} ago`;
+            }
+        }
+
+        function openSendPnModal() {
+            const modal = document.getElementById('send-pn-modal');
+            modal.classList.remove('hidden');
+        }
+
+        function closeSendPnModal() {
+            const modal = document.getElementById('send-pn-modal');
+            modal.classList.add('hidden');
+        }
+
+        function openComposePnModal(recipient) {
+            closeSendPnModal();
+            const modal = document.getElementById('compose-pn-modal');
+            const recipientEl = document.getElementById('compose-pn-recipient');
+            
+            let recipientText = 'Unknown';
+            if (recipient === 'Primary') recipientText = 'Declan Kelly (Primary)';
+            if (recipient === 'Secondary') recipientText = 'Finn Kelly (Secondary)';
+            if (recipient === 'Both') recipientText = 'Declan Kelly & Finn Kelly (Both)';
+
+            recipientEl.textContent = recipientText;
+            modal.classList.remove('hidden');
+            lucide.createIcons();
+        }
+
+        function closeComposePnModal() {
+            const modal = document.getElementById('compose-pn-modal');
+            document.getElementById('compose-pn-title').value = '';
+            document.getElementById('compose-pn-body').value = '';
+            modal.classList.add('hidden');
+        }
+
+        function sendNotification() {
+            const title = document.getElementById('compose-pn-title').value;
+            const body = document.getElementById('compose-pn-body').value;
+
+            if (!title.trim() || !body.trim()) {
+                showToast('Please enter a title and message.', 'fail');
+                return;
+            }
+            console.log('Sending notification...');
+            closeComposePnModal();
+            showToast('Notification sent successfully!');
+        }
+
+        function openSettingsModal() {
+            const modal = document.getElementById('more-settings-modal');
+            modal.classList.remove('hidden');
+            lucide.createIcons();
+        }
+
+        function closeSettingsModal() {
+            const modal = document.getElementById('more-settings-modal');
+            modal.classList.add('hidden');
+        }
+
+        function openAbsenceRequestModal() {
+            const modal = document.getElementById('absence-request-modal');
+            
+            const today = new Date();
+            const year = today.getFullYear();
+            const month = String(today.getMonth() + 1).padStart(2, '0'); 
+            const day = String(today.getDate()).padStart(2, '0');
+            const todayString = `${year}-${month}-${day}`;
+
+            const dateInput = document.getElementById('absence-date');
+            if(dateInput) dateInput.setAttribute('min', todayString);
+            
+            modal.classList.remove('hidden');
+            lucide.createIcons();
+        }
+
+        function closeAbsenceRequestModal() {
+            const modal = document.getElementById('absence-request-modal');
+            document.getElementById('absence-date').value = '';
+            modal.classList.add('hidden');
+        }
+        
+        function sendAbsenceRequest() {
+            const absenceDate = document.getElementById('absence-date').value;
+            if (!absenceDate) {
+                showToast('Please select a date of absence.', 'fail');
+                return;
+            }
+            console.log('Sending absence request for:', absenceDate);
+            closeAbsenceRequestModal();
+            showToast('Absence request form sent successfully!');
+        }
+
+        function toggleDropdown(button) {
+            const dropdown = button.nextElementSibling;
+            const icon = button.querySelector('[data-lucide="chevron-down"]');
+            dropdown.classList.toggle('hidden');
+            icon.classList.toggle('rotate-180');
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+            showTabContent('forms');
+            updateRelativeTime();
+            setInterval(updateRelativeTime, 60000);
+
+            // Modal Close Logic
+            const closeModal = (id) => {
+                const el = document.getElementById(id);
+                if (el) {
+                    el.classList.add('hidden');
+                    if(id === 'medical-form-details-modal') el.style.display = '';
+                }
+            };
+
+            document.getElementById('send-pn-modal')?.addEventListener('click', (e) => { if(e.target === e.currentTarget) closeModal('send-pn-modal'); });
+            document.getElementById('compose-pn-modal')?.addEventListener('click', (e) => { if(e.target === e.currentTarget) closeModal('compose-pn-modal'); });
+            document.getElementById('edit-student-modal')?.addEventListener('click', (e) => { if(e.target === e.currentTarget) closeModal('edit-student-modal'); });
+            document.getElementById('absence-request-modal')?.addEventListener('click', (e) => { if(e.target === e.currentTarget) closeModal('absence-request-modal'); });
+            document.getElementById('more-settings-modal')?.addEventListener('click', (e) => { if(e.target === e.currentTarget) closeModal('more-settings-modal'); });
+            document.getElementById('medical-form-details-modal')?.addEventListener('click', (e) => { if(e.target === e.currentTarget) closeModal('medical-form-details-modal'); });
+            document.getElementById('remove-consent-form-modal')?.addEventListener('click', (e) => { if(e.target === e.currentTarget) closeModal('remove-consent-form-modal'); });
+            document.getElementById('delete-chy-form-modal')?.addEventListener('click', (e) => { if(e.target === e.currentTarget) closeModal('delete-chy-form-modal'); });
+
+            // Escape key listener
+            window.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    closeModal('send-pn-modal');
+                    closeModal('compose-pn-modal');
+                    closeModal('edit-student-modal');
+                    closeModal('absence-request-modal');
+                    closeModal('more-settings-modal');
+                    closeModal('medical-form-details-modal');
+                    closeModal('remove-consent-form-modal');
+                    closeModal('delete-chy-form-modal');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
