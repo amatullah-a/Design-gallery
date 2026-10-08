@@ -5,31 +5,34 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Design Gallery</title>
   <style>
-    :root { color-scheme: light dark; font-family: Inter, ui-sans-serif, system-ui, sans-serif; }
-    body { margin: 0; background: #0b1020; color: #f4f7ff; min-height: 100vh; }
-    main { width: min(1060px, calc(100% - 40px)); margin: 0 auto; padding: 72px 0; }
-    h1 { font-size: clamp(2.2rem, 7vw, 4.8rem); line-height: .95; margin: 0 0 18px; }
-    .intro { color: #aeb9d3; font-size: 1.1rem; margin: 0 0 42px; }
-    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 16px; }
-    .card { color: inherit; text-decoration: none; padding: 24px; min-height: 110px; border: 1px solid #293451;
-      border-radius: 16px; background: #121a2e; display: flex; flex-direction: column; justify-content: space-between;
-      transition: transform .16s ease, border-color .16s ease; }
-    .card:hover { transform: translateY(-3px); border-color: #7c9cff; }
-    .card span { font-size: 1.2rem; font-weight: 700; } .card small { color: #8e9ab5; }
-    .empty { color: #8e9ab5; } footer { margin-top: 46px; color: #6f7b96; font-size: .85rem; }
+    :root { font-family: Arial, Helvetica, sans-serif; color: #202124; background: #fff; }
+    body { margin: 0; }
+    main { width: min(820px, calc(100% - 40px)); margin: 0 auto; padding: 42px 0; }
+    h1 { margin: 0 0 8px; font-size: 1.8rem; }
+    .intro { margin: 0 0 28px; color: #5f6368; line-height: 1.5; }
+    ol { margin: 0; padding: 0; list-style: none; border-top: 1px solid #dadce0; }
+    li { display: flex; align-items: baseline; justify-content: space-between; gap: 24px;
+      padding: 14px 4px; border-bottom: 1px solid #dadce0; }
+    li a, li > span { color: #1a0dab; font-size: 1rem; font-weight: 600; text-decoration: none; }
+    li a:hover { text-decoration: underline; }
+    li small { color: #5f6368; font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+      font-size: .75rem; text-align: right; overflow-wrap: anywhere; }
+    .empty { color: #5f6368; }
+    footer { margin-top: 24px; color: #80868b; font-size: .75rem; }
+    @media (max-width: 620px) { li { display: block; } li small { display: block; margin-top: 5px; text-align: left; } }
   </style>
 </head>
 <body>
   <main>
     <h1>Design Gallery</h1>
     <p class="intro">A collection of visual design projects.</p>
-    <section class="grid" aria-label="Design projects">
-      <a class="card" href="designs/cc/"><span>Cc</span><small>cc</small></a>
-      <a class="card" href="designs/login%20page/"><span>Login Page</span><small>login page</small></a>
-      <a class="card" href="designs/placedesk/"><span>Placedesk</span><small>placedesk</small></a>
-      <a class="card" href="designs/Shop/"><span>Shop</span><small>Shop</small></a>
-      <a class="card" href="designs/shop%20draft/"><span>Shop Draft</span><small>shop draft</small></a>
-    </section>
+    <ol aria-label="Design projects">
+      <li><a href="designs/cc/cloud-cam-wireframe.html" target="_blank" rel="noopener">Cc</a><small>HTML preview · designs/cc/cloud-cam-wireframe.html</small></li>
+      <li><a href="designs/login%20page/index.html" target="_blank" rel="noopener">Login Page</a><small>HTML preview · designs/login page/index.html</small></li>
+      <li><a href="designs/placedesk/index.html" target="_blank" rel="noopener">Placedesk</a><small>HTML preview · designs/placedesk/index.html</small></li>
+      <li><a href="designs/Shop/shop-rebuild.html" target="_blank" rel="noopener">Shop</a><small>HTML preview · designs/Shop/shop-rebuild.html</small></li>
+      <li><a href="https://github.com/amatullah-a/Design-gallery/blob/main/designs/shop%20draft/shop-draft.tsx" target="_blank" rel="noopener">Shop Draft</a><small>Source only · designs/shop draft/shop-draft.tsx</small></li>
+    </ol>
     <footer>Updated by Design Sync</footer>
   </main>
 </body>
