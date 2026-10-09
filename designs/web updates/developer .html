@@ -1,0 +1,2567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Developer Review - WebUpdates</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    fontSize: {
+                        'body': '15px',
+                    },
+                    colors: {
+                        slate: {
+                            50: '#f8fafc',
+                            100: '#f1f5f9',
+                            200: '#e2e8f0', // Borders
+                            300: '#cbd5e1',
+                            400: '#94a3b8',
+                            500: '#64748b',
+                            600: '#475569',
+                            700: '#334155',
+                            800: '#1e293b',
+                            900: '#0f172a',
+                            950: '#111827', // Primary Text/Navy
+                        },
+                        yellow: {
+                            400: '#facc15', // Brand Primary
+                            500: '#eab308',
+                        },
+                        canvas: '#fcfcfc', // Main Background
+                    },
+                    borderRadius: {
+                        'xl': '12px',
+                        'lg': '8px',
+                    },
+                    boxShadow: {
+                        'soft': '0 4px 20px -2px rgba(0, 0, 0, 0.05)',
+                        'glow': '0 0 15px rgba(250, 204, 21, 0.3)',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        /* Custom Styles */
+        body {
+            font-family: "Inter", system-ui, sans-serif;
+            -webkit-font-smoothing: antialiased;
+            background-color: #fcfcfc;
+            color: #111827;
+        }
+        
+        /* Tab Active State */
+        .tab-btn.active {
+            color: #111827;
+            border-bottom-width: 2px;
+            border-color: #facc15;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        /* Dropdown Styles */
+        .dropdown-menu-animate {
+            transform-origin: top;
+            animation: scaleIn 0.1s ease-out forwards;
+        }
+        
+        /* Smooth Icon Rotation */
+        #sidebar-toggle i, #sidebar-toggle svg {
+            transition: transform 0.3s ease;
+        }
+        
+        @keyframes scaleIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        
+        /* Selected item styling in custom dropdowns */
+        .dropdown-option.selected {
+            background-color: #f8fafc; /* slate-50 */
+            color: #0f172a; /* slate-900 */
+            font-weight: 600;
+        }
+
+        /* Checkbox Custom Style - Standardized with SVG */
+        .custom-checkbox {
+            appearance: none;
+            -webkit-appearance: none;
+            display: inline-block;
+            vertical-align: middle;
+            background-origin: border-box;
+            user-select: none;
+            flex-shrink: 0;
+            background-color: white;
+            border: 2px solid #94a3b8; /* slate-400 default */
+            border-radius: 4px; /* Ensure rounded corners */
+            width: 1.25rem;
+            height: 1.25rem;
+            transition: all 0.15s ease-in-out;
+            cursor: pointer;
+        }
+        
+        .custom-checkbox:checked {
+            background-color: #0f172a; /* Slate 900/950 */
+            border-color: #0f172a;
+            background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='M12.207 4.793a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0l-2.5-2.5a1 1 0 011.414-1.414L6.5 9.086l4.293-4.293a1 1 0 011.414 0z'/%3e%3c/svg%3e");
+            background-size: 100% 100%;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .custom-checkbox:focus {
+            outline: none;
+        }
+        
+        /* Radio Custom Style */
+        .custom-radio {
+            appearance: none;
+            -webkit-appearance: none;
+            border-radius: 50%;
+            background-color: white;
+            border: 1px solid #cbd5e1; /* slate-300 */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+            padding: 0;
+            transition: all 0.15s ease-in-out;
+            width: 1rem;
+            height: 1rem;
+            cursor: pointer;
+        }
+        .custom-radio::before {
+            content: "";
+            display: block;
+            width: 0.5rem;
+            height: 0.5rem;
+            border-radius: 50%;
+            transform: scale(0);
+            transition: 120ms transform ease-in-out;
+            background-color: #0f172a; /* Slate 900 */
+        }
+        .custom-radio:checked {
+            border-color: #0f172a;
+        }
+        .custom-radio:checked::before {
+            transform: scale(1);
+        }
+        .custom-radio:focus {
+            outline: 2px solid transparent;
+            outline-offset: 2px;
+            box-shadow: 0 0 0 2px #e2e8f0; 
+        }
+        
+        /* Calendar Styles */
+        .calendar-btn {
+            transition: all 0.2s;
+        }
+        .calendar-btn:hover {
+            background-color: #f1f5f9;
+        }
+        .calendar-btn.selected {
+            background-color: #0f172a;
+            color: white;
+            font-weight: bold;
+        }
+        .calendar-btn.in-range {
+            background-color: #f1f5f9;
+            color: #0f172a;
+        }
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 0.25rem;
+            text-align: center;
+        }
+
+        /* Tooltips */
+        .tooltip-container {
+            position: relative;
+            display: inline-block;
+        }
+        .tooltip-content {
+            visibility: hidden;
+            opacity: 0;
+            position: absolute;
+            z-index: 60;
+            bottom: 125%; 
+            left: 50%;
+            transform: translateX(-50%) translateY(4px); 
+            background-color: white;
+            color: #111827;
+            padding: 0.75rem 1rem;
+            border-radius: 12px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            white-space: nowrap;
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+            margin-bottom: 0.5rem;
+            box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e2e8f0;
+            min-width: 150px;
+            text-align: center;
+        }
+        .tooltip-container:hover .tooltip-content {
+            visibility: visible;
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+        /* Extended tooltip for descriptions */
+        .tooltip-content.wide {
+            white-space: normal;
+            min-width: 240px;
+            max-width: 320px;
+            text-align: left;
+            line-height: 1.5;
+            padding: 1rem;
+        }
+        
+        /* Module view switching */
+        .nav-item.active {
+            background-color: #facc15;
+            color: #0f172a;
+        }
+        .nav-item.active i {
+            color: #0f172a;
+        }
+        
+        /* Fade transition */
+        .fade-enter {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        .fade-enter-active {
+            opacity: 1;
+            transform: translateY(0);
+            transition: opacity 0.4s ease-out, transform 0.4s ease-out;
+        }
+        
+    </style>
+</head>
+<body class="h-screen overflow-hidden bg-canvas font-sans text-slate-900">
+
+    <!-- LOGIN SCREEN -->
+    <div id="login-view" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-50 p-4">
+        <div class="w-full max-w-md bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden fade-enter-active">
+            <!-- Header -->
+            <div class="px-8 py-6 text-center border-b border-slate-50 bg-slate-50/50">
+                <div class="h-12 w-12 rounded-xl bg-slate-950 flex items-center justify-center text-white font-black text-xl mx-auto mb-4 shadow-lg shadow-slate-900/20 select-none">
+                    US
+                </div>
+                <h2 class="text-xl font-bold text-slate-950 tracking-tight">Welcome back</h2>
+                <p class="text-xs text-slate-500 mt-1">Sign in to WebUpdates Dashboard</p>
+            </div>
+            
+            <!-- Content -->
+            <div class="p-8 space-y-5">
+                <!-- Role Selection -->
+                <div>
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-3">Select Role</p>
+                    <div class="flex items-center gap-6">
+                        <label class="flex items-center gap-2 cursor-not-allowed opacity-50">
+                            <input type="radio" name="login_role" value="admin" class="custom-radio" disabled>
+                            <span class="text-sm font-semibold text-slate-600">Admin</span>
+                        </label>
+
+                        <label class="flex items-center gap-2 cursor-pointer group">
+                            <input type="radio" name="login_role" value="developer" class="custom-radio" checked>
+                            <span class="text-sm font-semibold text-slate-600 group-hover:text-slate-900 transition-colors">Developer</span>
+                        </label>
+
+                        <label class="flex items-center gap-2 cursor-not-allowed opacity-50">
+                            <input type="radio" name="login_role" value="peer_reviewer" class="custom-radio" disabled>
+                            <span class="text-sm font-semibold text-slate-600">Reviewer</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Inputs -->
+                <div class="space-y-3 pt-1">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Email Address</label>
+                        <div class="relative">
+                            <i data-lucide="mail" class="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-slate-400"></i>
+                            <input type="email" value="dev@uniqueschools.com" class="pl-9 flex h-10 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-medium placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-transparent transition-all">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Password</label>
+                        <div class="relative">
+                            <i data-lucide="lock" class="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-slate-400"></i>
+                            <input type="password" value="password123" class="pl-9 flex h-10 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-medium placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-transparent transition-all">
+                        </div>
+                    </div>
+                </div>
+
+                <button id="login-btn" class="w-full h-10 bg-yellow-400 hover:bg-yellow-500 text-slate-950 text-sm font-bold rounded-lg shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2 mt-2">
+                    Sign In <i data-lucide="arrow-right" class="size-4"></i>
+                </button>
+            </div>
+            
+            <!-- Footer -->
+            <div class="px-8 py-3 bg-slate-50 border-t border-slate-100 text-center">
+                <p class="text-[10px] text-slate-400">© 2026 Unique Schools. All rights reserved.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN DASHBOARD CONTAINER (Initially Hidden) -->
+    <div id="dashboard-container" class="flex h-full w-full hidden">
+        <!-- Sidebar -->
+        <aside class="w-64 bg-white border-r border-slate-200 flex flex-col h-full hidden md:flex font-sans transition-all duration-300 ease-in-out" id="sidebar">
+            <!-- Sidebar Header -->
+            <div class="h-24 flex items-center justify-between px-6 border-b border-slate-50/50 overflow-hidden transition-all duration-300" id="sidebar-header">
+                <div class="flex items-center gap-3 overflow-hidden whitespace-nowrap">
+                    <div class="h-10 w-10 rounded-lg bg-yellow-400 flex items-center justify-center text-slate-950 shrink-0 transition-all duration-300">
+                        <i data-lucide="code-2" class="size-6"></i>
+                    </div>
+                    <span class="sidebar-text font-bold text-slate-950 text-[16px] leading-tight truncate transition-opacity duration-200 delay-100">Developer</span>
+                </div>
+                <button id="sidebar-toggle" class="text-slate-400 hover:text-slate-600 transition-transform duration-300 shrink-0">
+                    <i data-lucide="chevron-left" class="size-[18px]"></i>
+                </button>
+            </div>
+
+            <div class="flex-1 px-4 py-6 overflow-y-auto custom-scrollbar overflow-x-hidden">
+                <ul class="flex flex-col gap-2">
+                    <li>
+                        <a href="#" class="nav-item flex items-center gap-3 px-4 py-3 rounded-lg bg-yellow-400 text-slate-950 font-bold hover:bg-yellow-500 shadow-sm transition-colors group whitespace-nowrap overflow-hidden active" data-target="dashboard-view">
+                            <i data-lucide="layout-grid" class="size-5 text-slate-950 shrink-0"></i>
+                            <span class="sidebar-text text-[15px] transition-opacity duration-200 delay-100">Dashboard</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="nav-item flex items-center gap-3 px-4 py-3 rounded-lg text-slate-600 font-bold hover:bg-slate-50 transition-colors group whitespace-nowrap overflow-hidden" data-target="reports-view">
+                            <i data-lucide="bar-chart-2" class="size-5 text-slate-400 group-hover:text-slate-600 shrink-0"></i>
+                            <span class="sidebar-text text-[15px] transition-opacity duration-200 delay-100">Reports & Analytics</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="p-8 mt-auto border-t border-slate-50 overflow-hidden">
+                <div class="flex flex-col items-center gap-2 justify-center transition-all duration-300" id="sidebar-footer-content">
+                    <span class="text-5xl font-black text-slate-950 tracking-tighter shrink-0 transition-all duration-300">US</span>
+                    <span class="sidebar-text text-sm font-bold text-slate-950 whitespace-nowrap transition-opacity duration-200 delay-100">Unique Schools</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 overflow-x-hidden overflow-y-auto bg-white relative">
+            <!-- Timestamp Overlay -->
+            <div class="fixed bottom-2 right-2 z-50 pointer-events-none select-none">
+                <p class="text-[10px] font-mono text-slate-500" id="timestamp">
+                    Wireframe Generated: Loading...
+                </p>
+            </div>
+
+            <!-- DASHBOARD VIEW -->
+            <div id="dashboard-view" class="container mx-auto px-8 py-8 max-w-[1600px] animate-fade-in view-section">
+                
+                <!-- Page Content -->
+                <div class="space-y-8 animate-fade-in relative">
+                    
+                    <!-- Top Header -->
+                    <div class="flex items-center justify-between mb-8">
+                        <h1 class="text-3xl font-bold text-slate-950 tracking-tight">Developer Dashboard</h1>
+                        
+                        <div class="flex items-center gap-3">
+                            <!-- Notifications -->
+                            <div class="relative" id="notification-container">
+                                <button id="notification-btn" class="relative w-10 h-10 flex items-center justify-center text-slate-600 hover:text-slate-950 transition-colors rounded-lg border border-slate-200 hover:bg-white focus:outline-none focus:ring-2 focus:ring-slate-200 focus:ring-offset-2">
+                                    <i data-lucide="bell" class="size-5"></i>
+                                    <span class="absolute top-2.5 right-3 size-1.5 bg-red-500 rounded-full border border-white"></span>
+                                </button>
+                                <!-- Notification Dropdown -->
+                                <div id="notification-dropdown" class="hidden absolute right-0 top-12 z-50 w-80 bg-white rounded-xl shadow-soft border border-slate-200 overflow-hidden dropdown-menu-animate origin-top-right">
+                                    <div class="flex items-center justify-between p-4 border-b border-slate-100">
+                                        <h3 class="font-bold text-slate-950 text-sm">Notifications</h3>
+                                        <button class="text-slate-400 hover:text-slate-600 focus:outline-none" id="close-notif-btn">
+                                            <i data-lucide="x" class="size-4"></i>
+                                        </button>
+                                    </div>
+                                    <div class="max-h-[320px] overflow-y-auto custom-scrollbar">
+                                        <!-- Item 1 -->
+                                        <div class="notification-item p-4 border-b border-slate-100 hover:bg-slate-50 cursor-pointer relative group" data-status="unread">
+                                            <p class="notif-title text-sm font-bold text-slate-950 pr-8 leading-snug">Ticket 210-2526-00012 updated</p>
+                                            <p class="notif-time text-xs text-slate-500 mt-1">10 min ago</p>
+                                            <span class="unread-dot absolute right-4 top-1/2 -translate-y-1/2 w-2 h-2 bg-yellow-400 rounded-full border border-white group-hover:invisible"></span>
+                                            <button class="delete-notif-btn absolute right-2 top-1/2 -translate-y-1/2 hidden group-hover:flex items-center justify-center p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors">
+                                                <i data-lucide="x" class="size-4"></i>
+                                            </button>
+                                        </div>
+                                        <!-- Item 2 -->
+                                        <div class="notification-item p-4 border-b border-slate-100 hover:bg-slate-50 cursor-pointer relative group" data-status="unread">
+                                            <p class="notif-title text-sm font-bold text-slate-950 pr-8 leading-snug">New comment on Homepage Hero</p>
+                                            <p class="notif-time text-xs text-slate-500 mt-1">1 hour ago</p>
+                                            <span class="unread-dot absolute right-4 top-1/2 -translate-y-1/2 w-2 h-2 bg-yellow-400 rounded-full border border-white group-hover:invisible"></span>
+                                            <button class="delete-notif-btn absolute right-2 top-1/2 -translate-y-1/2 hidden group-hover:flex items-center justify-center p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors">
+                                                <i data-lucide="x" class="size-4"></i>
+                                            </button>
+                                        </div>
+                                        <!-- Item 3 -->
+                                        <div class="notification-item p-4 border-b border-slate-100 hover:bg-slate-50 cursor-pointer relative group" data-status="read">
+                                            <p class="notif-title text-sm font-medium text-slate-500 pr-8 leading-snug">Ticket 210-2526-00005 marked as Completed</p>
+                                            <p class="notif-time text-xs text-slate-400 mt-1">2 hours ago</p>
+                                            <button class="delete-notif-btn absolute right-2 top-1/2 -translate-y-1/2 hidden group-hover:flex items-center justify-center p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors">
+                                                <i data-lucide="x" class="size-4"></i>
+                                            </button>
+                                        </div>
+                                         <!-- Item 4 -->
+                                        <div class="notification-item p-4 hover:bg-slate-50 cursor-pointer relative group" data-status="read">
+                                            <p class="notif-title text-sm font-medium text-slate-500 pr-8 leading-snug">Portal Translation Check approved</p>
+                                            <p class="notif-time text-xs text-slate-400 mt-1">3 hours ago</p>
+                                            <button class="delete-notif-btn absolute right-2 top-1/2 -translate-y-1/2 hidden group-hover:flex items-center justify-center p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors">
+                                                <i data-lucide="x" class="size-4"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="p-3 border-t border-slate-100 text-center bg-slate-50/50">
+                                        <button class="text-xs font-bold text-slate-700 hover:text-slate-950 transition-colors">Mark all as read</button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Profile -->
+                            <div class="relative" id="profile-container">
+                                <button id="profile-btn" class="w-10 h-10 flex items-center justify-center rounded-full border border-slate-200 bg-white text-xs font-bold text-slate-700 hover:bg-slate-50 transition-all focus:outline-none focus:ring-2 focus:ring-slate-200">
+                                    DR
+                                </button>
+                                <!-- Profile Dropdown -->
+                                <div id="profile-dropdown" class="hidden absolute right-0 top-12 z-50 w-64 bg-white rounded-xl shadow-soft border border-slate-200 overflow-hidden dropdown-menu-animate origin-top-right">
+                                    <div class="p-4 border-b border-slate-100">
+                                        <p class="text-sm font-bold text-slate-950">Dev User</p>
+                                        <p class="text-xs text-slate-500 truncate mt-0.5">dev@uniqueschools.com</p>
+                                    </div>
+                                    <div class="py-1">
+                                        <a href="#" class="block px-4 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-50 hover:text-slate-950 transition-colors">Profile</a>
+                                    </div>
+                                    <div class="border-t border-slate-100"></div>
+                                    <div class="py-1">
+                                        <a href="#" class="block px-4 py-2.5 text-sm font-bold text-red-600 hover:bg-red-50 transition-colors">Log out</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Stats Row -->
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                        <div class="bg-white rounded-xl p-3 shadow-sm border border-slate-200 h-20 flex flex-col justify-between hover:shadow-soft transition-all">
+                            <p class="text-xs font-bold text-slate-500 uppercase tracking-wide">Total Requests</p>
+                            <h3 class="text-2xl font-black text-slate-950">17</h3>
+                        </div>
+                        <div class="bg-white rounded-xl p-3 shadow-sm border border-slate-200 h-20 flex flex-col justify-between hover:shadow-soft transition-all">
+                            <p class="text-xs font-bold text-slate-500 uppercase tracking-wide">Normal Urgent</p>
+                            <h3 class="text-2xl font-black text-slate-950">5</h3>
+                        </div>
+                        <div class="bg-white rounded-xl p-3 shadow-sm border border-slate-200 h-20 flex flex-col justify-between hover:shadow-soft transition-all">
+                            <p class="text-xs font-bold text-slate-500 uppercase tracking-wide">Needs Info</p>
+                            <h3 class="text-2xl font-black text-slate-950">2</h3>
+                        </div>
+                        <div class="bg-white rounded-xl p-3 shadow-sm border border-slate-200 h-20 flex flex-col justify-between hover:shadow-soft transition-all">
+                            <p class="text-xs font-bold text-slate-500 uppercase tracking-wide">Completed</p>
+                            <h3 class="text-2xl font-black text-slate-950">2</h3>
+                        </div>
+                    </div>
+
+
+                    <!-- Tabs -->
+                    <div class="flex items-center gap-8 mt-8 border-b border-transparent">
+                        <button class="tab-btn group pb-4 text-sm font-medium text-slate-400 hover:text-slate-600 transition-colors flex items-center gap-2" data-tab="New">New <span class="flex items-center justify-center w-5 h-5 text-[10px] rounded-full bg-slate-100 text-slate-500 font-bold" id="badge-New">7</span></button>
+                        <button class="tab-btn group pb-4 text-sm font-bold text-slate-950 hover:text-slate-800 transition-colors border-b-2 border-yellow-400 flex items-center gap-2 active" data-tab="Active">Active <span class="flex items-center justify-center w-5 h-5 text-[10px] rounded-full bg-slate-950 text-white font-bold" id="badge-Active">8</span></button>
+                        <button class="tab-btn group pb-4 text-sm font-medium text-slate-400 hover:text-slate-600 transition-colors flex items-center gap-2" data-tab="Completed">Completed <span class="flex items-center justify-center w-5 h-5 text-[10px] rounded-full bg-slate-100 text-slate-500 font-bold" id="badge-Completed">2</span></button>
+                        <button class="tab-btn group pb-4 text-sm font-medium text-slate-400 hover:text-slate-600 transition-colors flex items-center gap-2" data-tab="Archived">Archived <span class="flex items-center justify-center w-5 h-5 text-[10px] rounded-full bg-slate-100 text-slate-500 font-bold" id="badge-Archived">0</span></button>
+                    </div>
+
+                    <!-- Action Bar -->
+                    <div class="flex items-end justify-between mt-0">
+                        <div class="relative w-48" id="date-picker-container">
+                            <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">Start Date Filter</label>
+                            <button id="date-picker-btn" class="flex items-center justify-between w-full h-10 px-3 py-2 bg-white border border-slate-200 rounded-lg text-sm font-semibold text-slate-700 hover:border-slate-300 focus:outline-none transition-all">
+                                <div class="flex items-center gap-2">
+                                    <i data-lucide="calendar" class="size-[18px] text-slate-500"></i>
+                                    <span id="selected-date-range">All time</span>
+                                </div>
+                                <i data-lucide="chevron-down" class="size-[18px] text-slate-400"></i>
+                            </button>
+                            <!-- Date Dropdowns -->
+                            <div id="date-range-menu" class="hidden absolute left-0 top-full mt-2 z-50 w-56 bg-white rounded-xl shadow-xl border border-slate-200 overflow-hidden dropdown-menu-animate">
+                                 <div class="px-4 py-3 border-b border-slate-100"><p class="text-xs font-bold text-slate-500 uppercase tracking-wider">Select Range</p></div>
+                                 <div class="py-1">
+                                    <button class="w-full text-left px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 flex items-center gap-2 date-option selected" data-value="All time"><i data-lucide="check" class="size-4 text-slate-900 opacity-100 icon-check"></i> All time</button>
+                                    <button class="w-full text-left px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 flex items-center gap-2 date-option" data-value="Today"><i data-lucide="check" class="size-4 text-slate-900 opacity-0 icon-check"></i> Today</button>
+                                    <button class="w-full text-left px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 flex items-center gap-2 date-option" data-value="This month"><i data-lucide="check" class="size-4 text-slate-900 opacity-0 icon-check"></i> This month</button>
+                                    <button class="w-full text-left px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 flex items-center gap-2 date-option" data-value="This year"><i data-lucide="check" class="size-4 text-slate-900 opacity-0 icon-check"></i> This year</button>
+                                    <button class="w-full text-left px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 flex items-center gap-2" id="custom-range-trigger"><i data-lucide="check" class="size-4 text-slate-900 opacity-0 icon-check"></i> Custom range...</button>
+                                 </div>
+                            </div>
+                            <!-- Custom Dual Calendar Popup -->
+                            <div id="custom-calendar-popup" class="hidden absolute left-0 top-full mt-2 z-50 bg-white rounded-xl shadow-xl border border-slate-200 overflow-hidden dropdown-menu-animate calendar-popup p-4 min-w-[520px]">
+                                 <!-- Header with aligned titles -->
+                                 <div class="flex gap-4 mb-4">
+                                     <!-- Left Header -->
+                                     <div class="flex-1 relative flex items-center justify-center">
+                                         <button id="prev-month-btn" class="absolute left-0 p-1 hover:bg-slate-100 rounded-full transition-colors text-slate-500 hover:text-slate-900">
+                                             <i data-lucide="chevron-left" class="size-4"></i>
+                                         </button>
+                                         <span class="text-sm font-bold text-slate-900" id="cal-month-title-1"></span>
+                                     </div>
+                                     <!-- Right Header -->
+                                     <div class="flex-1 relative flex items-center justify-center">
+                                         <span class="text-sm font-bold text-slate-900" id="cal-month-title-2"></span>
+                                         <button id="next-month-btn" class="absolute right-0 p-1 hover:bg-slate-100 rounded-full transition-colors text-slate-500 hover:text-slate-900">
+                                             <i data-lucide="chevron-right" class="size-4"></i>
+                                         </button>
+                                     </div>
+                                 </div>
+
+                                 <!-- Grids -->
+                                 <div class="flex gap-4 relative">
+                                     <!-- Month 1 -->
+                                     <div class="flex-1">
+                                         <div class="grid grid-cols-7 mb-2 text-center">
+                                            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wide">Su</span>
+                                            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wide">Mo</span>
+                                            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wide">Tu</span>
+                                            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wide">We</span>
+                                            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wide">Th</span>
+                                            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wide">Fr</span>
+                                            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wide">Sa</span>
+                                         </div>
+                                         <div class="grid grid-cols-7 gap-y-1 gap-x-0.5 text-xs text-slate-700" id="calendar-month-1"></div>
+                                     </div>
+                                     <!-- Month 2 -->
+                                     <div class="flex-1">
+                                         <div class="grid grid-cols-7 mb-2 text-center">
+                                            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wide">Su</span>
+                                            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wide">Mo</span>
+                                            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wide">Tu</span>
+                                            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wide">We</span>
+                                            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wide">Th</span>
+                                            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wide">Fr</span>
+                                            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wide">Sa</span>
+                                         </div>
+                                         <div class="grid grid-cols-7 gap-y-1 gap-x-0.5 text-xs text-slate-700" id="calendar-month-2"></div>
+                                     </div>
+                                 </div>
+
+                                 <!-- Footer -->
+                                 <div class="mt-4 pt-3 border-t border-slate-100 flex justify-between items-center">
+                                     <div class="flex flex-col">
+                                         <p class="text-[10px] font-medium text-slate-400 uppercase tracking-wide">Selected Range</p>
+                                         <p class="text-xs font-bold text-slate-900 mt-0.5" id="calendar-status-text">Select start date</p>
+                                     </div>
+                                     <div class="flex gap-2">
+                                         <button id="calendar-cancel-btn" class="px-3 py-1.5 text-xs font-bold text-slate-600 hover:bg-slate-50 rounded-lg border border-transparent hover:border-slate-200 transition-all">Cancel</button>
+                                         <button id="calendar-apply-btn" class="px-4 py-1.5 text-xs font-bold text-white bg-slate-900 hover:bg-slate-800 rounded-lg shadow-md hover:shadow-lg disabled:opacity-50 disabled:shadow-none disabled:cursor-not-allowed transition-all" disabled>Apply</button>
+                                     </div>
+                                 </div>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center gap-3">
+                            <button id="btn-archive-main" class="flex items-center gap-2 h-10 px-4 bg-slate-950 text-white text-sm font-semibold rounded-lg hover:bg-slate-800 transition-colors shadow-sm disabled:opacity-50" disabled>
+                                <i data-lucide="archive" class="size-[18px]"></i> Archive
+                            </button>
+                            <button class="flex items-center h-10 px-4 bg-white border border-slate-200 text-slate-700 text-sm font-semibold rounded-lg hover:bg-slate-50 hover:border-slate-300 transition-colors">Clear Filters</button>
+                        </div>
+                    </div>
+
+                    <!-- Filters Row -->
+                    <div class="flex flex-col gap-4 pt-2 pb-2">
+                        <div class="grid grid-cols-1 md:grid-cols-12 gap-4">
+                            <!-- Search (Span 2) -->
+                            <div class="md:col-span-2 relative">
+                                <i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 size-[18px] text-slate-400"></i>
+                                <input type="text" placeholder="Search..." class="pl-10 pr-8 flex h-10 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-medium placeholder:text-slate-400 focus:outline-none transition-all shadow-sm" id="search-input">
+                                <button id="clear-search-btn" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 hidden transition-colors focus:outline-none">
+                                    <i data-lucide="x" class="size-4"></i>
+                                </button>
+                            </div>
+
+                            <!-- 1. All Tickets (Scope) Filter (Span 2) -->
+                            <div class="md:col-span-2 relative custom-dropdown-group">
+                                <button class="flex h-10 w-full items-center justify-between rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-950 hover:border-slate-300 focus:outline-none transition-all" id="btn-filter-scope">
+                                    <span class="truncate" id="label-filter-scope">All Tickets</span>
+                                    <i data-lucide="chevron-down" class="size-[18px] text-slate-400 shrink-0"></i>
+                                </button>
+                                <div class="hidden absolute z-50 top-full left-0 w-full mt-1.5 bg-white border border-slate-200 rounded-xl shadow-xl dropdown-menu-animate overflow-hidden" id="dropdown-filter-scope">
+                                    <div class="p-1.5">
+                                        <button class="w-full text-left px-3 py-2 text-sm font-medium text-slate-700 rounded-lg hover:bg-slate-50 transition-colors dropdown-option selected" data-value="all" data-type="scope">All Tickets</button>
+                                        <button class="w-full text-left px-3 py-2 text-sm font-medium text-slate-700 rounded-lg hover:bg-slate-50 transition-colors dropdown-option" data-value="assigned_to_me" data-type="scope">Assigned to Me</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 2. School Filter (Span 2) -->
+                            <div class="md:col-span-2 relative custom-dropdown-group">
+                                <button class="flex h-10 w-full items-center justify-between rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-700 hover:border-slate-300 focus:outline-none transition-all" id="btn-filter-school">
+                                    <span class="truncate" id="label-filter-school">School</span>
+                                    <i data-lucide="chevron-down" class="size-[18px] text-slate-400 shrink-0"></i>
+                                </button>
+                                <div class="hidden absolute z-50 top-full left-0 w-full min-w-[240px] mt-1.5 bg-white border border-slate-200 rounded-xl shadow-xl dropdown-menu-animate" id="dropdown-filter-school">
+                                    <div class="p-2 border-b border-slate-100">
+                                        <div class="relative">
+                                            <i data-lucide="search" class="absolute left-2 top-1/2 -translate-y-1/2 size-[16px] text-slate-400"></i>
+                                            <input class="w-full pl-8 pr-2 py-1.5 text-xs border border-slate-200 rounded-lg bg-slate-50 focus:outline-none focus:ring-1 focus:ring-yellow-400 placeholder:text-slate-400" placeholder="Search schools..." id="input-search-school">
+                                        </div>
+                                    </div>
+                                    <div class="max-h-48 overflow-y-auto custom-scrollbar p-1.5" id="school-list-container">
+                                        <label class="flex items-center gap-3 px-3 py-2 text-sm hover:bg-slate-50 rounded-lg cursor-pointer">
+                                            <input type="checkbox" class="custom-checkbox w-4 h-4 rounded border-2 border-slate-400 text-slate-950 focus:ring-slate-950" value="All Schools">
+                                            <span class="text-slate-700 font-medium">All Schools</span>
+                                        </label>
+                                        <label class="flex items-center gap-3 px-3 py-2 text-sm hover:bg-slate-50 rounded-lg cursor-pointer">
+                                            <input type="checkbox" class="custom-checkbox w-4 h-4 rounded border-2 border-slate-400 text-slate-950 focus:ring-slate-950" value="Saint Mary's Academy">
+                                            <span class="text-slate-700">Saint Mary's Academy</span>
+                                        </label>
+                                        <label class="flex items-center gap-3 px-3 py-2 text-sm hover:bg-slate-50 rounded-lg cursor-pointer">
+                                            <input type="checkbox" class="custom-checkbox w-4 h-4 rounded border-2 border-slate-400 text-slate-950 focus:ring-slate-950" value="Lincoln High School">
+                                            <span class="text-slate-700">Lincoln High School</span>
+                                        </label>
+                                        <label class="flex items-center gap-3 px-3 py-2 text-sm hover:bg-slate-50 rounded-lg cursor-pointer">
+                                            <input type="checkbox" class="custom-checkbox w-4 h-4 rounded border-2 border-slate-400 text-slate-950 focus:ring-slate-950" value="Westfield Elementary">
+                                            <span class="text-slate-700">Westfield Elementary</span>
+                                        </label>
+                                        <label class="flex items-center gap-3 px-3 py-2 text-sm hover:bg-slate-50 rounded-lg cursor-pointer">
+                                            <input type="checkbox" class="custom-checkbox w-4 h-4 rounded border-2 border-slate-400 text-slate-950 focus:ring-slate-950" value="Oakridge International">
+                                            <span class="text-slate-700">Oakridge International</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 3. Category Filter (Span 2) -->
+                            <div class="md:col-span-2 relative custom-dropdown-group">
+                                <button class="flex h-10 w-full items-center justify-between rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-700 hover:border-slate-300 focus:outline-none transition-all" id="btn-filter-category">
+                                    <span class="truncate" id="label-filter-category">Category</span>
+                                    <i data-lucide="chevron-down" class="size-[18px] text-slate-400 shrink-0"></i>
+                                </button>
+                                <div class="hidden absolute z-50 top-full left-0 w-full mt-1.5 bg-white border border-slate-200 rounded-xl shadow-xl dropdown-menu-animate overflow-hidden" id="dropdown-filter-category">
+                                    <div class="p-1.5">
+                                        <button class="w-full text-left px-3 py-2 text-sm font-medium text-slate-700 rounded-lg hover:bg-slate-50 transition-colors dropdown-option selected" data-value="all" data-type="category">All Categories</button>
+                                        <button class="w-full text-left px-3 py-2 text-sm font-medium text-slate-700 rounded-lg hover:bg-slate-50 transition-colors dropdown-option" data-value="Text Update" data-type="category">Text Update</button>
+                                        <button class="w-full text-left px-3 py-2 text-sm font-medium text-slate-700 rounded-lg hover:bg-slate-50 transition-colors dropdown-option" data-value="Image Update" data-type="category">Image Update</button>
+                                        <button class="w-full text-left px-3 py-2 text-sm font-medium text-slate-700 rounded-lg hover:bg-slate-50 transition-colors dropdown-option" data-value="Technical" data-type="category">Technical</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 4. Status Filter (Span 2) -->
+                            <div class="md:col-span-2 relative custom-dropdown-group">
+                                <button class="flex h-10 w-full items-center justify-between rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-700 hover:border-slate-300 focus:outline-none transition-all" id="btn-filter-status">
+                                    <span class="truncate" id="label-filter-status">Status</span>
+                                    <i data-lucide="chevron-down" class="size-[18px] text-slate-400 shrink-0"></i>
+                                </button>
+                                <div class="hidden absolute z-50 top-full left-0 w-full mt-1.5 bg-white border border-slate-200 rounded-xl shadow-xl dropdown-menu-animate overflow-hidden" id="dropdown-filter-status">
+                                    <div class="p-1.5">
+                                        <!-- New -->
+                                        <button class="w-full text-left px-3 py-2 text-sm font-medium text-slate-700 rounded-lg hover:bg-slate-50 transition-colors status-option flex items-center justify-between group" data-value="New">
+                                            <span>New</span>
+                                            <i data-lucide="check-circle" class="size-4 text-slate-900 opacity-0 check-icon"></i>
+                                        </button>
+                                        <!-- In Progress -->
+                                        <button class="w-full text-left px-3 py-2 text-sm font-medium text-slate-700 rounded-lg hover:bg-slate-50 transition-colors status-option flex items-center justify-between group" data-value="In Progress">
+                                            <span>In Progress</span>
+                                            <i data-lucide="check-circle" class="size-4 text-slate-900 opacity-0 check-icon"></i>
+                                        </button>
+                                        <!-- Reopened -->
+                                        <button class="w-full text-left px-3 py-2 text-sm font-medium text-slate-700 rounded-lg hover:bg-slate-50 transition-colors status-option flex items-center justify-between group" data-value="Reopened">
+                                            <span>Reopened</span>
+                                            <i data-lucide="check-circle" class="size-4 text-slate-900 opacity-0 check-icon"></i>
+                                        </button>
+                                        <!-- Info Needed -->
+                                        <button class="w-full text-left px-3 py-2 text-sm font-medium text-slate-700 rounded-lg hover:bg-slate-50 transition-colors status-option flex items-center justify-between group" data-value="Info Needed">
+                                            <span>Info Needed</span>
+                                            <i data-lucide="check-circle" class="size-4 text-slate-900 opacity-0 check-icon"></i>
+                                        </button>
+                                        <!-- Completed -->
+                                        <button class="w-full text-left px-3 py-2 text-sm font-medium text-slate-700 rounded-lg hover:bg-slate-50 transition-colors status-option flex items-center justify-between group" data-value="Complete">
+                                            <span>Completed</span>
+                                            <i data-lucide="check-circle" class="size-4 text-slate-900 opacity-0 check-icon"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 5. Priority Filter (Span 2) -->
+                            <div class="md:col-span-2 relative custom-dropdown-group">
+                                <button class="flex h-10 w-full items-center justify-between rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-700 hover:border-slate-300 focus:outline-none transition-all" id="btn-filter-priority">
+                                    <span class="truncate" id="label-filter-priority">Priority</span>
+                                    <i data-lucide="chevron-down" class="size-[18px] text-slate-400 shrink-0"></i>
+                                </button>
+                                <div class="hidden absolute z-50 top-full left-0 w-full mt-1.5 bg-white border border-slate-200 rounded-xl shadow-xl dropdown-menu-animate overflow-hidden" id="dropdown-filter-priority">
+                                    <div class="p-1.5">
+                                        <button class="w-full text-left px-3 py-2 text-sm font-medium text-slate-700 rounded-lg hover:bg-slate-50 transition-colors dropdown-option selected" data-value="all" data-type="priority">All Priorities</button>
+                                        <button class="w-full text-left px-3 py-2 text-sm font-medium text-slate-700 rounded-lg hover:bg-slate-50 transition-colors dropdown-option" data-value="Urgent" data-type="priority">Urgent</button>
+                                        <button class="w-full text-left px-3 py-2 text-sm font-medium text-slate-700 rounded-lg hover:bg-slate-50 transition-colors dropdown-option" data-value="Normal" data-type="priority">Normal</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Table -->
+                    <div class="bg-white rounded-xl border border-slate-200 shadow-sm flex flex-col overflow-hidden">
+                        <div id="requests-table-scroll" class="overflow-auto relative custom-scrollbar h-[600px]">
+                            <table class="w-full border-collapse">
+                                <thead class="sticky top-0 z-10 bg-white shadow-sm border-b border-slate-200">
+                                    <tr>
+                                        <th class="px-6 py-5 w-12 bg-white"><div class="flex items-center justify-center"><input type="checkbox" id="select-all-checkbox" class="custom-checkbox w-5 h-5 rounded border-2 border-slate-400 text-slate-950 focus:ring-slate-950"></div></th>
+                                        <th class="px-6 py-5 text-left text-sm font-semibold text-slate-950 bg-white">ID</th>
+                                        <th class="px-6 py-5 text-left text-sm font-semibold text-slate-950 bg-white">Title</th>
+                                        <th class="px-6 py-5 text-left text-sm font-semibold text-slate-950 bg-white">School</th>
+                                        <th class="px-6 py-5 text-left text-sm font-semibold text-slate-950 bg-white w-48">Assigned</th>
+                                        <th class="px-6 py-5 text-center text-sm font-semibold text-slate-950 bg-white">Priority</th>
+                                        <th class="px-6 py-5 text-center text-sm font-semibold text-slate-950 bg-white">Status</th>
+                                        
+                                        <!-- Start Date Header -->
+                                        <th class="px-6 py-5 text-left text-sm font-semibold text-slate-950 bg-white cursor-pointer group select-none sort-header whitespace-nowrap" data-column="start_date">
+                                            <div class="flex items-center gap-1 group-hover:text-slate-700">
+                                                Start Date 
+                                                <i data-lucide="chevron-down" class="size-[14px] text-slate-400 transition-transform duration-200 sort-icon"></i>
+                                            </div>
+                                        </th>
+                                        
+                                        <!-- Due Date Header -->
+                                        <th class="px-6 py-5 text-left text-sm font-semibold text-slate-950 bg-white cursor-pointer group select-none sort-header" data-column="sla_due_date">
+                                            <div class="flex items-center gap-1 group-hover:text-slate-700">
+                                                Due Date 
+                                                <i data-lucide="chevron-down" class="size-[14px] text-slate-400 transition-transform duration-200 sort-icon"></i>
+                                            </div>
+                                        </th>
+
+                                        <th class="px-6 py-5 text-left text-sm font-semibold text-slate-950 bg-white">Completed</th>
+                                        <th class="px-6 py-5 text-center text-sm font-semibold text-slate-950 bg-white">Activity</th>
+                                        <th class="px-6 py-5 text-center text-sm font-semibold text-slate-950 bg-white">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-slate-100" id="requests-table-body"></tbody>
+                            </table>
+                            <div id="dashboard-loading-indicator" class="hidden py-4 text-center text-slate-400 text-xs w-full bg-slate-50/50">Loading more requests...</div>
+                        </div>
+                        
+                        <!-- Dashboard Footer (Modified for Infinite Scroll) -->
+                        <div class="px-6 py-4 border-t border-slate-200 flex items-center justify-between bg-white" id="dashboard-footer">
+                            <div class="flex items-center gap-2 text-sm text-slate-500">
+                                <span id="showing-text">Showing 0 of 0 requests</span>
+                            </div>
+                            <!-- Pagination controls removed for infinite scroll -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MODULE SEPARATE TAB VIEW (New Screen) -->
+            <div id="module-separate-view" class="container mx-auto px-8 py-8 max-w-[1600px] h-full animate-fade-in view-section hidden">
+                <div class="w-full h-[calc(100vh-140px)] flex flex-col items-center justify-center bg-white rounded-xl border-2 border-dashed border-slate-200 p-8 text-center">
+                    <h2 class="text-xl font-bold text-slate-950 mb-2">Module Located in Separate Tab</h2>
+                    <p class="text-sm text-slate-500 mb-6">Please check the specific link for this section.</p>
+                    <button id="go-back-from-module" class="h-10 px-6 bg-white border border-slate-200 rounded-lg text-sm font-bold text-slate-700 hover:bg-slate-50 hover:border-slate-300 transition-colors shadow-sm">
+                        Go Back
+                    </button>
+                </div>
+            </div>
+
+            <!-- TICKET DETAIL VIEW -->
+            <div id="ticket-detail-view" class="container mx-auto px-8 py-8 max-w-[1000px] animate-fade-in view-section hidden">
+                <!-- Back Button -->
+                <button id="back-to-dashboard" class="group flex items-center gap-2 text-sm font-bold text-slate-500 hover:text-slate-900 mb-6 transition-colors">
+                    <i data-lucide="arrow-left" class="size-4 group-hover:-translate-x-1 transition-transform"></i>
+                    Back to Dashboard
+                </button>
+
+                <!-- Ticket Header -->
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-8 mb-6">
+                    <div class="flex items-start justify-between">
+                        <div>
+                            <div class="flex items-center gap-3 mb-2">
+                                <span class="text-xs font-mono text-slate-400" id="detail-id">#115-2526-00012</span>
+                                <span id="detail-status-badge"></span>
+                            </div>
+                            <h1 class="text-2xl font-bold text-slate-950 mb-2" id="detail-title">Fix Broken Image On Blog</h1>
+                            <div class="flex items-center gap-4 text-sm text-slate-500">
+                                <span class="flex items-center gap-1.5"><i data-lucide="building-2" class="size-4"></i> <span id="detail-school">Saint Mary's Academy</span></span>
+                                <span class="flex items-center gap-1.5"><i data-lucide="calendar" class="size-4"></i> Created <span id="detail-date">27 Jan 2026</span></span>
+                            </div>
+                        </div>
+                        <div class="flex gap-2">
+                            <button class="flex items-center gap-2 h-9 px-4 bg-white border border-slate-200 rounded-lg text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:border-slate-300 transition-colors">
+                                <i data-lucide="edit-3" class="size-4"></i> Edit
+                            </button>
+                            <button class="flex items-center gap-2 h-9 px-4 bg-slate-950 rounded-lg text-sm font-semibold text-white hover:bg-slate-800 transition-colors shadow-sm">
+                                <i data-lucide="check-circle" class="size-4"></i> Resolve
+                            </button>
+                        </div>
+                    </div>
+                    <hr class="my-6 border-slate-100">
+                    <div>
+                        <h3 class="text-sm font-bold text-slate-950 mb-2">Description</h3>
+                        <p class="text-slate-600 text-sm leading-relaxed" id="detail-description">
+                            The main hero image on the blog listing page is failing to load on mobile devices. It seems to be a 404 error when inspecting the console. Please investigate and replace with the correct asset or fix the path.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Ticket Thread -->
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                    <div class="px-6 py-4 border-b border-slate-200 bg-slate-50/50 flex justify-between items-center">
+                        <h3 class="font-bold text-slate-950">Activity Thread</h3>
+                        <span class="text-xs font-semibold text-slate-500 bg-white border border-slate-200 px-2 py-1 rounded-md shadow-sm" id="thread-count-badge">45 Items</span>
+                    </div>
+                    
+                    <div id="thread-container" class="divide-y divide-slate-100">
+                        <!-- Messages injected here -->
+                    </div>
+
+                    <!-- Thread Pagination -->
+                    <div class="px-6 py-4 border-t border-slate-200 bg-white flex items-center justify-between" id="thread-pagination">
+                        <div class="flex items-center gap-2 text-sm text-slate-500">
+                            <span id="thread-showing-text">Showing 0-0 of 0</span>
+                        </div>
+                        <div class="flex items-center gap-2" id="thread-pagination-controls">
+                            <!-- Pagination buttons -->
+                        </div>
+                    </div>
+                    
+                    <!-- Reply Box -->
+                    <div class="p-6 bg-slate-50 border-t border-slate-200">
+                        <div class="flex gap-4">
+                            <div class="w-10 h-10 rounded-full bg-slate-950 text-white flex items-center justify-center text-sm font-bold shrink-0">AR</div>
+                            <div class="flex-1">
+                                <textarea placeholder="Type your reply here..." class="w-full h-24 p-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-transparent text-sm resize-none"></textarea>
+                                <div class="flex justify-end mt-2">
+                                    <button class="h-9 px-4 bg-slate-950 text-white text-sm font-bold rounded-lg hover:bg-slate-800 transition-colors shadow-sm">Post Reply</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- REPORTS VIEW -->
+            <div id="reports-view" class="container mx-auto px-8 py-8 max-w-[1600px] animate-fade-in view-section hidden">
+                <!-- Header -->
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+                    <div>
+                        <h2 class="text-2xl font-bold text-slate-950 tracking-tight">Reports & Analytics</h2>
+                        <p class="text-sm text-slate-500 mt-1 font-normal">Management overview: Support volume, resource planning, and workload distribution.</p>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <div class="relative">
+                            <button id="reports-date-btn" class="flex items-center justify-between h-9 px-3 bg-white border border-slate-200 rounded-lg text-sm font-medium text-slate-700 hover:bg-slate-50 hover:border-slate-300 transition-colors shadow-sm focus:outline-none focus:ring-2 focus:ring-slate-200 min-w-[160px]">
+                                <div class="flex items-center">
+                                    <i data-lucide="calendar" class="size-4 mr-2 text-slate-400"></i>
+                                    <span id="reports-date-label">Last 30 Days</span>
+                                </div>
+                                <i data-lucide="chevron-down" class="size-4 ml-2 text-slate-400"></i>
+                            </button>
+                            <div id="reports-date-dropdown" class="hidden absolute right-0 top-full mt-1 z-50 w-48 bg-white rounded-xl shadow-xl border border-slate-200 overflow-hidden dropdown-menu-animate">
+                                <div class="p-1.5">
+                                    <button class="w-full text-left px-3 py-2 text-sm font-medium text-slate-700 rounded-lg hover:bg-slate-50 transition-colors reports-date-option selected" data-value="Last 30 Days">Last 30 Days</button>
+                                    <button class="w-full text-left px-3 py-2 text-sm font-medium text-slate-700 rounded-lg hover:bg-slate-50 transition-colors reports-date-option" data-value="Last 90 Days">Last 90 Days</button>
+                                    <button class="w-full text-left px-3 py-2 text-sm font-medium text-slate-700 rounded-lg hover:bg-slate-50 transition-colors reports-date-option" data-value="Last Year">Last Year</button>
+                                    <button class="w-full text-left px-3 py-2 text-sm font-medium text-slate-700 rounded-lg hover:bg-slate-50 transition-colors reports-date-option" data-value="This Year">This Year</button>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="flex items-center h-9 px-3 bg-white border border-slate-200 rounded-lg text-sm font-medium text-slate-700 hover:bg-slate-50 hover:border-slate-300 transition-colors shadow-sm">
+                            <i data-lucide="download" class="size-4 mr-2 text-slate-400"></i>
+                            Export CSV
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Top Stats Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+                    <!-- Card 1 -->
+                    <div class="bg-white rounded-xl p-5 shadow-sm border border-slate-200 flex flex-col justify-between hover:shadow-soft transition-all h-28">
+                        <p class="text-sm font-medium text-slate-500">Total Requests</p>
+                        <h3 class="text-3xl font-bold text-slate-950 mt-1" id="report-total-requests">142</h3>
+                    </div>
+                    <!-- Card 2 -->
+                    <div class="bg-white rounded-xl p-5 shadow-sm border border-slate-200 flex flex-col justify-between hover:shadow-soft transition-all h-28">
+                        <p class="text-sm font-medium text-slate-500">Average Resolution Time</p>
+                        <div class="flex items-baseline gap-1 mt-1">
+                            <h3 class="text-3xl font-bold text-slate-950" id="report-avg-time">2.4</h3>
+                            <span class="text-sm font-normal text-slate-500">Days</span>
+                        </div>
+                    </div>
+                    <!-- Card 3 -->
+                    <div class="bg-white rounded-xl p-5 shadow-sm border border-slate-200 flex flex-col justify-between hover:shadow-soft transition-all h-28">
+                        <p class="text-sm font-medium text-slate-500">Median Resolution Time</p>
+                        <div class="flex items-baseline gap-1 mt-1">
+                            <h3 class="text-3xl font-bold text-slate-950" id="report-median-time">1.8</h3>
+                            <span class="text-sm font-normal text-slate-500">Days</span>
+                        </div>
+                    </div>
+                    <!-- Card 4 -->
+                    <div class="bg-white rounded-xl p-5 shadow-sm border border-slate-200 flex flex-col justify-between hover:shadow-soft transition-all h-28">
+                        <p class="text-sm font-medium text-slate-500">Team Capacity</p>
+                        <div class="flex items-baseline gap-1 mt-1">
+                            <h3 class="text-3xl font-bold text-slate-950" id="report-team-capacity">85%</h3>
+                            <span class="text-sm font-normal text-slate-500">Utilized</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts Row -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+                    
+                    <!-- Requests by Status -->
+                    <div class="bg-white rounded-xl p-6 shadow-sm border border-slate-200">
+                        <h3 class="font-bold text-slate-950 mb-6">Requests by Status</h3>
+                        <div class="space-y-5">
+                            <div>
+                                <div class="flex justify-between text-xs font-normal mb-1.5">
+                                    <span class="text-slate-600">New</span>
+                                    <span class="text-slate-950">25</span>
+                                </div>
+                                <div class="h-2 w-full bg-slate-100 rounded-full overflow-hidden">
+                                    <div class="h-full bg-[#93c5fd] rounded-full" style="width: 18%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between text-xs font-normal mb-1.5">
+                                    <span class="text-slate-600">In Progress</span>
+                                    <span class="text-slate-950">45</span>
+                                </div>
+                                <div class="h-2 w-full bg-slate-100 rounded-full overflow-hidden">
+                                    <div class="h-full bg-[#1d4ed8] rounded-full" style="width: 32%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between text-xs font-normal mb-1.5">
+                                    <span class="text-slate-600">Info Needed</span>
+                                    <span class="text-slate-950">15</span>
+                                </div>
+                                <div class="h-2 w-full bg-slate-100 rounded-full overflow-hidden">
+                                    <div class="h-full bg-[#3b82f6] rounded-full" style="width: 10%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between text-xs font-normal mb-1.5">
+                                    <span class="text-slate-600">Complete</span>
+                                    <span class="text-slate-950">57</span>
+                                </div>
+                                <div class="h-2 w-full bg-slate-100 rounded-full overflow-hidden">
+                                    <div class="h-full bg-[#1e3a8a] rounded-full" style="width: 40%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Requests by Priority -->
+                    <div class="bg-white rounded-xl p-6 shadow-sm border border-slate-200">
+                        <h3 class="font-bold text-slate-950 mb-6">Requests by Priority</h3>
+                        <div class="h-[180px] flex justify-between gap-2 px-2">
+                            <div class="flex flex-col items-center w-full group h-full justify-end">
+                                <div class="w-full bg-[#1e3a8a] rounded-t-sm hover:bg-blue-900 transition-colors relative" style="height: 15%;">
+                                    <span class="absolute -top-6 left-1/2 -translate-x-1/2 text-xs font-normal text-slate-900 opacity-0 group-hover:opacity-100 transition-opacity">12</span>
+                                </div>
+                                <span class="text-xs font-normal text-slate-500 mt-2">P1</span>
+                            </div>
+                            <div class="flex flex-col items-center w-full group h-full justify-end">
+                                <div class="w-full bg-[#1d4ed8] rounded-t-sm hover:bg-blue-800 transition-colors relative" style="height: 35%;">
+                                    <span class="absolute -top-6 left-1/2 -translate-x-1/2 text-xs font-normal text-slate-900 opacity-0 group-hover:opacity-100 transition-opacity">28</span>
+                                </div>
+                                <span class="text-xs font-normal text-slate-500 mt-2">P2</span>
+                            </div>
+                            <div class="flex flex-col items-center w-full group h-full justify-end">
+                                <div class="w-full bg-[#3b82f6] rounded-t-sm hover:bg-indigo-500 transition-colors relative" style="height: 75%;">
+                                    <span class="absolute -top-6 left-1/2 -translate-x-1/2 text-xs font-normal text-slate-900 opacity-0 group-hover:opacity-100 transition-opacity">65</span>
+                                </div>
+                                <span class="text-xs font-normal text-slate-500 mt-2">P3</span>
+                            </div>
+                            <div class="flex flex-col items-center w-full group h-full justify-end">
+                                <div class="w-full bg-[#93c5fd] rounded-t-sm hover:bg-blue-400 transition-colors relative" style="height: 45%;">
+                                    <span class="absolute -top-6 left-1/2 -translate-x-1/2 text-xs font-normal text-slate-900 opacity-0 group-hover:opacity-100 transition-opacity">37</span>
+                                </div>
+                                <span class="text-xs font-normal text-slate-500 mt-2">P4</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Team Workload -->
+                    <div class="bg-white rounded-xl p-6 shadow-sm border border-slate-200">
+                        <h3 class="font-bold text-slate-950 mb-6">Team Workload</h3>
+                        <div class="space-y-5">
+                            <div>
+                                <div class="flex items-center justify-between text-xs font-normal mb-1.5">
+                                    <div class="flex items-center gap-2">
+                                        <div class="w-5 h-5 rounded bg-slate-100 flex items-center justify-center text-[9px] font-bold text-slate-600">AR</div>
+                                        <span class="text-slate-600">Alex Rivera</span>
+                                    </div>
+                                    <span class="text-slate-950 font-medium">18 tickets <span class="text-slate-400 mx-1">•</span> 42h</span>
+                                </div>
+                                <div class="h-1 w-full bg-slate-100 rounded-full overflow-hidden">
+                                    <div class="h-full bg-[#3b82f6] rounded-full" style="width: 75%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex items-center justify-between text-xs font-normal mb-1.5">
+                                    <div class="flex items-center gap-2">
+                                        <div class="w-5 h-5 rounded bg-slate-100 flex items-center justify-center text-[9px] font-bold text-slate-600">SJ</div>
+                                        <span class="text-slate-600">Sarah Jones</span>
+                                    </div>
+                                    <span class="text-slate-950 font-medium">15 tickets <span class="text-slate-400 mx-1">•</span> 38h</span>
+                                </div>
+                                <div class="h-1 w-full bg-slate-100 rounded-full overflow-hidden">
+                                    <div class="h-full bg-[#3b82f6] rounded-full" style="width: 60%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex items-center justify-between text-xs font-normal mb-1.5">
+                                    <div class="flex items-center gap-2">
+                                        <div class="w-5 h-5 rounded bg-slate-100 flex items-center justify-center text-[9px] font-bold text-slate-600">MC</div>
+                                        <span class="text-slate-600">Mike Chen</span>
+                                    </div>
+                                    <span class="text-slate-950 font-medium">12 tickets <span class="text-slate-400 mx-1">•</span> 24h</span>
+                                </div>
+                                <div class="h-1 w-full bg-slate-100 rounded-full overflow-hidden">
+                                    <div class="h-full bg-[#3b82f6] rounded-full" style="width: 45%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex items-center justify-between text-xs font-normal mb-1.5">
+                                    <div class="flex items-center gap-2">
+                                        <div class="w-5 h-5 rounded bg-slate-100 flex items-center justify-center text-[9px] font-bold text-slate-600">LW</div>
+                                        <span class="text-slate-600">Lisa Wong</span>
+                                    </div>
+                                    <span class="text-slate-950 font-medium">22 tickets <span class="text-slate-400 mx-1">•</span> 56h</span>
+                                </div>
+                                <div class="h-1 w-full bg-slate-100 rounded-full overflow-hidden">
+                                    <div class="h-full bg-[#1d4ed8] rounded-full" style="width: 88%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex items-center justify-between text-xs font-normal mb-1.5">
+                                    <div class="flex items-center gap-2">
+                                        <div class="w-5 h-5 rounded bg-slate-100 flex items-center justify-center text-[9px] font-bold text-slate-600">U</div>
+                                        <span class="text-slate-600">Unassigned</span>
+                                    </div>
+                                    <span class="text-slate-950 font-medium">5 tickets <span class="text-slate-400 mx-1">•</span> 0h</span>
+                                </div>
+                                <div class="h-1 w-full bg-slate-100 rounded-full overflow-hidden">
+                                    <div class="h-full bg-slate-300 rounded-full" style="width: 15%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- School Performance Table -->
+                <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden mb-12">
+                    <div class="p-6 border-b border-slate-200 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                        <div>
+                            <h3 class="font-bold text-slate-950">School Performance & Volume</h3>
+                            <p class="text-sm text-slate-500 mt-1 font-normal">Key performance metrics and ticket volume across all schools.</p>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <div class="relative w-full md:w-64">
+                                <i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-slate-400"></i>
+                                <input type="text" placeholder="Search schools..." class="pl-9 flex h-9 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-200 focus:border-transparent transition-all">
+                            </div>
+                            <button class="h-9 px-4 bg-white border border-slate-200 rounded-lg text-sm font-medium text-slate-700 hover:bg-slate-50 hover:border-slate-300 transition-colors whitespace-nowrap">View All Schools</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Scrollable Container for Infinite Scroll -->
+                    <div class="overflow-x-auto max-h-[400px] overflow-y-auto custom-scrollbar" id="school-table-container">
+                        <table class="w-full text-sm text-left">
+                            <thead class="bg-slate-50 text-slate-500 border-b border-slate-100 sticky top-0 z-10 shadow-sm">
+                                <tr>
+                                    <th class="px-6 py-4 font-medium w-20 bg-slate-50">Sr. No.</th>
+                                    <th class="px-6 py-4 font-medium w-[30%] bg-slate-50">School Name</th>
+                                    <th class="px-6 py-4 font-medium text-center bg-slate-50">Ticket Volume</th>
+                                    <th class="px-6 py-4 font-medium text-center bg-slate-50">Time Spent (Hrs)</th>
+                                    <th class="px-6 py-4 font-medium text-center bg-slate-50">Avg. Time/Ticket</th>
+                                    <th class="px-6 py-4 font-medium text-center bg-slate-50">Trend</th>
+                                    <th class="px-6 py-4 font-medium text-right bg-slate-50">View</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-100" id="school-table-body">
+                                <!-- Rows generated by JS -->
+                            </tbody>
+                        </table>
+                        <div id="school-loading" class="hidden py-4 text-center text-slate-400 text-xs">Loading more schools...</div>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- Modals & Toasts -->
+    <div id="archive-modal" class="hidden fixed inset-0 z-[100] flex items-center justify-center bg-slate-900/20 backdrop-blur-sm transition-opacity duration-200">
+        <div class="bg-white rounded-lg shadow-xl p-6 w-[440px] transition-transform duration-200 border border-slate-100" id="archive-modal-content">
+            <h3 class="text-lg font-bold text-slate-950 mb-2">Confirm Archive</h3>
+            <p class="text-sm text-slate-500 mb-6">Are you sure you want to archive the selected requests?</p>
+            <div class="flex justify-end gap-3"><button id="cancel-archive-btn" class="px-4 py-2 bg-white border border-slate-300 rounded-lg text-sm font-semibold text-slate-700">Cancel</button><button id="confirm-archive-btn" class="px-4 py-2 bg-slate-950 rounded-lg text-sm font-semibold text-white">Archive</button></div>
+        </div>
+    </div>
+
+    <!-- Reviewer Message Modal (New) -->
+    <div id="reviewer-modal" class="hidden fixed inset-0 z-[100] flex items-center justify-center bg-slate-900/20 backdrop-blur-sm transition-opacity duration-200">
+        <div class="bg-white rounded-lg shadow-xl p-6 w-[440px] transition-transform duration-200 border border-slate-100">
+            <h3 class="text-lg font-bold text-slate-950 mb-2">Reviewer's Message</h3>
+            <div class="bg-yellow-50 border border-yellow-100 rounded-lg p-4 mb-6">
+                <p class="text-sm text-slate-700 italic leading-relaxed mb-3">"Please verify the responsive layout on mobile devices. The current implementation causes a slight overflow on iPhone SE screens. Also, ensure the alt text is updated."</p>
+                
+                <!-- Attached Image -->
+                <div class="mb-2 rounded-lg overflow-hidden border border-yellow-200/60 shadow-sm bg-white">
+                    <div class="relative group cursor-pointer">
+                        <img src="https://placehold.co/600x320/f1f5f9/475569?text=Mobile+View+Overflow" alt="Issue Screenshot" class="w-full h-auto object-cover">
+                        <div class="absolute inset-0 bg-black/5 group-hover:bg-black/0 transition-colors"></div>
+                    </div>
+                    <div class="px-3 py-2 bg-white border-t border-yellow-100 flex items-center gap-2">
+                        <i data-lucide="image" class="size-3 text-slate-400"></i>
+                        <span class="text-[10px] text-slate-500 font-medium">screenshot_mobile_overflow.png</span>
+                    </div>
+                </div>
+
+                <p class="text-xs text-slate-500 font-bold mt-2 text-right">- Shubham</p>
+            </div>
+            <div class="flex justify-end gap-3">
+                <button id="close-reviewer-modal-btn" class="px-4 py-2 bg-white border border-slate-300 rounded-lg text-sm font-semibold text-slate-700 hover:bg-slate-50 transition-colors">Close</button>
+                <button id="resolve-reviewer-btn" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-sm font-semibold shadow-sm transition-colors flex items-center gap-2">
+                    <i data-lucide="check" class="size-4"></i> Mark as Resolved
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast-notification" class="hidden fixed bottom-6 right-6 z-[100] bg-white text-slate-950 px-4 py-4 rounded-xl shadow-xl border border-slate-100 flex items-start gap-3 w-80"><div class="bg-emerald-100 rounded-full p-1 shrink-0 mt-0.5"><i data-lucide="check" class="size-3.5 text-emerald-600"></i></div><div class="flex-1"><p class="text-sm font-bold">Successfully Archived</p><p class="text-xs text-slate-500 mt-1">The selected requests have been moved to the archive.</p></div><button class="text-slate-400 hover:text-slate-600" onclick="document.getElementById('toast-notification').classList.add('hidden')"><i data-lucide="x" class="size-4"></i></button></div>
+
+    <!-- Logic -->
+    <script>
+        (function() {
+            // --- Mock Data ---
+            const initialRequests = [
+                { id: "210-2526-00001", title: "Fix Broken Image", description: "The image on the main blog page is not loading correctly.", status: "In Progress", urgency: "Urgent", created_at: new Date().toISOString(), start_date: new Date().toISOString(), sla_due_date: new Date().toISOString(), completed_at: null, profiles: { name: "Parth", school: "Saint Mary's Academy" }, assignees: [{ name: "Alex Rivera" }], total_messages: 45, category: "Text Update" },
+                { id: "210-2526-00002", title: "Update Faculty", description: "Please update the faculty list with the new staff members.", status: "New", urgency: "Normal", created_at: new Date().toISOString(), start_date: null, sla_due_date: new Date().toISOString(), completed_at: null, profiles: { name: "Sarah", school: "Saint Mary's Academy" }, assignees: [{ name: "John Doe" }], total_messages: 1, category: "Text Update" },
+                // Added static 'New' items
+                { id: "210-2526-00003", title: "Update Academic Calendar 2026", description: "Upload the new PDF for the 2026-2027 academic year.", status: "New", urgency: "Urgent", created_at: new Date().toISOString(), start_date: null, sla_due_date: new Date().toISOString(), completed_at: null, profiles: { name: "Admin", school: "Lincoln High School" }, assignees: [], total_messages: 0, category: "Text Update" },
+                { id: "210-2526-00004", title: "Add New Staff Member Profile", description: "Add profile for Dr. Smith in the Science department.", status: "New", urgency: "Normal", created_at: new Date().toISOString(), start_date: null, sla_due_date: new Date().toISOString(), completed_at: null, profiles: { name: "HR", school: "Westfield Elementary" }, assignees: [], total_messages: 2, category: "Text Update" },
+                { id: "210-2526-00005", title: "Fix Typo in Admissions Page", description: "Correct 'requirments' to 'requirements' in the second paragraph.", status: "New", urgency: "Normal", created_at: new Date().toISOString(), start_date: null, sla_due_date: new Date().toISOString(), completed_at: null, profiles: { name: "Editor", school: "Saint Mary's Academy" }, assignees: [{ name: "Dev 1" }], total_messages: 0, category: "Text Update" },
+                { id: "210-2526-00006", title: "Upload Annual Report PDF", description: "The annual financial report needs to be live by Monday.", status: "New", urgency: "Urgent", created_at: new Date().toISOString(), start_date: null, sla_due_date: new Date().toISOString(), completed_at: null, profiles: { name: "Finance", school: "Oakridge International" }, assignees: [], total_messages: 1, category: "Text Update" },
+                // Added static 'Completed' items
+                { id: "210-2526-00007", title: "Remove Holiday Banner", description: "Holiday season is over, please revert homepage header.", status: "Complete", urgency: "Normal", created_at: new Date(Date.now() - 86400000 * 5).toISOString(), start_date: new Date(Date.now() - 86400000 * 4).toISOString(), sla_due_date: new Date(Date.now() - 86400000 * 3).toISOString(), completed_at: new Date(Date.now() - 86400000 * 1).toISOString(), profiles: { name: "Marketing", school: "All Schools" }, assignees: [{ name: "Alex Rivera" }], total_messages: 5, category: "Image Update" },
+                { id: "210-2526-00008", title: "Update Copyright Footer", description: "Change year to 2026 across all pages.", status: "Complete", urgency: "Normal", created_at: new Date(Date.now() - 86400000 * 10).toISOString(), start_date: new Date(Date.now() - 86400000 * 9).toISOString(), sla_due_date: new Date(Date.now() - 86400000 * 8).toISOString(), completed_at: new Date(Date.now() - 86400000 * 8).toISOString(), profiles: { name: "Admin", school: "All Schools" }, assignees: [{ name: "Sarah Jones" }], total_messages: 2, category: "Text Update" },
+                { id: "210-2526-00009", title: "Fix Broken Link on Contact Us", description: "Map link was returning 404.", status: "Complete", urgency: "Urgent", created_at: new Date(Date.now() - 86400000 * 2).toISOString(), start_date: new Date(Date.now() - 86400000 * 2).toISOString(), sla_due_date: new Date(Date.now() - 86400000 * 1).toISOString(), completed_at: new Date(Date.now() - 86400000 * 1).toISOString(), profiles: { name: "User", school: "Lincoln High School" }, assignees: [{ name: "Mike Chen" }], total_messages: 3, category: "Technical" },
+                { id: "210-2526-00010", title: "Optimize Home Page Images", description: "Reduce file size for faster load times.", status: "Complete", urgency: "Normal", created_at: new Date(Date.now() - 86400000 * 15).toISOString(), start_date: new Date(Date.now() - 86400000 * 14).toISOString(), sla_due_date: new Date(Date.now() - 86400000 * 10).toISOString(), completed_at: new Date(Date.now() - 86400000 * 11).toISOString(), profiles: { name: "Dev Team", school: "Westfield Elementary" }, assignees: [{ name: "Alex Rivera" }], total_messages: 8, category: "Image Update" }
+            ];
+            
+            // Realistic Titles
+            const mockTitles = [
+                "Update Homepage Hero Image", "Fix Broken Link on Contact Page", "Add New Event to Calendar", "Update Staff Directory", 
+                "Change Footer Copyright Year", "Upload Newsletter PDF", "Fix Mobile Menu Glitch", "Update Admissions Form", 
+                "Replace Principal's Photo", "Add 'Snow Day' Alert", "Update Lunch Menu", "Fix Typo in About Us", 
+                "Optimize SEO for Blog", "Update Social Media Links", "Create New Landing Page", "Update Privacy Policy", 
+                "Fix Video Playback Issue", "Add Google Analytics Code", "Update School Logo", "Remove Expired Job Posting",
+                "New Gallery for Sports Day", "Update FAQ Section", "Integration with Parent Portal", "Fix Form Submission Error"
+            ];
+
+            // Populate more mixed data
+            for(let i=0; i<30; i++){
+                const st = ["In Progress", "Info Needed", "Reopened"][Math.floor(Math.random()*3)];
+                initialRequests.push({
+                    id: `210-2526-${(i+11).toString().padStart(5, '0')}`, 
+                    title: mockTitles[i % mockTitles.length], 
+                    description: `This is a detailed description for request #${i+11}. It involves checking the specific module and ensuring compliance with the latest guidelines.`,
+                    status: st, 
+                    urgency: Math.random()>0.7?"Urgent":"Normal",
+                    created_at: new Date(Date.now() - Math.floor(Math.random() * 60 * 24 * 60 * 60 * 1000)).toISOString(), 
+                    start_date: new Date().toISOString(), 
+                    sla_due_date: new Date().toISOString(), 
+                    completed_at: null,
+                    profiles: { name: `User ${i}`, school: ["Saint Mary's Academy","Lincoln High School","Westfield Elementary"][Math.floor(Math.random()*3)] },
+                    assignees: Math.random()>0.5?[{name:"Alex Rivera"}]:[{name:"Dev 1"}], 
+                    total_messages: Math.floor(Math.random() * 50), 
+                    category: ["Text Update","Image Update","Technical"][Math.floor(Math.random()*3)]
+                });
+            }
+
+            // Guaranteed New Data
+            for(let i=0; i<12; i++){
+                initialRequests.push({
+                    id: `210-2526-N${(i+11).toString().padStart(4, '0')}`, 
+                    title: `New: ${mockTitles[(i+5) % mockTitles.length]}`, 
+                    description: `Incoming request requiring triage.`,
+                    status: 'New', 
+                    urgency: Math.random()>0.7?"Urgent":"Normal",
+                    created_at: new Date(Date.now() - Math.floor(Math.random() * 4 * 60 * 60 * 1000)).toISOString(), // Last 4 hours
+                    start_date: null,
+                    sla_due_date: new Date().toISOString(), 
+                    completed_at: null,
+                    profiles: { name: `Staff ${i}`, school: ["Northstar High","Valley View School"][Math.floor(Math.random()*2)] },
+                    assignees: [], 
+                    total_messages: 0, 
+                    category: ["Text Update","Image Update"][Math.floor(Math.random()*2)]
+                });
+            }
+
+            // Guaranteed Completed Data
+            for(let i=0; i<15; i++){
+                initialRequests.push({
+                    id: `210-2526-C${(i+11).toString().padStart(4, '0')}`, 
+                    title: `Completed: ${mockTitles[(i+10) % mockTitles.length]}`, 
+                    description: `This task has been resolved and verified.`,
+                    status: 'Complete', 
+                    urgency: "Normal",
+                    created_at: new Date(Date.now() - Math.floor(Math.random() * 30 * 24 * 60 * 60 * 1000)).toISOString(), 
+                    start_date: new Date().toISOString(), 
+                    sla_due_date: new Date().toISOString(), 
+                    completed_at: new Date(Date.now() - Math.floor(Math.random() * 5 * 24 * 60 * 60 * 1000)).toISOString(),
+                    profiles: { name: `Admin ${i}`, school: ["Saint Mary's Academy"][0] },
+                    assignees: [{name:"Sarah Jones"}], 
+                    total_messages: Math.floor(Math.random() * 10), 
+                    category: "Technical"
+                });
+            }
+
+            // State
+            let currentTab = 'Active';
+            let selectedIds = new Set();
+            let requests = [...initialRequests];
+            let activeFilters = { search: '', schools: new Set(), category: 'all', status: new Set(), priority: 'all', dateRange: 'All time', customStart: null, customEnd: null };
+            
+            // Sort State
+            let sortState = { column: null, direction: 'desc' }; // 'asc' or 'desc'
+
+            // Calendar Internal State
+            let currentCalendarDate = new Date();
+            let tempStart = null;
+            let tempEnd = null;
+
+            // Infinite Scroll State for Dashboard
+            let dashboardData = []; 
+            let displayedDashboardCount = 0;
+            const dashboardBatchSize = 20;
+            
+            // Reviewer Logic State
+            let currentReviewerRequestId = null;
+            let resolvedComments = new Set(); // Stores IDs of requests with resolved comments
+
+            // Thread Pagination State
+            let currentThreadPage = 1;
+            const threadItemsPerPage = 10;
+            let currentThreadMessages = [];
+
+            // School Data State for Infinite Scroll
+            let schoolData = [];
+            let displayedSchoolCount = 0;
+            const schoolBatchSize = 10;
+            const totalSchools = 50; // Total mock schools
+
+            // Helper Functions
+            function updateBulkActionsUI() {
+                const btn = document.getElementById('btn-archive-main');
+                if(btn) {
+                    if(selectedIds.size > 0) btn.disabled = false; else btn.disabled = true;
+                }
+            };
+
+            const formatDate = (d) => {
+                if (!d) return '-';
+                return new Date(d).toLocaleDateString('en-GB', { 
+                    day: '2-digit', 
+                    month: 'short', 
+                    year: 'numeric' 
+                });
+            };
+
+            const getPriorityBadge = (u) => {
+                if (u === 'Urgent') {
+                    // Urgent uses the Red color from the palette
+                    return `<span class="px-3 py-1 rounded-lg border text-xs font-medium bg-[#1e3a8a]/10 text-[#1e3a8a] border-[#1e3a8a]/20">${u}</span>`;
+                }
+                return `<span class="px-3 py-1 rounded-lg border text-xs font-medium bg-white text-slate-600 border-slate-200">${u}</span>`;
+            };
+
+            const getStatusPill = (s) => {
+                // Using the requested palette: #93c5fd, #818cf8, #1d4ed8, #1e3a8a
+                // 'Complete' overridden to Green as per latest request
+                const map = {
+                    'New': 'bg-white border-slate-950 text-slate-950',
+                    'In Progress': 'bg-[#1d4ed8]/10 border-[#1d4ed8]/20 text-[#1d4ed8]',
+                    'Complete': 'bg-emerald-50 border-emerald-200 text-emerald-700',
+                    'Info Needed': 'bg-[#818cf8]/10 border-[#818cf8]/20 text-[#818cf8]',
+                    'Reopened': 'bg-[#818cf8]/10 border-[#818cf8]/20 text-[#818cf8]',
+                    'Archived': 'bg-slate-100 border-slate-200 text-slate-500'
+                };
+                const label = s === 'Complete' ? 'Completed' : s;
+                return `<span class="px-3 py-1 rounded-lg border text-xs font-semibold whitespace-nowrap ${map[s]||'bg-slate-50'}">${label}</span>`;
+            };
+            
+            const getAssigneeCell = (a) => {
+                if (a && a.length) {
+                    return `<div class="flex flex-col">
+                        <span class="text-sm font-normal text-slate-950 truncate">${a[0].name}</span>
+                        <span class="text-[11px] text-slate-500 mt-0.5">Reviewer: Quinn</span>
+                    </div>`;
+                }
+                return `<span class="text-sm text-slate-400 italic">Unassigned</span>`;
+            };
+
+            function isDateMatch(dateStr, range) {
+                if (!dateStr) return false;
+                const d = new Date(dateStr); d.setHours(0,0,0,0);
+                const now = new Date(); now.setHours(0,0,0,0);
+
+                if (range === 'All time') return true;
+                if (range === 'Today') return d.getTime() === now.getTime();
+                if (range === 'This month') return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
+                if (range === 'This year') return d.getFullYear() === now.getFullYear();
+                if (range === 'Custom range' && activeFilters.customStart && activeFilters.customEnd) {
+                    const start = new Date(activeFilters.customStart); start.setHours(0,0,0,0);
+                    const end = new Date(activeFilters.customEnd); end.setHours(0,0,0,0);
+                    return d.getTime() >= start.getTime() && d.getTime() <= end.getTime();
+                }
+                return true;
+            }
+
+            function updateTabCounts() {
+                const counts = { New: 0, Active: 0, Completed: 0, Archived: 0 };
+                requests.forEach(r => {
+                    if (r.status === 'New') counts.New++;
+                    else if (['In Progress', 'Reopened', 'Info Needed'].includes(r.status)) counts.Active++;
+                    else if (r.status === 'Complete') counts.Completed++;
+                    else if (r.status === 'Archived') counts.Archived++;
+                });
+
+                const badgeNew = document.getElementById('badge-New');
+                const badgeActive = document.getElementById('badge-Active');
+                const badgeCompleted = document.getElementById('badge-Completed');
+                const badgeArchived = document.getElementById('badge-Archived');
+
+                if (badgeNew) badgeNew.textContent = counts.New;
+                if (badgeActive) badgeActive.textContent = counts.Active;
+                if (badgeCompleted) badgeCompleted.textContent = counts.Completed;
+                if (badgeArchived) badgeArchived.textContent = counts.Archived;
+            }
+
+            function renderCalendar() {
+                const monthNames = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+                const year1 = currentCalendarDate.getFullYear();
+                const month1 = currentCalendarDate.getMonth();
+                
+                const nextMonthDate = new Date(year1, month1 + 1, 1);
+                const year2 = nextMonthDate.getFullYear();
+                const month2 = nextMonthDate.getMonth();
+
+                const calTitle1 = document.getElementById('cal-month-title-1');
+                const calTitle2 = document.getElementById('cal-month-title-2');
+                
+                if(calTitle1) calTitle1.textContent = `${monthNames[month1]} ${year1}`;
+                if(calTitle2) calTitle2.textContent = `${monthNames[month2]} ${year2}`;
+                
+                renderMonth(year1, month1, 'calendar-month-1');
+                renderMonth(year2, month2, 'calendar-month-2');
+            }
+
+            function renderMonth(year, month, containerId) {
+                const container = document.getElementById(containerId);
+                if(!container) return;
+                
+                const firstDay = new Date(year, month, 1).getDay();
+                const daysInMonth = new Date(year, month + 1, 0).getDate();
+                
+                let html = '';
+                for(let i=0; i<firstDay; i++) html += `<div></div>`;
+                
+                for(let i=1; i<=daysInMonth; i++) {
+                    const date = new Date(year, month, i);
+                    date.setHours(0,0,0,0);
+                    const time = date.getTime();
+                    // Reduced size to w-7 h-7 and text-xs for compact view
+                    let classes = "calendar-btn w-7 h-7 rounded-full text-xs flex items-center justify-center mx-auto text-slate-700 cursor-pointer hover:bg-slate-100 transition-colors";
+                    
+                    if (tempStart && tempEnd) {
+                        const tStart = tempStart.getTime();
+                        const tEnd = tempEnd.getTime();
+                        if (time >= tStart && time <= tEnd) {
+                            classes = "calendar-btn w-7 h-7 rounded-full text-xs flex items-center justify-center mx-auto text-slate-900 bg-slate-100 font-medium in-range";
+                            if (time === tStart || time === tEnd) {
+                                classes = "calendar-btn w-7 h-7 rounded-full text-xs flex items-center justify-center mx-auto bg-slate-900 text-white font-bold selected shadow-sm";
+                            }
+                        }
+                    } else if (tempStart && time === tempStart.getTime()) {
+                        classes = "calendar-btn w-7 h-7 rounded-full text-xs flex items-center justify-center mx-auto bg-slate-900 text-white font-bold selected shadow-sm";
+                    }
+                    html += `<div class="${classes}" data-date="${date.toISOString()}">${i}</div>`;
+                }
+                container.innerHTML = html;
+                
+                container.querySelectorAll('.calendar-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        const date = new Date(btn.getAttribute('data-date'));
+                        date.setHours(0,0,0,0);
+                        const status = document.getElementById('calendar-status-text');
+                        const applyBtn = document.getElementById('calendar-apply-btn');
+                        
+                        if (!tempStart || (tempStart && tempEnd)) {
+                            tempStart = date;
+                            tempEnd = null;
+                            if(status) status.textContent = "Select end date";
+                            if(applyBtn) {
+                                applyBtn.disabled = true; 
+                                applyBtn.classList.add('opacity-50', 'cursor-not-allowed');
+                                applyBtn.classList.remove('shadow-md');
+                            }
+                        } else {
+                            if (date < tempStart) {
+                                tempEnd = tempStart;
+                                tempStart = date;
+                            } else {
+                                tempEnd = date;
+                            }
+                            if(status) status.textContent = "Range selected";
+                            if(applyBtn) {
+                                applyBtn.disabled = false; 
+                                applyBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+                                applyBtn.classList.add('shadow-md');
+                            }
+                        }
+                        renderCalendar(); 
+                    });
+                });
+            }
+
+            function generateMockMessages(count) {
+                const msgs = [];
+                for(let i=0; i<count; i++) {
+                    msgs.push({
+                        id: i,
+                        user: Math.random() > 0.5 ? 'Dev User' : 'Client User',
+                        initials: Math.random() > 0.5 ? 'DU' : 'CU',
+                        role: Math.random() > 0.5 ? 'Developer' : 'Client',
+                        time: new Date(Date.now() - i * 3600000).toLocaleString(),
+                        content: `This is message number ${count - i}. We are discussing the ticket details here. It's a long thread to test pagination.`
+                    });
+                }
+                return msgs; 
+            }
+
+            function renderPaginationControls(totalItems, currentPage, itemsPerPage, containerId, onPageChange) {
+                const container = document.getElementById(containerId);
+                const showingText = document.getElementById(containerId === 'pagination-controls' ? 'showing-text' : 'thread-showing-text');
+                if(!container) return;
+
+                const totalPages = Math.ceil(totalItems / itemsPerPage);
+                const startItem = totalItems === 0 ? 0 : (currentPage - 1) * itemsPerPage + 1;
+                const endItem = Math.min(currentPage * itemsPerPage, totalItems);
+
+                if (showingText) showingText.textContent = `Showing ${startItem}-${endItem} of ${totalItems}`;
+
+                let html = '';
+                html += `<button class="p-2 rounded-lg border border-slate-200 text-slate-500 hover:bg-slate-50 hover:text-slate-900 disabled:opacity-50 disabled:cursor-not-allowed transition-colors" ${currentPage === 1 ? 'disabled' : ''} data-page="${currentPage - 1}">
+                    <i data-lucide="chevron-left" class="size-4 pointer-events-none"></i>
+                </button>`;
+
+                for (let i = 1; i <= totalPages; i++) {
+                    if (i === 1 || i === totalPages || (i >= currentPage - 1 && i <= currentPage + 1)) {
+                        html += `<button class="w-8 h-8 rounded-lg text-xs font-bold transition-colors ${i === currentPage ? 'bg-slate-950 text-white' : 'text-slate-600 hover:bg-slate-50 border border-slate-200'}" data-page="${i}">${i}</button>`;
+                    } else if (i === currentPage - 2 || i === currentPage + 2) {
+                        html += `<span class="text-slate-400 text-xs">...</span>`;
+                    }
+                }
+
+                html += `<button class="p-2 rounded-lg border border-slate-200 text-slate-500 hover:bg-slate-50 hover:text-slate-900 disabled:opacity-50 disabled:cursor-not-allowed transition-colors" ${currentPage === totalPages || totalPages === 0 ? 'disabled' : ''} data-page="${currentPage + 1}">
+                    <i data-lucide="chevron-right" class="size-4 pointer-events-none"></i>
+                </button>`;
+
+                container.innerHTML = html;
+
+                container.querySelectorAll('button').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        if (!btn.disabled) {
+                            onPageChange(parseInt(btn.getAttribute('data-page')));
+                        }
+                    });
+                });
+                
+                if(window.lucide) lucide.createIcons();
+            }
+
+            function openTicketDetail(request) {
+                const dashboardView = document.getElementById('dashboard-view');
+                const detailView = document.getElementById('ticket-detail-view');
+                
+                document.getElementById('detail-id').textContent = '#' + request.id;
+                document.getElementById('detail-title').textContent = request.title;
+                document.getElementById('detail-school').textContent = request.profiles.school;
+                document.getElementById('detail-date').textContent = formatDate(request.created_at);
+                document.getElementById('detail-description').textContent = request.description || "No description provided.";
+                
+                const statusBadge = document.getElementById('detail-status-badge');
+                statusBadge.innerHTML = getStatusPill(request.status);
+
+                currentThreadMessages = generateMockMessages(request.total_messages || 5);
+                currentThreadPage = 1;
+                renderTicketThread();
+
+                dashboardView.classList.add('hidden');
+                detailView.classList.remove('hidden');
+                window.scrollTo(0,0);
+            }
+
+            function renderTicketThread() {
+                const container = document.getElementById('thread-container');
+                const badge = document.getElementById('thread-count-badge');
+                if(!container) return;
+
+                badge.textContent = `${currentThreadMessages.length} Items`;
+
+                const start = (currentThreadPage - 1) * threadItemsPerPage;
+                const end = start + threadItemsPerPage;
+                const pageMsgs = currentThreadMessages.slice(start, end);
+
+                container.innerHTML = pageMsgs.map(msg => `
+                    <div class="p-6 flex gap-4 hover:bg-slate-50 transition-colors">
+                        <div class="w-10 h-10 rounded-full ${msg.role === 'Developer' ? 'bg-slate-200 text-slate-700' : 'bg-yellow-100 text-yellow-700'} flex items-center justify-center text-sm font-bold shrink-0">${msg.initials}</div>
+                        <div class="flex-1">
+                            <div class="flex items-center justify-between mb-1">
+                                <span class="text-sm font-bold text-slate-900">${msg.user} <span class="text-xs font-normal text-slate-500 ml-1">(${msg.role})</span></span>
+                                <span class="text-xs text-slate-400">${msg.time}</span>
+                            </div>
+                            <p class="text-sm text-slate-600 leading-relaxed">${msg.content}</p>
+                        </div>
+                    </div>
+                `).join('');
+
+                renderPaginationControls(currentThreadMessages.length, currentThreadPage, threadItemsPerPage, 'thread-pagination-controls', (newPage) => {
+                    currentThreadPage = newPage;
+                    renderTicketThread();
+                });
+            }
+
+            function generateSchoolData() {
+                const names = [
+                    "Saint Mary's Academy", "Lincoln High School", "Westfield Elementary", "Oakridge International", "Pinecrest Middle",
+                    "Northstar High", "Valley View School", "Summit Academy", "Riverside Primary", "Maplewood High",
+                    "Cedar Creek School", "Horizon International", "Blue Ridge Academy", "Willow Creek Elementary", "Grandview High",
+                    "Springfield Middle", "Evergreen High", "Mountain View School", "Lakeside Academy", "Sunnydale Primary",
+                    "Redwood High", "Brookside Elementary", "Clearwater Middle", "Highland Park School", "Fairview Academy"
+                ];
+                
+                const schools = [];
+                for(let i=0; i<totalSchools; i++) {
+                    const name = names[i % names.length] + (i >= names.length ? ` ${Math.floor(i/names.length) + 1}` : "");
+                    schools.push({
+                        id: i + 1,
+                        name: name,
+                        volume: Math.floor(Math.random() * 50) + 5,
+                        time: Math.floor(Math.random() * 200) + 10,
+                        avg: (Math.random() * 3 + 0.5).toFixed(1),
+                        trend: Math.random() > 0.5 ? 'up' : 'down'
+                    });
+                }
+                return schools;
+            }
+
+            function loadSchoolRows(count) {
+                const tbody = document.getElementById('school-table-body');
+                if(!tbody) return;
+
+                const nextBatch = schoolData.slice(displayedSchoolCount, displayedSchoolCount + count);
+                
+                nextBatch.forEach(school => {
+                    const tr = document.createElement('tr');
+                    tr.className = "hover:bg-slate-50 transition-colors group";
+                    tr.innerHTML = `
+                        <td class="px-6 py-4 text-slate-600 font-normal">${school.id}</td>
+                        <td class="px-6 py-4 font-medium text-slate-900">${school.name}</td>
+                        <td class="px-6 py-4 text-center text-slate-600 font-normal">${school.volume}</td>
+                        <td class="px-6 py-4 text-center text-slate-600 font-normal">${school.time}</td>
+                        <td class="px-6 py-4 text-center text-slate-600 font-normal">${school.avg} hrs</td>
+                        <td class="px-6 py-4 text-center">
+                            <i data-lucide="${school.trend === 'up' ? 'trending-up' : 'trending-down'}" class="size-4 ${school.trend === 'up' ? 'text-emerald-500' : 'text-red-500'} mx-auto"></i>
+                        </td>
+                        <td class="px-6 py-4 text-right">
+                            <button class="text-slate-400 hover:text-slate-900 transition-colors">
+                                <i data-lucide="arrow-right" class="size-4 ml-auto"></i>
+                            </button>
+                        </td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+
+                displayedSchoolCount += nextBatch.length;
+                if(window.lucide) lucide.createIcons();
+            }
+
+            function initSchoolInfiniteScroll() {
+                schoolData = generateSchoolData();
+                loadSchoolRows(schoolBatchSize); 
+
+                const container = document.getElementById('school-table-container');
+                const loading = document.getElementById('school-loading');
+
+                if(container) {
+                    container.addEventListener('scroll', () => {
+                        if (container.scrollTop + container.clientHeight >= container.scrollHeight - 20) {
+                            if (displayedSchoolCount < totalSchools) {
+                                if(loading) loading.classList.remove('hidden');
+                                setTimeout(() => {
+                                    loadSchoolRows(5);
+                                    if(loading) loading.classList.add('hidden');
+                                }, 300);
+                            }
+                        }
+                    });
+                }
+            }
+
+            function loadMoreDashboardRows() {
+                const tbody = document.getElementById('requests-table-body');
+                const showingText = document.getElementById('showing-text');
+                if(!tbody) return;
+
+                const nextBatch = dashboardData.slice(displayedDashboardCount, displayedDashboardCount + dashboardBatchSize);
+                
+                if(nextBatch.length === 0 && displayedDashboardCount === 0) {
+                     tbody.innerHTML = '<tr><td colspan="100%" class="px-6 py-8 text-center text-slate-500 text-sm">No requests found.</td></tr>';
+                     if(showingText) showingText.textContent = `Showing 0 of 0 requests`;
+                     return;
+                }
+
+                const html = nextBatch.map(r => {
+                    const isSel = selectedIds.has(r.id);
+                    const requestData = encodeURIComponent(JSON.stringify(r));
+                    // Mock URL based on school name for the tooltip
+                    const schoolUrl = `https://www.google.com/search?q=${encodeURIComponent(r.profiles.school)}`;
+                    
+                    // Determine Comment Icon HTML
+                    const isResolved = resolvedComments.has(r.id);
+                    let commentBtnHtml;
+                    
+                    if (isResolved) {
+                        commentBtnHtml = `
+                        <button class="relative p-2 hover:bg-slate-100 rounded-lg text-slate-950 reviewer-comment-trigger group" data-id="${r.id}" title="Marked as Resolved">
+                            <i data-lucide="message-square" class="size-[18px]"></i>
+                            <span class="absolute top-1.5 right-1.5 flex h-2.5 w-2.5 items-center justify-center rounded-full bg-emerald-500 ring-2 ring-white">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" class="size-1.5 text-white"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                            </span>
+                        </button>`;
+                    } else {
+                        commentBtnHtml = `
+                        <button class="p-2 hover:bg-slate-100 rounded-lg text-slate-950 reviewer-comment-trigger" data-id="${r.id}" title="Reviewer's Note">
+                            <i data-lucide="message-square-plus" class="size-[18px]"></i>
+                        </button>`;
+                    }
+                    
+                    return `<tr class="group hover:bg-slate-50 transition-colors border-b border-slate-100 last:border-0 whitespace-nowrap ${isSel?'bg-slate-50':''}">
+                        <td class="px-6 py-5"><div class="flex items-center justify-center"><input type="checkbox" class="custom-checkbox w-5 h-5 rounded border-2 border-slate-400 text-slate-950 focus:ring-slate-950 cursor-pointer checkbox-trigger" data-id="${r.id}" ${isSel?'checked':''}></div></td>
+                        <td class="px-6 py-5"><span class="text-body font-normal text-slate-950">${r.id}</span></td>
+                        <td class="px-6 py-5">
+                            <div class="flex items-center gap-2 max-w-[200px]">
+                                <span class="text-body font-normal text-slate-950 truncate cursor-pointer hover:underline separate-view-trigger" title="${r.title}">${r.title}</span>
+                                <div class="relative tooltip-container group/info">
+                                    <i data-lucide="info" class="size-[20px] text-slate-400 hover:text-slate-600 cursor-pointer transition-colors"></i>
+                                    <div class="tooltip-content wide bottom-full left-1/2 -translate-x-1/2 mb-3 shadow-xl">
+                                        <p class="font-bold text-slate-950 text-sm mb-1">Description:</p>
+                                        <p class="text-slate-600 text-xs font-medium">${r.description || r.title}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-6 py-5">
+                            <div class="flex items-center gap-2 group/school cursor-pointer">
+                                <span class="text-body font-normal text-slate-950 truncate max-w-[180px]" title="${r.profiles.school}">${r.profiles.school}</span>
+                                <div class="relative tooltip-container">
+                                    <a href="${schoolUrl}" target="_blank" rel="noopener noreferrer" class="p-1 hover:bg-slate-100 rounded flex items-center justify-center" onclick="event.stopPropagation()">
+                                        <i data-lucide="external-link" class="size-5 text-slate-400"></i>
+                                    </a>
+                                    <div class="tooltip-content bottom-full left-1/2 -translate-x-1/2 mb-2 shadow-xl py-1.5 px-3 min-w-[200px] max-w-[300px]">
+                                        <p class="text-blue-600 text-xs font-medium truncate">${schoolUrl}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-6 py-5">${getAssigneeCell(r.assignees)}</td>
+                        <td class="px-6 py-5 text-center">${getPriorityBadge(r.urgency)}</td>
+                        <td class="px-6 py-5 text-center">${getStatusPill(r.status)}</td>
+                        <td class="px-6 py-5"><span class="text-body font-normal text-slate-500">${formatDate(r.start_date)}</span></td>
+                        <td class="px-6 py-5"><span class="text-body font-normal text-slate-500">${formatDate(r.sla_due_date)}</span></td>
+                        <td class="px-6 py-5"><span class="text-body font-normal text-slate-500">${formatDate(r.completed_at)}</span></td>
+                        <td class="px-6 py-5 text-center">
+                            <div class="relative tooltip-container group/activity">
+                                <div class="relative inline-block cursor-pointer">
+                                    <i data-lucide="message-square" class="size-6 text-slate-400 hover:text-slate-600 transition-colors"></i>
+                                    ${r.total_messages > 0 ? `<span class="absolute -top-2 -right-2 flex h-5 w-5 items-center justify-center rounded-full bg-gray-600 text-[10px] font-bold text-white border-2 border-white shadow-sm">${r.total_messages}</span>` : ''}
+                                </div>
+                                <div class="tooltip-content wide bottom-full left-1/2 -translate-x-1/2 mb-3 shadow-xl text-center">
+                                    <p class="text-slate-600 text-xs font-medium">${r.total_messages} messages are unread</p>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-6 py-5 text-center">
+                            <div class="flex items-center justify-center gap-2">
+                                <button class="p-2 hover:bg-slate-100 rounded-lg text-slate-950 separate-view-trigger"><i data-lucide="eye" class="size-[18px]"></i></button>
+                                <button class="p-2 hover:bg-slate-100 rounded-lg text-slate-950 separate-view-trigger"><i data-lucide="pencil" class="size-[18px]"></i></button>
+                                ${commentBtnHtml}
+                            </div>
+                        </td>
+                    </tr>`;
+                }).join('');
+
+                tbody.insertAdjacentHTML('beforeend', html);
+                displayedDashboardCount += nextBatch.length;
+                if(window.lucide) lucide.createIcons();
+                updateBulkActionsUI();
+                
+                // Update showing text
+                if(showingText) {
+                    showingText.textContent = `Showing ${displayedDashboardCount} of ${dashboardData.length} requests`;
+                }
+            }
+
+            function renderTable() {
+                const tbody = document.getElementById('requests-table-body');
+                const container = document.getElementById('dashboard-table-container');
+                const showingText = document.getElementById('showing-text');
+                if(!tbody) return;
+
+                updateTabCounts();
+
+                // Update Archive Button Action Text
+                const archiveBtn = document.getElementById('btn-archive-main');
+                if(archiveBtn) {
+                    if(currentTab === 'Archived') {
+                        archiveBtn.innerHTML = '<i data-lucide="archive-restore" class="size-[18px]"></i> Unarchive';
+                        // Ensure icon renders immediately
+                        if(window.lucide) lucide.createIcons({ attrs: { class: "size-[18px]" } });
+                    } else {
+                        archiveBtn.innerHTML = '<i data-lucide="archive" class="size-[18px]"></i> Archive';
+                        if(window.lucide) lucide.createIcons({ attrs: { class: "size-[18px]" } });
+                    }
+                }
+
+                // 1. Filter Data
+                dashboardData = requests.filter(r => {
+                    let tabMatch = false;
+                    if(currentTab === 'New') tabMatch = r.status === 'New';
+                    else if(currentTab === 'Active') tabMatch = ['In Progress', 'Reopened', 'Info Needed'].includes(r.status);
+                    else if(currentTab === 'Completed') tabMatch = r.status === 'Complete';
+                    else if(currentTab === 'Archived') tabMatch = r.status === 'Archived';
+                    if(!tabMatch) return false;
+
+                    if(activeFilters.search) {
+                         const q = activeFilters.search.toLowerCase();
+                         if(!r.title.toLowerCase().includes(q) && !r.id.includes(q)) return false;
+                    }
+                    
+                    if(activeFilters.category !== 'all' && r.category !== activeFilters.category) return false;
+                    
+                    if(activeFilters.schools.size > 0 && !activeFilters.schools.has('All Schools') && !activeFilters.schools.has(r.profiles.school)) return false;
+
+                    if(activeFilters.status.size > 0 && !activeFilters.status.has(r.status)) return false;
+                    if(activeFilters.priority !== 'all' && r.urgency !== activeFilters.priority) return false;
+                    if (activeFilters.dateRange && !isDateMatch(r.created_at, activeFilters.dateRange)) return false;
+                    return true; 
+                });
+
+                // 2. Reset Display
+                tbody.innerHTML = '';
+                displayedDashboardCount = 0;
+                if(container) container.scrollTop = 0;
+
+                // 3. Load Initial Batch
+                loadMoreDashboardRows();
+                
+                // Update Select All State
+                const allSelected = dashboardData.length > 0 && dashboardData.every(r => selectedIds.has(r.id));
+                const selectAllBox = document.getElementById('select-all-checkbox');
+                if(selectAllBox) selectAllBox.checked = allSelected;
+            }
+
+            document.addEventListener('DOMContentLoaded', () => {
+                document.getElementById('timestamp').textContent = 'Wireframe Generated: ' + new Date().toLocaleString();
+                renderTable();
+                initSchoolInfiniteScroll();
+
+                // Sidebar Collapse Logic
+                const sidebarToggle = document.getElementById('sidebar-toggle');
+                const sidebar = document.getElementById('sidebar');
+                const sidebarHeader = document.getElementById('sidebar-header');
+                const sidebarFooterText = document.querySelector('#sidebar-footer-content span.text-5xl');
+                const sidebarTexts = document.querySelectorAll('.sidebar-text');
+
+                if (sidebarToggle && sidebar) {
+                    sidebarToggle.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        const isExpanded = sidebar.classList.contains('w-64');
+
+                        if (isExpanded) {
+                            // Collapse
+                            sidebar.classList.replace('w-64', 'w-20');
+                            sidebarHeader.classList.remove('flex-row', 'justify-between', 'px-6', 'h-24');
+                            sidebarHeader.classList.add('flex-col', 'justify-center', 'gap-4', 'py-6', 'h-auto');
+                            sidebarTexts.forEach(t => t.classList.add('hidden'));
+                            const icon = sidebarToggle.querySelector('svg') || sidebarToggle.querySelector('i');
+                            if(icon) icon.style.transform = 'rotate(180deg)';
+                            if(sidebarFooterText) {
+                                sidebarFooterText.classList.replace('text-5xl', 'text-2xl');
+                                sidebarFooterText.parentElement.classList.remove('gap-2');
+                            }
+                            document.querySelectorAll('.nav-item').forEach(nav => {
+                                nav.classList.add('justify-center');
+                                nav.classList.replace('px-4', 'px-2');
+                            });
+                        } else {
+                            // Expand
+                            sidebar.classList.replace('w-20', 'w-64');
+                            sidebarHeader.classList.add('justify-between', 'px-6', 'h-24');
+                            sidebarHeader.classList.remove('flex-col', 'justify-center', 'gap-4', 'py-6', 'h-auto');
+                            sidebarTexts.forEach(t => t.classList.remove('hidden'));
+                            const icon = sidebarToggle.querySelector('svg') || sidebarToggle.querySelector('i');
+                            if(icon) icon.style.transform = 'rotate(0deg)';
+                            if(sidebarFooterText) {
+                                sidebarFooterText.classList.replace('text-2xl', 'text-5xl');
+                                sidebarFooterText.parentElement.classList.add('gap-2');
+                            }
+                            document.querySelectorAll('.nav-item').forEach(nav => {
+                                nav.classList.remove('justify-center');
+                                nav.classList.replace('px-2', 'px-4');
+                            });
+                        }
+                    });
+                }
+
+                const dashboardTableContainer = document.getElementById('dashboard-table-container');
+                const dashboardLoading = document.getElementById('dashboard-loading');
+
+                if (dashboardTableContainer) {
+                    dashboardTableContainer.addEventListener('scroll', () => {
+                        if (dashboardTableContainer.scrollTop + dashboardTableContainer.clientHeight >= dashboardTableContainer.scrollHeight - 20) {
+                            if (displayedDashboardCount < dashboardData.length) {
+                                if(dashboardLoading) dashboardLoading.classList.remove('hidden');
+                                setTimeout(() => {
+                                    loadMoreDashboardRows();
+                                    if(dashboardLoading) dashboardLoading.classList.add('hidden');
+                                }, 300);
+                            }
+                        }
+                    });
+                }
+                
+                // Event Delegation for Table Body Actions
+                const tbody = document.getElementById('requests-table-body');
+                if (tbody) {
+                    tbody.addEventListener('change', (e) => {
+                        if (e.target.classList.contains('checkbox-trigger')) {
+                            const box = e.target;
+                            const id = box.getAttribute('data-id');
+                            const tr = box.closest('tr');
+                            
+                            if (box.checked) {
+                                selectedIds.add(id);
+                                tr.classList.add('bg-slate-50');
+                            } else {
+                                selectedIds.delete(id);
+                                tr.classList.remove('bg-slate-50');
+                            }
+                            
+                            updateBulkActionsUI();
+                            
+                            // Update Select All Checkbox state
+                            const selectAllBox = document.getElementById('select-all-checkbox');
+                            if (selectAllBox) {
+                                const allFilteredSelected = dashboardData.length > 0 && dashboardData.every(r => selectedIds.has(r.id));
+                                selectAllBox.checked = allFilteredSelected;
+                            }
+                        }
+                    });
+
+                    tbody.addEventListener('click', (e) => {
+                        if (e.target.classList.contains('separate-view-trigger') || e.target.closest('.separate-view-trigger')) {
+                             e.stopPropagation();
+                             document.querySelectorAll('.view-section').forEach(v => v.classList.add('hidden'));
+                             document.getElementById('module-separate-view').classList.remove('hidden');
+                        }
+
+                        // Reviewer Comment Trigger
+                        const commentBtn = e.target.closest('.reviewer-comment-trigger');
+                        if (commentBtn) {
+                            e.stopPropagation();
+                            currentReviewerRequestId = commentBtn.getAttribute('data-id'); // Store the ID
+                            
+                            const reviewerModal = document.getElementById('reviewer-modal');
+                            
+                            // Check if already resolved to adjust modal state (optional, keeping simple as per request)
+                            const isResolved = resolvedComments.has(currentReviewerRequestId);
+                            const resolveBtn = document.getElementById('resolve-reviewer-btn');
+                            
+                            if (resolveBtn) {
+                                if (isResolved) {
+                                    resolveBtn.classList.add('hidden');
+                                } else {
+                                    resolveBtn.classList.remove('hidden');
+                                }
+                            }
+
+                            if (reviewerModal) {
+                                reviewerModal.classList.remove('hidden');
+                            }
+                        }
+                    });
+                }
+                
+                // Select All Logic
+                const selectAllBox = document.getElementById('select-all-checkbox');
+                if (selectAllBox) {
+                    const newSelectAll = selectAllBox.cloneNode(true);
+                    selectAllBox.parentNode.replaceChild(newSelectAll, selectAllBox);
+                    
+                    newSelectAll.addEventListener('change', (e) => {
+                        const isChecked = e.target.checked;
+                        dashboardData.forEach(r => {
+                            if (isChecked) selectedIds.add(r.id);
+                            else selectedIds.delete(r.id);
+                        });
+                        document.querySelectorAll('.checkbox-trigger').forEach(cb => {
+                            cb.checked = isChecked;
+                            const tr = cb.closest('tr');
+                            if (isChecked) tr.classList.add('bg-slate-50');
+                            else tr.classList.remove('bg-slate-50');
+                        });
+                        updateBulkActionsUI();
+                    });
+                }
+
+                const loginBtn = document.getElementById('login-btn');
+                const loginView = document.getElementById('login-view');
+                const dashboardContainer = document.getElementById('dashboard-container');
+                if (loginBtn && loginView && dashboardContainer) {
+                    loginBtn.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        loginView.classList.add('hidden');
+                        dashboardContainer.classList.remove('hidden');
+                        renderTable();
+                    });
+                }
+
+                const backBtn = document.getElementById('back-to-dashboard');
+                if(backBtn) {
+                    backBtn.addEventListener('click', () => {
+                        document.querySelectorAll('.view-section').forEach(v => v.classList.add('hidden'));
+                        document.getElementById('dashboard-view').classList.remove('hidden');
+                    });
+                }
+
+                const goBackModule = document.getElementById('go-back-from-module');
+                if(goBackModule) {
+                    goBackModule.addEventListener('click', () => {
+                         document.querySelectorAll('.view-section').forEach(v => v.classList.add('hidden'));
+                         document.getElementById('dashboard-view').classList.remove('hidden');
+                    });
+                }
+
+                document.querySelectorAll('.nav-item').forEach(item => {
+                    item.addEventListener('click', (e) => {
+                        e.preventDefault(); 
+                        document.querySelectorAll('.nav-item').forEach(nav => {
+                            nav.classList.remove('active', 'bg-yellow-400', 'text-slate-950', 'hover:bg-yellow-500');
+                            nav.classList.add('text-slate-600', 'hover:bg-slate-50');
+                            const icon = nav.querySelector('i') || nav.querySelector('svg');
+                            if (icon) {
+                                icon.classList.remove('text-slate-950');
+                                icon.classList.add('text-slate-400');
+                            }
+                        });
+
+                        item.classList.add('active', 'bg-yellow-400', 'text-slate-950', 'hover:bg-yellow-500');
+                        item.classList.remove('text-slate-600', 'hover:bg-slate-50');
+                        const activeIcon = item.querySelector('i') || item.querySelector('svg');
+                        if (activeIcon) {
+                            activeIcon.classList.remove('text-slate-400');
+                            activeIcon.classList.add('text-slate-950');
+                        }
+
+                        const targetId = item.getAttribute('data-target');
+                        if (targetId) {
+                            document.querySelectorAll('.view-section').forEach(view => {
+                                view.classList.add('hidden');
+                            });
+                            const targetView = document.getElementById(targetId);
+                            if (targetView) {
+                                targetView.classList.remove('hidden');
+                            }
+                        }
+                    });
+                });
+
+                const notifBtn = document.getElementById('notification-btn');
+                const notifDropdown = document.getElementById('notification-dropdown');
+                const profileBtn = document.getElementById('profile-btn');
+                const profileDropdown = document.getElementById('profile-dropdown');
+                const closeNotifBtn = document.getElementById('close-notif-btn');
+
+                if (notifBtn && notifDropdown) {
+                    notifBtn.addEventListener('click', (e) => { e.stopPropagation(); if (profileDropdown) profileDropdown.classList.add('hidden'); document.querySelectorAll('[id^="dropdown-filter-"]').forEach(d => d.classList.add('hidden')); notifDropdown.classList.toggle('hidden'); });
+                }
+                if (closeNotifBtn && notifDropdown) { closeNotifBtn.addEventListener('click', (e) => { e.stopPropagation(); notifDropdown.classList.add('hidden'); }); }
+                if (profileBtn && profileDropdown) {
+                    profileBtn.addEventListener('click', (e) => { e.stopPropagation(); if (notifDropdown) notifDropdown.classList.add('hidden'); document.querySelectorAll('[id^="dropdown-filter-"]').forEach(d => d.classList.add('hidden')); profileDropdown.classList.toggle('hidden'); });
+                }
+
+                const setupDropdown = (btnId, menuId, labelId, filterKey) => {
+                    const btn = document.getElementById(btnId);
+                    const menu = document.getElementById(menuId);
+                    const label = document.getElementById(labelId);
+                    if(!btn || !menu) return;
+                    btn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        document.querySelectorAll('[id^="dropdown-filter-"]').forEach(d => { if(d.id !== menuId) d.classList.add('hidden'); });
+                        if(notifDropdown) notifDropdown.classList.add('hidden');
+                        if(profileDropdown) profileDropdown.classList.add('hidden');
+                        menu.classList.toggle('hidden');
+                    });
+                    menu.querySelectorAll('.dropdown-option').forEach(opt => {
+                        opt.addEventListener('click', (e) => {
+                            e.stopPropagation();
+                            const val = opt.getAttribute('data-value');
+                            const text = opt.textContent;
+                            menu.querySelectorAll('.dropdown-option').forEach(o => o.classList.remove('selected'));
+                            opt.classList.add('selected');
+                            activeFilters[filterKey] = val;
+                            label.textContent = text;
+                            if (val !== 'all') {
+                                btn.classList.remove('text-slate-700');
+                                btn.classList.add('text-slate-950');
+                                const icon = btn.querySelector('i') || btn.querySelector('svg');
+                                if(icon) icon.classList.replace('text-slate-400', 'text-slate-950');
+                            } else {
+                                if (filterKey === 'ticketScope') {
+                                    btn.classList.add('text-slate-950');
+                                    btn.classList.remove('text-slate-700');
+                                } else {
+                                    const defaults = { 'category': 'Category', 'status': 'Status', 'priority': 'Priority' };
+                                    label.textContent = defaults[filterKey] || text;
+                                    btn.classList.remove('text-slate-950');
+                                    btn.classList.add('text-slate-700');
+                                    const icon = btn.querySelector('i') || btn.querySelector('svg');
+                                    if(icon) icon.classList.replace('text-slate-950', 'text-slate-400');
+                                }
+                            }
+                            menu.classList.add('hidden');
+                            loadMoreDashboardRows(); // Refresh Logic
+                            renderTable();
+                        });
+                    });
+                };
+
+                // Add Scope Filter (All Tickets) - Added this missing line
+                setupDropdown('btn-filter-scope', 'dropdown-filter-scope', 'label-filter-scope', 'ticketScope');
+
+                // Add Category Filter
+                setupDropdown('btn-filter-category', 'dropdown-filter-category', 'label-filter-category', 'category');
+                
+                setupDropdown('btn-filter-priority', 'dropdown-filter-priority', 'label-filter-priority', 'priority');
+                
+                // School Filter Logic
+                const schoolBtn = document.getElementById('btn-filter-school');
+                const schoolMenu = document.getElementById('dropdown-filter-school');
+                const schoolSearch = document.getElementById('input-search-school');
+                const schoolLabel = document.getElementById('label-filter-school');
+
+                if(schoolBtn && schoolMenu) {
+                    schoolBtn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        document.querySelectorAll('[id^="dropdown-filter-"]').forEach(d => { if(d.id !== 'dropdown-filter-school') d.classList.add('hidden'); });
+                        if(notifDropdown) notifDropdown.classList.add('hidden');
+                        if(profileDropdown) profileDropdown.classList.add('hidden');
+                        schoolMenu.classList.toggle('hidden');
+                    });
+
+                    // Search within Dropdown
+                    if(schoolSearch) {
+                        schoolSearch.addEventListener('input', (e) => {
+                            const term = e.target.value.toLowerCase();
+                            const items = schoolMenu.querySelectorAll('label');
+                            items.forEach(item => {
+                                const text = item.querySelector('span').textContent.toLowerCase();
+                                if(text.includes(term)) {
+                                    item.classList.remove('hidden');
+                                    item.classList.add('flex');
+                                } else {
+                                    item.classList.add('hidden');
+                                    item.classList.remove('flex');
+                                }
+                            });
+                        });
+                        schoolSearch.addEventListener('click', e => e.stopPropagation());
+                    }
+
+                    // Checkbox Logic
+                    schoolMenu.querySelectorAll('input[type="checkbox"]').forEach(chk => {
+                        chk.addEventListener('change', (e) => {
+                             const name = e.target.value;
+                             const isChecked = e.target.checked;
+                             
+                             if(name === 'All Schools') {
+                                 // Toggle all
+                                 schoolMenu.querySelectorAll('input[type="checkbox"]').forEach(c => {
+                                     if(c !== e.target) c.checked = isChecked;
+                                 });
+                                 activeFilters.schools.clear();
+                                 if(isChecked) activeFilters.schools.add('All Schools');
+                             } else {
+                                 // Handle individual
+                                 if(isChecked) activeFilters.schools.add(name);
+                                 else activeFilters.schools.delete(name);
+                                 
+                                 // Uncheck 'All Schools' if any individual is unchecked
+                                 const allChk = schoolMenu.querySelector('input[value="All Schools"]');
+                                 if(!isChecked && allChk) allChk.checked = false;
+                             }
+                             
+                             // Update Button Style
+                             if(activeFilters.schools.size > 0 && !activeFilters.schools.has('All Schools')) {
+                                 schoolLabel.textContent = `School (${activeFilters.schools.size})`;
+                                 schoolBtn.classList.remove('text-slate-700');
+                                 schoolBtn.classList.add('text-slate-950');
+                             } else {
+                                 schoolLabel.textContent = 'School';
+                                 schoolBtn.classList.remove('text-slate-950');
+                                 schoolBtn.classList.add('text-slate-700');
+                             }
+
+                             renderTable();
+                        });
+                    });
+                }
+
+                const statusBtn = document.getElementById('btn-filter-status');
+                const statusMenu = document.getElementById('dropdown-filter-status');
+                const statusLabel = document.getElementById('label-filter-status');
+
+                if (statusBtn && statusMenu) {
+                    statusBtn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        document.querySelectorAll('[id^="dropdown-filter-"]').forEach(d => { if(d.id !== 'dropdown-filter-status') d.classList.add('hidden'); });
+                        if(notifDropdown) notifDropdown.classList.add('hidden');
+                        if(profileDropdown) profileDropdown.classList.add('hidden');
+                        statusMenu.classList.toggle('hidden');
+                    });
+
+                    statusMenu.querySelectorAll('.status-option').forEach(opt => {
+                        opt.addEventListener('click', (e) => {
+                            e.stopPropagation();
+                            const val = opt.getAttribute('data-value');
+                            const icon = opt.querySelector('.check-icon');
+                            const isSelected = activeFilters.status.has(val);
+
+                            if (isSelected) {
+                                activeFilters.status.delete(val);
+                                opt.classList.remove('selected', 'font-bold', 'text-slate-900');
+                                opt.classList.add('font-medium', 'text-slate-700');
+                                icon.classList.replace('opacity-100', 'opacity-0');
+                            } else {
+                                activeFilters.status.add(val);
+                                opt.classList.add('selected', 'font-bold', 'text-slate-900');
+                                opt.classList.remove('font-medium', 'text-slate-700');
+                                icon.classList.replace('opacity-0', 'opacity-100');
+                            }
+
+                            if (activeFilters.status.size > 0) {
+                                statusLabel.textContent = `Status (${activeFilters.status.size})`;
+                                statusBtn.classList.remove('text-slate-700');
+                                statusBtn.classList.add('text-slate-950');
+                            } else {
+                                statusLabel.textContent = 'Status';
+                                statusBtn.classList.add('text-slate-700');
+                                statusBtn.classList.remove('text-slate-950');
+                            }
+                            
+                            renderTable();
+                        });
+                    });
+                }
+
+                document.addEventListener('click', () => {
+                    document.querySelectorAll('[id^="dropdown-filter-"]').forEach(d => d.classList.add('hidden'));
+                    document.getElementById('date-range-menu')?.classList.add('hidden');
+                    document.getElementById('custom-calendar-popup')?.classList.add('hidden');
+                    if(notifDropdown) notifDropdown.classList.add('hidden');
+                    if(profileDropdown) profileDropdown.classList.add('hidden');
+                    document.getElementById('reports-date-dropdown')?.classList.add('hidden');
+                });
+                
+                document.querySelectorAll('.tab-btn').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        document.querySelectorAll('.tab-btn').forEach(b => {
+                            b.classList.remove('text-slate-950', 'border-b-2', 'border-yellow-400', 'active');
+                            b.classList.add('text-slate-400');
+                            b.querySelector('span').classList.replace('bg-slate-950', 'bg-slate-100');
+                            b.querySelector('span').classList.replace('text-white', 'text-slate-500');
+                        });
+                        btn.classList.add('text-slate-950', 'border-b-2', 'border-yellow-400', 'active');
+                        btn.classList.remove('text-slate-400');
+                        btn.querySelector('span').classList.replace('bg-slate-100', 'bg-slate-950');
+                        btn.querySelector('span').classList.replace('text-slate-500', 'text-white');
+                        currentTab = btn.getAttribute('data-tab');
+                        renderTable();
+                    });
+                });
+                
+                const searchInput = document.getElementById('search-input');
+                const clearSearchBtn = document.getElementById('clear-search-btn');
+
+                if (searchInput && clearSearchBtn) {
+                    searchInput.addEventListener('input', (e) => {
+                        activeFilters.search = e.target.value;
+                        if (e.target.value.length > 0) {
+                            clearSearchBtn.classList.remove('hidden');
+                        } else {
+                            clearSearchBtn.classList.add('hidden');
+                        }
+                        renderTable();
+                    });
+
+                    clearSearchBtn.addEventListener('click', () => {
+                        searchInput.value = '';
+                        activeFilters.search = '';
+                        clearSearchBtn.classList.add('hidden');
+                        searchInput.focus();
+                        renderTable();
+                    });
+                }
+                
+                const dateBtn = document.getElementById('date-picker-btn');
+                const dateMenu = document.getElementById('date-range-menu');
+                const calPopup = document.getElementById('custom-calendar-popup');
+                
+                if(dateBtn) dateBtn.addEventListener('click', (e) => { 
+                    e.stopPropagation(); 
+                    if(notifDropdown) notifDropdown.classList.add('hidden');
+                    if(profileDropdown) profileDropdown.classList.add('hidden');
+                    dateMenu.classList.toggle('hidden');
+                    calPopup.classList.add('hidden');
+                });
+                if(calPopup) calPopup.addEventListener('click', (e) => e.stopPropagation());
+
+                document.querySelectorAll('.date-option').forEach(opt => {
+                    opt.addEventListener('click', () => {
+                        document.querySelectorAll('.date-option .icon-check').forEach(i => i.classList.replace('opacity-100', 'opacity-0'));
+                        opt.querySelector('.icon-check').classList.replace('opacity-0', 'opacity-100');
+                        const val = opt.getAttribute('data-value');
+                        activeFilters.dateRange = val;
+                        document.getElementById('selected-date-range').textContent = val;
+                        dateMenu.classList.add('hidden');
+                        renderTable();
+                    });
+                });
+
+                if(document.getElementById('custom-range-trigger')) document.getElementById('custom-range-trigger').addEventListener('click', (e) => { e.stopPropagation(); dateMenu.classList.add('hidden'); calPopup.classList.remove('hidden'); tempStart = null; tempEnd = null; renderCalendar(); });
+                if(document.getElementById('prev-month-btn')) document.getElementById('prev-month-btn').addEventListener('click', (e) => { e.stopPropagation(); currentCalendarDate.setMonth(currentCalendarDate.getMonth() - 1); renderCalendar(); });
+                if(document.getElementById('next-month-btn')) document.getElementById('next-month-btn').addEventListener('click', (e) => { e.stopPropagation(); currentCalendarDate.setMonth(currentCalendarDate.getMonth() + 1); renderCalendar(); });
+                if(document.getElementById('calendar-cancel-btn')) document.getElementById('calendar-cancel-btn').addEventListener('click', () => { calPopup.classList.add('hidden'); });
+                if(document.getElementById('calendar-apply-btn')) document.getElementById('calendar-apply-btn').addEventListener('click', () => {
+                    if(tempStart && tempEnd) {
+                        activeFilters.customStart = tempStart;
+                        activeFilters.customEnd = tempEnd;
+                        activeFilters.dateRange = 'Custom range';
+                        const startStr = tempStart.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+                        const endStr = tempEnd.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+                        document.getElementById('selected-date-range').textContent = `${startStr} - ${endStr}`;
+                        calPopup.classList.add('hidden');
+                        renderTable();
+                    }
+                });
+
+                const archiveBtn = document.getElementById('btn-archive-main');
+                const archiveModal = document.getElementById('archive-modal');
+                const cancelArchiveBtn = document.getElementById('cancel-archive-btn');
+                const confirmArchiveBtn = document.getElementById('confirm-archive-btn');
+                const toast = document.getElementById('toast-notification');
+
+                if (archiveBtn) {
+                    archiveBtn.addEventListener('click', () => {
+                        const modalTitle = document.querySelector('#archive-modal-content h3');
+                        const modalText = document.querySelector('#archive-modal-content p');
+                        const modalConfirmBtn = document.getElementById('confirm-archive-btn');
+
+                        if (currentTab === 'Archived') {
+                            if(modalTitle) modalTitle.textContent = "Confirm Unarchive";
+                            if(modalText) modalText.textContent = "Are you sure you want to restore the selected requests to active status?";
+                            if(modalConfirmBtn) modalConfirmBtn.textContent = "Unarchive";
+                        } else {
+                            if(modalTitle) modalTitle.textContent = "Confirm Archive";
+                            if(modalText) modalText.textContent = "Are you sure you want to archive the selected requests?";
+                            if(modalConfirmBtn) modalConfirmBtn.textContent = "Archive";
+                        }
+
+                        if (archiveModal) archiveModal.classList.remove('hidden');
+                    });
+                }
+
+                if (cancelArchiveBtn) {
+                    cancelArchiveBtn.addEventListener('click', () => {
+                        if (archiveModal) archiveModal.classList.add('hidden');
+                    });
+                }
+
+                if (confirmArchiveBtn) {
+                    confirmArchiveBtn.addEventListener('click', () => {
+                        requests.forEach(r => {
+                            if (selectedIds.has(r.id)) {
+                                if (currentTab === 'Archived') {
+                                    r.status = 'In Progress'; // Restore logic
+                                } else {
+                                    r.status = 'Archived'; // Archive logic
+                                }
+                            }
+                        });
+                        selectedIds.clear();
+                        if (archiveModal) archiveModal.classList.add('hidden');
+                        
+                        // Update Toast Text
+                        const toastTitle = document.querySelector('#toast-notification p.font-bold');
+                        const toastMsg = document.querySelector('#toast-notification p.text-xs');
+                        
+                        if (toastTitle && toastMsg) {
+                            if (currentTab === 'Archived') {
+                                toastTitle.textContent = "Successfully Unarchived";
+                                toastMsg.textContent = "The selected requests have been restored.";
+                            } else {
+                                toastTitle.textContent = "Successfully Archived";
+                                toastMsg.textContent = "The selected requests have been moved to the archive.";
+                            }
+                        }
+
+                        if (toast) {
+                            toast.classList.remove('hidden');
+                            setTimeout(() => toast.classList.add('hidden'), 3000);
+                        }
+                        updateBulkActionsUI();
+                        if (document.getElementById('select-all-checkbox')) {
+                            document.getElementById('select-all-checkbox').checked = false;
+                        }
+                        renderTable();
+                    });
+                }
+                
+                const clearFiltersBtn = document.querySelector('button.flex.items-center.h-10.px-4.bg-white.border'); 
+                if (clearFiltersBtn && clearFiltersBtn.textContent.trim() === 'Clear Filters') {
+                    clearFiltersBtn.addEventListener('click', () => {
+                        activeFilters = { search: '', schools: new Set(), category: 'all', status: new Set(), priority: 'all', dateRange: 'All time', customStart: null, customEnd: null };
+                        const searchInput = document.getElementById('search-input');
+                        const clearSearchBtn = document.getElementById('clear-search-btn');
+                        
+                        if (searchInput) {
+                            searchInput.value = '';
+                            if (clearSearchBtn) clearSearchBtn.classList.add('hidden');
+                        }
+                        
+                        const dateLabel = document.getElementById('selected-date-range');
+                        if (dateLabel) dateLabel.textContent = 'All time';
+                        
+                        if (statusLabel) statusLabel.textContent = 'Status';
+                        if (statusBtn) {
+                            statusBtn.classList.add('text-slate-700');
+                            statusBtn.classList.remove('text-slate-950');
+                        }
+                        if (statusMenu) {
+                             statusMenu.querySelectorAll('.status-option').forEach(opt => {
+                                opt.classList.remove('selected', 'font-bold', 'text-slate-900');
+                                opt.classList.add('font-medium', 'text-slate-700');
+                                const icon = opt.querySelector('.check-icon');
+                                if(icon) icon.classList.replace('opacity-100', 'opacity-0');
+                             });
+                        }
+
+                        // Reset School Filter UI
+                        if(schoolLabel) schoolLabel.textContent = 'School';
+                        if(schoolBtn) {
+                            schoolBtn.classList.remove('text-slate-950');
+                            schoolBtn.classList.add('text-slate-700');
+                        }
+                        if(schoolMenu) schoolMenu.querySelectorAll('input').forEach(i => i.checked = false);
+
+                        const resetDropdownUI = (labelId, btnId, defaultText, menuId) => {
+                            const label = document.getElementById(labelId);
+                            const btn = document.getElementById(btnId);
+                            const menu = document.getElementById(menuId);
+                            if(label) label.textContent = defaultText;
+                            if(btn) {
+                                btn.classList.remove('text-slate-950');
+                                btn.classList.add('text-slate-700');
+                                const icon = btn.querySelector('i') || btn.querySelector('svg');
+                                if(icon) icon.classList.replace('text-slate-950', 'text-slate-400');
+                            }
+                            if(menu) {
+                                menu.querySelectorAll('.dropdown-option').forEach(o => o.classList.remove('selected'));
+                                const allOpt = menu.querySelector('[data-value="all"]');
+                                if(allOpt) allOpt.classList.add('selected');
+                            }
+                        };
+                        resetDropdownUI('label-filter-category', 'btn-filter-category', 'Category', 'dropdown-filter-category');
+                        resetDropdownUI('label-filter-priority', 'btn-filter-priority', 'Priority', 'dropdown-filter-priority');
+                        
+                        const dateMenu = document.getElementById('date-range-menu');
+                        if (dateMenu) {
+                            dateMenu.querySelectorAll('.icon-check').forEach(i => i.classList.replace('opacity-100', 'opacity-0'));
+                            const allTimeCheck = dateMenu.querySelector('[data-value="All time"] .icon-check');
+                            if(allTimeCheck) allTimeCheck.classList.replace('opacity-0', 'opacity-100');
+                        }
+
+                        renderTable();
+                    });
+                }
+
+                // Reports Date Filter Logic
+                const reportsDateBtn = document.getElementById('reports-date-btn');
+                const reportsDateDropdown = document.getElementById('reports-date-dropdown');
+                const reportsDateLabel = document.getElementById('reports-date-label');
+                const statsContainer = document.getElementById('reports-stats-container');
+
+                if (reportsDateBtn && reportsDateDropdown) {
+                    reportsDateBtn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        if(notifDropdown) notifDropdown.classList.add('hidden');
+                        if(profileDropdown) profileDropdown.classList.add('hidden');
+                        reportsDateDropdown.classList.toggle('hidden');
+                    });
+
+                    document.querySelectorAll('.reports-date-option').forEach(opt => {
+                        opt.addEventListener('click', (e) => {
+                            e.stopPropagation();
+                            document.querySelectorAll('.reports-date-option').forEach(o => o.classList.remove('selected'));
+                            opt.classList.add('selected');
+                            
+                            if(reportsDateLabel) reportsDateLabel.textContent = opt.getAttribute('data-value');
+                            
+                            reportsDateDropdown.classList.add('hidden');
+                            
+                            if(statsContainer) {
+                                statsContainer.style.opacity = '0.5';
+                                setTimeout(() => {
+                                    const range = opt.getAttribute('data-value');
+                                    let multiplier = 1;
+                                    if(range === 'Last 90 Days') multiplier = 2.5;
+                                    if(range === 'Last Year') multiplier = 8;
+                                    if(range === 'This Year') multiplier = 1.2;
+
+                                    document.getElementById('stat-total-requests').textContent = Math.floor((142 + Math.random() * 20) * multiplier);
+                                    document.getElementById('stat-avg-res').textContent = (2.4 + (Math.random() * 0.5 - 0.2)).toFixed(1);
+                                    document.getElementById('stat-med-res').textContent = (1.8 + (Math.random() * 0.5 - 0.2)).toFixed(1);
+                                    document.getElementById('stat-capacity').textContent = Math.floor(75 + Math.random() * 20) + '%';
+                                    
+                                    statsContainer.style.opacity = '1';
+                                }, 300);
+                            }
+                        });
+                    });
+                }
+
+                document.querySelectorAll('.notification-item').forEach(item => {
+                    item.addEventListener('click', (e) => {
+                        if (e.target.closest('.delete-notif-btn')) return;
+                        e.stopPropagation(); 
+                        if (item.getAttribute('data-status') === 'unread') {
+                            item.querySelector('.unread-dot')?.remove();
+                            const title = item.querySelector('.notif-title');
+                            const time = item.querySelector('.notif-time');
+                            if (title) title.classList.replace('font-bold', 'font-medium');
+                            if (title) title.classList.replace('text-slate-950', 'text-slate-500');
+                            if (time) time.classList.replace('text-slate-500', 'text-slate-400');
+                            item.setAttribute('data-status', 'read');
+                        }
+                    });
+                    const deleteBtn = item.querySelector('.delete-notif-btn');
+                    if (deleteBtn) deleteBtn.addEventListener('click', (e) => { e.stopPropagation(); item.remove(); });
+                });
+
+                // Reviewer Modal Logic
+                const reviewerModal = document.getElementById('reviewer-modal');
+                const closeReviewerBtn = document.getElementById('close-reviewer-modal-btn');
+                const resolveReviewerBtn = document.getElementById('resolve-reviewer-btn');
+                // const toast = document.getElementById('toast-notification'); // Removed duplicate declaration
+
+                if (closeReviewerBtn) {
+                    closeReviewerBtn.addEventListener('click', () => {
+                        if (reviewerModal) reviewerModal.classList.add('hidden');
+                    });
+                }
+
+                if (resolveReviewerBtn) {
+                    resolveReviewerBtn.addEventListener('click', () => {
+                        if (reviewerModal) reviewerModal.classList.add('hidden');
+                        
+                        // Mark as resolved in data
+                        if (currentReviewerRequestId) {
+                            resolvedComments.add(currentReviewerRequestId);
+                            
+                            // Update UI immediately for the specific row
+                            const btn = document.querySelector(`.reviewer-comment-trigger[data-id="${currentReviewerRequestId}"]`);
+                            if (btn) {
+                                btn.classList.add('relative');
+                                btn.setAttribute('title', 'Marked as Resolved');
+                                // Replace content with icon + badge structure
+                                btn.innerHTML = `
+                                    <i data-lucide="message-square" class="size-[18px]"></i>
+                                    <span class="absolute top-1.5 right-1.5 flex h-2.5 w-2.5 items-center justify-center rounded-full bg-emerald-500 ring-2 ring-white">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" class="size-1.5 text-white"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                    </span>
+                                `;
+                                if(window.lucide) lucide.createIcons();
+                            }
+                        }
+
+                        // Show Success Toast
+                        const toastTitle = document.querySelector('#toast-notification p.font-bold');
+                        const toastMsg = document.querySelector('#toast-notification p.text-xs');
+                        
+                        if (toastTitle && toastMsg) {
+                            toastTitle.textContent = "Issue Resolved";
+                            toastMsg.textContent = "The issue has been marked as resolved successfully.";
+                        }
+
+                        if (toast) {
+                            toast.classList.remove('hidden');
+                            setTimeout(() => toast.classList.add('hidden'), 3000);
+                        }
+                    });
+                }
+            });
+        })();
+    </script>
+</body>
+</html>
