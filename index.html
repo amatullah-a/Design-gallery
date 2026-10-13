@@ -7,19 +7,19 @@
   <style>
     :root { font-family: Arial, Helvetica, sans-serif; color: #202124; background: #fff; }
     body { margin: 0; }
-    main { width: min(820px, calc(100% - 40px)); margin: 0 auto; padding: 42px 0; }
+    main { width: min(900px, calc(100% - 40px)); margin: 0 auto; padding: 42px 0; }
     h1 { margin: 0 0 8px; font-size: 1.8rem; }
     .intro { margin: 0 0 28px; color: #5f6368; line-height: 1.5; }
     ol { margin: 0; padding: 0; list-style: none; border-top: 1px solid #dadce0; }
-    li { display: flex; align-items: baseline; justify-content: space-between; gap: 24px;
-      padding: 14px 4px; border-bottom: 1px solid #dadce0; }
-    li a, li > span { color: #1a0dab; font-size: 1rem; font-weight: 600; text-decoration: none; }
+    li { display: block; padding: 16px 4px; border-bottom: 1px solid #dadce0; }
+    .project-title { margin-bottom: 7px; }
+    li .project-title a, li .project-title > span { color: #1a0dab; font-size: 1rem; font-weight: 600; text-decoration: none; }
     li a:hover { text-decoration: underline; }
-    li small { color: #5f6368; font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
-      font-size: .75rem; text-align: right; overflow-wrap: anywhere; }
+    li small { display: block; margin-top: 5px; color: #5f6368; font-size: .82rem; overflow-wrap: anywhere; }
+    .previews { margin-top: 10px; font-size: .85rem; line-height: 1.8; }
+    .preview-link { display: inline-block; margin-right: 8px; color: #4338ca; }
     .empty { color: #5f6368; }
     footer { margin-top: 24px; color: #80868b; font-size: .75rem; }
-    @media (max-width: 620px) { li { display: block; } li small { display: block; margin-top: 5px; text-align: left; } }
   </style>
 </head>
 <body>
@@ -27,15 +27,7 @@
     <h1>Design Gallery</h1>
     <p class="intro">A collection of visual design projects.</p>
     <ol aria-label="Design projects">
-      <li><a href="designs/app%20activity/app%20activity%20v10%20.html">App Activity</a><small>HTML preview · designs/app activity/app activity v10 .html</small></li>
-      <li><a href="designs/Disable%20ARF%20settings/disable%20arf%20setting%20.html">Disable Arf Settings</a><small>HTML preview · designs/Disable ARF settings/disable arf setting .html</small></li>
-      <li><a href="designs/medical%20form/medical-form-wireframe_V11.html">Medical Form</a><small>HTML preview · designs/medical form/medical-form-wireframe_V11.html</small></li>
-      <li><a href="designs/Shop%20rebuild/shop-rebuild.html">Shop Rebuild</a><small>HTML preview · designs/Shop rebuild/shop-rebuild.html</small></li>
-      <li><a href="designs/SMS/SMS_Wireframe%20%282%29.html">Sms</a><small>HTML preview · designs/SMS/SMS_Wireframe (2).html</small></li>
-      <li><a href="designs/SNS/SNS%20dashboard%20.html">Sns</a><small>HTML preview · designs/SNS/SNS dashboard .html</small></li>
-      <li><a href="designs/student%20profile/index.html">Student Profile</a><small>HTML preview · designs/student profile/index.html</small></li>
-      <li><a href="designs/web%20build/webbuildwf%20%281%29.html">Web Build</a><small>HTML preview · designs/web build/webbuildwf (1).html</small></li>
-      <li><a href="designs/web%20updates/admin%20.html">Web Updates</a><small>HTML preview · designs/web updates/admin .html</small></li>
+<li><div class="project-title"><a href="designs/app%20activity/app%20activity%20v10%20.html">App Activity</a></div><small>Module: app activity · Developer: Not specified</small><small>HTML preview</small><div class="previews"><strong>Previews:</strong> <a class="preview-link" href="designs/app%20activity/app%20activity%20v10%20.html">App Activity V10 </a></div></li>\n<li><div class="project-title"><a href="designs/Disable%20ARF%20settings/disable%20arf%20setting%20.html">Disable Arf Settings</a></div><small>Module: Disable ARF settings · Developer: Not specified</small><small>HTML preview</small><div class="previews"><strong>Previews:</strong> <a class="preview-link" href="designs/Disable%20ARF%20settings/disable%20arf%20setting%20.html">Disable Arf Setting </a></div></li>\n<li><div class="project-title"><a href="designs/medical%20form/medical-form-wireframe_V11.html">Medical Form</a></div><small>Module: medical form · Developer: Not specified</small><small>HTML preview</small><div class="previews"><strong>Previews:</strong> <a class="preview-link" href="designs/medical%20form/medical-form-wireframe_V11.html">Medical Form Wireframe V11</a></div></li>\n<li><div class="project-title"><a href="designs/Shop%20rebuild/shop-rebuild.html">Shop Rebuild</a></div><small>Module: Shop rebuild · Developer: Not specified</small><small>HTML preview</small><div class="previews"><strong>Previews:</strong> <a class="preview-link" href="designs/Shop%20rebuild/shop-rebuild.html">Shop Rebuild</a></div></li>\n<li><div class="project-title"><a href="designs/SMS/SMS_Wireframe%20%282%29.html">Sms</a></div><small>Module: SMS · Developer: Not specified</small><small>HTML preview</small><div class="previews"><strong>Previews:</strong> <a class="preview-link" href="designs/SMS/SMS_Wireframe%20%282%29.html">Sms Wireframe (2)</a></div></li>\n<li><div class="project-title"><a href="designs/SNS/SNS%20dashboard%20.html">Sns</a></div><small>Module: SNS · Developer: Not specified</small><small>HTML preview</small><div class="previews"><strong>Previews:</strong> <a class="preview-link" href="designs/SNS/SNS%20dashboard%20.html">Sns Dashboard </a></div></li>\n<li><div class="project-title"><a href="designs/student%20profile/index.html">Student Profile</a></div><small>Module: Student Profile · Developer: Amatullah</small><small>HTML preview</small><div class="previews"><strong>Previews:</strong> <a class="preview-link" href="designs/student%20profile/index.html">Index</a> · <a class="preview-link" href="designs/student%20profile/SFC%20forms%20.html">Sfc Forms </a> · <a class="preview-link" href="designs/student%20profile/SFCmain.html">Sfcmain</a></div></li>\n<li><div class="project-title"><a href="designs/web%20build/webbuildwf%20%281%29.html">Web Build</a></div><small>Module: web build · Developer: Not specified</small><small>HTML preview</small><div class="previews"><strong>Previews:</strong> <a class="preview-link" href="designs/web%20build/webbuildwf%20%281%29.html">Webbuildwf (1)</a></div></li>\n<li><div class="project-title"><a href="designs/web%20updates/admin%20.html">Web Updates</a></div><small>Module: web updates · Developer: Not specified</small><small>HTML preview</small><div class="previews"><strong>Previews:</strong> <a class="preview-link" href="designs/web%20updates/admin%20.html">Admin </a> · <a class="preview-link" href="designs/web%20updates/developer%20.html">Developer </a> · <a class="preview-link" href="designs/web%20updates/peer%20review%20.html">Peer Review </a></div></li>
     </ol>
     <footer>Updated by Design Sync</footer>
   </main>
