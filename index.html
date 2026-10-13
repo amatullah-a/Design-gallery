@@ -9,13 +9,13 @@
     * { box-sizing: border-box; }
     body { margin: 0; }
     .hero { background: #fff; border-bottom: 1px solid #e8eaf1; }
-    main { width: min(1180px, calc(100% - 40px)); margin: 0 auto; padding: 42px 0 56px; }
-    .hero h1 { margin: 0 0 8px; font-size: clamp(1.8rem, 4vw, 2.5rem); letter-spacing: -.04em; }
-    .intro { margin: 0; color: #707589; line-height: 1.6; }
-    .toolbar { display: flex; gap: 12px; margin: 28px 0 22px; }
-    .search { width: 100%; min-width: 0; padding: 13px 15px; border: 1px solid #dfe2eb; border-radius: 12px; background: #fff; color: inherit; font: inherit; outline: none; }
+    main { width: min(1180px, calc(100% - 40px)); margin: 0 auto; padding: 18px 0 28px; }
+    .hero h1 { margin: 0 0 4px; font-size: clamp(1.45rem, 2.5vw, 1.9rem); letter-spacing: -.04em; }
+    .intro { margin: 0; color: #707589; line-height: 1.4; font-size: .9rem; }
+    .toolbar { display: flex; gap: 10px; margin: 14px 0 10px; }
+    .search { width: 100%; min-width: 0; padding: 9px 12px; border: 1px solid #dfe2eb; border-radius: 12px; background: #fff; color: inherit; font: inherit; outline: none; }
     .search:focus { border-color: #7770ef; box-shadow: 0 0 0 3px #7770ef20; }
-    .count { margin: 0 0 16px; color: #777b8d; font-size: .9rem; }
+    .count { margin: 0 0 10px; color: #777b8d; font-size: .8rem; }
     .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 235px), 1fr)); gap: 12px; align-items: start; }
     .project-card { min-width: 0; padding: 14px; display: flex; flex-direction: column; background: #fff; border: 1px solid #e7e9f1; border-radius: 12px; box-shadow: 0 3px 12px #20233307; transition: transform .16s ease, box-shadow .16s ease, border-color .16s ease; }
     .project-card:hover { transform: translateY(-3px); border-color: #d5d3ff; box-shadow: 0 12px 28px #20233312; }
@@ -38,7 +38,7 @@
     .empty { padding: 28px; background: white; border: 1px dashed #d7dae5; border-radius: 16px; color: #777b8d; }
     .empty[hidden], .project-card[hidden] { display: none; }
     footer { margin-top: 30px; color: #9397a6; font-size: .78rem; text-align: center; }
-    @media (max-width: 560px) { main { width: calc(100% - 28px); padding: 28px 0 40px; } .toolbar { margin-top: 20px; } .project-card { padding: 13px; } }
+    @media (max-width: 560px) { main { width: calc(100% - 28px); padding: 16px 0 28px; } .toolbar { margin-top: 12px; } .project-card { padding: 13px; } }
   </style>
 </head>
 <body>
