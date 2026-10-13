@@ -5,31 +5,81 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Design Gallery</title>
   <style>
-    :root { font-family: Arial, Helvetica, sans-serif; color: #202124; background: #fff; }
+    :root { font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; color: #202333; background: #f6f7fb; }
+    * { box-sizing: border-box; }
     body { margin: 0; }
-    main { width: min(900px, calc(100% - 40px)); margin: 0 auto; padding: 42px 0; }
-    h1 { margin: 0 0 8px; font-size: 1.8rem; }
-    .intro { margin: 0 0 28px; color: #5f6368; line-height: 1.5; }
-    ol { margin: 0; padding: 0; list-style: none; border-top: 1px solid #dadce0; }
-    li { display: block; padding: 16px 4px; border-bottom: 1px solid #dadce0; }
-    .project-title { margin-bottom: 7px; }
-    li .project-title a, li .project-title > span { color: #1a0dab; font-size: 1rem; font-weight: 600; text-decoration: none; }
-    li a:hover { text-decoration: underline; }
-    li small { display: block; margin-top: 5px; color: #5f6368; font-size: .82rem; overflow-wrap: anywhere; }
-    .previews { margin-top: 10px; font-size: .85rem; line-height: 1.8; }
-    .preview-link { display: inline-block; margin-right: 8px; color: #4338ca; }
-    .empty { color: #5f6368; }
-    footer { margin-top: 24px; color: #80868b; font-size: .75rem; }
+    .hero { background: #fff; border-bottom: 1px solid #e8eaf1; }
+    main { width: min(1180px, calc(100% - 40px)); margin: 0 auto; padding: 42px 0 56px; }
+    .hero h1 { margin: 0 0 8px; font-size: clamp(1.8rem, 4vw, 2.5rem); letter-spacing: -.04em; }
+    .intro { margin: 0; color: #707589; line-height: 1.6; }
+    .toolbar { display: flex; gap: 12px; margin: 28px 0 22px; }
+    .search { width: 100%; min-width: 0; padding: 13px 15px; border: 1px solid #dfe2eb; border-radius: 12px; background: #fff; color: inherit; font: inherit; outline: none; }
+    .search:focus { border-color: #7770ef; box-shadow: 0 0 0 3px #7770ef20; }
+    .count { margin: 0 0 16px; color: #777b8d; font-size: .9rem; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 285px), 1fr)); gap: 18px; align-items: stretch; }
+    .project-card { min-width: 0; padding: 21px; display: flex; flex-direction: column; background: #fff; border: 1px solid #e7e9f1; border-radius: 18px; box-shadow: 0 5px 18px #20233308; transition: transform .16s ease, box-shadow .16s ease, border-color .16s ease; }
+    .project-card:hover { transform: translateY(-3px); border-color: #d5d3ff; box-shadow: 0 12px 28px #20233312; }
+    .card-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 18px; }
+    .project-icon { display: grid; place-items: center; width: 42px; height: 42px; border-radius: 12px; background: #eeedff; color: #5b52d6; font-size: 1.4rem; }
+    .file-count { color: #656a7e; background: #f3f4f8; padding: 6px 9px; border-radius: 999px; font-size: .75rem; white-space: nowrap; }
+    .project-card h2 { margin: 0 0 16px; font-size: 1.15rem; line-height: 1.35; overflow-wrap: anywhere; }
+    .metadata { display: grid; gap: 12px; margin-bottom: 15px; }
+    .metadata > div { display: grid; grid-template-columns: 85px minmax(0, 1fr); gap: 8px; font-size: .87rem; overflow-wrap: anywhere; }
+    .meta-label { color: #888ca0; font-size: .68rem; letter-spacing: .08em; font-weight: 700; }
+    .card-kind { color: #85899b; font-size: .78rem; margin: 0 0 12px; }
+    .preview-list { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 18px; }
+    .preview-heading { width: 100%; margin-bottom: 2px; color: #74788b; font-size: .76rem; font-weight: 650; }
+    .preview-link { max-width: 100%; padding: 7px 9px; border: 1px solid #e6e7f0; border-radius: 8px; color: #5149c8; text-decoration: none; font-size: .78rem; overflow-wrap: anywhere; }
+    .preview-link:hover { background: #f4f3ff; border-color: #d7d4ff; }
+    .preview-note { margin-bottom: 18px; color: #85899b; font-size: .8rem; }
+    .open-project { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-top: auto; padding: 11px 13px; border-radius: 10px; background: #5b52d6; color: white; font-size: .88rem; font-weight: 650; text-decoration: none; }
+    .open-project:hover { background: #4940bd; }
+    .no-preview { margin-top: auto; color: #85899b; font-size: .85rem; }
+    .empty { padding: 28px; background: white; border: 1px dashed #d7dae5; border-radius: 16px; color: #777b8d; }
+    .empty[hidden], .project-card[hidden] { display: none; }
+    footer { margin-top: 30px; color: #9397a6; font-size: .78rem; text-align: center; }
+    @media (max-width: 560px) { main { width: calc(100% - 28px); padding: 28px 0 40px; } .toolbar { margin-top: 20px; } .project-card { padding: 17px; } }
   </style>
 </head>
 <body>
-  <main>
+  <header class="hero"><main>
     <h1>Design Gallery</h1>
     <p class="intro">A collection of visual design projects.</p>
-    <ol aria-label="Design projects">
-<li><div class="project-title"><a href="designs/app%20activity/app%20activity%20v10%20.html">App Activity</a></div><small>Module: app activity · Developer: Not specified</small><small>HTML preview</small><div class="previews"><strong>Previews:</strong> <a class="preview-link" href="designs/app%20activity/app%20activity%20v10%20.html">App Activity V10 </a></div></li>\n<li><div class="project-title"><a href="designs/Disable%20ARF%20settings/disable%20arf%20setting%20.html">Disable Arf Settings</a></div><small>Module: Disable ARF settings · Developer: Not specified</small><small>HTML preview</small><div class="previews"><strong>Previews:</strong> <a class="preview-link" href="designs/Disable%20ARF%20settings/disable%20arf%20setting%20.html">Disable Arf Setting </a></div></li>\n<li><div class="project-title"><a href="designs/medical%20form/medical-form-wireframe_V11.html">Medical Form</a></div><small>Module: medical form · Developer: Not specified</small><small>HTML preview</small><div class="previews"><strong>Previews:</strong> <a class="preview-link" href="designs/medical%20form/medical-form-wireframe_V11.html">Medical Form Wireframe V11</a></div></li>\n<li><div class="project-title"><a href="designs/Shop%20rebuild/shop-rebuild.html">Shop Rebuild</a></div><small>Module: Shop rebuild · Developer: Not specified</small><small>HTML preview</small><div class="previews"><strong>Previews:</strong> <a class="preview-link" href="designs/Shop%20rebuild/shop-rebuild.html">Shop Rebuild</a></div></li>\n<li><div class="project-title"><a href="designs/SMS/SMS_Wireframe%20%282%29.html">Sms</a></div><small>Module: SMS · Developer: Not specified</small><small>HTML preview</small><div class="previews"><strong>Previews:</strong> <a class="preview-link" href="designs/SMS/SMS_Wireframe%20%282%29.html">Sms Wireframe (2)</a></div></li>\n<li><div class="project-title"><a href="designs/SNS/SNS%20dashboard%20.html">Sns</a></div><small>Module: SNS · Developer: Not specified</small><small>HTML preview</small><div class="previews"><strong>Previews:</strong> <a class="preview-link" href="designs/SNS/SNS%20dashboard%20.html">Sns Dashboard </a></div></li>\n<li><div class="project-title"><a href="designs/student%20profile/index.html">Student Profile</a></div><small>Module: Student Profile · Developer: Amatullah</small><small>HTML preview</small><div class="previews"><strong>Previews:</strong> <a class="preview-link" href="designs/student%20profile/index.html">Index</a> · <a class="preview-link" href="designs/student%20profile/SFC%20forms%20.html">Sfc Forms </a> · <a class="preview-link" href="designs/student%20profile/SFCmain.html">Sfcmain</a></div></li>\n<li><div class="project-title"><a href="designs/web%20build/webbuildwf%20%281%29.html">Web Build</a></div><small>Module: web build · Developer: Not specified</small><small>HTML preview</small><div class="previews"><strong>Previews:</strong> <a class="preview-link" href="designs/web%20build/webbuildwf%20%281%29.html">Webbuildwf (1)</a></div></li>\n<li><div class="project-title"><a href="designs/web%20updates/admin%20.html">Web Updates</a></div><small>Module: web updates · Developer: Not specified</small><small>HTML preview</small><div class="previews"><strong>Previews:</strong> <a class="preview-link" href="designs/web%20updates/admin%20.html">Admin </a> · <a class="preview-link" href="designs/web%20updates/developer%20.html">Developer </a> · <a class="preview-link" href="designs/web%20updates/peer%20review%20.html">Peer Review </a></div></li>
-    </ol>
+  </main></header>
+  <main>
+    <div class="toolbar"><input id="search" class="search" type="search" placeholder="Search projects, modules, developers…" aria-label="Search projects"></div>
+    <p class="count" id="count">Showing 9 project(s)</p>
+    <section class="grid" id="gallery" aria-label="Design projects">
+<article class="project-card" data-search="app activity app activity not specified" data-module="app activity" data-developer="not specified"><div class="card-top"><span class="project-icon" aria-hidden="true">▧</span><span class="file-count">1 preview(s)</span></div><h2>App Activity</h2><div class="metadata"><div><span class="meta-label">MODULE</span><span>App Activity</span></div><div><span class="meta-label">DEVELOPER</span><span>Not specified</span></div></div><div class="card-kind">HTML preview</div><div class="preview-list"><div class="preview-heading">Available previews</div><a class="preview-link" href="designs/app%20activity/app%20activity%20v10%20.html">App Activity V10 </a></div><a class="open-project" href="designs/app%20activity/app%20activity%20v10%20.html">Open project <span aria-hidden="true">↗</span></a></article>
+<article class="project-card" data-search="disable arf settings disable arf settings not specified" data-module="disable arf settings" data-developer="not specified"><div class="card-top"><span class="project-icon" aria-hidden="true">▧</span><span class="file-count">1 preview(s)</span></div><h2>Disable Arf Settings</h2><div class="metadata"><div><span class="meta-label">MODULE</span><span>Disable Arf Settings</span></div><div><span class="meta-label">DEVELOPER</span><span>Not specified</span></div></div><div class="card-kind">HTML preview</div><div class="preview-list"><div class="preview-heading">Available previews</div><a class="preview-link" href="designs/Disable%20ARF%20settings/disable%20arf%20setting%20.html">Disable Arf Setting </a></div><a class="open-project" href="designs/Disable%20ARF%20settings/disable%20arf%20setting%20.html">Open project <span aria-hidden="true">↗</span></a></article>
+<article class="project-card" data-search="medical form medical form not specified" data-module="medical form" data-developer="not specified"><div class="card-top"><span class="project-icon" aria-hidden="true">▧</span><span class="file-count">1 preview(s)</span></div><h2>Medical Form</h2><div class="metadata"><div><span class="meta-label">MODULE</span><span>Medical Form</span></div><div><span class="meta-label">DEVELOPER</span><span>Not specified</span></div></div><div class="card-kind">HTML preview</div><div class="preview-list"><div class="preview-heading">Available previews</div><a class="preview-link" href="designs/medical%20form/medical-form-wireframe_V11.html">Medical Form Wireframe V11</a></div><a class="open-project" href="designs/medical%20form/medical-form-wireframe_V11.html">Open project <span aria-hidden="true">↗</span></a></article>
+<article class="project-card" data-search="shop rebuild shop rebuild not specified" data-module="shop rebuild" data-developer="not specified"><div class="card-top"><span class="project-icon" aria-hidden="true">▧</span><span class="file-count">1 preview(s)</span></div><h2>Shop Rebuild</h2><div class="metadata"><div><span class="meta-label">MODULE</span><span>Shop Rebuild</span></div><div><span class="meta-label">DEVELOPER</span><span>Not specified</span></div></div><div class="card-kind">HTML preview</div><div class="preview-list"><div class="preview-heading">Available previews</div><a class="preview-link" href="designs/Shop%20rebuild/shop-rebuild.html">Shop Rebuild</a></div><a class="open-project" href="designs/Shop%20rebuild/shop-rebuild.html">Open project <span aria-hidden="true">↗</span></a></article>
+<article class="project-card" data-search="sms sms not specified" data-module="sms" data-developer="not specified"><div class="card-top"><span class="project-icon" aria-hidden="true">▧</span><span class="file-count">1 preview(s)</span></div><h2>Sms</h2><div class="metadata"><div><span class="meta-label">MODULE</span><span>Sms</span></div><div><span class="meta-label">DEVELOPER</span><span>Not specified</span></div></div><div class="card-kind">HTML preview</div><div class="preview-list"><div class="preview-heading">Available previews</div><a class="preview-link" href="designs/SMS/SMS_Wireframe%20%282%29.html">Sms Wireframe (2)</a></div><a class="open-project" href="designs/SMS/SMS_Wireframe%20%282%29.html">Open project <span aria-hidden="true">↗</span></a></article>
+<article class="project-card" data-search="sns sns not specified" data-module="sns" data-developer="not specified"><div class="card-top"><span class="project-icon" aria-hidden="true">▧</span><span class="file-count">1 preview(s)</span></div><h2>Sns</h2><div class="metadata"><div><span class="meta-label">MODULE</span><span>Sns</span></div><div><span class="meta-label">DEVELOPER</span><span>Not specified</span></div></div><div class="card-kind">HTML preview</div><div class="preview-list"><div class="preview-heading">Available previews</div><a class="preview-link" href="designs/SNS/SNS%20dashboard%20.html">Sns Dashboard </a></div><a class="open-project" href="designs/SNS/SNS%20dashboard%20.html">Open project <span aria-hidden="true">↗</span></a></article>
+<article class="project-card" data-search="student profile student profile amatullah" data-module="student profile" data-developer="amatullah"><div class="card-top"><span class="project-icon" aria-hidden="true">▧</span><span class="file-count">2 preview(s)</span></div><h2>Student Profile</h2><div class="metadata"><div><span class="meta-label">MODULE</span><span>Student Profile</span></div><div><span class="meta-label">DEVELOPER</span><span>Amatullah</span></div></div><div class="card-kind">HTML preview</div><div class="preview-list"><div class="preview-heading">Available previews</div><a class="preview-link" href="designs/student%20profile/SFC%20forms%20.html">Sfc Forms </a><a class="preview-link" href="designs/student%20profile/SFCmain.html">Sfcmain</a></div><a class="open-project" href="designs/student%20profile/index.html">Open project <span aria-hidden="true">↗</span></a></article>
+<article class="project-card" data-search="web build web build not specified" data-module="web build" data-developer="not specified"><div class="card-top"><span class="project-icon" aria-hidden="true">▧</span><span class="file-count">1 preview(s)</span></div><h2>Web Build</h2><div class="metadata"><div><span class="meta-label">MODULE</span><span>Web Build</span></div><div><span class="meta-label">DEVELOPER</span><span>Not specified</span></div></div><div class="card-kind">HTML preview</div><div class="preview-list"><div class="preview-heading">Available previews</div><a class="preview-link" href="designs/web%20build/webbuildwf%20%281%29.html">Webbuildwf (1)</a></div><a class="open-project" href="designs/web%20build/webbuildwf%20%281%29.html">Open project <span aria-hidden="true">↗</span></a></article>
+<article class="project-card" data-search="web updates web updates not specified" data-module="web updates" data-developer="not specified"><div class="card-top"><span class="project-icon" aria-hidden="true">▧</span><span class="file-count">3 preview(s)</span></div><h2>Web Updates</h2><div class="metadata"><div><span class="meta-label">MODULE</span><span>Web Updates</span></div><div><span class="meta-label">DEVELOPER</span><span>Not specified</span></div></div><div class="card-kind">HTML preview</div><div class="preview-list"><div class="preview-heading">Available previews</div><a class="preview-link" href="designs/web%20updates/admin%20.html">Admin </a><a class="preview-link" href="designs/web%20updates/developer%20.html">Developer </a><a class="preview-link" href="designs/web%20updates/peer%20review%20.html">Peer Review </a></div><a class="open-project" href="designs/web%20updates/admin%20.html">Open project <span aria-hidden="true">↗</span></a></article>
+    </section>
+    <div class="empty" id="no-results" hidden>No projects match your search.</div>
     <footer>Updated by Design Sync</footer>
   </main>
+  <script>
+    const search = document.getElementById('search');
+    const cards = Array.from(document.querySelectorAll('.project-card'));
+    const count = document.getElementById('count');
+    const noResults = document.getElementById('no-results');
+    function filterCards() {
+      const query = search.value.trim().toLowerCase();
+      let visible = 0;
+      cards.forEach(card => {
+        const match = (card.dataset.search || '').includes(query);
+        card.hidden = !match;
+        if (match) visible++;
+      });
+      count.textContent = `Showing ${visible} of ${cards.length} project(s)`;
+      noResults.hidden = visible !== 0;
+    }
+    search.addEventListener('input', filterCards);
+  </script>
 </body>
 </html>
