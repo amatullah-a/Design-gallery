@@ -1,0 +1,4121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Medical Form — Wireframe</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #fafbfd;
+      --surface: #ffffff;
+      --line: #e8eaed;
+      --line-strong: #d1d5db;
+      --ink: #1a1d23;
+      --ink-2: #6b7280;
+      --ink-3: #9ca3af;
+      --black: #1a1d23;
+      --primary: #1a1d23;
+      --primary-bg: #eef0f3;
+      --hover: #f2f3f5;
+      --focus: #1a1d23;
+      --ok-bg: #D7FFBF;
+      --ok-ink: #61AF32;
+      --warn-bg: #f3f4f6;
+      --warn-ink: #6b7280;
+      --red: #dc2626;
+      --red-bg: #fef2f2;
+      --radius: 8px;
+      --radius-sm: 6px;
+      --shadow: 0 1px 3px rgba(0,0,0,.05), 0 1px 2px rgba(0,0,0,.04);
+      --sidebar-w: 260px;
+    }
+
+    * {
+      box-sizing: border-box
+    }
+
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      height: 100%
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      font-size: 14px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    button {
+      font-family: inherit;
+      cursor: pointer
+    }
+
+    input,
+    select {
+      font-family: inherit;
+      font-size: 13px
+    }
+
+    /* Layout shell */
+    .app-shell {
+      display: flex;
+      height: 100vh;
+      overflow: hidden
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: var(--sidebar-w);
+      flex: none;
+      background: var(--surface);
+      border-right: 1px solid var(--line);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      transition: width .22s ease;
+      z-index: 30;
+    }
+
+    .sidebar.collapsed {
+      width: 66px;
+      border-right-color: var(--line)
+    }
+
+    .brand-logo {
+      display: none
+    }
+
+    .sidebar.collapsed .sidebar-brand {
+      justify-content: center;
+      padding: 16px 0 12px;
+      min-width: 0
+    }
+
+    .sidebar.collapsed .brand-text {
+      display: none
+    }
+
+    .sidebar.collapsed .brand-logo {
+      display: grid;
+      place-items: center;
+      color: var(--ink)
+    }
+
+    .sidebar.collapsed .sidebar-nav {
+      min-width: 0
+    }
+
+    .sidebar.collapsed .nav-item {
+      justify-content: center;
+      gap: 0;
+      padding: 10px 0;
+      margin: 2px 12px;
+      font-size: 0;
+      min-width: 0
+    }
+
+    .sidebar.collapsed .nav-item svg {
+      width: 20px;
+      height: 20px
+    }
+
+    .sidebar.collapsed .nav-chevron {
+      display: none
+    }
+
+    .sidebar.collapsed .nav-sub {
+      display: none !important
+    }
+
+    .sidebar.collapsed .nav-badge {
+      position: absolute;
+      top: 2px;
+      right: 8px;
+      min-width: 15px;
+      height: 15px;
+      padding: 0 3px;
+      font-size: 8.5px;
+      border-radius: 999px;
+      display: grid;
+      place-items: center
+    }
+
+    .sidebar-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 16px 16px 12px;
+      min-width: var(--sidebar-w);
+      white-space: nowrap;
+      font-weight: 700;
+      font-size: 15px;
+      color: var(--ink);
+      letter-spacing: -.01em;
+      margin-bottom: 4px
+    }
+
+    .sidebar-brand .logo {
+      width: 28px;
+      height: 28px;
+      border-radius: 7px;
+      background: var(--black);
+      display: grid;
+      place-items: center;
+      color: #fff;
+      font-size: 12px;
+      flex: none;
+      font-weight: 700;
+    }
+
+    .sidebar-nav {
+      flex: 1;
+      overflow-y: auto;
+      padding: 8px 0;
+      min-width: var(--sidebar-w)
+    }
+
+    .sidebar-nav::-webkit-scrollbar {
+      width: 0
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 14px;
+      color: var(--ink);
+      font-size: 15px;
+      font-weight: 500;
+      cursor: pointer;
+      white-space: nowrap;
+      position: relative;
+      user-select: none;
+      text-decoration: none;
+      transition: background .12s, color .12s;
+      border-radius: 6px;
+      margin: 1px 8px
+    }
+
+    .nav-chevron {
+      margin-left: auto;
+      color: var(--ink-3);
+      font-size: 13px;
+      line-height: 1;
+    }
+
+    .nav-item:hover {
+      background: var(--hover);
+      color: var(--ink)
+    }
+
+    .nav-item.active {
+      background: var(--primary-bg);
+      color: var(--primary);
+      font-weight: 600
+    }
+
+    .nav-item.active::before {
+      content: none;
+    }
+
+    .nav-item svg {
+      flex: none;
+      color: inherit;
+      opacity: .9;
+      width: 18px;
+      height: 18px;
+    }
+
+    .nav-item.active svg {
+      opacity: 1;
+      color: var(--primary)
+    }
+
+    .nav-badge {
+      margin-left: auto;
+      background: var(--primary);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      min-width: 22px;
+      height: 22px;
+      padding: 0 6px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .nav-section-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--ink-3);
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      padding: 12px 16px 4px;
+    }
+
+    /* Sub-nav group */
+    .nav-group {
+      display: flex;
+      flex-direction: column
+    }
+    .nav-item.has-sub {
+      cursor: pointer
+    }
+    .nav-item.has-sub .nav-chevron {
+      transition: transform .2s ease
+    }
+    .nav-item.has-sub.open .nav-chevron {
+      transform: rotate(90deg)
+    }
+    .nav-sub {
+      display: none;
+      flex-direction: column;
+      background: none;
+      border-left: none;
+      margin: 0;
+      border-radius: 0;
+      overflow: hidden
+    }
+    .nav-group.open .nav-sub {
+      display: flex
+    }
+    .nav-sub-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 14px 8px 30px;
+      font-size: 14.5px;
+      font-weight: 500;
+      color: #374151;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background .1s, color .1s;
+      border-radius: 6px;
+      margin: 2px 8px
+    }
+    .nav-sub-item svg {
+      flex: none;
+      width: 18px;
+      height: 18px;
+      opacity: .75
+    }
+    .nav-sub-item:hover {
+      background: var(--hover);
+      color: var(--ink)
+    }
+
+    /* Right pane */
+    .right-pane {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      min-width: 0
+    }
+
+    /* Top bar */
+    .topbar {
+      flex: none;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: #eef1f6;
+      border-bottom: 1px solid var(--line);
+      padding: 10px 20px 10px 14px;
+      z-index: 20;
+    }
+
+    .tb-tools {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      flex: none
+    }
+
+    .topbar-toggle,
+    .topbar-home {
+      width: 38px;
+      height: 38px;
+      border-radius: 8px;
+      border: none;
+      background: none;
+      display: grid;
+      place-items: center;
+      color: var(--ink);
+      flex: none;
+    }
+
+    .topbar-toggle:hover,
+    .topbar-home:hover {
+      background: var(--hover)
+    }
+
+    .topbar .search {
+      flex: 1;
+      max-width: 420px;
+      position: relative
+    }
+
+    .topbar .search input {
+      width: 100%;
+      height: 36px;
+      padding: 0 12px 0 34px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--surface);
+      color: var(--ink);
+      outline: none;
+    }
+
+    .topbar .search svg {
+      position: absolute;
+      left: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--ink-3)
+    }
+
+    .topbar .search input:focus {
+      border-color: var(--focus)
+    }
+
+    .spacer {
+      flex: 1
+    }
+
+    .year-pill {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      height: 40px;
+      padding: 0 12px 0 6px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--surface);
+      color: var(--ink-2);
+      white-space: nowrap;
+      font-size: 13px;
+    }
+
+    .ay-cap {
+      display: grid;
+      place-items: center;
+      width: 30px;
+      height: 30px;
+      border-radius: 8px;
+      background: #eef1f8;
+      color: #5b6b8c;
+      flex: none;
+    }
+
+    .year-pill .yl {
+      color: var(--ink-2)
+    }
+
+    .year-select {
+      position: relative;
+      display: flex;
+      align-items: center
+    }
+
+    .year-select select {
+      appearance: none;
+      -webkit-appearance: none;
+      border: none;
+      background: transparent;
+      font: inherit;
+      font-weight: 600;
+      color: var(--ink);
+      cursor: pointer;
+      outline: none;
+      padding: 0 20px 0 0;
+      font-size: 13px
+    }
+
+    .year-select .chev2 {
+      position: absolute;
+      right: 0;
+      pointer-events: none;
+      color: var(--ink-3)
+    }
+
+    .profile-wrap {
+      position: relative;
+      flex: none
+    }
+
+    .avatar {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: var(--hover);
+      border: 1px solid var(--line);
+      display: grid;
+      place-items: center;
+      color: var(--ink-2);
+      flex: none;
+      cursor: pointer;
+      padding: 0
+    }
+
+    .avatar:hover {
+      background: #e4e8ef
+    }
+
+    .profile-menu {
+      position: absolute;
+      top: calc(100% + 10px);
+      right: 0;
+      min-width: 290px;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      box-shadow: 0 12px 34px rgba(20, 24, 31, .16);
+      padding: 6px 0;
+      z-index: 90;
+      display: none
+    }
+
+    .profile-menu.show {
+      display: block
+    }
+
+    .pm-head {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px 14px;
+      border-bottom: 1px solid var(--line)
+    }
+
+    .pm-initials {
+      flex: none;
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: #e3e5e9;
+      color: #3f4650;
+      display: grid;
+      place-items: center;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: .02em
+    }
+
+    .pm-email {
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--ink);
+      word-break: break-all
+    }
+
+    .pm-item {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      width: 100%;
+      padding: 11px 16px;
+      background: none;
+      border: none;
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--ink);
+      cursor: pointer;
+      text-align: left
+    }
+
+    .pm-item:hover {
+      background: var(--hover)
+    }
+
+    .pm-item svg {
+      flex: none;
+      color: var(--ink-2)
+    }
+
+    /* Page scroll */
+    .page-scroll {
+      flex: 1;
+      overflow-y: auto
+    }
+
+    .right-body {
+      flex: 1;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+      overflow: hidden
+    }
+
+    /* Page */
+    .page {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 22px 20px 24px
+    }
+
+    .breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      margin-bottom: 10px;
+      font-size: 13px;
+    }
+
+    .breadcrumb .crumb-home {
+      display: inline-grid;
+      place-items: center;
+      color: var(--ink-3);
+      text-decoration: none;
+      transition: color .12s;
+    }
+
+    .breadcrumb .crumb-home:hover {
+      color: var(--ink)
+    }
+
+    .breadcrumb .crumb-sep {
+      color: var(--ink-3);
+      font-size: 15px;
+      line-height: 1;
+    }
+
+    .breadcrumb .crumb-current {
+      color: var(--ink);
+      font-weight: 500;
+    }
+
+    .breadcrumb .crumb-link {
+      color: var(--ink-2);
+      text-decoration: none;
+      font-weight: 500;
+      transition: color .12s;
+    }
+
+    .breadcrumb .crumb-link:hover {
+      color: var(--ink)
+    }
+
+    .pv-crumb {
+      margin-bottom: 0;
+      font-size: 13.5px;
+    }
+
+    .page-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 18px
+    }
+
+    .page-head h1 {
+      font-size: 20px;
+      font-weight: 700;
+      margin: 0;
+      letter-spacing: -.02em;
+      color: var(--ink)
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap
+    }
+
+    .btn {
+      height: 34px;
+      padding: 0 14px;
+      border-radius: var(--radius);
+      font-size: 13px;
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      border: 1px solid var(--line-strong);
+      background: var(--surface);
+      color: var(--ink);
+      white-space: nowrap;
+      transition: background .12s, border-color .12s;
+    }
+
+    .btn:hover {
+      background: var(--hover)
+    }
+
+    .btn.primary {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary)
+    }
+
+    .btn.primary:hover {
+      background: #000;
+      border-color: #000
+    }
+
+    .btn.ghost {
+      background: transparent;
+      border-color: transparent;
+      color: var(--ink-2)
+    }
+
+    .btn.ghost:hover {
+      background: var(--hover);
+      color: var(--ink)
+    }
+
+    .btn svg {
+      flex: none
+    }
+
+    /* Filter card */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow)
+    }
+
+    .filters {
+      padding: 0 2px 2px;
+      margin-top: 4px;
+      display: flex;
+      align-items: flex-end;
+      gap: 10px;
+      flex-wrap: nowrap
+    }
+
+    .filters-bar {
+      display: none
+    }
+
+    .btn.is-disabled,
+    .btn:disabled {
+      opacity: .5;
+      color: var(--ink-3);
+      border-color: var(--line);
+      background: var(--surface);
+      cursor: not-allowed;
+      pointer-events: none
+    }
+
+    .btn.primary.is-disabled,
+    .btn.primary:disabled {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: #fff;
+      opacity: .38
+    }
+
+    /* Hover hint when Create group is disabled (wrapper keeps pointer events) */
+    .cg-wrap {
+      position: relative;
+      display: inline-flex
+    }
+
+    .cg-wrap::after {
+      content: attr(data-cgtip);
+      position: absolute;
+      top: calc(100% + 8px);
+      right: 0;
+      background: var(--ink);
+      color: #fff;
+      font-size: 12px;
+      font-weight: 500;
+      white-space: nowrap;
+      padding: 6px 10px;
+      border-radius: 7px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .14s ease;
+      box-shadow: 0 4px 14px rgba(20, 24, 31, .18);
+      z-index: 40
+    }
+
+    .cg-wrap.cg-disabled:hover::after {
+      opacity: 1
+    }
+
+    .filters .filter-fields {
+      display: flex;
+      gap: 8px;
+      flex: 1;
+      min-width: 0;
+      align-items: flex-end
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      min-width: 0;
+      flex: 1
+    }
+
+    .field label {
+      font-size: 12.5px;
+      font-weight: 600;
+      color: #374151;
+      white-space: nowrap
+    }
+
+    .control {
+      position: relative
+    }
+
+    .control input,
+    .control select {
+      width: 100%;
+      height: 32px;
+      padding: 0 8px;
+      font-size: 12.5px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--surface);
+      color: var(--ink);
+      outline: none;
+      appearance: none
+    }
+
+    .control.has-icon input {
+      padding-left: 26px
+    }
+
+    .control.has-icon svg.lead {
+      position: absolute;
+      left: 7px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--ink-3)
+    }
+
+    .control select {
+      padding-right: 26px;
+      cursor: pointer
+    }
+
+    .control svg.chev {
+      position: absolute;
+      right: 7px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--ink-3);
+      pointer-events: none
+    }
+
+    .control input:focus,
+    .control select:focus {
+      border-color: var(--focus)
+    }
+
+    /* Results */
+    .results-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin: 22px 2px 12px;
+      flex-wrap: wrap
+    }
+
+    .results-head h2 {
+      font-size: 13.5px;
+      font-weight: 600;
+      margin: 0;
+      color: var(--ink)
+    }
+
+    .results-head .count {
+      color: var(--ink-3);
+      font-weight: 400;
+      margin-left: 6px
+    }
+
+    .table-total {
+      margin: 14px 2px 4px;
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--ink);
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+      overflow-y: auto;
+      max-height: calc(100vh - 250px);
+      border-radius: var(--radius);
+      position: relative;
+      margin-top: 16px;
+    }
+
+    /* Visible scrollbar styling */
+    .table-wrap::-webkit-scrollbar {
+      width: 7px;
+      height: 7px;
+    }
+
+    .table-wrap::-webkit-scrollbar-track {
+      background: var(--bg);
+      border-radius: 4px;
+    }
+
+    .table-wrap::-webkit-scrollbar-thumb {
+      background: #d1d5db;
+      border-radius: 4px;
+    }
+
+    .table-wrap::-webkit-scrollbar-thumb:hover {
+      background: #9ca3af;
+    }
+
+    .table-wrap::-webkit-scrollbar-corner {
+      background: var(--bg);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--surface);
+      min-width: 900px;
+      table-layout: fixed
+    }
+
+    thead th {
+      text-align: left;
+      font-size: 12.5px;
+      font-weight: 500;
+      color: #5b6572;
+      padding: 11px 7px;
+      border-bottom: 1px solid var(--line);
+      white-space: nowrap;
+      background: #f8f9fc;
+      position: sticky;
+      top: 0;
+      z-index: 3;
+      vertical-align: bottom;
+      letter-spacing: normal
+    }
+
+    tbody td {
+      padding: 8px 7px;
+      border-bottom: 1px solid var(--line);
+      vertical-align: middle;
+      color: var(--ink)
+    }
+
+    /* Center-align status and action columns */
+    td.col-center, th.col-center {
+      text-align: center;
+    }
+
+    tbody tr:hover {
+      background: #fafbfc
+    }
+
+    tbody tr:last-child td {
+      border-bottom: none
+    }
+
+    .sname {
+      font-weight: 600
+    }
+
+    .sub {
+      color: var(--ink-3);
+      font-size: 12.5px;
+      line-height: 1.35
+    }
+
+    .muted-dash {
+      color: var(--ink-3)
+    }
+
+    #scroll-loader {
+      text-align: center;
+      padding: 14px;
+      color: var(--ink-3);
+      font-size: 13px;
+      display: none;
+      margin-top: 8px;
+    }
+
+    #scroll-loader.visible {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .loader-dots {
+      display: inline-flex;
+      gap: 4px;
+    }
+
+    .loader-dots span {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--ink-3);
+      animation: dot-pulse 1.2s infinite ease-in-out;
+    }
+
+    .loader-dots span:nth-child(2) {
+      animation-delay: .2s;
+    }
+
+    .loader-dots span:nth-child(3) {
+      animation-delay: .4s;
+    }
+
+    @keyframes dot-pulse {
+
+      0%,
+      80%,
+      100% {
+        transform: scale(.6);
+        opacity: .4;
+      }
+
+      40% {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    /* Status badge (S / A letter) */
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 36px;
+      height: 26px;
+      padding: 0 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: default;
+      position: relative;
+    }
+    .status-badge.ok {
+      background: var(--ok-bg);
+      color: var(--ok-ink);
+      border: 1.5px solid #a9d484
+    }
+    .status-badge.neutral {
+      background: var(--warn-bg);
+      color: var(--ink-3);
+      border: 1.5px solid var(--line-strong)
+    }
+    /* Tooltip on hover — appears ON the badge (centered over it) */
+    .status-badge::after {
+      content: attr(data-tip);
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(.9);
+      font-size: 12px;
+      font-weight: 600;
+      padding: 5px 14px;
+      border-radius: 999px;
+      white-space: nowrap;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity .16s ease, transform .16s ease;
+      z-index: 22;
+      border: 1.5px solid currentColor
+    }
+    /* ok badge tooltip — green pill */
+    .status-badge.ok::after {
+      background: var(--ok-bg);
+      color: var(--ok-ink);
+      border-color: #a9d484
+    }
+    /* neutral badge tooltip — muted pill */
+    .status-badge.neutral::after {
+      background: var(--warn-bg);
+      color: var(--ink-3);
+      border-color: var(--line-strong)
+    }
+    .status-badge:hover::after {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1)
+    }
+
+    /* Group the last 3 action cells tightly */
+    .td-actions {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 2px
+    }
+
+    .med-icon {
+      display: inline-grid;
+      place-items: center;
+      width: 30px;
+      height: 30px;
+      border-radius: 8px
+    }
+
+    .med-icon.yes {
+      background: #fdecec;
+      color: #e11d1d
+    }
+
+    .med-icon.no {
+      color: var(--ink-3)
+    }
+
+    .med-flag {
+      position: relative;
+      display: inline-flex
+    }
+
+    .med-tooltip {
+      position: absolute;
+      top: calc(100% + 8px);
+      left: 50%;
+      transform: translateX(-50%);
+      background: #fdecec;
+      color: #e11d1d;
+      border: 1px solid #f6c9c9;
+      font-weight: 600;
+      padding: 6px 8px;
+      border-radius: 8px;
+      font-size: 12px;
+      line-height: 1.2;
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .14s ease;
+      z-index: 30
+    }
+
+    .med-tooltip::after {
+      content: '';
+      position: absolute;
+      bottom: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      border: 5px solid transparent;
+      border-bottom-color: #fdecec
+    }
+
+    .med-flag:hover .med-tooltip,
+    .med-flag:focus .med-tooltip,
+    .med-flag:focus-visible .med-tooltip {
+      opacity: 1
+    }
+
+    .ack-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 7px 11px;
+      border-radius: 8px;
+      border: 1px solid var(--primary);
+      background: var(--primary);
+      color: #fff;
+      font-size: 12.5px;
+      font-weight: 600;
+      font-family: inherit;
+      white-space: nowrap;
+      cursor: pointer;
+      transition: opacity .12s, background .12s
+    }
+
+    .ack-btn:hover {
+      opacity: .88
+    }
+
+    .ack-btn.done {
+      background: var(--ok-bg);
+      border-color: #a9d484;
+      color: var(--ok-ink);
+      cursor: pointer;
+      font-weight: 600
+    }
+
+
+
+    .ack-btn.done:hover {
+      opacity: .9
+    }
+
+    .contact-flag {
+      position: relative;
+      display: inline-grid;
+      place-items: center;
+      padding: 6px;
+      border-radius: 7px;
+      color: var(--ink-2);
+      cursor: default;
+      transition: background .12s, color .12s
+    }
+
+    .contact-flag:hover,
+    .contact-flag:focus-visible {
+      background: #eaf1ff;
+      color: #1d5fd8
+    }
+
+    .contact-tip {
+      position: fixed;
+      top: 0;
+      left: 0;
+      background: var(--surface);
+      color: var(--ink);
+      border: 1px solid var(--line);
+      padding: 10px 13px;
+      border-radius: 9px;
+      font-size: 12.5px;
+      font-weight: 500;
+      line-height: 1.45;
+      text-align: left;
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .14s ease;
+      box-shadow: 0 4px 14px rgba(20, 24, 31, .16);
+      z-index: 75
+    }
+
+    .contact-tip b {
+      font-weight: 600;
+      color: var(--ink-2)
+    }
+
+    .ct-h {
+      font-size: 10.5px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+      color: var(--ink-3);
+      margin-bottom: 2px
+    }
+
+    .ct-name {
+      font-weight: 600;
+      color: var(--ink)
+    }
+
+    .ct-row {
+      display: flex;
+      align-items: center;
+      gap: 14px
+    }
+
+    .ct-num {
+      color: var(--ink-2)
+    }
+
+    .ct-sep {
+      height: 1px;
+      background: var(--line);
+      margin: 9px -13px
+    }
+
+    .ct-none {
+      color: var(--ink-2)
+    }
+
+    .ct-copy {
+      display: inline-grid;
+      place-items: center;
+      width: 22px;
+      height: 22px;
+      margin-left: 2px;
+      border: none;
+      background: none;
+      color: var(--ink-3);
+      border-radius: 6px;
+      cursor: pointer;
+      flex: none
+    }
+
+    .ct-copy:hover {
+      background: #eaf1ff;
+      color: #1d5fd8
+    }
+
+    .contact-tip.show {
+      opacity: 1;
+      pointer-events: auto
+    }
+
+    /* Name + info-icon row in Last Modified By / Acknowledged By */
+    .nt-row {
+      display: flex;
+      align-items: center;
+      gap: 7px
+    }
+
+    .nt-name {
+      color: var(--ink)
+    }
+
+    .info-dot {
+      display: inline-grid;
+      place-items: center;
+      color: var(--ink-3);
+      cursor: pointer;
+      border-radius: 50%;
+      flex: none
+    }
+
+    .info-dot:hover,
+    .info-dot:focus-visible {
+      color: #1d5fd8
+    }
+
+    .info-tip {
+      position: fixed;
+      top: 0;
+      left: 0;
+      background: var(--surface);
+      color: var(--ink);
+      border: 1px solid var(--line);
+      padding: 7px 11px;
+      border-radius: 8px;
+      font-size: 12.5px;
+      font-weight: 500;
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .14s ease;
+      box-shadow: 0 4px 14px rgba(20, 24, 31, .16);
+      z-index: 76
+    }
+
+    .info-tip.show {
+      opacity: 1
+    }
+
+    .row-action {
+      background: none;
+      border: none;
+      padding: 6px;
+      border-radius: 7px;
+      color: var(--ink-2);
+      display: inline-grid;
+      place-items: center;
+      position: relative
+    }
+
+    /* Small popup label above the icon */
+    .row-action::after {
+      content: attr(data-tip);
+      position: absolute;
+      bottom: calc(100% + 7px);
+      left: 50%;
+      transform: translateX(-50%) scale(.94);
+      background: var(--surface);
+      color: var(--ink);
+      border: 1px solid var(--line);
+      padding: 5px 11px;
+      border-radius: 8px;
+      font-size: 12.5px;
+      font-weight: 500;
+      line-height: 1.2;
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .14s ease, transform .14s ease;
+      box-shadow: 0 4px 14px rgba(20, 24, 31, .16);
+      z-index: 30
+    }
+
+    .row-action:hover::after,
+    .row-action:focus-visible::after {
+      opacity: 1;
+      transform: translateX(-50%) scale(1)
+    }
+
+    .row-action:hover {
+      background: #eaf1ff;
+      color: #1d5fd8
+    }
+
+    .pdf-btn:hover {
+      color: #1d5fd8
+    }
+
+    .checkbox {
+      width: 17px;
+      height: 17px;
+      accent-color: var(--black);
+      cursor: pointer
+    }
+
+    .empty {
+      padding: 44px 20px;
+      text-align: center;
+      color: var(--ink-3)
+    }
+
+    td .cell-label {
+      display: none
+    }
+
+    /* Selection bar */
+    .selbar {
+      position: fixed;
+      left: 50%;
+      bottom: 20px;
+      transform: translateX(-50%) translateY(140%);
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      z-index: 50;
+      background: var(--black);
+      color: #fff;
+      padding: 10px 12px 10px 18px;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(20, 24, 31, .28);
+      transition: transform .22s ease;
+      max-width: calc(100vw - 32px)
+    }
+
+    .selbar.show {
+      transform: translateX(-50%) translateY(0)
+    }
+
+    .selbar .n {
+      font-weight: 600;
+      white-space: nowrap
+    }
+
+    .selbar .selbtn {
+      height: 34px;
+      padding: 0 14px;
+      border-radius: 8px;
+      border: none;
+      background: #fff;
+      color: var(--black);
+      font-weight: 600;
+      font-size: 13px
+    }
+
+    .selbar .selbtn.line {
+      background: transparent;
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, .35)
+    }
+
+    .selbar .selbtn.line:hover {
+      background: rgba(255, 255, 255, .12)
+    }
+
+    /* Modal */
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(20, 24, 31, .42);
+      z-index: 60;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px
+    }
+
+    .overlay.show {
+      display: flex
+    }
+
+    .modal {
+      background: var(--surface);
+      border-radius: 14px;
+      width: 100%;
+      max-width: 440px;
+      box-shadow: 0 20px 60px rgba(20, 24, 31, .28);
+      animation: pop .16s ease
+    }
+
+    .modal.wide {
+      max-width: 640px;
+      max-height: 88vh;
+      display: flex;
+      flex-direction: column
+    }
+
+    .overlay.fullscreen {
+      position: absolute;
+      inset: 0;
+      padding: 0;
+      z-index: 40
+    }
+
+    .modal.fullscreen {
+      max-width: none;
+      width: 100%;
+      height: 100%;
+      max-height: 100%;
+      border-radius: 0;
+      display: flex;
+      flex-direction: column
+    }
+
+    .modal.fullscreen .modal-body {
+      padding: 26px 32px
+    }
+
+    .modal.fullscreen .pv-grid,
+    .modal.fullscreen .pv-consent {
+      grid-template-columns: repeat(3, 1fr)
+    }
+
+    .modal.fullscreen .modal-head,
+    .modal.fullscreen .modal-foot {
+      padding-left: 32px;
+      padding-right: 32px
+    }
+
+    @keyframes pop {
+      from {
+        opacity: 0;
+        transform: translateY(8px) scale(.98)
+      }
+
+      to {
+        opacity: 1;
+        transform: none
+      }
+    }
+
+    .modal-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 20px;
+      border-bottom: 1px solid var(--line)
+    }
+
+    .modal-head h3 {
+      margin: 0;
+      font-size: 16px;
+      font-weight: 600
+    }
+
+    .mh-left {
+      display: flex;
+      align-items: center;
+      gap: 14px
+    }
+
+    .back-btn {
+      gap: 5px;
+      padding-left: 10px
+    }
+
+    .modal-body {
+      padding: 20px
+    }
+
+    .modal-body.scroll {
+      overflow-y: auto
+    }
+
+    .modal-foot {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      padding: 16px 20px;
+      border-top: 1px solid var(--line)
+    }
+
+    .modal input[type=text] {
+      width: 100%;
+      height: 42px;
+      padding: 0 12px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      outline: none
+    }
+
+    .modal input[type=text]:focus {
+      border-color: var(--focus)
+    }
+
+    .hint {
+      font-size: 12px;
+      color: var(--ink-3);
+      margin-top: 8px
+    }
+
+    /* ============================================================
+       VIEW FORM — clean, form-like. Three distinct layouts.
+       ============================================================ */
+
+    /* Header meta (student name + last modified) */
+    .pv-hdr {
+      margin-bottom: 24px;
+      padding-bottom: 18px;
+      border-bottom: 1px solid var(--line)
+    }
+
+    .pv-hdr .name {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--ink)
+    }
+
+    .pv-hdr .meta {
+      font-size: 12.5px;
+      color: var(--ink-3);
+      margin-top: 4px
+    }
+
+    .pv-note {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--warn-bg);
+      color: var(--warn-ink);
+      border-radius: 9px;
+      padding: 11px 14px;
+      font-size: 13px;
+      margin-bottom: 22px
+    }
+
+    /* Parent / guardian panel — deliberately separate from the form */
+    .pv-parent {
+      background: #f4f6f9;
+      border: 1px solid var(--line);
+      border-left: 3px solid var(--ink-2);
+      border-radius: 10px;
+      padding: 16px 18px 14px;
+      margin-bottom: 26px
+    }
+
+    .pv-parent-h {
+      font-size: 12.5px;
+      font-weight: 700;
+      color: var(--ink);
+      margin-bottom: 14px
+    }
+
+    .pv-parent-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px 28px
+    }
+
+    .pp-item {
+      display: flex;
+      flex-direction: column;
+      gap: 3px
+    }
+
+    .pp-item span {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--ink-3)
+    }
+
+    .pp-item div {
+      font-size: 14px;
+      color: var(--ink);
+      overflow-wrap: anywhere
+    }
+
+    .pv-parent-note {
+      margin-top: 13px;
+      padding-top: 11px;
+      border-top: 1px dashed var(--line-strong);
+      font-size: 11.5px;
+      color: var(--ink-3);
+      font-style: italic
+    }
+
+    /* Shared field primitives */
+    .pv-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 18px
+    }
+
+    .pv-item {
+      display: flex;
+      flex-direction: column;
+      gap: 7px
+    }
+
+    .pv-lab {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--ink-3);
+      letter-spacing: normal
+    }
+
+    .pv-val {
+      font-size: 14.5px;
+      color: var(--ink);
+      line-height: 1.55;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+      min-height: 21px
+    }
+
+    /* Section wrapper + heading (question / section title) */
+    .pv-section {
+      margin-bottom: 26px
+    }
+
+    .pv-section>h4 {
+      margin: 0 0 16px;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--ink);
+      letter-spacing: normal;
+      text-transform: none
+    }
+
+    .pv-qhead {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 16px
+    }
+
+    .pv-qhead h4 {
+      margin: 0;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--ink);
+      line-height: 1.4;
+      text-transform: none;
+      letter-spacing: normal
+    }
+
+    .pv-answer {
+      flex: none;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 11px;
+      border-radius: 999px;
+      white-space: nowrap
+    }
+
+    .pv-answer.yes {
+      background: var(--ok-bg);
+      color: var(--ok-ink)
+    }
+
+    .pv-answer.no,
+    .pv-answer.na {
+      background: var(--warn-bg);
+      color: var(--warn-ink)
+    }
+
+    .pv-choices {
+      flex: none;
+      display: inline-flex;
+      gap: 14px
+    }
+
+    .pv-choices label {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: var(--ink-2)
+    }
+
+    .pv-choices i {
+      width: 13px;
+      height: 13px;
+      border: 1.5px solid var(--line-strong);
+      border-radius: 4px;
+      display: inline-block
+    }
+
+    /* Groups (Emergency contact 1 / Doctor) */
+    .pv-group-title {
+      font-size: 12.5px;
+      font-weight: 700;
+      color: var(--ink-2);
+      margin-bottom: 13px;
+      text-transform: none;
+      letter-spacing: normal
+    }
+
+    .pv-group+.pv-group {
+      margin-top: 20px
+    }
+
+    .modal.fullscreen .pv-group .pv-grid {
+      display: flex;
+      flex-direction: column
+    }
+
+    /* Consent rows */
+    .pv-consent {
+      display: flex;
+      flex-direction: column
+    }
+
+    /* =======================================================
+       LAYOUT B — CARDS (each section a boxed card)
+       ======================================================= */
+    .v-b .pv-section {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 20px 22px;
+      margin-bottom: 16px;
+      box-shadow: 0 1px 2px rgba(20, 24, 31, .04)
+    }
+
+    .v-b .pv-section>h4,
+    .v-b .pv-qhead {
+      margin-bottom: 18px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--line)
+    }
+
+    .v-b .pv-val {
+      border: 1px solid var(--line-strong);
+      border-radius: 9px;
+      background: #f7f9fb;
+      padding: 10px 13px;
+      min-height: 44px
+    }
+
+    .v-b .pv-full .pv-val {
+      min-height: 90px
+    }
+
+    .v-b .pv-consent .row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--line);
+      font-size: 13.5px;
+      color: var(--ink);
+      font-weight: 500
+    }
+
+    .v-b .pv-consent .row:last-child {
+      border-bottom: none
+    }
+
+    /* =======================================================
+       LAYOUT C — LEDGER (label : value rows, header strip)
+       ======================================================= */
+    .v-c .pv-section {
+      margin-bottom: 22px
+    }
+
+    .v-c .pv-section>h4,
+    .v-c .pv-qhead {
+      padding: 10px 15px;
+      background: #f3f5f8;
+      border-left: 3px solid var(--ink);
+      border-radius: 0 8px 8px 0;
+      margin-bottom: 4px
+    }
+
+    .v-c .pv-grid,
+    .v-c .pv-group .pv-grid {
+      gap: 0
+    }
+
+    /* Contact / doctor groups: pair short fields side by side, full fields full width */
+    .modal.fullscreen .v-c .pv-group .pv-grid {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      gap: 16px 28px;
+      padding: 6px 15px 2px
+    }
+
+    .v-c .pv-group .pv-item {
+      flex: 1 1 calc(50% - 14px);
+      min-width: 0;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 5px;
+      padding: 0;
+      border-bottom: none
+    }
+
+    .v-c .pv-group .pv-item.pv-full {
+      flex-basis: 100%
+    }
+
+    .v-c .pv-group .pv-lab {
+      width: auto;
+      padding-top: 0;
+      font-size: 11.5px;
+      color: var(--ink-3)
+    }
+
+    .v-c .pv-group .pv-val,
+    .v-c .pv-group .pv-full .pv-val {
+      min-height: auto
+    }
+
+    .v-c .pv-group-title {
+      margin: 14px 0 2px;
+      padding: 0 15px
+    }
+
+    .v-c .pv-item {
+      flex-direction: row;
+      align-items: baseline;
+      gap: 20px;
+      padding: 12px 15px;
+      border-bottom: 1px solid var(--line)
+    }
+
+    .v-c .pv-item:last-child {
+      border-bottom: none
+    }
+
+    .v-c .pv-lab {
+      flex: none;
+      width: 210px;
+      padding-top: 1px;
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--ink-2)
+    }
+
+    .v-c .pv-val {
+      flex: 1;
+      min-height: auto
+    }
+
+    .v-c .pv-full .pv-val {
+      min-height: 60px
+    }
+
+    .v-c .pv-consent .row {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 12px;
+      padding: 12px 15px;
+      border-bottom: 1px solid var(--line);
+      font-size: 13.5px;
+      color: var(--ink);
+      font-weight: 500
+    }
+
+    /* Layout switcher (in the view header) */
+    .pv-layouts {
+      display: flex;
+      align-items: center;
+      gap: 4px
+    }
+
+    .pv-lyt-label {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      color: var(--ink-3);
+      margin-right: 6px
+    }
+
+    .pv-lyt {
+      font-family: inherit;
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--ink-2);
+      background: none;
+      border: 1px solid var(--line-strong);
+      border-radius: 999px;
+      padding: 5px 13px;
+      cursor: pointer;
+      transition: all .12s
+    }
+
+    .pv-lyt:hover {
+      background: var(--hover)
+    }
+
+    .pv-lyt.active {
+      background: var(--ink);
+      border-color: var(--ink);
+      color: #fff
+    }
+
+
+    .devnotes {
+      position: fixed;
+      right: 20px;
+      bottom: 18px;
+      z-index: 30;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 13px;
+      border-radius: 999px;
+      background: #2b2f38;
+      color: #fff;
+      text-decoration: none;
+      font-size: 12.5px;
+      font-weight: 600;
+      border: 1px dashed #6b7280;
+      box-shadow: 0 6px 18px rgba(20, 24, 31, .22);
+      opacity: .92;
+      transition: opacity .15s, transform .15s
+    }
+
+    .devnotes:hover {
+      opacity: 1;
+      transform: translateY(-1px)
+    }
+
+    .devnotes .dn-tag {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      background: #fde68a;
+      color: #78350f;
+      padding: 2px 7px;
+      border-radius: 999px;
+      white-space: nowrap
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 74px;
+      right: 24px;
+      left: auto;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transform: translateX(130%);
+      background: #d7ffbf;
+      color: #172028;
+      padding: 14px 16px;
+      border: 1px solid #c2f2a4;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 600;
+      min-width: 300px;
+      max-width: 420px;
+      z-index: 80;
+      transition: transform .25s ease, opacity .25s ease;
+      opacity: 0;
+      box-shadow: 0 10px 30px rgba(20, 24, 31, .16)
+    }
+
+    .toast .tmsg {
+      flex: 1
+    }
+
+    .toast .tclose {
+      flex: none;
+      display: grid;
+      place-items: center;
+      width: 22px;
+      height: 22px;
+      border: none;
+      background: none;
+      color: #5c7a4a;
+      cursor: pointer;
+      border-radius: 6px
+    }
+
+    .toast .tclose:hover {
+      background: rgba(0, 0, 0, .07);
+      color: #172028
+    }
+
+    .toast.show {
+      transform: translateX(0);
+      opacity: 1
+    }
+
+    @media (max-width:760px) {
+      .devnotes {
+        right: 12px;
+        bottom: 12px;
+        padding: 8px 11px;
+        font-size: 11.5px
+      }
+
+      .devnotes .dn-text {
+        display: none
+      }
+
+      .toast {
+        left: 14px;
+        right: 14px;
+        min-width: 0;
+        max-width: none;
+        transform: translateY(140%)
+      }
+
+      .toast.show {
+        transform: translateY(0)
+      }
+    }
+
+    @media (max-width:1100px) {
+      .filter-grid {
+        grid-template-columns: repeat(2, 1fr)
+      }
+    }
+
+    @media (max-width:760px) {
+      .sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        z-index: 60;
+        width: var(--sidebar-w);
+        transform: translateX(-100%);
+        transition: transform .22s ease;
+        box-shadow: 2px 0 16px rgba(20, 24, 31, .18)
+      }
+
+      .sidebar.mobile-open {
+        transform: translateX(0)
+      }
+
+      .sidebar.collapsed {
+        width: var(--sidebar-w)
+      }
+
+      .sidebar-backdrop {
+        position: fixed;
+        inset: 0;
+        background: rgba(20, 24, 31, .42);
+        z-index: 55;
+        display: none
+      }
+
+      .sidebar-backdrop.show {
+        display: block
+      }
+
+      .topbar {
+        padding: 8px 12px;
+        gap: 8px
+      }
+
+      .topbar .search {
+        max-width: 200px;
+        min-width: 0;
+        flex: 1
+      }
+
+      .yl {
+        display: none
+      }
+
+      .academic-year {
+        padding: 6px 10px
+      }
+
+      .page {
+        padding: 16px 14px 20px
+      }
+
+      .page-head {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px
+      }
+
+      .page-head .actions {
+        width: 100%;
+        flex-wrap: wrap
+      }
+
+      .filters {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px
+      }
+
+      .filters-bar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        padding: 13px 16px;
+        border: 1px solid var(--line-strong);
+        border-radius: 10px;
+        background: var(--surface);
+        font-size: 15px;
+        color: var(--ink-2);
+        cursor: pointer
+      }
+
+      .filters-bar .fchev {
+        transition: transform .18s
+      }
+
+      .filters.open .filters-bar .fchev {
+        transform: rotate(180deg)
+      }
+
+      .filters .filter-fields {
+        display: none;
+        grid-template-columns: 1fr;
+        gap: 12px;
+        width: 100%
+      }
+
+      .filters.open .filter-fields {
+        display: grid
+      }
+
+      .filters>.btn {
+        display: none;
+        align-self: stretch !important;
+        justify-content: center
+      }
+
+      .filters.open>.btn {
+        display: flex
+      }
+
+      .filter-grid {
+        grid-template-columns: 1fr
+      }
+
+      .filter-foot .btn {
+        flex: 1;
+        justify-content: center
+      }
+
+      .pv-grid {
+        grid-template-columns: 1fr
+      }
+
+      .pv-consent {
+        grid-template-columns: 1fr
+      }
+
+      .modal.fullscreen .pv-grid,
+      .modal.fullscreen .pv-consent {
+        grid-template-columns: 1fr
+      }
+
+      .modal.fullscreen .modal-body {
+        padding: 18px 16px
+      }
+
+      .modal.fullscreen .modal-head,
+      .modal.fullscreen .modal-foot {
+        padding-left: 16px;
+        padding-right: 16px
+      }
+
+      .modal-foot {
+        flex-wrap: wrap
+      }
+
+      .modal-foot .btn {
+        flex: 1;
+        justify-content: center
+      }
+
+      /* Mobile: keep the table and let each row scroll horizontally (prod style) */
+      .table-wrap {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="app-shell">
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-brand">
+        <span class="brand-logo">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8" /><path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+          </svg>
+        </span>
+        <span class="brand-text">Test App School 2</span>
+      </div>
+      <nav class="sidebar-nav" aria-label="Main navigation">
+
+        <!-- App Engagement Overview: bar chart -->
+        <a class="nav-item" href="#" onclick="return false">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="20" x2="18" y2="10" /><line x1="12" y1="20" x2="12" y2="4" /><line x1="6" y1="20" x2="6" y2="14" />
+          </svg>
+          App Engagement Overview
+        </a>
+
+        <!-- Attendance Overview: calendar -->
+        <a class="nav-item" href="#" onclick="return false">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M8 2v4" /><path d="M16 2v4" /><rect width="18" height="18" x="3" y="4" rx="2" /><path d="M3 10h18" />
+          </svg>
+          Attendance Overview
+        </a>
+
+        <!-- Note from Parent: message square -->
+        <a class="nav-item" href="#" onclick="return false">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+          </svg>
+          Note from Parent
+          <span class="nav-badge">77</span>
+        </a>
+
+        <!-- Detention: shield -->
+        <a class="nav-item" href="#" onclick="return false">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+          </svg>
+          Detention
+        </a>
+
+        <!-- News: newspaper + expandable -->
+        <div class="nav-group open" id="newsGroup">
+          <a class="nav-item has-sub open" href="#" onclick="toggleSubNav('newsGroup'); return false">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2" /><path d="M18 14h-8" /><path d="M15 18h-5" /><path d="M10 6h8v4h-8V6Z" />
+            </svg>
+            News
+            <span class="nav-chevron">›</span>
+          </a>
+          <div class="nav-sub">
+            <a class="nav-sub-item" href="#" onclick="return false">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14" /><path d="M12 5v14" /></svg>
+              Add
+            </a>
+            <a class="nav-sub-item" href="#" onclick="return false">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3" /><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" /></svg>
+              Manage News
+            </a>
+            <a class="nav-sub-item" href="#" onclick="return false">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2" /><path d="m9 12 2 2 4-4" /></svg>
+              Category
+            </a>
+          </div>
+        </div>
+
+        <!-- Notifications: bell + expandable -->
+        <div class="nav-group open" id="notifGroup">
+          <a class="nav-item has-sub open" href="#" onclick="toggleSubNav('notifGroup'); return false">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" /><path d="M13.73 21a2 2 0 0 1-3.46 0" />
+            </svg>
+            Notifications
+            <span class="nav-chevron">›</span>
+          </a>
+          <div class="nav-sub">
+            <a class="nav-sub-item" href="#" onclick="return false">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14" /><path d="M12 5v14" /></svg>
+              Add
+            </a>
+            <a class="nav-sub-item" href="#" onclick="return false">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3" /><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" /></svg>
+              Manage Notifications
+            </a>
+            <a class="nav-sub-item" href="#" onclick="return false">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2" /><path d="m9 12 2 2 4-4" /></svg>
+              Category
+            </a>
+          </div>
+        </div>
+
+        <!-- Personal Notification: mail + badge + expandable -->
+        <div class="nav-group open" id="pnGroup">
+          <a class="nav-item has-sub open" href="#" onclick="toggleSubNav('pnGroup'); return false">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="4" width="20" height="16" rx="2" /><path d="M2 7l10 7 10-7" />
+            </svg>
+            Personal Notification
+            <span class="nav-chevron">›</span>
+            <span class="nav-badge">0</span>
+          </a>
+          <div class="nav-sub">
+            <a class="nav-sub-item" href="#" onclick="return false">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14" /><path d="M12 5v14" /></svg>
+              Add
+            </a>
+            <a class="nav-sub-item" href="#" onclick="return false">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3" /><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" /></svg>
+              Manage Personal Notifications
+            </a>
+            <a class="nav-sub-item" href="#" onclick="return false">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z" /><path d="M14 2v4a2 2 0 0 0 2 2h4" /><path d="M10 9H8" /><path d="M16 13H8" /><path d="M16 17H8" /></svg>
+              PN Templates
+            </a>
+          </div>
+        </div>
+
+        <!-- Evening Study: square pen -->
+        <a class="nav-item" href="#" onclick="return false">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M13.4 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7.4" /><path d="M2 6h4" /><path d="M2 10h4" /><path d="M2 14h4" /><path d="M2 18h4" /><path d="M21.378 5.626a1 1 0 1 0-3.004-3.004l-5.01 5.012a2 2 0 0 0-.506.854l-.837 2.87a.5.5 0 0 0 .62.62l2.87-.837a2 2 0 0 0 .854-.506z" />
+          </svg>
+          Evening Study
+        </a>
+
+        <!-- Gallery: images -->
+        <a class="nav-item" href="#" onclick="return false">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 22H4a2 2 0 0 1-2-2V6" /><path d="m22 13-1.296-1.296a2.4 2.4 0 0 0-3.408 0L11 18" /><circle cx="12" cy="8" r="2" /><rect width="16" height="16" x="6" y="2" rx="2" />
+          </svg>
+          Gallery
+        </a>
+
+        <!-- Medical Form: clipboard check (current page) -->
+        <a class="nav-item active" href="#" onclick="return false" aria-current="page">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2" /><rect x="9" y="3" width="6" height="4" rx="1" /><path d="M9 12l2 2 4-4" />
+          </svg>
+          Medical Form
+        </a>
+
+        <!-- Settings: gear -->
+        <a class="nav-item" href="#" onclick="return false">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="3" /><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
+          </svg>
+          Settings
+        </a>
+
+      </nav>
+    </aside>
+    <div class="sidebar-backdrop" id="sidebarBackdrop" onclick="closeMobileSidebar()"></div>
+
+    <!-- Right pane -->
+    <div class="right-pane">
+
+      <!-- Top bar -->
+      <header class="topbar">
+        <div class="tb-tools">
+          <button class="topbar-toggle" id="sidebarToggle" aria-label="Toggle sidebar" onclick="toggleSidebar()">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect width="18" height="18" x="3" y="3" rx="2" /><path d="M9 3v18" />
+            </svg>
+          </button>
+          <button class="topbar-home" aria-label="Home" title="Home">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8" /><path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+            </svg>
+          </button>
+        </div>
+        <div class="search">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="7" />
+            <path d="M21 21l-4-4" />
+          </svg>
+          <input type="text" placeholder="Search student name" aria-label="Search student name">
+        </div>
+        <div class="spacer"></div>
+        <div class="year-pill">
+          <span class="ay-cap">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 10L12 5 2 10l10 5 10-5z" />
+              <path d="M6 12v5c0 1 2.7 3 6 3s6-2 6-3v-5" />
+            </svg>
+          </span>
+          <span class="yl">Academic Year:</span>
+          <div class="year-select">
+            <select id="yearSelect" onchange="onYearChange()" aria-label="Academic year">
+              <option>2026 – 2027</option>
+              <option selected>2025 – 2026</option>
+              <option>2024 – 2025</option>
+              <option>2023 – 2024</option>
+            </select>
+            <svg class="chev2" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2">
+              <path d="M6 9l6 6 6-6" />
+            </svg>
+          </div>
+        </div>
+        <div class="profile-wrap">
+          <button class="avatar" id="profileBtn" onclick="toggleProfile(event)" aria-label="Account menu" aria-haspopup="true">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="8" r="4" />
+              <path d="M4 20c0-4 4-6 8-6s8 2 8 6" />
+            </svg>
+          </button>
+          <div class="profile-menu" id="profileMenu">
+            <div class="pm-head">
+              <span class="pm-initials" id="pmInitials">XZ</span>
+              <span class="pm-email" id="pmEmail">xyz@yopmail.com</span>
+            </div>
+            <button class="pm-item" type="button">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect width="18" height="11" x="3" y="11" rx="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" />
+              </svg>
+              Change password
+            </button>
+            <button class="pm-item" type="button">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" /><path d="m16 17 5-5-5-5" /><path d="M21 12H9" />
+              </svg>
+              Logout
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <!-- Content region (below topbar, right of sidebar) -->
+      <div class="right-body">
+      <!-- Page scroll area -->
+      <div class="page-scroll" id="pageScroll">
+        <main class="page">
+          <nav class="breadcrumb" aria-label="Breadcrumb">
+            <a href="#" class="crumb-home" onclick="return false" aria-label="Home">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 10.5L12 3l9 7.5" />
+                <path d="M5 9.5V20a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V9.5" />
+                <path d="M9.5 21v-5a1 1 0 0 1 1-1h3a1 1 0 0 1 1 1v5" />
+              </svg>
+            </a>
+            <span class="crumb-sep">›</span>
+            <span class="crumb-current">Medical Form</span>
+          </nav>
+          <div class="page-head">
+            <h1>Medical Form</h1>
+            <div class="actions">
+              <button class="btn" onclick="downloadBlankPDF()">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M12 3v12" />
+                  <path d="M7 10l5 5 5-5" />
+                  <path d="M4 21h16" />
+                </svg>
+                Preview form
+              </button>
+              <button class="btn" onclick="exportAll()">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M12 3v12" />
+                  <path d="M7 10l5 5 5-5" />
+                  <path d="M4 21h16" />
+                </svg>
+                Export
+              </button>
+              <span class="cg-wrap" id="createGroupWrap" data-cgtip="Select students to create a group">
+                <button class="btn primary" id="createGroupBtn" onclick="openGroup()">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 5v14M5 12h14" />
+                  </svg>
+                  Create group
+                </button>
+              </span>
+            </div>
+          </div>
+
+          <!-- Filters (auto-apply on change, no box) -->
+          <section class="filters" id="filtersSection">
+            <button class="filters-bar" onclick="toggleFilters()" aria-label="Toggle filters">
+              <span>Filters</span>
+              <svg class="fchev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6" /></svg>
+            </button>
+            <div class="filter-fields">
+              <div class="field">
+                <label for="f-name">Student name</label>
+                <div class="control has-icon">
+                  <svg class="lead" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg>
+                  <input id="f-name" type="text" placeholder="Search name" oninput="applyFilters()">
+                </div>
+              </div>
+
+              <div class="field">
+                <label for="f-sub">Submission</label>
+                <div class="control">
+                  <select id="f-sub" onchange="applyFilters()">
+                    <option value="">All</option>
+                    <option>Submitted</option>
+                    <option>Not Submitted</option>
+                  </select>
+                  <svg class="chev" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+                </div>
+              </div>
+              <div class="field">
+                <label for="f-cond">Medical condition</label>
+                <div class="control">
+                  <select id="f-cond" onchange="applyFilters()">
+                    <option value="">All</option>
+                    <option value="yes">Has condition</option>
+                    <option value="no">No condition</option>
+                  </select>
+                  <svg class="chev" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+                </div>
+              </div>
+              <div class="field">
+                <label for="f-year">Year</label>
+                <div class="control">
+                  <select id="f-year" onchange="applyFilters()">
+                    <option value="">All years</option>
+                    <option>1</option><option>2</option><option>3</option>
+                    <option>4</option><option>5</option><option>6</option>
+                    <option>7</option><option>Incoming (2026–2027)</option>
+                  </select>
+                  <svg class="chev" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+                </div>
+              </div>
+              <div class="field">
+                <label for="f-class">Class</label>
+                <div class="control">
+                  <select id="f-class" onchange="applyFilters()">
+                    <option value="">All classes</option>
+                  </select>
+                  <svg class="chev" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+                </div>
+              </div>
+              <div class="field">
+                <label for="f-ack">Acknowledged</label>
+                <div class="control">
+                  <select id="f-ack" onchange="applyFilters()">
+                    <option value="">All</option>
+                    <option>Acknowledged</option>
+                    <option>Not Acknowledged</option>
+                  </select>
+                  <svg class="chev" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+                </div>
+              </div>
+            </div>
+            <button class="btn" id="clearFiltersBtn" style="flex:none;height:32px;white-space:nowrap;font-size:12.5px;align-self:flex-end" onclick="resetFilters()">Clear filters</button>
+          </section>
+
+          <div class="card table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th style="width:3%"><input type="checkbox" class="checkbox" id="selectAll"
+                      onchange="toggleAll(this)" aria-label="Select all"></th>
+                  <th style="width:5%">Sr. No.</th>
+                  <th style="width:15%">Student Name</th>
+                  <th style="width:6.5%">Year</th>
+                  <th style="width:5%">Class</th>
+                  <th style="width:13%">Last Modified By</th>
+                  <th class="col-center" style="width:8.5%">Submission<br>Status</th>
+                  <th style="width:13%">Acknowledged By</th>
+                  <th class="col-center" style="width:12%">Acknowledged<br>Status</th>
+                  <th class="col-center" style="width:8%">Medical<br>Condition</th>
+                  <th class="col-center" style="width:11%"></th>
+                </tr>
+              </thead>
+              <tbody id="tbody"></tbody>
+            </table>
+            <!-- Infinite scroll loader & sentinel (inside scroll box) -->
+            <div id="scroll-loader">
+              <div class="loader-dots"><span></span><span></span><span></span></div>
+              Loading more rows…
+            </div>
+            <div id="scroll-sentinel" style="height:2px"></div>
+          </div>
+          <div class="table-total">Total : <span id="totalCount">0</span></div>
+        </main>
+      </div>
+      <!-- View form — fills content area only (below topbar, right of sidebar) -->
+      <div class="overlay fullscreen" id="previewOverlay" onclick="if(event.target===this)closePreview()">
+        <div class="modal fullscreen" role="dialog" aria-modal="true" aria-labelledby="pvTitle">
+          <div class="modal-head">
+            <div class="mh-left">
+              <nav class="breadcrumb pv-crumb" aria-label="Breadcrumb">
+                <a href="#" class="crumb-home" onclick="closePreview();return false" aria-label="Home">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 10.5L12 3l9 7.5" />
+                    <path d="M5 9.5V20a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V9.5" />
+                    <path d="M9.5 21v-5a1 1 0 0 1 1-1h3a1 1 0 0 1 1 1v5" />
+                  </svg>
+                </a>
+                <span class="crumb-sep">›</span>
+                <a href="#" class="crumb-link" onclick="closePreview();return false">Medical Form</a>
+                <span class="crumb-sep">›</span>
+                <span class="crumb-current" id="pvTitle">Preview</span>
+              </nav>
+            </div>
+            <button class="row-action" onclick="closePreview()" aria-label="Close">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M18 6L6 18M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+          <div class="modal-body scroll" id="pvBody"></div>
+          <div class="modal-foot">
+            <button class="btn" onclick="closePreview()">Close</button>
+            <button class="btn primary" id="pvDownloadBtn" onclick="downloadBlankPDF()">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M4 21h16"/></svg>
+              <span class="lbl">Download empty form</span>
+            </button>
+          </div>
+        </div>
+      </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Developer notes (wireframe only — remove before production) -->
+  <a class="devnotes" id="devNotes" href="https://docs.google.com/document/d/1wFsU6GzTKsFWnBFD7rH_pyMwdKLi4VQR2ZyRz4h4G4I/edit?usp=sharing"
+     target="_blank" rel="noopener" title="Opens the shared Google Doc for feedback. Wireframe only — not part of the production build.">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z" /><path d="M14 2v4a2 2 0 0 0 2 2h4" /><path d="M16 13H8" /><path d="M16 17H8" />
+    </svg>
+    <span class="dn-text">Developer notes &amp; queries</span>
+    <span class="dn-tag">Not in production</span>
+  </a>
+
+  <!-- Change password modal -->
+  <div class="overlay" id="pwdOverlay" onclick="if(event.target===this)closeChangePassword()">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="pwdTitle">
+      <div class="modal-head">
+        <h3 id="pwdTitle">Change password</h3>
+        <button class="row-action" onclick="closeChangePassword()" aria-label="Close">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M18 6L6 18M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="field" style="margin-bottom:12px">
+          <label for="pwdCurrent">Current password</label>
+          <div class="control"><input id="pwdCurrent" type="password" placeholder="Enter current password"></div>
+        </div>
+        <div class="field" style="margin-bottom:12px">
+          <label for="pwdNew">New password</label>
+          <div class="control"><input id="pwdNew" type="password" placeholder="At least 8 characters"></div>
+        </div>
+        <div class="field">
+          <label for="pwdConfirm">Confirm new password</label>
+          <div class="control"><input id="pwdConfirm" type="password" placeholder="Re-enter new password"></div>
+        </div>
+        <div id="pwdError" style="color:var(--red);font-size:12.5px;margin-top:10px;min-height:16px"></div>
+      </div>
+      <div class="modal-foot">
+        <button class="btn" onclick="closeChangePassword()">Cancel</button>
+        <button class="btn primary" onclick="submitChangePassword()">Update password</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Create Group modal -->
+  <div class="overlay" id="ackOverlay" onclick="if(event.target===this)closeAckConfirm()">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="ackTitle">
+      <div class="modal-head">
+        <h3 id="ackTitle">Acknowledge form</h3>
+        <button class="row-action" onclick="closeAckConfirm()" aria-label="Close">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M18 6L6 18M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p id="ackBody" style="margin:0;font-size:14px;line-height:1.6;color:var(--ink)"></p>
+      </div>
+      <div class="modal-foot">
+        <button class="btn" onclick="closeAckConfirm()">Cancel</button>
+        <button class="btn primary" id="ackConfirmBtn" onclick="submitAcknowledge()">Confirm</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="overlay" id="groupOverlay" onclick="if(event.target===this)closeGroup()">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="groupTitle">
+      <div class="modal-head">
+        <h3 id="groupTitle">Create group</h3>
+        <button class="row-action" onclick="closeGroup()" aria-label="Close">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M18 6L6 18M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="field">
+          <label for="groupName">Group name</label>
+          <input type="text" id="groupName" placeholder="e.g. Allergy watch list">
+        </div>
+        <p class="hint" id="groupHint">No students selected yet — you can still create an empty group and add students
+          later.</p>
+      </div>
+      <div class="modal-foot">
+        <button class="btn" onclick="closeGroup()">Cancel</button>
+        <button class="btn primary" onclick="submitGroup()">Create group</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Create Group modal end -->
+
+
+  <div class="info-tip" id="infoTip"></div>
+
+  <div class="toast" id="toast">
+    <span class="tmsg" id="toastMsg"></span>
+    <button class="tclose" onclick="hideToast()" aria-label="Dismiss">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12" /></svg>
+    </button>
+  </div>
+
+  <script>
+    /* Sidebar toggle */
+    /* ---- Profile menu ---- */
+    /* Position the contact tooltip as a fixed element so the table's scroll box can't clip it */
+    function positionContactTip(flag) {
+      const tip = flag.querySelector('.contact-tip');
+      if (!tip) return;
+      const r = flag.getBoundingClientRect();
+      const tw = tip.offsetWidth || 220, th = tip.offsetHeight || 110;
+      let top = r.top - 8 - th;              /* prefer above the icon */
+      if (top < 64) top = r.bottom + 8;      /* not enough room -> below */
+      let left = r.right - tw;               /* right-align to the icon */
+      if (left < 10) left = 10;
+      if (left + tw > window.innerWidth - 10) left = window.innerWidth - 10 - tw;
+      tip.style.top = top + 'px';
+      tip.style.left = left + 'px';
+    }
+    /* Keep the tooltip open while the pointer moves onto it (so the copy button is clickable) */
+    let ctHideTimer = null;
+    function hideAllContactTips() {
+      document.querySelectorAll('.contact-tip.show').forEach(t => t.classList.remove('show'));
+    }
+    document.addEventListener('mouseover', e => {
+      const flag = e.target.closest && e.target.closest('.contact-flag');
+      const tip = e.target.closest && e.target.closest('.contact-tip');
+      if (flag) {
+        clearTimeout(ctHideTimer);
+        const t = flag.querySelector('.contact-tip');
+        document.querySelectorAll('.contact-tip.show').forEach(x => { if (x !== t) x.classList.remove('show'); });
+        positionContactTip(flag);
+        if (t) t.classList.add('show');
+      } else if (tip) {
+        clearTimeout(ctHideTimer);
+      }
+    });
+    document.addEventListener('mouseout', e => {
+      const fromFlag = e.target.closest && e.target.closest('.contact-flag');
+      const fromTip = e.target.closest && e.target.closest('.contact-tip');
+      if (!fromFlag && !fromTip) return;
+      const to = e.relatedTarget;
+      const toFlag = to && to.closest && to.closest('.contact-flag');
+      const toTip = to && to.closest && to.closest('.contact-tip');
+      if (!toFlag && !toTip) { clearTimeout(ctHideTimer); ctHideTimer = setTimeout(hideAllContactTips, 180); }
+    });
+    document.addEventListener('focusin', e => {
+      const flag = e.target.closest && e.target.closest('.contact-flag');
+      if (flag) { positionContactTip(flag); const t = flag.querySelector('.contact-tip'); if (t) t.classList.add('show'); }
+    });
+    /* Shared date/time info tooltip for Last Modified By / Acknowledged By */
+    function showInfoTip(dot) {
+      const tip = document.getElementById('infoTip');
+      tip.textContent = dot.getAttribute('data-info') || '';
+      const r = dot.getBoundingClientRect();
+      tip.classList.add('show');
+      const tw = tip.offsetWidth, th = tip.offsetHeight;
+      let top = r.top - 8 - th;
+      if (top < 64) top = r.bottom + 8;
+      let left = r.left + r.width / 2 - tw / 2;
+      if (left < 10) left = 10;
+      if (left + tw > window.innerWidth - 10) left = window.innerWidth - 10 - tw;
+      tip.style.top = top + 'px';
+      tip.style.left = left + 'px';
+    }
+    function hideInfoTip() { document.getElementById('infoTip').classList.remove('show'); }
+    document.addEventListener('mouseover', e => {
+      const dot = e.target.closest && e.target.closest('.info-dot');
+      if (dot) showInfoTip(dot);
+    });
+    document.addEventListener('mouseout', e => {
+      const dot = e.target.closest && e.target.closest('.info-dot');
+      const to = e.relatedTarget;
+      if (dot && !(to && to.closest && to.closest('.info-dot'))) hideInfoTip();
+    });
+    document.addEventListener('focusin', e => {
+      const dot = e.target.closest && e.target.closest('.info-dot');
+      if (dot) showInfoTip(dot);
+    });
+    document.addEventListener('focusout', e => {
+      if (e.target.closest && e.target.closest('.info-dot')) hideInfoTip();
+    });
+
+    function copyNumber(e, num) {
+      e.stopPropagation();
+      const done = () => toast('Copied ' + num + ' to clipboard.');
+      const fallback = () => {
+        const ta = document.createElement('textarea');
+        ta.value = num; ta.style.position = 'fixed'; ta.style.opacity = '0';
+        document.body.appendChild(ta); ta.select();
+        try { document.execCommand('copy'); } catch (_) { }
+        document.body.removeChild(ta); done();
+      };
+      try {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(num).then(done).catch(fallback);
+        } else fallback();
+      } catch (_) { fallback(); }
+    }
+
+    function toggleProfile(e) {
+      if (e) e.stopPropagation();
+      document.getElementById('profileMenu').classList.toggle('show');
+    }
+    function closeProfile() {
+      const m = document.getElementById('profileMenu');
+      if (m) m.classList.remove('show');
+    }
+    document.addEventListener('click', e => {
+      const wrap = document.querySelector('.profile-wrap');
+      if (wrap && !wrap.contains(e.target)) closeProfile();
+    });
+
+    function openChangePassword() {
+      closeProfile();
+      document.getElementById('pwdOverlay').classList.add('show');
+      ['pwdCurrent', 'pwdNew', 'pwdConfirm'].forEach(id => document.getElementById(id).value = '');
+      document.getElementById('pwdError').textContent = '';
+      setTimeout(() => document.getElementById('pwdCurrent').focus(), 50);
+    }
+    function closeChangePassword() { document.getElementById('pwdOverlay').classList.remove('show'); }
+    function submitChangePassword() {
+      const cur = document.getElementById('pwdCurrent').value.trim();
+      const nw = document.getElementById('pwdNew').value.trim();
+      const cf = document.getElementById('pwdConfirm').value.trim();
+      const err = document.getElementById('pwdError');
+      if (!cur || !nw || !cf) { err.textContent = 'Please fill in all three fields.'; return; }
+      if (nw.length < 8) { err.textContent = 'New password must be at least 8 characters.'; return; }
+      if (nw !== cf) { err.textContent = 'New password and confirmation do not match.'; return; }
+      closeChangePassword();
+      toast('Password changed successfully.');
+    }
+    function doLogout() {
+      closeProfile();
+      toast('Logged out successfully.');
+    }
+
+    function toggleFilters() {
+      document.getElementById('filtersSection').classList.toggle('open');
+    }
+    function toggleSidebar() {
+      const sb = document.getElementById('sidebar');
+      if (window.matchMedia('(max-width:760px)').matches) {
+        sb.classList.toggle('mobile-open');
+        document.getElementById('sidebarBackdrop').classList.toggle('show', sb.classList.contains('mobile-open'));
+      } else {
+        sb.classList.toggle('collapsed');
+      }
+    }
+    function closeMobileSidebar() {
+      document.getElementById('sidebar').classList.remove('mobile-open');
+      document.getElementById('sidebarBackdrop').classList.remove('show');
+    }
+
+    /* Sub-nav expand/collapse */
+    function toggleSubNav(groupId) {
+      document.getElementById(groupId).classList.toggle('open');
+      const btn = document.querySelector('#' + groupId + ' .nav-item.has-sub');
+      if (btn) btn.classList.toggle('open');
+    }
+
+    /* Class options */
+    const classMap = { 1: ['1A', '1B', '1C', '1D'], 2: ['2A', '2B', '2C'], 3: ['3A', '3B', '3C'], 4: ['4A', '4B', '4C', '4D'], 5: ['5A', '5B', '5C', '5D'] };
+    (function () {
+      const sel = document.getElementById('f-class');
+      if (!sel) return;
+      Object.values(classMap).flat().forEach(c => { const o = document.createElement('option'); o.textContent = c; sel.appendChild(o); });
+    })();
+
+    /* Sample data */
+    const baseStudents = [
+      { id: 1, name: "James Mc'Antee", year: "1", cls: "1D", pc: "Niall Ryan", sc: "", cond: true, mod: "Niall Ryan", modAt: "06 Jul 2026, 3:20 PM", sub: "Submitted", ackBy: "Aisling Doherty", ackAt: "06 Jul 2026, 3:21 PM", ack: "Acknowledged" },
+      { id: 2, name: "Roberto Roberts", year: "4", cls: "4A", pc: "Decan Kelly", sc: "Finn Kelly", cond: true, mod: "Finn Kelly", modAt: "13 Oct 2025, 3:14 PM", sub: "Submitted", ackBy: "Aisling Doherty", ackAt: "26 Nov 2025, 5:22 AM", ack: "Acknowledged" },
+      { id: 3, name: "Aoife Byrne", year: "2", cls: "2B", pc: "Sean Byrne", sc: "Mary Byrne", cond: false, mod: "Sean Byrne", modAt: "02 Jun 2026, 9:10 AM", sub: "Submitted", ackBy: "", ackAt: "", ack: "Not Acknowledged" },
+      { id: 4, name: "Liam Walsh", year: "3", cls: "3C", pc: "Grace Walsh", sc: "", cond: false, mod: "", modAt: "", sub: "Not Submitted", ackBy: "", ackAt: "", ack: "Not Acknowledged" },
+      { id: 5, name: "Sophie O'Brien", year: "5", cls: "5D", pc: "Kevin O'Brien", sc: "Anne O'Brien", cond: true, mod: "Kevin O'Brien", modAt: "20 May 2026, 1:05 PM", sub: "Submitted", ackBy: "David Lee", ackAt: "21 May 2026, 8:00 AM", ack: "Acknowledged" },
+      { id: 6, name: "Noah Kelly", year: "1", cls: "1A", pc: "Emma Kelly", sc: "", cond: false, mod: "", modAt: "", sub: "Not Submitted", ackBy: "", ackAt: "", ack: "Not Acknowledged" },
+      { id: 7, name: "Ella Murphy", year: "5", cls: "1A", pc: "Tom Murphy", sc: "Rosa Murphy", cond: true, mod: "Tom Murphy", modAt: "01 Jul 2026, 11:02 AM", sub: "Submitted", ackBy: "", ackAt: "", ack: "Not Acknowledged" },
+    ];
+
+    const extraNames = ["Cian Dolan", "Siobhan Nolan", "Patrick Flynn", "Niamh Burke", "Eoin Hayes", "Caoimhe Quinn",
+      "Fionn Brennan", "Aisling Connolly", "Darragh Moore", "Ciara Ryan", "Cormac Lynch", "Roisin Murphy",
+      "Tadhg O'Sullivan", "Grainne Fitzgerald", "Senan Dunne", "Maeve Collins", "Oisin Gallagher", "Sorcha Delaney",
+      "Conor Fahy", "Emer Walsh", "Ruairi Moran", "Aoibhin Doyle", "Cathal Sheridan", "Sinead Kavanagh",
+      "Ferdia O'Connell", "Blathnaid Reilly", "Lorcan Dunbar", "Clodagh Power", "Niall Healy", "Saoirse Boyle",
+      "Diarmuid Stack", "Orla Slattery", "Fergal Toner", "Cliona Whelan", "Colm Madden", "Aine Farrell"];
+    const extraClasses = ["1A", "1B", "1C", "1D", "2A", "2B", "2C", "3A", "3B", "3C", "4A", "4B", "4C", "4D", "5A", "5B", "5C", "5D"];
+    const extraYears = ["1", "2", "3", "4", "5"];
+    const adultNames = ["Liam O'Brien", "Emma Kelly", "Noah Byrne", "Sophie Walsh", "Jack Murphy", "Grace Doyle",
+      "Sean Kavanagh", "Hannah Ryan", "Adam Nolan", "Chloe Brennan", "Daniel Flynn", "Laura Gallagher",
+      "Michael Dunne", "Sarah Collins", "David Moran", "Anna Fitzgerald", "James Healy", "Ella Boyle",
+      "Thomas Power", "Katie Whelan", "Patrick Farrell", "Rachel Madden", "Conor Sheridan", "Niamh Reilly",
+      "Eoin Doyle", "Aoife Slattery", "Cian Toner", "Orla Delaney", "Kevin Fahy", "Sinead Dunbar",
+      "Brian Stack", "Maria Lynch", "Paul Burke", "Julia Moore", "Mark Connolly", "Emily Ryan"];
+    const pick = (i, off) => adultNames[(i + off) % adultNames.length];
+    const students = [...baseStudents];
+    extraNames.forEach((name, i) => {
+      const yr = extraYears[(i + 2) % extraYears.length];
+      const cls = extraClasses[(i + 3) % extraClasses.length];
+      const submitted = i % 3 !== 0;
+      const acknowledged = submitted && i % 5 !== 2;
+      students.push({
+        id: 8 + i, name, year: yr, cls, pc: (i % 7 === 3 ? "" : pick(i, 12)), sc: (i % 7 === 3 ? "" : (i % 2 === 0 ? pick(i, 24) : "")), cond: submitted && i % 4 === 0,
+        mod: submitted ? pick(i, 0) : "", modAt: submitted ? "0" + ((i % 9) + 1) + " Jul 2026, 10:00 AM" : "",
+        sub: submitted ? "Submitted" : "Not Submitted",
+        ackBy: acknowledged ? pick(i, 6) : "", ackAt: acknowledged ? "0" + ((i % 9) + 1) + " Jul 2026, 11:00 AM" : "",
+        ack: acknowledged ? "Acknowledged" : "Not Acknowledged"
+      });
+    });
+
+    /* A form that has not been submitted cannot report a medical condition */
+    students.forEach(s => { if (s.sub !== 'Submitted') s.cond = false; });
+
+    const selected = new Set();
+    let view = [...students];
+
+    /* Infinite scroll state */
+    const PAGE_SIZE = 15;
+    let renderedCount = 0;
+
+    /* Icons */
+    const medYes = `<span class="med-flag" tabindex="0" aria-label="Has medical condition"><span class="med-icon yes"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v9M7.5 12h9" stroke-width="2.6" stroke-linecap="round"/></svg></span><span class="med-tooltip">Has medical condition</span></span>`;
+    const medNo = `<span class="med-icon no" title="No medical condition"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M5 12h14"/></svg></span>`;
+    /* Download arrow icon (traditional) */
+    const dlIcon = `<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M4 21h16"/></svg>`;
+    const eyeIcon = `<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>`;
+
+    function nameTime(name, time, label) {
+      if (!name) return '<span class="muted-dash">—</span>';
+      const tip = (label || 'Recorded') + ' at: ' + (time || '');
+      return `<div class="nt-row"><span class="nt-name">${name}</span>` +
+        `<span class="info-dot" data-info="${esc(tip)}" tabindex="0" aria-label="${esc(tip)}">` +
+        `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg></span></div>`;
+    }
+
+    /* Logged-in staff member recording the acknowledgement */
+    const CURRENT_USER = 'Krish Hedaoo';
+    function stamp(d) {
+      const M = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+      let h = d.getHours(); const ap = h >= 12 ? 'PM' : 'AM'; h = h % 12 || 12;
+      const mm = String(d.getMinutes()).padStart(2, '0');
+      return d.getDate() + ' ' + M[d.getMonth()] + ' ' + d.getFullYear() + ', ' + h + ':' + mm + ' ' + ap;
+    }
+    let pendingAckId = null;
+    let pendingAckMode = 'ack';
+    function confirmAcknowledge(id) {
+      const s = students.find(x => x.id === id);
+      if (!s || s.ack === 'Acknowledged') return;
+      if (s.sub !== 'Submitted') { toast('This form has not been submitted yet.'); return; }
+      pendingAckId = id;
+      pendingAckMode = 'ack';
+      document.getElementById('ackTitle').textContent = 'Acknowledge form';
+      document.getElementById('ackBody').innerHTML =
+        'This will change the status for <b>' + esc(s.name) + '</b> to <b>Acknowledged</b>. Do you wish to continue?';
+      document.getElementById('ackConfirmBtn').textContent = 'Confirm';
+      document.getElementById('ackOverlay').classList.add('show');
+    }
+    function confirmUnacknowledge(id) {
+      const s = students.find(x => x.id === id);
+      if (!s || s.ack !== 'Acknowledged') return;
+      pendingAckId = id;
+      pendingAckMode = 'unack';
+      document.getElementById('ackTitle').textContent = 'Remove acknowledgement';
+      document.getElementById('ackBody').innerHTML =
+        'Are you sure you want to remove this acknowledged mark for <b>' + esc(s.name) + '</b>?';
+      document.getElementById('ackConfirmBtn').textContent = 'Yes';
+      document.getElementById('ackOverlay').classList.add('show');
+    }
+    function closeAckConfirm() {
+      document.getElementById('ackOverlay').classList.remove('show');
+      pendingAckId = null;
+    }
+    function submitAcknowledge() {
+      const id = pendingAckId, mode = pendingAckMode;
+      closeAckConfirm();
+      if (id == null) return;
+      if (mode === 'unack') unacknowledgeForm(id); else acknowledgeForm(id);
+    }
+    function refreshRow(s, id) {
+      const tr = document.querySelector('#tbody tr[data-row-id="' + id + '"]');
+      if (tr) {
+        const idx = view.findIndex(x => x.id === id);
+        const tmp = document.createElement('tbody');
+        tmp.innerHTML = rowHTML(s, idx < 0 ? 0 : idx);
+        tr.replaceWith(tmp.firstElementChild);
+      } else { render(); }
+    }
+    function unacknowledgeForm(id) {
+      const s = students.find(x => x.id === id);
+      if (!s || s.ack !== 'Acknowledged') return;
+      s.ack = 'Not Acknowledged';
+      s.ackBy = '';
+      s.ackAt = '';
+      refreshRow(s, id);
+      toast('Acknowledgement removed for ' + s.name + '.');
+    }
+    function acknowledgeForm(id) {
+      const s = students.find(x => x.id === id);
+      if (!s || s.ack === 'Acknowledged') return;
+      if (s.sub !== 'Submitted') { toast('This form has not been submitted yet.'); return; }
+      s.ack = 'Acknowledged';
+      s.ackBy = CURRENT_USER;
+      s.ackAt = stamp(new Date());
+      refreshRow(s, id);
+      toast('Acknowledged by ' + s.ackBy + ' at ' + s.ackAt + '.');
+    }
+
+    function rowHTML(s, i) {
+      /* Status badges: S = Submitted / NS, A = Acknowledged / NA */
+      const subBadge = s.sub === 'Submitted'
+        ? `<span class="status-badge ok" data-tip="Submitted">S</span>`
+        : `<span class="status-badge neutral" data-tip="Not Submitted">N</span>`;
+      const ackBadge = s.ack === 'Acknowledged'
+        ? `<span class="status-badge ok" data-tip="Acknowledged">A</span>`
+        : `<span class="status-badge neutral" data-tip="Not Acknowledged">NA</span>`;
+      const acknowledged = s.ack === 'Acknowledged';
+      const submitted = s.sub === 'Submitted';
+      /* Acknowledged teacher details: who acknowledged it and when */
+      const ackDetails = acknowledged
+        ? nameTime(s.ackBy, s.ackAt, 'Acknowledged')
+        : '<span class="muted">—</span>';
+      /* Acknowledged status entry: button that records the acknowledgement */
+      const ackEntry = acknowledged
+        ? `<button class="ack-btn done" onclick="confirmUnacknowledge(${s.id})" title="Click to remove acknowledgement">Acknowledged</button>`
+        : (submitted
+          ? `<button class="ack-btn" onclick="confirmAcknowledge(${s.id})">Acknowledge</button>`
+          : `<span class="muted">—</span>`);
+      const checked = selected.has(s.id) ? 'checked' : '';
+      /* Contact icon tooltip: primary, primary + secondary, or none */
+      const contactIcon = `<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>`;
+      const cPhone = seed => '08' + (7 + seed % 3) + ' ' + (100 + (seed * 37) % 900) + ' ' + (1000 + (seed * 53) % 9000);
+      const numHTML = num => `<span class="ct-num">${num}</span><button class="ct-copy" onclick="copyNumber(event,'${num}')" aria-label="Copy number" title="Copy number"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button>`;
+      const contactTip = s.pc
+        ? (`<div class="ct-block"><div class="ct-h">Primary contact</div><div class="ct-row"><span class="ct-name">${esc(s.pc)}</span>${numHTML(cPhone(s.id))}</div></div>` +
+          (s.sc
+            ? `<div class="ct-sep"></div><div class="ct-block"><div class="ct-h">Secondary contact</div><div class="ct-row"><span class="ct-name">${esc(s.sc)}</span>${numHTML(cPhone(s.id + 7))}</div></div>`
+            : ''))
+        : '<div class="ct-none">No contact available</div>';
+      return `<tr data-row-id="${s.id}">
+    <td data-role="select"><input type="checkbox" class="checkbox rowcb" data-id="${s.id}" ${checked} onchange="toggleRow(${s.id},this)" aria-label="Select ${s.name}"><span class="cell-label" style="display:none"></span></td>
+    <td><span class="cell-label">Sr.No.</span><span class="cell-val">${i + 1}</span></td>
+    <td><span class="cell-label">Student</span><span class="cell-val sname">${s.name}</span></td>
+    <td><span class="cell-label">Year</span><span class="cell-val">${String(s.year).includes('(') ? esc(String(s.year)).replace(/\s*\(/, '<br><span style="white-space:nowrap">(').replace(/\)$/, ')</span>') : esc(String(s.year))}</span></td>
+    <td><span class="cell-label">Class</span><span class="cell-val">${s.cls}</span></td>
+    <td><span class="cell-label">Last Modified By</span><span class="cell-val">${nameTime(s.mod, s.modAt, 'Modified')}</span></td>
+    <td class="col-center"><span class="cell-label">Submission Status</span><span class="cell-val">${subBadge}</span></td>
+    <td><span class="cell-label">Acknowledged By</span><span class="cell-val">${ackDetails}</span></td>
+    <td class="col-center"><span class="cell-label">Acknowledged Status</span><span class="cell-val">${ackEntry}</span></td>
+    <td class="col-center"><span class="cell-label">Medical Condition</span><span class="cell-val">${s.cond ? medYes : medNo}</span></td>
+    <td class="col-center"><span class="cell-label">Actions</span><span class="cell-val"><div style="display:inline-flex;align-items:center;gap:4px"><button class="row-action pdf-btn" data-tip="Download PDF" onclick="downloadStudentPDF(${s.id})" aria-label="Download PDF">${dlIcon}</button><button class="row-action" data-tip="View" onclick="openRowPreview(${s.id})" aria-label="View form">${eyeIcon}</button><span class="contact-flag" tabindex="0" aria-label="Contact details">${contactIcon}<span class="contact-tip">${contactTip}</span></span></div></span></td>
+  </tr>`;
+    }
+
+    function render() {
+      const tb = document.getElementById('tbody');
+      const countEl = document.getElementById('count');
+      if (countEl) countEl.textContent = '(' + view.length + ')';
+      const totalEl = document.getElementById('totalCount');
+      if (totalEl) totalEl.textContent = view.length;
+      renderedCount = 0;
+      tb.innerHTML = '';
+      if (view.length === 0) {
+        tb.innerHTML = `<tr><td colspan="11"><div class="empty"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg><div>No students match these filters.</div><div class="sub" style="margin-top:4px">Try clearing the filters.</div></div></td></tr>`;
+        return;
+      }
+      loadMore();
+      syncSelectAll();
+    }
+
+    function loadMore() {
+      if (renderedCount >= view.length) { document.getElementById('scroll-loader').classList.remove('visible'); return; }
+      const tb = document.getElementById('tbody');
+      const batch = view.slice(renderedCount, renderedCount + PAGE_SIZE);
+      const startIdx = renderedCount;
+      tb.insertAdjacentHTML('beforeend', batch.map((s, i) => rowHTML(s, startIdx + i)).join(''));
+      renderedCount += batch.length;
+      document.getElementById('scroll-loader').classList.toggle('visible', renderedCount < view.length);
+      syncSelectAll();
+    }
+
+    /* IntersectionObserver for infinite scroll — sentinel & scroll live inside table-wrap */
+    (function () {
+      const sentinel = document.getElementById('scroll-sentinel');
+      const root = document.querySelector('.table-wrap');
+      const obs = new IntersectionObserver(entries => {
+        if (entries[0].isIntersecting) loadMore();
+      }, { root: root, rootMargin: '200px', threshold: 0 });
+      obs.observe(sentinel);
+    })();
+
+    /* Filtering — auto-applied on any change */
+    const val = id => document.getElementById(id).value.trim();
+    function updateClearBtn() {
+      const any = ['f-name', 'f-sub', 'f-cond', 'f-year', 'f-class', 'f-ack']
+        .some(id => { const el = document.getElementById(id); return el && el.value !== ''; });
+      const btn = document.getElementById('clearFiltersBtn');
+      if (btn) { btn.disabled = !any; btn.classList.toggle('is-disabled', !any); }
+    }
+    function applyFilters() {
+      const name = val('f-name').toLowerCase(), sub = val('f-sub'), cond = val('f-cond'),
+        year = val('f-year'), cls = val('f-class'), ack = val('f-ack');
+      view = students.filter(s => {
+        if (name && !s.name.toLowerCase().includes(name)) return false;
+        if (sub && s.sub !== sub) return false;
+        if (cond === 'yes' && !s.cond) return false;
+        if (cond === 'no' && s.cond) return false;
+        if (year && s.year !== year) return false;
+        if (cls && s.cls !== cls) return false;
+        if (ack && s.ack !== ack) return false;
+        return true;
+      });
+      updateClearBtn();
+      render();
+    }
+    function resetFilters() {
+      ['f-name', 'f-sub', 'f-cond', 'f-year', 'f-class', 'f-ack'].forEach(id => document.getElementById(id).value = '');
+      view = [...students]; updateClearBtn(); render();
+    }
+
+    /* Selection */
+    function toggleRow(id, cb) { cb.checked ? selected.add(id) : selected.delete(id); updateSelbar(); syncSelectAll(); }
+    function toggleAll(cb) {
+      view.forEach(s => cb.checked ? selected.add(s.id) : selected.delete(s.id));
+      document.querySelectorAll('.rowcb').forEach(c => c.checked = cb.checked);
+      updateSelbar();
+    }
+    function syncSelectAll() {
+      const all = document.getElementById('selectAll');
+      const boxes = [...document.querySelectorAll('.rowcb')];
+      all.checked = boxes.length > 0 && boxes.every(b => b.checked);
+    }
+    function clearSelection() { selected.clear(); document.querySelectorAll('.rowcb').forEach(c => c.checked = false); document.getElementById('selectAll').checked = false; updateSelbar(); }
+    function updateSelbar() {
+      const cnt = document.getElementById('selCount');
+      if (cnt) cnt.textContent = selected.size;
+      const bar = document.getElementById('selbar');
+      if (bar) bar.classList.toggle('show', selected.size > 0);
+      const cg = document.getElementById('createGroupBtn');
+      if (cg) { cg.disabled = selected.size === 0; cg.classList.toggle('is-disabled', selected.size === 0); }
+      const cgw = document.getElementById('createGroupWrap');
+      if (cgw) cgw.classList.toggle('cg-disabled', selected.size === 0);
+    }
+
+    /* Modals */
+    function openGroup() {
+      if (selected.size === 0) { toast('Select at least one student to create a group.'); return; }
+      const hint = document.getElementById('groupHint');
+      hint.textContent = selected.size + ' student' + (selected.size > 1 ? 's' : '') + ' will be added to this group.';
+      document.getElementById('groupOverlay').classList.add('show');
+      setTimeout(() => document.getElementById('groupName').focus(), 50);
+    }
+    function closeGroup() { document.getElementById('groupOverlay').classList.remove('show'); document.getElementById('groupName').value = ''; }
+    function submitGroup() {
+      const nm = document.getElementById('groupName').value.trim();
+      if (!nm) { document.getElementById('groupName').focus(); return; }
+      if (selected.size === 0) { closeGroup(); toast('Select at least one student to create a group.'); return; }
+      const n = selected.size;
+      closeGroup();
+      toast('Group "' + nm + '" created successfully with ' + n + ' student' + (n > 1 ? 's' : '') + '.');
+    }
+    /* ---- Medical form field schema (shared by view, preview and PDF) ---- */
+    const FORM = [
+      {
+        t: 'Emergency contact details', groups: [
+          {
+            t: 'Emergency contact 1', items: [
+              { l: 'Name', k: 'ec1n', short: true },
+              { l: 'Contact number', k: 'ec1p', short: true },
+            ]
+          },
+          {
+            t: 'Emergency contact 2', items: [
+              { l: 'Name', k: 'ec2n', short: true },
+              { l: 'Contact number', k: 'ec2p', short: true },
+            ]
+          },
+        ]
+      },
+      {
+        t: 'Doctor details', groups: [
+          {
+            t: 'Doctor', items: [
+              { l: 'Name', k: 'docn', short: true },
+              { l: 'Contact number', k: 'docp', short: true },
+              { l: 'Address', k: 'doca', full: true },
+            ]
+          },
+        ]
+      },
+      {
+        t: 'Does your student have any disability or medical conditions?', q: 'cond', items: [
+          { l: 'Diagnosis', k: 'diag' },
+          { l: 'Signs / symptoms', k: 'sympt' },
+          { l: 'Triggers', k: 'trig' },
+          { l: 'Other details', k: 'condOther', full: true },
+        ]
+      },
+      {
+        t: 'Does your student have a routine healthcare requirement?', q: 'routine', items: [
+          { l: 'During school hours', k: 'rhDuring' },
+          { l: 'Outside school hours', k: 'rhOutside' },
+        ]
+      },
+      {
+        t: 'Regular medication (taken during school hours)', q: 'regMed', na: true, items: [
+          { l: 'Medication / description', k: 'regMedDesc' },
+          { l: 'Dose', k: 'regMedDose' },
+        ]
+      },
+      {
+        t: 'Emergency medication (full details including dosage)', q: 'emgMed', na: true, items: [
+          { l: 'Medication', k: 'emgMedName' },
+          { l: 'Protocol', k: 'emgMedProto', full: true },
+        ]
+      },
+      { t: 'Has this medication been left in the school office?', q: 'leftOffice', na: true },
+      {
+        t: 'Special considerations — activities etc.', q: 'special', na: true, items: [
+          { l: 'Details', k: 'specialDet', full: true },
+        ]
+      },
+      {
+        t: 'Does your student suffer from any type of allergy?', q: 'allergy', items: [
+          { l: 'Details', k: 'allergyDet', full: true },
+        ]
+      },
+      {
+        t: 'Is your student currently receiving treatment from a GP or other doctor?', q: 'gp', items: [
+          { l: 'Details', k: 'gpDet', full: true },
+        ]
+      },
+      {
+        t: 'Consent & authorisation', consent: [
+          { l: 'Emergency first aid', k: 'cFirstAid' },
+          { l: 'Medical assistance', k: 'cMedAssist' },
+          { l: 'Medication as prescribed by GP', k: 'cRxMed' },
+          { l: 'Non-prescription medication', k: 'cNonRx' },
+        ]
+      },
+      {
+        t: 'Is there any other information about your student that you think is relevant for us to know?', q: 'other', items: [
+          { l: 'Details', k: 'otherDet', full: true },
+        ]
+      },
+    ];
+
+    /* Dummy data for a submitted student (woven with their real name/contacts) */
+    function dummyData(s) {
+      const id = s.id;
+
+      /* Phone number variants */
+      const phones = ['083 412 7890', '087 234 5678', '086 901 2345', '085 678 3412', '089 321 7654', '083 567 8901', '087 890 1234'];
+      const ph1 = phones[id % phones.length];
+      const ph2 = phones[(id + 3) % phones.length];
+      const phDoc = phones[(id + 5) % phones.length];
+
+      /* Doctor names & addresses */
+      const docNames = ['Dr. Sarah Connolly', 'Dr. Michael O\'Brien', 'Dr. Aine Kavanagh', 'Dr. Fionn Murphy', 'Dr. Grace Walsh', 'Dr. Cian Doherty', 'Dr. Niamh Reilly'];
+      const docAddrs = [
+        '14 Oak Grove Medical Centre, Dublin 9, D09 X2Y4',
+        '7 Maple Avenue Practice, Cork, T12 AB34',
+        '23 Elm Road Surgery, Galway, H91 CD56',
+        'Birch Lane Family Practice, 5 Birch Lane, Limerick, V94 EF78',
+        'Cedar Medical, 31 Cedar Close, Waterford, X91 GH90',
+        'Riverbank Health Clinic, 2 Bridge St, Sligo, F91 PQ12',
+        'Hillview Surgery, 18 Hill Road, Kilkenny, R95 RS34',
+      ];
+
+      /* Medical conditions — pick by id */
+      const condData = [
+        { diag: 'Asthma (mild persistent)', sympt: 'Wheezing, shortness of breath, chest tightness after exercise', trig: 'Cold air, exercise, pollen, dust mites', condOther: 'Uses Ventolin reliever inhaler. Inhaler and spacer kept on student\'s person at all times.' },
+        { diag: 'Type 1 Diabetes', sympt: 'Hypoglycaemia — sweating, shaking, pale skin, confusion, dizziness', trig: 'Missed meals, prolonged exercise, illness, stress', condOther: 'Blood glucose monitor in school bag. Student can self-administer insulin. Glucagon kit stored in school office.' },
+        { diag: 'Epilepsy (absence seizures)', sympt: 'Brief staring episodes (5–30 sec), unresponsiveness, eye blinking', trig: 'Tiredness, flashing lights, hyperventilation, high fever', condOther: 'Seizures are typically self-limiting. Do not restrain student. Time the seizure and notify parents after every episode.' },
+        { diag: 'Severe Eczema & Contact Dermatitis', sympt: 'Dry, cracked, intensely itchy skin — mainly on inner elbows, wrists and neck', trig: 'Soap, detergents, synthetic fabrics, heat, sweat, stress', condOther: 'Moisturiser applied after PE. Avoid latex gloves during first aid. Topical steroid cream in school office with written GP protocol.' },
+        { diag: 'Coeliac Disease', sympt: 'Severe abdominal pain, bloating, nausea and fatigue following gluten ingestion', trig: 'Any food containing wheat, rye, barley or cross-contaminated oats', condOther: 'Strict gluten-free diet. Student brings own packed lunch. School canteen has been notified. Even trace amounts can cause a reaction.' },
+        { diag: 'Juvenile Idiopathic Arthritis (JIA)', sympt: 'Joint pain, swelling and stiffness — primarily knees and wrists, worse in mornings', trig: 'Cold, damp weather, prolonged sitting, overexertion', condOther: 'May need extra time to move between classes on flare days. Physio exercises approved by consultant are performed at school once weekly.' },
+        { diag: 'Anxiety Disorder (generalised)', sympt: 'Panic attacks, hyperventilation, nausea, rapid heartbeat, dizziness in high-pressure situations', trig: 'Exams, public speaking, crowded spaces, sudden loud noises', condOther: 'Student has an agreed anxiety management plan with the school counsellor. Quiet room access granted. Parents to be notified if panic attack occurs.' },
+      ];
+      const cond = s.cond;
+      const ci = condData[id % condData.length];
+
+      /* Routine healthcare */
+      const routineFlag = id % 3 !== 2;
+      const rhDuringArr = [
+        'Ventolin inhaler (2 puffs via spacer) 10 minutes before PE class',
+        'Blood glucose check before lunch (12:15 pm) and immediately after PE',
+        'Levetiracetam 250mg tablet at 12:30 pm — must be taken with food and water',
+        'Topical steroid cream applied to affected areas after PE shower',
+        'None required during school hours — student manages independently',
+        'Methotrexate tablet on Monday lunchtimes only (once weekly)',
+        'Mindfulness check-in with school counsellor on Tuesdays at 11 am',
+      ];
+      const rhOutsideArr = [
+        'Singulair (Montelukast) 5mg once daily at bedtime',
+        'Insulin injection with evening meal — administered and supervised by parent',
+        'Second dose of Levetiracetam 250mg at 8:00 pm at home',
+        'Emollient bath soak followed by full-body moisturiser application every evening',
+        'No school-hours requirement — GP follow-up every 6 months',
+        'Folic acid 5mg supplement taken on Sundays (day after Methotrexate)',
+        'Weekly online CBT session with private therapist on Thursdays at 5 pm',
+      ];
+
+      /* Regular medication */
+      const regMedVal = [
+        'Yes', 'No', 'Non Applicable', 'Yes', 'Non Applicable', 'Yes', 'No',
+      ][id % 7];
+      const regDescArr = [
+        'Montelukast (Singulair) 5mg chewable tablet',
+        '', '',
+        'Metformin 500mg tablet',
+        '',
+        'Methotrexate 2.5mg tablets (6 tablets once weekly)',
+        '',
+      ];
+      const regDoseArr = [
+        'Once daily at 12:00 pm — with lunch',
+        '', '',
+        'Twice daily — with breakfast and lunch',
+        '',
+        'Six tablets every Monday lunchtime — with food',
+        '',
+      ];
+
+      /* Emergency medication */
+      const emgMedVal = cond ? ['Yes', 'Yes', 'No', 'Yes', 'No', 'Non Applicable', 'Yes'][id % 7] : 'Non Applicable';
+      const emgNames = [
+        'Salbutamol inhaler (Ventolin) 100mcg — 2–4 puffs via spacer',
+        'Glucagon injection kit (GlucaGen HypoKit 1mg/ml)',
+        '', '', '',
+        '',
+        'Adrenaline auto-injector (EpiPen 0.3mg)',
+      ];
+      const emgProtos = [
+        'Administer 2–4 puffs via spacer. If no improvement after 5 minutes, repeat and call 112 immediately. Do not leave student unattended.',
+        'If student is unresponsive or unable to swallow: inject 1mg Glucagon into outer thigh. Place in recovery position. Call 112. Notify parents immediately.',
+        '', '', '',
+        '',
+        'Administer EpiPen into outer thigh (can be given through clothing). Call 112 immediately. Lay student flat with legs raised. A second dose may be given after 5 minutes if no improvement. Notify parents.',
+      ];
+
+      const leftOfficeVal = emgMedVal === 'Yes' ? (id % 2 === 0 ? 'Yes' : 'No') : 'Non Applicable';
+
+      /* Special considerations */
+      const specialVal = ['Non Applicable', 'Yes', 'No', 'Non Applicable', 'Yes', 'Non Applicable', 'Yes'][id % 7];
+      const specialDets = [
+        '',
+        'Student must not participate in contact sports (rugby, GAA, martial arts) due to seizure risk. Can participate in swimming if a staff member is poolside.',
+        '',
+        '',
+        'Requires additional rest breaks during written exams. Formal accommodation granted — see SEN file. GP letter on record.',
+        '',
+        'Must carry a snack at all times. Cannot fast for extended periods. Please inform subject teacher before any extended sporting or outdoor event.',
+      ];
+
+      /* Allergy */
+      const allergyFlag = id % 4 !== 1;
+      const allergyDets = [
+        'Peanuts and tree nuts — anaphylaxis risk. Carries EpiPen at all times. Spare EpiPen stored in school office. Staff trained in administration.',
+        '',
+        'Penicillin and amoxicillin — do not administer any antibiotic without first confirming it is penicillin-free.',
+        'Bee and wasp stings — previous anaphylactic reaction recorded. Carries EpiPen. Parents to be called immediately following any sting.',
+        'Latex — avoid latex gloves during first aid. Student carries antihistamine (cetirizine) for mild reactions.',
+        'Sesame seeds — found in some breads, hummus and snack bars. Carries antihistamines. School canteen has been informed.',
+        'Sulphite preservatives — found in some fruit juices, dried fruit and processed meats. Student manages own dietary choices.',
+      ];
+
+      /* GP treatment */
+      const gpFlag = id % 5 !== 3;
+      const gpDets = [
+        'Under care of Dr. Aoife Sheridan at Dublin Paediatric Asthma Clinic. Review every 6 months. Last attended March 2026.',
+        'Registered with the Paediatric Diabetes Team at Children\'s Health Ireland, Crumlin. Monthly review. Continuous glucose monitor data shared with school nurse.',
+        'Attending paediatric neurology at Our Lady\'s Children\'s Hospital. Last reviewed January 2026. MRI on file.',
+        '',
+        'Under dermatology care at Cork University Hospital. Patch testing completed February 2026. Treatment plan reviewed annually.',
+        'Follow-up with Paediatric Gastroenterology, Galway University Hospital every 12 months. Confirmed coeliac — antibody levels monitored.',
+        'Monthly session with Dr. Louise Barry (CAMHS). School counsellor copied on management plan with parental consent.',
+      ];
+
+      /* Other info */
+      const otherFlag = id % 6 === 0 || id % 7 === 3;
+      const otherDets = [
+        'Student wears prescription glasses for reading and board work. Spare pair kept in school bag.',
+        '', '', '',
+        'Student has mild hearing impairment in left ear (30dB loss). Please seat near the front of class and face the student when speaking.',
+        '', '',
+        'Student has a medical alert bracelet (MedicAlert) which they wear at all times — please do not ask them to remove it during PE or swimming.',
+      ];
+
+      return {
+        ec1n: s.pc || 'Mary O\'Brien',   ec1p: ph1,
+        ec2n: s.sc || 'Patrick O\'Brien', ec2p: ph2,
+        docn: docNames[id % docNames.length],
+        docp: phDoc,
+        doca: docAddrs[id % docAddrs.length],
+
+        cond: cond ? 'Yes' : 'No',
+        diag:      cond ? ci.diag      : '',
+        sympt:     cond ? ci.sympt     : '',
+        trig:      cond ? ci.trig      : '',
+        condOther: cond ? ci.condOther : '',
+
+        routine:   routineFlag ? 'Yes' : 'No',
+        rhDuring:  routineFlag ? rhDuringArr[id % rhDuringArr.length]   : '',
+        rhOutside: routineFlag ? rhOutsideArr[id % rhOutsideArr.length] : '',
+
+        regMed:     regMedVal,
+        regMedDesc: regDescArr[id % regDescArr.length],
+        regMedDose: regDoseArr[id % regDoseArr.length],
+
+        emgMed:      emgMedVal,
+        emgMedName:  emgMedVal === 'Yes' ? emgNames[id % emgNames.length]   : '',
+        emgMedProto: emgMedVal === 'Yes' ? emgProtos[id % emgProtos.length] : '',
+
+        leftOffice: leftOfficeVal,
+
+        special:    specialVal,
+        specialDet: specialVal === 'Yes' ? specialDets[id % specialDets.length] : '',
+
+        allergy:    allergyFlag ? 'Yes' : 'No',
+        allergyDet: allergyFlag ? allergyDets[id % allergyDets.length] : '',
+
+        gp:    gpFlag ? 'Yes' : 'No',
+        gpDet: gpFlag ? gpDets[id % gpDets.length] : '',
+
+        cFirstAid: 'Yes',
+        cMedAssist: 'Yes',
+        cRxMed:  id % 9 === 0 ? 'No' : 'Yes',
+        cNonRx:  id % 4 === 0 ? 'No' : 'Yes',
+
+        other:    otherFlag ? 'Yes' : 'No',
+        otherDet: otherFlag ? otherDets[id % otherDets.length] : '',
+      };
+    }
+
+    const esc = t => String(t == null ? '' : t).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    function ynChip(val) {
+      const v = String(val || '');
+      const cls = /^yes$/i.test(v) ? 'yes' : (/non/i.test(v) ? 'na' : 'no');
+      return `<span class="pv-answer ${cls}">${esc(v || '—')}</span>`;
+    }
+    function ynChoices(na) {
+      const opts = na ? ['Yes', 'No', 'Non Applicable'] : ['Yes', 'No'];
+      return `<span class="pv-choices">` + opts.map(o => `<label><i></i>${o}</label>`).join('') + `</span>`;
+    }
+    let pvLayout = 'c';
+    let pvLast = null;
+    function itemHTML(it, data, filled) {
+      const val = filled ? (data[it.k] || '') : '';
+      const cls = 'pv-item' + (it.full ? ' pv-full' : '') + (it.short ? ' pv-short' : '');
+      return `<div class="${cls}"><span class="pv-lab">${esc(it.l)}</span><div class="pv-val">${esc(val)}</div></div>`;
+    }
+    function setLayout(l) {
+      pvLayout = l;
+      document.querySelectorAll('.pv-lyt').forEach(b => b.classList.toggle('active', b.dataset.l === l));
+      if (pvLast) renderForm(pvLast.data, pvLast.filled, pvLast.header);
+    }
+    /* Build the form body. filled=true -> show values + answer chips; filled=false -> blank template */
+    function renderForm(data, filled, header) {
+      pvLast = { data, filled, header };
+      const body = document.getElementById('pvBody');
+      body.className = 'modal-body scroll pv-body v-' + pvLayout;
+      let h = '';
+      if (header) {
+        h += `<div class="pv-hdr"><div class="name">${esc(header.name)}</div><div class="meta">Last modified by ${esc(header.meta)}</div></div>`;
+        if (header.notSubmitted) h += `<div class="pv-note">This form has not been submitted yet — showing the blank form.</div>`;
+      } else if (!filled) {
+        h += `<div class="pv-note">Blank medical form template — all fields are shown empty.</div>`;
+      }
+      const showValues = filled && !(header && header.notSubmitted);
+      FORM.forEach((sec, secIdx) => {
+        h += `<div class="pv-section">`;
+        if (sec.consent) {
+          h += `<h4>${esc(sec.t)}</h4><div class="pv-consent">`;
+          sec.consent.forEach(it => {
+            const right = showValues ? ynChip(data[it.k]) : ynChoices(false);
+            h += `<div class="row"><span>${esc(it.l)}</span>${right}</div>`;
+          });
+          h += `</div>`;
+        } else if (sec.q) {
+          const right = showValues ? ynChip(data[sec.q]) : ynChoices(sec.na);
+          h += `<div class="pv-qhead"><h4>${esc(sec.t)}</h4>${right}</div>`;
+          if (sec.items && sec.items.length) {
+            h += `<div class="pv-grid">` + sec.items.map(it => itemHTML(it, data, showValues)).join('') + `</div>`;
+          }
+        } else if (sec.groups) {
+          h += `<h4>${esc(sec.t)}</h4>`;
+          sec.groups.forEach(g => {
+            h += `<div class="pv-group"><div class="pv-group-title">${esc(g.t)}</div>` +
+              `<div class="pv-grid">` + g.items.map(it => itemHTML(it, data, showValues)).join('') + `</div></div>`;
+          });
+        } else {
+          h += `<h4>${esc(sec.t)}</h4><div class="pv-grid">` + sec.items.map(it => itemHTML(it, data, showValues)).join('') + `</div>`;
+        }
+        h += `</div>`;
+      });
+      document.getElementById('pvBody').innerHTML = h;
+    }
+
+    /* Row-level view: show this student's form filled with dummy data */
+    function openRowPreview(id) {
+      const s = students.find(x => x.id === id);
+      if (!s) return;
+      const submitted = s.sub === 'Submitted';
+      const dd = dummyData(s);
+      const rels = ['Mother', 'Father', 'Guardian', 'Grandparent'];
+      const parent = [
+        ['Parent / guardian name', s.pc || 'Not provided'],
+        ['Relationship to student', rels[s.id % rels.length]],
+        ['Contact number', s.pc ? dd.ec1p : 'Not provided'],
+        ['Email address', s.pc ? (slug(s.pc).replace(/-/g, '.') + '@example.com') : 'Not provided']
+      ];
+      const header = { name: s.name, meta: s.mod ? (s.mod + ', ' + s.modAt) : '—', notSubmitted: !submitted, parent };
+      renderForm(submitted ? dummyData(s) : {}, true, header);
+      document.getElementById('pvTitle').textContent = s.name;
+      const btn = document.getElementById('pvDownloadBtn');
+      btn.querySelector('.lbl').textContent = 'Download PDF';
+      btn.onclick = () => downloadStudentPDF(s.id);
+      document.getElementById('previewOverlay').classList.add('show');
+    }
+    /* Top-bar Preview form button: open the blank/empty form template */
+    function openPreview() {
+      renderForm({}, false, null);
+      document.getElementById('pvTitle').textContent = 'Preview';
+      const btn = document.getElementById('pvDownloadBtn');
+      btn.querySelector('.lbl').textContent = 'Download empty form';
+      btn.onclick = () => downloadBlankPDF();
+      document.getElementById('previewOverlay').classList.add('show');
+    }
+    function closePreview() { document.getElementById('previewOverlay').classList.remove('show'); }
+    /* Download blank empty form PDF */
+    function downloadBlankPDF() {
+      const meta = {
+        rows: [['Student', ''], ['Year', ''], ['Class', ''], ['Date completed', '']]
+      };
+      const pages = buildFormPDF(meta, {}, false);
+      triggerDownload(makePDF(pages), 'medical-form-blank.pdf');
+      toast('Downloaded blank medical form.');
+    }
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeGroup(); closePreview(); closeChangePassword(); closeProfile(); closeAckConfirm(); } });
+
+    /* Academic year */
+    let currentYear = '2025 – 2026';
+    function onYearChange() { currentYear = document.getElementById('yearSelect').value; toast('Switched to academic year ' + currentYear + '.'); }
+
+    /* Download helper */
+    function triggerDownload(blob, filename) {
+      const url = URL.createObjectURL(blob), a = document.createElement('a');
+      a.href = url; a.download = filename; document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 1500);
+    }
+    const slug = n => String(n).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+    function toCSV(rows) {
+      const headers = [
+        // Student metadata (Image 1)
+        'Students name', 'Year', 'Class',
+        'Primary Contact name', 'Secondary Contact name',
+        'Medical condition',
+        'Last modified by',
+        'Submission Status',
+        'Acknowledged teacher details',
+        'Acknowledged Status Entry',
+        // Emergency contacts (Image 2)
+        'Emergency Contact name 1', 'Emergency Contact no 1',
+        'Emergency Contact name 2', 'Emergency Contact no 2',
+        // Doctor (Image 2)
+        'Doctor name', 'Doctor Contact no', 'Doctor address',
+        // Condition 1: Disability / medical conditions (Image 3)
+        'Condition - 1', 'Condition - 1 (Yes/no)', 'Non applicable status - 1',
+        'Diagnosis: - 1', 'Signs/Symptoms: - 1', 'Triggers: - 1', 'Other details: - 1',
+        // Condition 2: Routine healthcare (Image 3-4)
+        'Condition - 2', 'Condition - 2 (Yes/no)', 'Non applicable status - 2',
+        'During school hours: - 2', 'Outside school hours: - 2',
+        // Condition 3: Regular medication (Image 4)
+        'Condition - 3', 'Condition - 3 (Yes/no)', 'Non applicable status - 3',
+        'Medication/Description: - 3', 'Dose: - 3',
+        // Condition 4: Emergency medication (Image 4-5)
+        'Condition - 4', 'Condition - 4 (Yes/no)', 'Non applicable status - 4',
+        'Medication: - 4', 'Protocol: - 4',
+        // Condition 5: Medication left in office (Image 5)
+        'Condition - 5', 'Condition - 5 (Yes/no)', 'Non applicable status - 5',
+        // Condition 6: Special considerations
+        'Condition - 6', 'Condition - 6 (Yes/no)', 'Non applicable status - 6',
+        'Details: - 6',
+        // Condition 7: Allergy
+        'Condition - 7', 'Condition - 7 (Yes/no)', 'Non applicable status - 7',
+        'Details: - 7',
+        // Condition 8: GP / doctor treatment
+        'Condition - 8', 'Condition - 8 (Yes/no)', 'Non applicable status - 8',
+        'Details: - 8',
+        // Condition 9: Consent & authorisation
+        'Condition - 9',
+        'Consent - Emergency first aid', 'Consent - Medical assistance',
+        'Consent - Medication as prescribed by GP', 'Consent - Non-prescription medication',
+        // Condition 10: Other information
+        'Condition - 10', 'Condition - 10 (Yes/no)', 'Non applicable status - 10',
+        'Details: - 10',
+      ];
+
+      const esc = v => { v = (v == null ? '' : String(v)); return /[",\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v; };
+      const lines = [headers.join(',')];
+
+      /* Helper: split a Yes/No/Non Applicable value into two columns */
+      function ynNA(val) {
+        const v = String(val || '');
+        if (/non.?appl/i.test(v)) return ['-', 'YES'];
+        if (/^yes$/i.test(v))     return ['YES', '-'];
+        if (/^no$/i.test(v))      return ['NO', '-'];
+        return ['-', '-'];
+      }
+
+      rows.forEach((s, i) => {
+        const submitted = s.sub === 'Submitted';
+        const fd = submitted ? dummyData(s) : {};
+        const g = k => fd[k] || '';
+
+        /* Combined name+date fields to match reference format */
+        const lastModBy  = s.mod  ? s.mod  + (s.modAt  ? ' ' + s.modAt  : '') : '';
+        const ackDetails = s.ackBy ? s.ackBy + (s.ackAt ? ' ' + s.ackAt : '') : '';
+
+        const [cond1yn, cond1na]   = ynNA(g('cond'));
+        const [cond2yn, cond2na]   = ynNA(g('routine'));
+        const [cond3yn, cond3na]   = ynNA(g('regMed'));
+        const [cond4yn, cond4na]   = ynNA(g('emgMed'));
+        const [cond5yn, cond5na]   = ynNA(g('leftOffice'));
+        const [cond6yn, cond6na]   = ynNA(g('special'));
+        const [cond7yn, cond7na]   = ynNA(g('allergy'));
+        const [cond8yn, cond8na]   = ynNA(g('gp'));
+        const [cond10yn, cond10na] = ynNA(g('other'));
+
+        lines.push([
+          // Student metadata
+          s.name, s.year, s.cls,
+          s.pc, s.sc,
+          s.cond ? 'Medical Condition' : '',
+          lastModBy,
+          s.sub,
+          ackDetails,
+          s.ack,
+          // Emergency contacts
+          g('ec1n'), g('ec1p'),
+          g('ec2n'), g('ec2p'),
+          // Doctor
+          g('docn'), g('docp'), g('doca'),
+          // Condition 1
+          'Does your student have any disability or medical conditions?',
+          cond1yn, cond1na,
+          g('diag'), g('sympt'), g('trig'), g('condOther'),
+          // Condition 2
+          'Does your student have a routine healthcare requirement?',
+          cond2yn, cond2na,
+          g('rhDuring'), g('rhOutside'),
+          // Condition 3
+          'Regular medication (taken during school hours):',
+          cond3yn, cond3na,
+          g('regMedDesc'), g('regMedDose'),
+          // Condition 4
+          'Emergency medication - please fill out full details including dosage:',
+          cond4yn, cond4na,
+          g('emgMedName'), g('emgMedProto'),
+          // Condition 5
+          'Has this medication been left in school office?',
+          cond5yn, cond5na,
+          // Condition 6
+          'Special considerations - activities etc.:',
+          cond6yn, cond6na,
+          g('specialDet'),
+          // Condition 7
+          'Does your student suffer from any type of allergy?',
+          cond7yn, cond7na,
+          g('allergyDet'),
+          // Condition 8
+          'Is your student currently receiving treatment from a GP or other doctor?',
+          cond8yn, cond8na,
+          g('gpDet'),
+          // Condition 9 - Consent & authorisation
+          'Consent & authorisation:',
+          g('cFirstAid'), g('cMedAssist'), g('cRxMed'), g('cNonRx'),
+          // Condition 10
+          'Is there any other information about your student that you think is relevant for us to know?',
+          cond10yn, cond10na,
+          g('otherDet'),
+        ].map(esc).join(','));
+      });
+
+      return lines.join('\r\n');
+    }
+    const ascii = s => String(s == null ? '' : s).replace(/[–—]/g, '-').replace(/['']/g, "'").replace(/[""]/g, '"');
+    /* CSV export */
+    function downloadCSV(rows, filename) {
+      if (!rows.length) { toast('Nothing to export in the current view.'); return; }
+      triggerDownload(new Blob(['\ufeff' + toCSV(rows)], { type: 'text/csv;charset=utf-8' }), filename);
+    }
+    function exportAll() {
+      const yr = val('f-year');
+      if (!yr) { toast('Please select a Year in the filters before exporting.'); return; }
+      if (!view.length) { toast('No students match the current filters.'); return; }
+      downloadCSV(view, 'medical-forms-year-' + slug(yr) + '.csv');
+      toast('Exported ' + view.length + ' student' + (view.length !== 1 ? 's' : '') + ' for Year ' + yr + '.');
+    }
+    function exportView() { downloadCSV(view, 'medical-forms-view.csv'); toast('Exported ' + view.length + ' student' + (view.length !== 1 ? 's' : '') + ' from current view.'); }
+
+    /* PDF */
+    function pdfEsc(s) { return ascii(s).replace(/\\/g, '\\\\').replace(/\(/g, '\\(').replace(/\)/g, '\\)'); }
+    function makePDF(pages) {
+      if (typeof pages === 'string') pages = [pages];
+      const N = pages.length;
+      /* objs: 1 Catalog, 2 Pages, 3 F1, 4 F2, then per page: page obj + content obj */
+      const objs = [];
+      objs[1] = '<< /Type /Catalog /Pages 2 0 R >>';
+      objs[3] = '<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>';
+      objs[4] = '<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold >>';
+      const kids = [];
+      for (let i = 0; i < N; i++) {
+        const pageIdx = 5 + i * 2, contentIdx = 6 + i * 2;
+        kids.push(pageIdx + ' 0 R');
+        objs[pageIdx] = '<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents ' + contentIdx + ' 0 R >>';
+        objs[contentIdx] = '<< /Length ' + pages[i].length + ' >>\nstream\n' + pages[i] + '\nendstream';
+      }
+      objs[2] = '<< /Type /Pages /Kids [' + kids.join(' ') + '] /Count ' + N + ' >>';
+      const total = 4 + N * 2;
+      let pdf = '%PDF-1.4\n'; const offsets = [];
+      for (let i = 1; i <= total; i++) { offsets.push(pdf.length); pdf += i + ' 0 obj\n' + objs[i] + '\nendobj\n'; }
+      const xref = pdf.length;
+      pdf += 'xref\n0 ' + (total + 1) + '\n0000000000 65535 f \n';
+      offsets.forEach(off => { pdf += String(off).padStart(10, '0') + ' 00000 n \n'; });
+      pdf += 'trailer\n<< /Size ' + (total + 1) + ' /Root 1 0 R >>\nstartxref\n' + xref + '\n%%EOF';
+      return new Blob([pdf], { type: 'application/pdf' });
+    }
+    /* Build medical-form PDF pages from the shared FORM schema */
+    /* ---- PDF layout helpers ---- */
+    const SCHOOL_NAME = 'Test App School 2';
+    /* Helvetica character widths (per 1000 units) for text measuring / wrapping */
+    const HW = { ' ': 278, '!': 278, '"': 355, '#': 556, '$': 556, '%': 889, '&': 667, "'": 191, '(': 333, ')': 333, '*': 389, '+': 584, ',': 278, '-': 333, '.': 278, '/': 278, ':': 278, ';': 278, '<': 584, '=': 584, '>': 584, '?': 556, '@': 1015, '[': 278, '\\': 278, ']': 278, '^': 469, '_': 556, '`': 333, '{': 334, '|': 260, '}': 334, '~': 584 };
+    '0123456789'.split('').forEach(c => HW[c] = 556);
+    const UPW = { A: 667, B: 667, C: 722, D: 722, E: 667, F: 611, G: 778, H: 722, I: 278, J: 500, K: 667, L: 556, M: 833, N: 722, O: 778, P: 667, Q: 778, R: 722, S: 667, T: 611, U: 722, V: 667, W: 944, X: 667, Y: 667, Z: 611 };
+    const LOW = { a: 556, b: 556, c: 500, d: 556, e: 556, f: 278, g: 556, h: 556, i: 222, j: 222, k: 500, l: 222, m: 833, n: 556, o: 556, p: 556, q: 556, r: 333, s: 500, t: 278, u: 556, v: 500, w: 722, x: 500, y: 500, z: 500 };
+    Object.assign(HW, UPW, LOW);
+    function textW(str, size, bold) {
+      let w = 0; const t = ascii(str);
+      for (const ch of t) w += (HW[ch] || 556);
+      return w / 1000 * size * (bold ? 1.055 : 1);
+    }
+    function wrapText(str, maxW, size, bold) {
+      const words = ascii(str).split(/\s+/).filter(Boolean);
+      if (!words.length) return [''];
+      const lines = []; let line = '';
+      words.forEach(word => {
+        const test = line ? line + ' ' + word : word;
+        if (textW(test, size, bold) <= maxW) { line = test; }
+        else {
+          if (line) lines.push(line);
+          /* break a single over-long word */
+          let w = word;
+          while (textW(w, size, bold) > maxW && w.length > 1) {
+            let cut = w.length;
+            while (cut > 1 && textW(w.slice(0, cut), size, bold) > maxW) cut--;
+            lines.push(w.slice(0, cut)); w = w.slice(cut);
+          }
+          line = w;
+        }
+      });
+      if (line) lines.push(line);
+      return lines;
+    }
+
+    /* Build a fully formatted medical-form PDF */
+    function buildFormPDF(meta, data, filled) {
+      const L = 52, R = 560, CW = R - L;          /* margins / content width */
+      const TOP = 792, BOTTOM = 58;
+      const pages = []; let P = [], y = 0, pageNo = 0;
+
+      const op = str => P.push(str);
+      const txt = (t, size, bold, x, yy, color) => {
+        if (color) op(color + ' rg');
+        op('BT /' + (bold ? 'F2' : 'F1') + ' ' + size + ' Tf ' + x + ' ' + (yy) + ' Td (' + pdfEsc(t) + ') Tj ET');
+        if (color) op('0 0 0 rg');
+      };
+      const rect = (x, yy, w, h, mode, col) => {
+        if (col) op(col + (mode === 'S' ? ' RG' : ' rg'));
+        op(x + ' ' + yy + ' ' + w + ' ' + h + ' re ' + mode);
+        op(mode === 'S' ? '0 0 0 RG' : '0 0 0 rg');
+      };
+      const line = (x1, y1, x2, y2, col, w) => {
+        op((col || '0.82 0.84 0.87') + ' RG ' + (w || 0.7) + ' w ' + x1 + ' ' + y1 + ' m ' + x2 + ' ' + y2 + ' l S 0 0 0 RG');
+      };
+      const footer = () => {
+        const pn = 'Page ' + pageNo;
+        txt(pn, 8, false, R - textW(pn, 8, false), BOTTOM + 4, '0.60 0.63 0.68');
+      };
+      const newPage = () => {
+        if (P.length) { footer(); pages.push(P.join('\n')); P = []; }
+        pageNo++; y = TOP - 46;
+      };
+      const need = h => { if (y - h < BOTTOM + 30) newPage(); };
+
+      /* --- checkbox --- */
+      const checkbox = (x, yy, label, ticked) => {
+        const s = 9.5;
+        rect(x, yy - 1.5, s, s, 'S', '0.62 0.65 0.70');
+        if (ticked) {
+          rect(x + 1.3, yy - 0.2, s - 2.6, s - 2.6, 'f', '0.16 0.18 0.22');
+          /* tick */
+          op('1 1 1 RG 1.3 w ' + (x + 2.5) + ' ' + (yy + 3.1) + ' m ' + (x + 4.1) + ' ' + (yy + 1.5) + ' l ' + (x + 7.2) + ' ' + (yy + 5.4) + ' l S 0 0 0 RG');
+        }
+        txt(label, 9.5, ticked, x + s + 5, yy, ticked ? '0.10 0.12 0.15' : '0.35 0.38 0.42');
+        return x + s + 9 + textW(label, 9.5, ticked);
+      };
+
+      /* --- section heading (group titles like "Emergency contact details") --- */
+      const section = (title, prefix) => {
+        const full = prefix ? prefix + ' ' + title : title;
+        const lines = wrapText(full, CW, 11, true);
+        need(20 + lines.length * 14);
+        y -= 6;
+        if (prefix) {
+          /* render prefix ("Q)") in accent color, then title in dark */
+          const pw = textW(prefix + ' ', 11, true);
+          txt(prefix, 11, true, L, y, '0.35 0.38 0.50');
+          lines.forEach((ln, li) => {
+            const offset = li === 0 ? pw : 0;
+            txt(li === 0 ? ln.slice(prefix.length + 1) : ln, 11, true, L + offset, y, '0.10 0.12 0.17');
+            y -= 14;
+          });
+        } else {
+          lines.forEach(ln => { txt(ln, 11, true, L, y, '0.10 0.12 0.17'); y -= 14; });
+        }
+        y -= 4;
+      };
+      /* separator between question blocks */
+      const divider = () => {
+        need(20);
+        y -= 12;
+        line(L - 8, y, R + 8, y, '0.45 0.48 0.52', 1.5);
+        y -= 15;
+      };
+
+      /* --- label + ruled writing lines (no boxes) --- */
+      const LINE_H = 18;
+      const fieldLines = (value, w, minLines) => {
+        const val = filled ? String(value == null ? '' : value) : '';
+        const vl = val ? wrapText(val, w - 6, 10) : [];
+        return { vl: vl, n: Math.max(minLines || 1, vl.length) };
+      };
+      const fieldH = (value, w, minLines) => 14 + fieldLines(value, w, minLines).n * LINE_H;
+      const field = (label, value, w, x, minLines) => {
+        const f = fieldLines(value, w, minLines);
+        txt(label, 8.5, false, x, y, '0.45 0.48 0.53');
+        let ly = y - 16;
+        for (let i = 0; i < f.n; i++) {
+          if (f.vl[i]) txt(f.vl[i], 10, false, x + 2, ly + 4, '0.10 0.12 0.16');
+          line(x, ly, x + w, ly, '0.87 0.89 0.92', 0.5);
+          ly -= LINE_H;
+        }
+        return 14 + f.n * LINE_H;
+      };
+      /* one full-width field — page breaks are decided at block level */
+      const fieldFull = (label, value, minLines) => {
+        const h = fieldH(value, CW, minLines);
+        field(label, value, CW, L, minLines);
+        y -= h + 8;
+      };
+      const fieldFullH = (value, minLines) => fieldH(value, CW, minLines) + 8;
+      const headingH = (title, prefix) => {
+        const full = prefix ? prefix + ' ' + title : title;
+        return 6 + wrapText(full, CW, 11, true).length * 14 + 4;
+      };
+      /* ================= HEADER ================= */
+      newPage();
+      const centre = (t, size, bold, yy, col) => txt(t, size, bold, L + (CW - textW(t, size, bold)) / 2, yy, col);
+      /* school name, centred */
+      centre(SCHOOL_NAME, 17, true, y, '0.10 0.12 0.16');
+      y -= 22;
+      /* intro paragraph, centred, tight spacing */
+      const intro = 'The following information must be supplied to the school so we can ensure the highest level of care for your son/daughter. If during the course of the school year your child becomes ill or is receiving medical attention and/or medication, please inform the school as soon as possible.';
+      wrapText(intro, CW - 24, 9).forEach(ln => { centre(ln, 9, false, y, '0.34 0.38 0.44'); y -= 12; });
+      y -= 8;
+      line(L, y, R, y, '0.80 0.82 0.86', 0.8);
+      y -= 20;
+
+      /* student / status summary — identification only, two per row */
+      if (meta && meta.rows && meta.rows.length) {
+        const halfW = (CW - 26) / 2;
+        for (let i = 0; i < meta.rows.length; i += 2) {
+          const a = meta.rows[i], bb = meta.rows[i + 1];
+          need(30);
+          const startY = y;
+          const draw = (r, x) => {
+            txt(r[0], 8.5, false, x, y, '0.45 0.48 0.53');
+            if (filled && r[1]) txt(String(r[1]), 10, false, x + 2, y - 13, '0.10 0.12 0.16');
+            line(x, y - 17, x + halfW, y - 17, '0.87 0.89 0.92', 0.5);
+          };
+          draw(a, L);
+          if (bb) { y = startY; draw(bb, L + halfW + 26); }
+          y = startY - 28;
+        }
+        y -= 10;
+      }
+
+      /* parent / guardian details — separate panel, kept together */
+      if (meta && meta.parent && meta.parent.length) {
+        const halfW2 = (CW - 40) / 2;
+        const rowsN = Math.ceil(meta.parent.length / 2);
+        const panelH = 30 + rowsN * 30;
+        need(panelH + 12);
+        rect(L, y - panelH, CW, panelH, 'f', '0.957 0.965 0.975');
+        rect(L, y - panelH, CW, panelH, 'S', '0.85 0.87 0.90');
+        rect(L, y - panelH, 3, panelH, 'f', '0.42 0.45 0.50');
+        txt('Parent / guardian details', 10, true, L + 16, y - 18, '0.11 0.13 0.17');
+        let py = y - 40;
+        for (let i = 0; i < meta.parent.length; i += 2) {
+          const a = meta.parent[i], bb = meta.parent[i + 1];
+          const drawP = (r, x) => {
+            txt(r[0], 8, false, x, py, '0.45 0.48 0.53');
+            if (filled && r[1]) txt(String(r[1]), 10, false, x, py - 13, '0.10 0.12 0.16');
+          };
+          drawP(a, L + 16);
+          if (bb) drawP(bb, L + 16 + halfW2 + 8);
+          py -= 30;
+        }
+        y -= panelH + 16;
+      }      if (meta && meta.note) {
+        const nl = wrapText(meta.note, CW - 18, 9);
+        const nh = 10 + nl.length * 12;
+        rect(L, y - nh, CW, nh, 'f', '0.99 0.96 0.90');
+        rect(L, y - nh, CW, nh, 'S', '0.93 0.85 0.68');
+        let ny = y - 14;
+        nl.forEach(ln => { txt(ln, 9, false, L + 9, ny, '0.45 0.33 0.10'); ny -= 12; });
+        y -= nh + 14;
+      }
+
+      /* ================= FORM SECTIONS ================= */
+      FORM.forEach(sec => {
+        if (sec.consent) {
+          const h = headingH(sec.t) + sec.consent.length * 22 + 26;
+          need(h);
+          section(sec.t);
+          sec.consent.forEach(it => {
+            txt(it.l, 10, true, L, y, '0.11 0.13 0.17');
+            const v = filled ? String(data[it.k] || '') : '';
+            let cx = L + 300;
+            cx = checkbox(cx, y - 1, 'Yes', /^yes$/i.test(v));
+            checkbox(cx + 8, y - 1, 'No', /^no$/i.test(v));
+            y -= 22;
+          });
+          y -= 2; divider();
+        } else if (sec.q) {
+          const items = sec.items || [];
+          const h = headingH(sec.t, 'Q)') + 38 + items.reduce((a, it) => a + fieldFullH(data[it.k], it.full ? 3 : 1), 0) + 26;
+          need(h);
+          section(sec.t, 'Q)');
+          const v = filled ? String(data[sec.q] || '') : '';
+          txt('Answer', 8.5, false, L, y, '0.42 0.45 0.50');
+          y -= 14;
+          let cx = L;
+          cx = checkbox(cx, y, 'Yes', /^yes$/i.test(v));
+          cx = checkbox(cx + 10, y, 'No', /^no$/i.test(v));
+          if (sec.na) checkbox(cx + 10, y, 'Non Applicable', /non/i.test(v));
+          y -= 24;
+          items.forEach(it => fieldFull(it.l, data[it.k], it.full ? 3 : 1));
+          y -= 2; divider();
+        } else if (sec.groups) {
+          let h = headingH(sec.t);
+          sec.groups.forEach(g => { h += 15 + g.items.reduce((a, it) => a + fieldFullH(data[it.k], it.full ? 3 : 1), 0) + 2; });
+          h += 24;
+          need(h);
+          section(sec.t);
+          const halfW = (CW - 22) / 2;
+          sec.groups.forEach(g => {
+            txt(g.t, 9.5, true, L, y, '0.30 0.34 0.40');
+            y -= 15;
+            for (let i = 0; i < g.items.length;) {
+              const a = g.items[i], bn = g.items[i + 1];
+              if (a.full) {
+                fieldFull(a.l, data[a.k], 3); i++;
+              } else if (bn && !bn.full) {
+                const rh = Math.max(fieldH(data[a.k], halfW, 1), fieldH(data[bn.k], halfW, 1));
+                const startY = y;
+                field(a.l, data[a.k], halfW, L, 1);
+                y = startY; field(bn.l, data[bn.k], halfW, L + halfW + 22, 1);
+                y = startY - rh - 8;
+                i += 2;
+              } else {
+                fieldFull(a.l, data[a.k], 1); i++;
+              }
+            }
+            y -= 2;
+          });
+          divider();
+        } else {
+          const items = sec.items;
+          const h = headingH(sec.t, 'Q)') + items.reduce((a, it) => a + fieldFullH(data[it.k], it.full ? 3 : 1), 0) + 26;
+          need(h);
+          section(sec.t, 'Q)');
+          items.forEach(it => fieldFull(it.l, data[it.k], it.full ? 3 : 1));
+          y -= 2; divider();
+        }
+      });
+
+      /* signature block — kept together */
+      need(headingH('Parent / guardian confirmation') + 66);
+      y -= 6;
+      section('Parent / guardian confirmation');
+      txt('Signature', 8.5, false, L, y, '0.42 0.45 0.50');
+      txt('Date', 8.5, false, L + CW / 2 + 8, y, '0.42 0.45 0.50');
+      line(L, y - 26, L + CW / 2 - 16, y - 26, '0.55 0.58 0.62', 0.8);
+      line(L + CW / 2 + 8, y - 26, R, y - 26, '0.55 0.58 0.62', 0.8);
+      y -= 40;
+
+      footer();
+      pages.push(P.join('\n'));
+      return pages;
+    }
+    function downloadStudentPDF(id) {
+      const s = students.find(x => x.id === id); if (!s) return;
+      const submitted = s.sub === 'Submitted';
+      const meta = {
+        rows: [
+          ['Student', s.name],
+          ['Year', s.year],
+          ['Class', s.cls],
+          ['Primary contact', s.pc || '-']
+        ],
+        note: submitted ? '' : 'This form has not been submitted yet - the blank form is shown below.'
+      };
+      const pages = buildFormPDF(meta, submitted ? dummyData(s) : {}, submitted);
+      triggerDownload(makePDF(pages), 'medical-form-' + slug(s.name) + '.pdf');
+      toast('Downloaded PDF for ' + s.name + '.');
+    }
+
+    /* Toast */
+    let toastTimer;
+    function toast(msg) {
+      const t = document.getElementById('toast');
+      document.getElementById('toastMsg').textContent = msg;
+      t.classList.add('show');
+      clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove('show'), 3200);
+    }
+    function hideToast() {
+      clearTimeout(toastTimer);
+      document.getElementById('toast').classList.remove('show');
+    }
+
+    render();
+    updateClearBtn();
+    updateSelbar();
+  </script>
+</body>
+
+</html>

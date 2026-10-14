@@ -1,0 +1,2214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fixture Dashboard - Coláiste Phádraig</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    
+    <!-- Flatpickr (Date Range Picker) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        border: "hsl(var(--border))",
+                        input: "hsl(var(--input))",
+                        ring: "hsl(var(--ring))",
+                        background: "hsl(var(--background))",
+                        foreground: "hsl(var(--foreground))",
+                        primary: {
+                            DEFAULT: "hsl(var(--primary))",
+                            foreground: "hsl(var(--primary-foreground))",
+                        },
+                        secondary: {
+                            DEFAULT: "hsl(var(--secondary))",
+                            foreground: "hsl(var(--secondary-foreground))",
+                        },
+                        destructive: {
+                            DEFAULT: "hsl(var(--destructive))",
+                            foreground: "hsl(var(--destructive-foreground))",
+                        },
+                        muted: {
+                            DEFAULT: "hsl(var(--muted))",
+                            foreground: "hsl(var(--muted-foreground))",
+                        },
+                        accent: {
+                            DEFAULT: "hsl(var(--accent))",
+                            foreground: "hsl(var(--accent-foreground))",
+                        },
+                        card: {
+                            DEFAULT: "hsl(var(--card))",
+                            foreground: "hsl(var(--card-foreground))",
+                        },
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        :root {
+            --background: 0 0% 100%;
+            --foreground: 222.2 84% 4.9%;
+            --card: 0 0% 100%;
+            --card-foreground: 222.2 84% 4.9%;
+            --popover: 0 0% 100%;
+            --popover-foreground: 222.2 84% 4.9%;
+            --primary: 222.2 47.4% 11.2%;
+            --primary-foreground: 210 40% 98%;
+            --secondary: 210 40% 96.1%;
+            --secondary-foreground: 222.2 47.4% 11.2%;
+            --muted: 210 40% 96.1%;
+            --muted-foreground: 215.4 16.3% 46.9%;
+            --accent: 210 40% 96.1%;
+            --accent-foreground: 222.2 47.4% 11.2%;
+            --destructive: 0 84.2% 60.2%;
+            --destructive-foreground: 210 40% 98%;
+            --border: 214.3 31.8% 91.4%;
+            --input: 214.3 31.8% 91.4%;
+            --ring: 222.2 84% 4.9%;
+            --radius: 0.5rem;
+        }
+
+        /* Hide scrollbar for sidebar but allow scroll */
+        .scrollbar-none::-webkit-scrollbar {
+            display: none;
+        }
+        .scrollbar-none {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        
+        /* Custom scrollbar for lists */
+        .scrollbar-thin {
+            scrollbar-width: thin;
+        }
+        .scrollbar-thin::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .scrollbar-thin::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .scrollbar-thin::-webkit-scrollbar-thumb {
+            background-color: #cbd5e1;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body class="flex h-screen overflow-hidden bg-background text-foreground font-sans selection:bg-primary/20">
+
+    <!-- Sidebar -->
+    <aside id="sidebar" class="w-[260px] bg-card border-r border-border flex flex-col transition-all duration-300 ease-in-out z-10 shrink-0 h-full">
+        <div class="flex-1 flex flex-col overflow-hidden">
+            <div class="p-4 mt-8 flex items-center justify-between min-h-[72px] max-h-[72px] shrink-0">
+                <div class="flex items-center space-x-2.5 cursor-pointer">
+                    <img alt="School Logo" width="40" height="40" class="rounded-md shrink-0" src="https://d7jqfxg6hzhg0.cloudfront.net/dev-school-images-1-787432d6-a1a1-4308-8f99-aff38ef63373/resized/6999_20250701150735.png" />
+                    <h1 id="sidebar-title" class="text-xl font-semibold tracking-tight uppercase truncate transition-opacity duration-300">Coláiste Phádraig</h1>
+                </div>
+            </div>
+            <div class="px-4 shrink-0"><div class="bg-border h-px w-full mt-4"></div></div>
+            <nav id="sidebar-nav" class="mt-6 px-4 overflow-y-auto flex-grow scrollbar-none">
+                <!-- Navigation items injected via JS -->
+            </nav>
+        </div>
+        <div class="px-4 pb-6 space-y-1 shrink-0">
+            <button class="inline-flex items-center gap-2 rounded-md text-sm font-medium h-10 w-full justify-start px-4 text-destructive hover:bg-destructive/10 transition-colors cursor-pointer outline-none">
+                <i class="ph ph-sign-out text-lg"></i>
+                <span class="sidebar-text">Log Out</span>
+            </button>
+            <button id="toggle-sidebar-btn" class="inline-flex items-center gap-2 rounded-md text-sm font-medium h-10 w-full justify-start px-4 text-muted-foreground hover:bg-muted cursor-pointer outline-none">
+                <i id="toggle-icon" class="ph ph-caret-left text-lg transition-transform"></i>
+                <span class="sidebar-text">Collapse</span>
+            </button>
+        </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 overflow-y-auto bg-muted/50 h-full">
+        <div class="w-full px-6 py-6 md:px-8 md:py-8 relative">
+            
+            <!-- MODULE: Fixtures List -->
+            <div id="view-fixtures-list" class="view-module animate-in fade-in duration-300 hidden">
+                <div class="flex items-center justify-between mb-2">
+                    <div class="space-y-1">
+                        <h1 class="text-2xl font-bold tracking-tight text-foreground">Fixtures Management</h1>
+                        <nav class="flex items-center text-sm text-muted-foreground">
+                            <i class="ph ph-house mr-1.5 text-sm"></i>
+                            <i class="ph ph-caret-right mx-1 opacity-40 text-sm"></i>
+                            <span>Fixtures</span>
+                        </nav>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <div class="relative hidden md:block group">
+                            <i class="ph ph-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground"></i>
+                            <input class="h-10 w-[300px] pl-10 pr-8 rounded-md border border-border bg-card text-sm outline-none transition-all focus:ring-1 focus:ring-primary" placeholder="Search students..." />
+                            <span class="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] text-muted-foreground border px-1.5 rounded bg-muted/50">/</span>
+                        </div>
+                        <div class="h-10 w-10 border-2 border-white rounded-full bg-primary/10 flex items-center justify-center font-bold text-sm text-primary uppercase shadow-sm">CP</div>
+                    </div>
+                </div>
+
+                <!-- Empty State 1 -->
+                <div class="bg-card rounded-xl border border-border/60 py-20 mb-8 flex flex-col items-center justify-center text-center shadow-none">
+                    <div class="bg-muted/50 p-4 rounded-full mb-4">
+                        <i class="ph ph-trophy text-4xl text-muted-foreground opacity-20"></i>
+                    </div>
+                    <p class="text-sm font-medium text-muted-foreground">No fixtures found</p>
+                </div>
+
+                <div class="flex flex-wrap items-center justify-between gap-4 mb-8">
+                    <div class="flex flex-wrap items-center gap-3">
+                        <div class="relative">
+                            <i class="ph ph-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground"></i>
+                            <input class="h-10 w-64 pl-10 rounded-md border border-border bg-card text-sm outline-none" placeholder="Search teams..." />
+                        </div>
+                        <button class="h-10 px-4 border border-border rounded-md text-sm font-medium flex items-center gap-2 bg-card hover:bg-muted">All Dates <i class="ph ph-caret-down opacity-40"></i></button>
+                        <button class="h-10 px-4 border border-border rounded-md text-sm font-medium flex items-center gap-2 bg-card hover:bg-muted">Status <i class="ph ph-caret-down opacity-40"></i></button>
+                        <label class="flex items-center gap-2.5 text-sm font-semibold text-foreground cursor-pointer bg-card px-4 h-10 rounded-md border border-border hover:bg-muted transition-colors">
+                            <input type="checkbox" class="h-4 w-4 rounded border-border text-primary focus:ring-primary" checked />
+                            Show my fixtures
+                        </label>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button onclick="switchView('fixtures-create')" class="h-10 px-6 bg-primary text-primary-foreground rounded-md text-sm font-bold flex items-center gap-2 hover:bg-primary/90 transition-all active:scale-95 shadow-sm">
+                            <i class="ph-bold ph-plus"></i> Add Fixture
+                        </button>
+                        <button class="h-10 px-4 border border-border rounded-md text-sm font-bold flex items-center gap-2 bg-card hover:bg-muted"><i class="ph ph-paper-plane-tilt"></i> Send PN</button>
+                        <button class="h-10 w-10 border border-border rounded-md flex items-center justify-center bg-card hover:bg-muted"><i class="ph ph-download-simple text-base"></i></button>
+                    </div>
+                </div>
+
+                <!-- Empty State 2 -->
+                <div class="bg-card rounded-xl border border-border/60 py-32 flex flex-col items-center justify-center text-center shadow-none">
+                    <div class="bg-muted/50 p-6 rounded-full mb-4"><i class="ph ph-magnifying-glass text-4xl text-muted-foreground opacity-20"></i></div>
+                    <p class="text-sm font-medium text-muted-foreground">No fixtures found matching your criteria</p>
+                </div>
+            </div>
+
+            <!-- MODULE: Create Fixture -->
+            <div id="view-fixtures-create" class="view-module animate-in fade-in duration-300 hidden">
+                <div class="relative mb-6">
+                    <div class="flex items-center justify-between gap-4 pt-3">
+                        <h1 class="text-2xl font-bold tracking-tight">
+                            <span class="bg-primary bg-clip-text text-transparent">Create New Fixture</span>
+                        </h1>
+                        <div class="flex items-center gap-4">
+                            <div class="flex items-center gap-2 flex-shrink-0">
+                                <button onclick="switchView('fixtures-list')" class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground h-9 px-4 py-2 outline-none">Cancel</button>
+                            </div>
+                            <div class="hidden sm:flex items-center gap-2">
+                                <button class="relative h-10 w-10 rounded-full p-0 border-2 border-background outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
+                                    <span class="flex size-full items-center justify-center rounded-full bg-primary/10 text-primary font-bold">CP</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <nav class="flex items-center text-sm border-b border-border/40 pb-2 mt-2">
+                        <i class="ph ph-house text-muted-foreground cursor-pointer hover:text-primary" onclick="switchView('fixtures-list')"></i>
+                        <i class="ph ph-caret-right mx-1 text-muted-foreground/40"></i>
+                        <span class="text-muted-foreground cursor-pointer hover:text-primary" onclick="switchView('fixtures-list')">Fixtures</span>
+                        <i class="ph ph-caret-right mx-1 text-muted-foreground/40"></i>
+                        <span class="text-foreground font-medium">Create Fixture</span>
+                    </nav>
+                </div>
+
+                <div class="bg-card text-card-foreground flex flex-col gap-6 rounded-xl border border-border/60 py-6 shadow-none">
+                    <div class="p-2 sm:p-4">
+                        
+                        <!-- Stepper -->
+                        <div class="hidden lg:block mb-8 px-4">
+                            <div class="text-muted-foreground h-12 items-center justify-center w-full bg-muted rounded-lg grid p-1 outline-none" style="grid-template-columns: repeat(5, minmax(0px, 1fr))">
+                                <button onclick="setStep(1)" id="tab-step-1" class="step-tab inline-flex flex-1 items-center justify-center gap-1.5 px-2 text-[13px] font-normal whitespace-nowrap relative h-full transition-all duration-200 cursor-pointer rounded-md outline-none bg-primary text-primary-foreground">
+                                    <div class="flex flex-col items-center gap-0"><span>Fixture Details</span><span class="text-[9px] opacity-70">Step 1</span></div>
+                                </button>
+                                <button onclick="setStep(2)" id="tab-step-2" class="step-tab inline-flex flex-1 items-center justify-center gap-1.5 px-2 text-[13px] font-normal whitespace-nowrap relative h-full transition-all duration-200 cursor-pointer rounded-md outline-none hover:bg-muted text-muted-foreground">
+                                    <div class="flex flex-col items-center gap-0"><span>Teachers</span><span class="text-[9px] opacity-70">Step 2</span></div>
+                                </button>
+                                <button onclick="setStep(3)" id="tab-step-3" class="step-tab inline-flex flex-1 items-center justify-center gap-1.5 px-2 text-[13px] font-normal whitespace-nowrap relative h-full transition-all duration-200 cursor-pointer rounded-md outline-none hover:bg-muted text-muted-foreground">
+                                    <div class="flex flex-col items-center gap-0"><span>Team Selection</span><span class="text-[9px] opacity-70">Step 3 (Optional)</span></div>
+                                </button>
+                                <button onclick="setStep(4)" id="tab-step-4" class="step-tab inline-flex flex-1 items-center justify-center gap-1.5 px-2 text-[13px] font-normal whitespace-nowrap relative h-full transition-all duration-200 cursor-pointer rounded-md outline-none hover:bg-muted text-muted-foreground">
+                                    <div class="flex flex-col items-center gap-0"><span>Supporters</span><span class="text-[9px] opacity-70">Step 4 (Optional)</span></div>
+                                </button>
+                                <button onclick="setStep(5)" id="tab-step-5" class="step-tab inline-flex flex-1 items-center justify-center gap-1.5 px-2 text-[13px] font-normal whitespace-nowrap relative h-full transition-all duration-200 cursor-pointer rounded-md outline-none hover:bg-muted text-muted-foreground">
+                                    <div class="flex flex-col items-center gap-0"><span>Review</span><span class="text-[9px] opacity-70">Step 5</span></div>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="p-4 sm:px-6">
+                            
+                            <!-- Step 1 Content -->
+                            <div id="step-1-content" class="step-content space-y-12 animate-in fade-in duration-300 block">
+                                <!-- Section 1: Match Details -->
+                                <div class="space-y-8">
+                                    <h3 class="text-lg font-medium flex items-center gap-2 border-b border-border/50 pb-2 text-foreground">
+                                        <i class="ph-bold ph-calendar-blank text-primary"></i> Match Details
+                                    </h3>
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-8">
+                                        
+                                        <!-- Date Picker native substitute -->
+                                        <div class="space-y-2">
+                                            <label class="flex items-center gap-2 text-sm leading-none font-medium select-none text-foreground" for="date">Date</label>
+                                            <input type="date" id="date" class="flex h-9 w-full rounded-md border border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring font-normal text-muted-foreground" />
+                                        </div>
+
+                                        <div class="space-y-2">
+                                            <label class="flex items-center gap-2 text-sm leading-none font-medium select-none text-foreground" for="time">Time</label>
+                                            <div class="relative">
+                                                <input type="time" id="time" class="flex h-9 w-full rounded-md border border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring font-normal" />
+                                                <i class="ph-bold ph-clock absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-foreground opacity-50 pointer-events-none"></i>
+                                            </div>
+                                        </div>
+
+                                        <!-- Section 2: Teams -->
+                                        <div class="space-y-2 relative custom-dropdown" id="dropdown-school-team">
+                                            <label class="flex items-center gap-2 text-sm leading-none font-medium select-none text-foreground">School Team</label>
+                                            <button class="dropdown-trigger inline-flex items-center gap-2 whitespace-nowrap rounded-md text-sm transition-all border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 px-4 py-2 w-full justify-between font-normal shadow-none">
+                                                <span class="selected-text">Senior Cup Rugby</span>
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down opacity-50"><path d="m6 9 6 6 6-6"></path></svg>
+                                            </button>
+                                            <div class="dropdown-menu hidden absolute top-full left-0 mt-1 z-50 bg-card border border-border shadow-2xl rounded-xl overflow-hidden w-full animate-in slide-in-from-top-1">
+                                                <div class="p-2 border-b border-border bg-muted/10 relative">
+                                                    <i class="ph ph-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground"></i>
+                                                    <input class="dropdown-search w-full bg-background border border-input rounded-md pl-8 pr-3 py-1.5 text-xs outline-none focus:ring-1 focus:ring-primary font-normal" placeholder="Search teams..." />
+                                                </div>
+                                                <div class="dropdown-list max-h-[200px] overflow-y-auto scrollbar-thin"></div>
+                                            </div>
+                                        </div>
+
+                                        <div class="space-y-2 relative custom-dropdown" id="dropdown-opponent">
+                                            <label class="flex items-center gap-2 text-sm leading-none font-medium select-none text-foreground">Opponent Team</label>
+                                            <button class="dropdown-trigger inline-flex items-center gap-2 whitespace-nowrap rounded-md text-sm transition-all border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 px-4 py-2 w-full justify-between font-normal shadow-none">
+                                                <span class="selected-text text-muted-foreground">Search opponent team...</span>
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down opacity-50"><path d="m6 9 6 6 6-6"></path></svg>
+                                            </button>
+                                            <div class="dropdown-menu hidden absolute top-full left-0 mt-1 z-50 bg-card border border-border shadow-2xl rounded-xl overflow-hidden w-full animate-in slide-in-from-top-1">
+                                                <div class="p-2 border-b bg-muted/10 relative">
+                                                    <input class="dropdown-search w-full bg-background border rounded-md px-3 py-1.5 text-xs outline-none focus:ring-1 focus:ring-primary font-normal" placeholder="Type to search..." />
+                                                </div>
+                                                <div class="dropdown-list max-h-[180px] overflow-y-auto scrollbar-thin"></div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Section 3: Venue Details -->
+                                        <div class="space-y-2 relative custom-dropdown" id="dropdown-venue-type">
+                                            <label class="flex items-center gap-2 text-sm leading-none font-medium select-none text-foreground">Venue Type</label>
+                                            <button class="dropdown-trigger inline-flex items-center gap-2 whitespace-nowrap rounded-md text-sm transition-all border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 px-4 py-2 w-full justify-between font-normal shadow-none">
+                                                <span class="selected-text">Home</span>
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down opacity-50 transition-transform"><path d="m6 9 6 6 6-6"></path></svg>
+                                            </button>
+                                            <div class="dropdown-menu hidden absolute top-full left-0 mt-1 z-50 bg-card border border-border shadow-xl rounded-xl overflow-hidden w-full py-1 animate-in slide-in-from-top-1">
+                                                <div class="dropdown-list max-h-[160px] overflow-y-auto scrollbar-thin"></div>
+                                            </div>
+                                        </div>
+
+                                        <div class="space-y-2 relative custom-dropdown" id="dropdown-home-venue">
+                                            <label class="flex items-center gap-2 text-sm leading-none font-medium select-none text-foreground">Home Venue</label>
+                                            <button class="dropdown-trigger inline-flex items-center gap-2 whitespace-nowrap rounded-md text-sm transition-all border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 px-4 py-2 w-full justify-between font-normal shadow-none">
+                                                <span class="selected-text text-muted-foreground">Venues</span>
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down opacity-50"><path d="m6 9 6 6 6-6"></path></svg>
+                                            </button>
+                                            <div class="dropdown-menu hidden absolute top-full left-0 mt-1 z-50 bg-card border border-border shadow-2xl rounded-xl overflow-hidden w-full animate-in slide-in-from-top-1">
+                                                <div class="p-2 border-b border-border bg-muted/10 relative">
+                                                    <i class="ph ph-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground"></i>
+                                                    <input class="dropdown-search w-full bg-background border rounded-md pl-8 pr-3 py-1.5 text-xs outline-none focus:ring-1 focus:ring-primary font-normal" placeholder="Search venues..." />
+                                                </div>
+                                                <div class="dropdown-list max-h-[220px] overflow-y-auto scrollbar-thin"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Fixture Info Section -->
+                                <div class="space-y-6 pt-4 border-t border-border/40">
+                                    <h3 class="text-lg font-medium flex items-center gap-2 text-foreground">
+                                        <i class="ph-bold ph-clipboard-text text-primary"></i> Fixture Information
+                                    </h3>
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                        <div class="space-y-2 relative custom-dropdown" id="dropdown-fixture-type">
+                                            <label class="flex items-center gap-2 text-sm leading-none font-medium select-none text-foreground">Fixture Type</label>
+                                            <button class="dropdown-trigger inline-flex items-center gap-2 whitespace-nowrap rounded-md text-sm transition-all border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 px-4 py-2 w-full justify-between font-normal shadow-none">
+                                                <span class="selected-text text-muted-foreground">Select fixture type</span>
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down opacity-50"><path d="m6 9 6 6 6-6"></path></svg>
+                                            </button>
+                                            <div class="dropdown-menu hidden absolute bottom-full mb-1 left-0 z-50 bg-card border border-border shadow-2xl rounded-xl overflow-hidden w-full animate-in slide-in-from-bottom-1">
+                                                <div class="p-2 border-b border-border bg-muted/10 relative">
+                                                    <i class="ph ph-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground"></i>
+                                                    <input class="dropdown-search w-full bg-background border border-input rounded-md pl-8 pr-3 py-1.5 text-xs outline-none focus:ring-1 focus:ring-primary font-normal" placeholder="Filter types..." />
+                                                </div>
+                                                <div class="dropdown-list max-h-[160px] overflow-y-auto scrollbar-thin"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Step 2 Content -->
+                            <div id="step-2-content" class="step-content space-y-12 animate-in fade-in duration-300 hidden">
+                                <!-- Teachers Section -->
+                                <div class="space-y-6">
+                                    <div class="flex items-center justify-between">
+                                        <h3 class="text-lg font-medium flex items-center gap-2 text-foreground">
+                                            <i class="ph-bold ph-graduation-cap text-primary"></i> Teachers Attending
+                                        </h3>
+                                        <span class="text-[10px] font-medium bg-primary/5 text-primary border border-primary/20 px-3 py-1 rounded-full uppercase">Required</span>
+                                    </div>
+                                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                                        <!-- Team Coaches -->
+                                        <div class="space-y-4 p-6 rounded-xl border border-primary/10 bg-primary/[0.02] shadow-sm">
+                                            <div class="flex items-center justify-between mb-2">
+                                                <h4 class="text-xs font-medium text-primary uppercase tracking-wider">Assigned Team Coaches</h4>
+                                                <span class="text-[10px] text-muted-foreground italic font-normal">Auto-suggested</span>
+                                            </div>
+                                            <div class="grid grid-cols-2 gap-3" id="team-coaches-list">
+                                                <!-- Populated by JS -->
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Additional Support Staff -->
+                                        <div class="space-y-4 p-6 rounded-xl border border-border/50 bg-muted/10 shadow-sm">
+                                            <h4 class="text-xs font-medium text-foreground uppercase tracking-wider mb-2">Additional Support Staff</h4>
+                                            <div class="flex gap-2">
+                                                <div class="relative flex-1">
+                                                    <i class="ph ph-users absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground"></i>
+                                                    <select id="staff-select" class="flex h-9 w-full rounded-md border border-input bg-background pl-9 pr-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 font-normal text-foreground">
+                                                        <option value="">Search all staff...</option>
+                                                        <!-- Options Populated by JS -->
+                                                    </select>
+                                                </div>
+                                                <button id="add-staff-btn" class="h-9 px-5 bg-primary text-primary-foreground rounded-md text-xs font-medium flex items-center gap-2 hover:bg-primary/90 transition-all shadow-md active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed">
+                                                    <i class="ph-bold ph-plus"></i> Add
+                                                </button>
+                                            </div>
+                                            <div id="added-staff-container" class="flex flex-wrap gap-2 pt-1 min-h-[32px]">
+                                                <!-- Added staff badges injected here -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 bg-muted/20 p-6 rounded-xl border border-border/40 shadow-inner">
+                                        <div class="space-y-2">
+                                            <label class="flex items-center gap-2 text-sm leading-none font-medium select-none text-foreground" for="leaving-time">Leaving school From time:</label>
+                                            <input type="time" id="leaving-time" onchange="updateDetectedPeriodsUI()" class="flex h-9 w-full rounded-md border border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring font-normal" value="08:30" />
+                                        </div>
+                                        <div class="space-y-2">
+                                            <label class="flex items-center gap-2 text-sm leading-none font-medium select-none text-foreground" for="returning-time">Returning Time</label>
+                                            <input type="time" id="returning-time" onchange="updateDetectedPeriodsUI()" class="flex h-9 w-full rounded-md border border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring font-normal" value="14:30" />
+                                        </div>
+                                        
+                                        <!-- Auto-Detection Box -->
+                                        <div class="col-span-1 md:col-span-2 pt-2 animate-in fade-in zoom-in-95 duration-300">
+                                            <div class="p-3.5 bg-primary/5 border border-primary/20 rounded-md flex items-start gap-3">
+                                                <i class="ph-fill ph-info text-primary mt-0.5 text-lg shrink-0"></i>
+                                                <div>
+                                                    <h4 class="text-xs font-semibold text-primary uppercase tracking-wider mb-1">Auto-Detected Impact</h4>
+                                                    <p class="text-sm text-foreground mb-1" id="detected-periods-text">Affected Periods: <span class="font-medium">Calculating...</span></p>
+                                                    <p class="text-xs text-muted-foreground leading-relaxed">Based on standard timetable slots. Cover will be requested dynamically for assigned staff during these specific periods.</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Placeholder for other steps -->
+                            <div id="step-other-content" class="step-content hidden p-20 text-center space-y-4 border rounded-xl bg-muted/10 m-6 animate-in zoom-in-95">
+                                <h3 id="step-other-title" class="text-xl font-bold uppercase tracking-tight text-foreground">Step Title</h3>
+                                <p class="text-muted-foreground italic">Configuration for this step...</p>
+                            </div>
+
+                        </div>
+
+                        <!-- Stepper Controls -->
+                        <div id="stepper-controls" class="flex justify-between mt-8 px-6 pb-6 pt-4 border-t border-border/20">
+                            <button id="btn-prev-step" onclick="prevStep()" class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground h-9 px-4 py-2 invisible">Previous</button>
+                            <button id="btn-next-step" onclick="nextStep()" class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md font-medium bg-primary text-primary-foreground shadow-xs hover:bg-primary/90 h-9 px-4 py-2 text-sm">
+                                <span id="btn-next-text" class="text-sm hidden sm:inline">Team Selection</span>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-right h-4 w-4 sm:ml-0"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MODULE: Supervision and Substitution (SNS) -->
+            <div id="view-sns" class="view-module animate-in slide-in-from-bottom-4 duration-500 block">
+                <div class="relative space-y-2 mb-6">
+                    <div class="flex items-center justify-between gap-4 pt-3">
+                        <h1 class="text-2xl font-bold tracking-tight">
+                            <span class="bg-primary bg-clip-text text-transparent">Supervision and Substitution</span>
+                        </h1>
+                        <div class="flex items-center gap-4">
+                            <div class="w-[200px] sm:w-[250px] md:w-[300px] lg:w-[350px] xl:w-[400px]">
+                                <div class="relative w-full">
+                                    <div class="relative">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-search absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4"><path d="m21 21-4.34-4.34"></path><circle cx="11" cy="11" r="8"></circle></svg>
+                                        <input id="sns-global-search-input" oninput="handleSnsSearch(event)" class="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-xs transition-colors outline-none focus-visible:ring-1 focus-visible:ring-ring pl-10 pr-4" placeholder="Search staff or fixtures..." type="text">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="hidden sm:flex items-center gap-2">
+                                <button class="relative h-10 w-10 rounded-full p-0 border-2 border-background outline-none focus-visible:ring-2 focus-visible:ring-ring">
+                                    <span class="flex size-full items-center justify-center rounded-full bg-primary/10 text-primary font-bold">CP</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <nav aria-label="Breadcrumbs" class="flex items-center text-sm border-b border-border/40 pb-2 mt-2">
+                        <a class="flex items-center text-muted-foreground hover:text-primary transition-colors cursor-pointer" onclick="switchView('fixtures-list')">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-house h-3.5 w-3.5"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"></path><path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
+                        </a>
+                        <div class="flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right h-3.5 w-3.5 mx-1 text-muted-foreground/40"><path d="m9 18 6-6-6-6"></path></svg>
+                            <span class="text-foreground font-medium">SNS Dashboard</span>
+                        </div>
+                    </nav>
+                </div>
+
+                <!-- Needs Action Summary Section -->
+                <div class="mb-8 animate-in slide-in-from-bottom-2 duration-500">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                        
+                        <!-- Metric: Pending Today -->
+                        <div class="bg-card rounded-lg border border-border/60 p-3 shadow-sm flex flex-col justify-between hover:shadow-md transition-shadow">
+                            <div class="flex justify-between items-center mb-1">
+                                <span class="text-xs font-medium text-muted-foreground">Pending Today</span>
+                                <i class="ph-bold ph-calendar-x text-muted-foreground"></i>
+                            </div>
+                            <div class="flex items-baseline gap-1.5 mt-1">
+                                <h3 class="text-lg font-bold text-amber-500" id="metric-pending-today">0</h3>
+                                <span class="text-[10px] text-muted-foreground font-medium">requires cover</span>
+                            </div>
+                        </div>
+
+                        <!-- Metric: Pending Tomorrow -->
+                        <div class="bg-card rounded-lg border border-border/60 p-3 shadow-sm flex flex-col justify-between hover:shadow-md transition-shadow">
+                            <div class="flex justify-between items-center mb-1">
+                                <span class="text-xs font-medium text-muted-foreground">Pending Tomorrow</span>
+                                <i class="ph-bold ph-calendar-blank text-muted-foreground"></i>
+                            </div>
+                            <div class="flex items-baseline gap-1.5 mt-1">
+                                <h3 class="text-lg font-bold text-blue-500" id="metric-pending-tomorrow">0</h3>
+                                <span class="text-[10px] text-muted-foreground font-medium">upcoming</span>
+                            </div>
+                        </div>
+
+                        <!-- Metric: Overdue Unresolved -->
+                        <div class="bg-card rounded-lg border border-border/60 p-3 shadow-sm flex flex-col justify-between hover:shadow-md transition-shadow">
+                            <div class="flex justify-between items-center mb-1">
+                                <span class="text-xs font-medium text-muted-foreground">Overdue Unresolved</span>
+                                <i class="ph-bold ph-warning-circle text-muted-foreground"></i>
+                            </div>
+                            <div class="flex items-baseline gap-1.5 mt-1">
+                                <h3 class="text-lg font-bold text-destructive" id="metric-overdue">0</h3>
+                                <span class="text-[10px] text-muted-foreground font-medium">past fixtures</span>
+                            </div>
+                        </div>
+
+                        <!-- Metric: Recently Completed -->
+                        <div class="bg-card rounded-lg border border-border/60 p-3 shadow-sm flex flex-col justify-between hover:shadow-md transition-shadow">
+                            <div class="flex justify-between items-center mb-1">
+                                <span class="text-xs font-medium text-muted-foreground">Recently Completed</span>
+                                <i class="ph-bold ph-check-circle text-muted-foreground"></i>
+                            </div>
+                            <div class="flex items-baseline gap-1.5 mt-1">
+                                <h3 class="text-lg font-bold text-emerald-500" id="metric-completed">0</h3>
+                                <span class="text-[10px] text-muted-foreground font-medium">last 7 days</span>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="flex flex-col gap-4 mb-6 relative z-50">
+                    <div class="flex flex-wrap items-center justify-between gap-4">
+                        <div class="flex gap-6 text-sm font-bold text-muted-foreground" id="sns-tabs">
+                            <button onclick="setSnsTab('All')" id="tab-All" class="sns-tab-btn text-primary border-b-2 border-primary pb-1">All</button>
+                            <button onclick="setSnsTab('Pending')" id="tab-Pending" class="sns-tab-btn hover:text-primary transition-colors pb-1 border-b-2 border-transparent">Pending</button>
+                            <button onclick="setSnsTab('In Progress')" id="tab-InProgress" class="sns-tab-btn hover:text-primary transition-colors pb-1 border-b-2 border-transparent">In Progress</button>
+                            <button onclick="setSnsTab('Completed')" id="tab-Completed" class="sns-tab-btn hover:text-primary transition-colors pb-1 border-b-2 border-transparent">Completed</button>
+                            <button onclick="setSnsTab('Cancelled')" id="tab-Cancelled" class="sns-tab-btn hover:text-primary transition-colors pb-1 border-b-2 border-transparent">Cancelled</button>
+                        </div>
+                        <div class="relative">
+                            <i class="ph ph-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground"></i>
+                            <input id="sns-search-input" oninput="handleSnsSearch(event)" type="text" placeholder="Search by staff, fixture..." class="h-9 w-64 pl-9 rounded-md border border-input bg-background text-sm outline-none focus:ring-1 focus:ring-primary shadow-sm" />
+                        </div>
+                    </div>
+
+                    <!-- Filter Bar -->
+                    <div class="flex flex-wrap items-center gap-2 py-1 w-full mt-2">
+                        
+                        <!-- Date Range (Flatpickr) -->
+                        <div class="relative w-[200px]">
+                            <input type="text" id="sns-date-range-picker" placeholder="Date Range" class="w-full border-input focus-visible:border-ring focus-visible:ring-ring/50 rounded-md border pl-3 pr-8 py-2 text-sm whitespace-nowrap transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 h-9 bg-card shadow-none cursor-pointer hover:bg-accent text-foreground placeholder:text-muted-foreground placeholder:opacity-100" readonly="readonly" />
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-calendar absolute right-2.5 top-1/2 -translate-y-1/2 size-4 opacity-50 shrink-0 pointer-events-none"><path d="M8 2v4"></path><path d="M16 2v4"></path><rect width="18" height="18" x="3" y="4" rx="2"></rect><path d="M3 10h18"></path></svg>
+                        </div>
+
+                        <!-- Staff Member -->
+                        <div class="relative custom-dropdown" id="dropdown-sns-staff">
+                            <button class="dropdown-trigger border-input focus-visible:border-ring focus-visible:ring-ring/50 flex items-center justify-between gap-2 rounded-md border px-3 py-2 text-sm whitespace-nowrap transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 h-9 bg-card shadow-none cursor-pointer hover:bg-accent min-w-[140px]">
+                                <span class="selected-text text-muted-foreground line-clamp-1 pointer-events-none">Staff Member</span>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down size-4 opacity-50 shrink-0 pointer-events-none"><path d="m6 9 6 6 6-6"></path></svg>
+                            </button>
+                            <div class="dropdown-menu hidden absolute top-full left-0 mt-1 z-50 bg-card text-card-foreground rounded-md border shadow-xl min-w-[150px] p-0 animate-in slide-in-from-top-1">
+                                <div class="flex h-full w-full flex-col overflow-hidden rounded-md">
+                                    <div class="dropdown-search-wrapper flex h-9 items-center gap-2 border-b px-3 hidden">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-search h-3 w-3 shrink-0 opacity-50"><path d="m21 21-4.34-4.34"></path><circle cx="11" cy="11" r="8"></circle></svg>
+                                        <input class="dropdown-search placeholder:text-muted-foreground flex h-9 w-full rounded-md bg-transparent py-2 text-xs outline-none" placeholder="Search staff..." autocomplete="off" />
+                                    </div>
+                                    <div class="dropdown-list max-h-[200px] overflow-y-auto overflow-x-hidden p-1"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Year Group -->
+                        <div class="relative custom-dropdown" id="dropdown-sns-year">
+                            <button class="dropdown-trigger border-input focus-visible:border-ring focus-visible:ring-ring/50 flex items-center justify-between gap-2 rounded-md border px-3 py-2 text-sm whitespace-nowrap transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 h-9 bg-card shadow-none cursor-pointer hover:bg-accent min-w-[140px]">
+                                <span class="selected-text text-muted-foreground line-clamp-1 pointer-events-none">Year Group</span>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down size-4 opacity-50 shrink-0 pointer-events-none"><path d="m6 9 6 6 6-6"></path></svg>
+                            </button>
+                            <div class="dropdown-menu hidden absolute top-full left-0 mt-1 z-50 bg-card text-card-foreground rounded-md border shadow-xl min-w-[150px] p-0 animate-in slide-in-from-top-1">
+                                <div class="flex h-full w-full flex-col overflow-hidden rounded-md">
+                                    <div class="dropdown-search-wrapper flex h-9 items-center gap-2 border-b px-3 hidden">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-search h-3 w-3 shrink-0 opacity-50"><path d="m21 21-4.34-4.34"></path><circle cx="11" cy="11" r="8"></circle></svg>
+                                        <input class="dropdown-search placeholder:text-muted-foreground flex h-9 w-full rounded-md bg-transparent py-2 text-xs outline-none" placeholder="Search..." autocomplete="off" />
+                                    </div>
+                                    <div class="dropdown-list max-h-[200px] overflow-y-auto overflow-x-hidden p-1"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Cover Type -->
+                        <div class="relative custom-dropdown" id="dropdown-sns-cover">
+                            <button class="dropdown-trigger border-input focus-visible:border-ring focus-visible:ring-ring/50 flex items-center justify-between gap-2 rounded-md border px-3 py-2 text-sm whitespace-nowrap transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 h-9 bg-card shadow-none cursor-pointer hover:bg-accent min-w-[140px]">
+                                <span class="selected-text text-muted-foreground line-clamp-1 pointer-events-none">Cover Type</span>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down size-4 opacity-50 shrink-0 pointer-events-none"><path d="m6 9 6 6 6-6"></path></svg>
+                            </button>
+                            <div class="dropdown-menu hidden absolute top-full left-0 mt-1 z-50 bg-card text-card-foreground rounded-md border shadow-xl min-w-[180px] p-0 animate-in slide-in-from-top-1">
+                                <div class="flex h-full w-full flex-col overflow-hidden rounded-md">
+                                    <div class="dropdown-search-wrapper flex h-9 items-center gap-2 border-b px-3 hidden">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-search h-3 w-3 shrink-0 opacity-50"><path d="m21 21-4.34-4.34"></path><circle cx="11" cy="11" r="8"></circle></svg>
+                                        <input class="dropdown-search placeholder:text-muted-foreground flex h-9 w-full rounded-md bg-transparent py-2 text-xs outline-none" placeholder="Search..." autocomplete="off" />
+                                    </div>
+                                    <div class="dropdown-list max-h-[200px] overflow-y-auto overflow-x-hidden p-1"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Status -->
+                        <div class="relative custom-dropdown" id="dropdown-sns-status">
+                            <button class="dropdown-trigger border-input focus-visible:border-ring focus-visible:ring-ring/50 flex items-center justify-between gap-2 rounded-md border px-3 py-2 text-sm whitespace-nowrap transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 h-9 bg-card shadow-none cursor-pointer hover:bg-accent min-w-[140px]">
+                                <span class="selected-text text-muted-foreground line-clamp-1 pointer-events-none">Status</span>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down size-4 opacity-50 shrink-0 pointer-events-none"><path d="m6 9 6 6 6-6"></path></svg>
+                            </button>
+                            <div class="dropdown-menu hidden absolute top-full left-0 mt-1 z-50 bg-card text-card-foreground rounded-md border shadow-xl min-w-[150px] p-0 animate-in slide-in-from-top-1">
+                                <div class="flex h-full w-full flex-col overflow-hidden rounded-md">
+                                    <div class="dropdown-search-wrapper flex h-9 items-center gap-2 border-b px-3 hidden">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-search h-3 w-3 shrink-0 opacity-50"><path d="m21 21-4.34-4.34"></path><circle cx="11" cy="11" r="8"></circle></svg>
+                                        <input class="dropdown-search placeholder:text-muted-foreground flex h-9 w-full rounded-md bg-transparent py-2 text-xs outline-none" placeholder="Search..." autocomplete="off" />
+                                    </div>
+                                    <div class="dropdown-list max-h-[200px] overflow-y-auto overflow-x-hidden p-1"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Clear All -->
+                        <button onclick="clearAllFilters()" class="inline-flex items-center gap-2 rounded-md text-sm font-medium transition-colors text-muted-foreground hover:text-foreground hover:bg-muted h-9 px-3 border border-transparent hover:border-border outline-none ml-1">
+                            <i class="ph-bold ph-x"></i> Clear all
+                        </button>
+                    </div>
+                </div>
+
+                <div class="bg-card rounded-xl border border-border/60 shadow-none overflow-hidden flex flex-col max-h-[calc(100vh-290px)] min-h-[400px] relative z-0">
+                    <div id="table-scroll-container" class="overflow-auto scrollbar-thin flex-1">
+                        <table class="w-full text-left relative">
+                            <thead class="sticky top-0 z-10">
+                                <tr class="border-b border-border/80">
+                                    <th class="py-3.5 pl-6 pr-4 bg-muted/95 backdrop-blur-sm text-sm font-medium text-foreground">Fixture name</th>
+                                    <th class="py-3.5 px-4 bg-muted/95 backdrop-blur-sm text-sm font-medium text-foreground">Team</th>
+                                    <th class="py-3.5 px-4 whitespace-nowrap bg-muted/95 backdrop-blur-sm text-sm font-medium text-foreground">Date</th>
+                                    <th class="py-3.5 px-4 bg-muted/95 backdrop-blur-sm text-sm font-medium text-foreground">Departure</th>
+                                    <th class="py-3.5 px-4 bg-muted/95 backdrop-blur-sm text-sm font-medium text-foreground">Return Time</th>
+                                    <th class="py-3.5 px-4 bg-muted/95 backdrop-blur-sm text-sm font-medium text-foreground">Staff</th>
+                                    <th class="py-3.5 px-4 whitespace-nowrap bg-muted/95 backdrop-blur-sm text-sm font-medium text-foreground">Periods</th>
+                                    <th class="py-3.5 px-4 text-center bg-muted/95 backdrop-blur-sm text-sm font-medium text-foreground">Status</th>
+                                    <th class="py-3.5 pr-6 pl-2 bg-muted/95 backdrop-blur-sm text-sm font-medium text-foreground w-12 text-center">Log</th>
+                                </tr>
+                            </thead>
+                            <tbody id="sns-table-body" class="divide-y divide-border/60 pb-8">
+                                <!-- Populated by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MODULE: Settings -->
+            <div id="view-settings" class="view-module animate-in fade-in duration-300 hidden">
+                <div class="flex items-center justify-between mb-2">
+                    <h1 class="text-2xl font-bold tracking-tight text-foreground">Settings</h1>
+                    <div class="flex items-center gap-4">
+                        <div class="relative hidden md:block group">
+                            <i class="ph ph-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground"></i>
+                            <input class="h-10 w-[300px] pl-10 pr-8 rounded-md border border-border bg-card text-sm outline-none transition-all focus:ring-1 focus:ring-primary" placeholder="Search students..." />
+                            <span class="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] text-muted-foreground border px-1.5 rounded bg-muted/50">/</span>
+                        </div>
+                        <div class="h-10 w-10 border-2 border-white rounded-full bg-muted flex items-center justify-center font-bold text-sm text-foreground uppercase shadow-sm">KW</div>
+                    </div>
+                </div>
+                
+                <nav aria-label="Breadcrumbs" class="flex items-center text-sm border-b border-border/40 pb-2 mb-6">
+                    <a class="flex items-center text-muted-foreground hover:text-primary transition-colors cursor-pointer" onclick="switchView('fixtures-list')">
+                        <i class="ph ph-house mr-1.5 text-sm"></i>
+                    </a>
+                    <div class="flex items-center">
+                        <i class="ph ph-caret-right mx-1 text-muted-foreground/40 text-sm"></i>
+                        <span class="text-foreground font-medium">Settings</span>
+                    </div>
+                </nav>
+
+                <div class="bg-card rounded-xl border border-border/60 shadow-sm p-6 sm:p-8 min-h-[600px]">
+                    <h2 class="text-2xl font-bold tracking-tight text-foreground">Configurations</h2>
+                    <p class="text-sm text-muted-foreground mt-1 mb-6">Set up and manage team manager</p>
+
+                    <!-- Tabs -->
+                    <div class="flex p-1 bg-muted/50 rounded-lg mb-8 max-w-3xl">
+                        <button onclick="setSettingsTab('venues')" id="st-tab-venues" class="flex-1 py-2 text-sm font-medium rounded-md bg-primary text-primary-foreground shadow-sm flex items-center justify-center gap-2 transition-all">
+                            <i class="ph ph-map-pin text-lg"></i> Home venues
+                        </button>
+                        <button onclick="setSettingsTab('fixtures')" id="st-tab-fixtures" class="flex-1 py-2 text-sm font-medium rounded-md text-muted-foreground hover:text-foreground flex items-center justify-center gap-2 transition-all">
+                            <i class="ph ph-trophy text-lg"></i> Fixture types
+                        </button>
+                        <button onclick="setSettingsTab('sns')" id="st-tab-sns" class="flex-1 py-2 text-sm font-medium rounded-md text-muted-foreground hover:text-foreground flex items-center justify-center gap-2 transition-all">
+                            <i class="ph ph-bell text-lg"></i> S&S Notifications
+                        </button>
+                    </div>
+
+                    <!-- Tab Content: Home Venues -->
+                    <div id="st-content-venues" class="animate-in fade-in duration-300 block">
+                        <div class="mb-6">
+                            <h3 class="text-xl font-bold tracking-tight text-foreground">Home Venues</h3>
+                            <p class="text-sm text-muted-foreground mt-1">Manage venues for your fixtures and trainings</p>
+                        </div>
+                        <div class="flex flex-col sm:flex-row items-center justify-between gap-4 mb-4">
+                            <div class="relative w-full max-w-2xl">
+                                <i class="ph ph-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground"></i>
+                                <input class="h-10 w-full pl-9 rounded-md border border-input bg-background text-sm outline-none focus:ring-1 focus:ring-primary shadow-sm" placeholder="Search Venues" />
+                            </div>
+                            <button class="h-10 px-4 bg-primary text-primary-foreground rounded-md text-sm font-medium flex items-center justify-center gap-2 hover:bg-primary/90 transition-all shadow-sm shrink-0 w-full sm:w-auto">
+                                Add Home Venue
+                            </button>
+                        </div>
+                        <div class="border border-border/80 rounded-lg bg-background h-[450px] overflow-hidden flex flex-col relative">
+                            <div class="overflow-y-auto flex-1 scrollbar-thin">
+                                <table class="w-full text-left text-sm whitespace-nowrap">
+                                    <thead class="bg-muted/30 sticky top-0 z-10">
+                                        <tr class="border-b border-border/80">
+                                            <th class="px-4 py-3.5 font-semibold text-foreground">Name</th>
+                                            <th class="px-4 py-3.5 font-semibold text-foreground">Address</th>
+                                            <th class="px-4 py-3.5 font-semibold text-foreground text-center w-24">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="st-venues-tbody" class="divide-y divide-border/60">
+                                        <!-- populated by js -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tab Content: Fixture Types -->
+                    <div id="st-content-fixtures" class="animate-in fade-in duration-300 hidden">
+                        <div class="mb-6">
+                            <h3 class="text-xl font-bold tracking-tight text-foreground">Fixture Types</h3>
+                            <p class="text-sm text-muted-foreground mt-1">Manage fixture types for your teams</p>
+                        </div>
+                        <div class="flex flex-col sm:flex-row items-center justify-between gap-4 mb-4">
+                            <div class="relative w-full max-w-2xl">
+                                <i class="ph ph-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground"></i>
+                                <input class="h-10 w-full pl-9 rounded-md border border-input bg-background text-sm outline-none focus:ring-1 focus:ring-primary shadow-sm" placeholder="Search Fixture Types" />
+                            </div>
+                            <button class="h-10 px-4 bg-primary text-primary-foreground rounded-md text-sm font-medium flex items-center justify-center gap-2 hover:bg-primary/90 transition-all shadow-sm shrink-0 w-full sm:w-auto">
+                                Add Fixture Type
+                            </button>
+                        </div>
+                        <div class="border border-border/80 rounded-lg bg-background h-[450px] overflow-hidden flex flex-col relative">
+                            <div class="overflow-y-auto flex-1 scrollbar-thin">
+                                <table class="w-full text-left text-sm whitespace-nowrap">
+                                    <thead class="bg-muted/30 sticky top-0 z-10">
+                                        <tr class="border-b border-border/80">
+                                            <th class="px-4 py-3.5 font-semibold text-foreground">Title</th>
+                                            <th class="px-4 py-3.5 font-semibold text-foreground w-[60%]">Description</th>
+                                            <th class="px-4 py-3.5 font-semibold text-foreground text-center w-24">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="st-fixtures-tbody" class="divide-y divide-border/60">
+                                        <!-- populated by js -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tab Content: S&S -->
+                    <div id="st-content-sns" class="animate-in fade-in duration-300 hidden">
+                        <div class="mb-6">
+                            <h3 class="text-xl font-bold tracking-tight text-foreground">S&S Notifications</h3>
+                            <p class="text-sm text-muted-foreground mt-1">Configure automated alerts and delivery methods for Supervision & Substitution.</p>
+                        </div>
+                        
+                        <div class="max-w-4xl space-y-6 pb-8">
+                            <!-- 1. Roles Config -->
+                            <div class="bg-card rounded-xl border border-border/60 shadow-sm overflow-hidden">
+                                <div class="px-6 py-5 border-b border-border/50 bg-muted/10 flex items-start gap-4">
+                                    <div class="p-2.5 bg-primary/10 rounded-lg text-primary mt-0.5">
+                                        <i class="ph-bold ph-users-three text-xl"></i>
+                                    </div>
+                                    <div>
+                                        <h2 class="text-lg font-bold text-foreground tracking-tight">Recipient Roles</h2>
+                                        <p class="text-sm text-muted-foreground mt-1">Define which staff roles receive automated S&S alerts.</p>
+                                    </div>
+                                </div>
+                                <div class="p-6 space-y-4">
+                                    <label class="flex items-center justify-between p-4 rounded-xl border border-border/60 bg-background hover:border-primary/30 transition-colors cursor-pointer group">
+                                        <div class="flex flex-col">
+                                            <span class="text-sm font-bold text-foreground">S&S Coordinator</span>
+                                            <span class="text-xs text-muted-foreground mt-0.5">Primary personnel managing the substitution roster.</span>
+                                        </div>
+                                        <div class="relative inline-flex h-5 w-9 shrink-0 cursor-pointer items-center justify-center rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background">
+                                            <input type="checkbox" class="peer sr-only" checked onchange="updateNotificationSettings('roles', 'sns', this.checked)">
+                                            <div class="h-5 w-9 rounded-full bg-input peer-checked:bg-primary transition-colors after:absolute after:left-[2px] after:top-[2px] after:h-4 after:w-4 after:rounded-full after:bg-background after:transition-all peer-checked:after:translate-x-4"></div>
+                                        </div>
+                                    </label>
+
+                                    <label class="flex items-center justify-between p-4 rounded-xl border border-border/60 bg-background hover:border-primary/30 transition-colors cursor-pointer group">
+                                        <div class="flex flex-col">
+                                            <span class="text-sm font-bold text-foreground">Principal & Deputy Principal</span>
+                                            <span class="text-xs text-muted-foreground mt-0.5">Highest level overview of all staff movements and absences.</span>
+                                        </div>
+                                        <div class="relative inline-flex h-5 w-9 shrink-0 cursor-pointer items-center justify-center rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background">
+                                            <input type="checkbox" class="peer sr-only" checked onchange="updateNotificationSettings('roles', 'principal', this.checked)">
+                                            <div class="h-5 w-9 rounded-full bg-input peer-checked:bg-primary transition-colors after:absolute after:left-[2px] after:top-[2px] after:h-4 after:w-4 after:rounded-full after:bg-background after:transition-all peer-checked:after:translate-x-4"></div>
+                                        </div>
+                                    </label>
+
+                                    <label class="flex items-center justify-between p-4 rounded-xl border border-border/60 bg-background hover:border-primary/30 transition-colors cursor-pointer group">
+                                        <div class="flex flex-col">
+                                            <span class="text-sm font-bold text-foreground">Office / Admin Staff</span>
+                                            <span class="text-xs text-muted-foreground mt-0.5">For managing transport logs and general school inquiries.</span>
+                                        </div>
+                                        <div class="relative inline-flex h-5 w-9 shrink-0 cursor-pointer items-center justify-center rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background">
+                                            <input type="checkbox" class="peer sr-only" checked onchange="updateNotificationSettings('roles', 'office', this.checked)">
+                                            <div class="h-5 w-9 rounded-full bg-input peer-checked:bg-primary transition-colors after:absolute after:left-[2px] after:top-[2px] after:h-4 after:w-4 after:rounded-full after:bg-background after:transition-all peer-checked:after:translate-x-4"></div>
+                                        </div>
+                                    </label>
+
+                                    <label class="flex items-center justify-between p-4 rounded-xl border border-border/60 bg-background hover:border-primary/30 transition-colors cursor-pointer group">
+                                        <div class="flex flex-col">
+                                            <span class="text-sm font-bold text-foreground">Relevant Year Head(s)</span>
+                                            <span class="text-xs text-muted-foreground mt-0.5">Notify the Year Head of the participating student cohort.</span>
+                                        </div>
+                                        <div class="relative inline-flex h-5 w-9 shrink-0 cursor-pointer items-center justify-center rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background">
+                                            <input type="checkbox" class="peer sr-only" onchange="updateNotificationSettings('roles', 'yearhead', this.checked)">
+                                            <div class="h-5 w-9 rounded-full bg-input peer-checked:bg-primary transition-colors after:absolute after:left-[2px] after:top-[2px] after:h-4 after:w-4 after:rounded-full after:bg-background after:transition-all peer-checked:after:translate-x-4"></div>
+                                        </div>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- 2. Notification Triggers -->
+                            <div class="bg-card rounded-xl border border-border/60 shadow-sm overflow-hidden">
+                                <div class="px-6 py-5 border-b border-border/50 bg-muted/10 flex items-start gap-4">
+                                    <div class="p-2.5 bg-primary/10 rounded-lg text-primary mt-0.5">
+                                        <i class="ph-bold ph-lightning text-xl"></i>
+                                    </div>
+                                    <div>
+                                        <h2 class="text-lg font-bold text-foreground tracking-tight">Notification Triggers</h2>
+                                        <p class="text-sm text-muted-foreground mt-1">Select which events generate system alerts.</p>
+                                    </div>
+                                </div>
+                                <div class="p-6 space-y-4">
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <label class="flex items-center justify-between p-4 rounded-xl border border-border/60 bg-background hover:border-primary/30 transition-colors cursor-pointer group">
+                                            <span class="text-sm font-bold text-foreground">New S&S Item Created</span>
+                                            <div class="relative inline-flex h-5 w-9 shrink-0 cursor-pointer items-center justify-center rounded-full">
+                                                <input type="checkbox" class="peer sr-only" checked onchange="updateNotificationSettings('events', 'created', this.checked)">
+                                                <div class="h-5 w-9 rounded-full bg-input peer-checked:bg-primary transition-colors after:absolute after:left-[2px] after:top-[2px] after:h-4 after:w-4 after:rounded-full after:bg-background after:transition-all peer-checked:after:translate-x-4"></div>
+                                            </div>
+                                        </label>
+                                        <label class="flex items-center justify-between p-4 rounded-xl border border-border/60 bg-background hover:border-primary/30 transition-colors cursor-pointer group">
+                                            <span class="text-sm font-bold text-foreground">Fixture Updated</span>
+                                            <div class="relative inline-flex h-5 w-9 shrink-0 cursor-pointer items-center justify-center rounded-full">
+                                                <input type="checkbox" class="peer sr-only" checked onchange="updateNotificationSettings('events', 'updated', this.checked)">
+                                                <div class="h-5 w-9 rounded-full bg-input peer-checked:bg-primary transition-colors after:absolute after:left-[2px] after:top-[2px] after:h-4 after:w-4 after:rounded-full after:bg-background after:transition-all peer-checked:after:translate-x-4"></div>
+                                            </div>
+                                        </label>
+                                        <label class="flex items-center justify-between p-4 rounded-xl border border-border/60 bg-background hover:border-primary/30 transition-colors cursor-pointer group">
+                                            <span class="text-sm font-bold text-foreground text-destructive">Fixture Cancelled</span>
+                                            <div class="relative inline-flex h-5 w-9 shrink-0 cursor-pointer items-center justify-center rounded-full">
+                                                <input type="checkbox" class="peer sr-only" checked onchange="updateNotificationSettings('events', 'cancelled', this.checked)">
+                                                <div class="h-5 w-9 rounded-full bg-input peer-checked:bg-primary transition-colors after:absolute after:left-[2px] after:top-[2px] after:h-4 after:w-4 after:rounded-full after:bg-background after:transition-all peer-checked:after:translate-x-4"></div>
+                                            </div>
+                                        </label>
+                                        <label class="flex items-center justify-between p-4 rounded-xl border border-border/60 bg-background hover:border-primary/30 transition-colors cursor-pointer group">
+                                            <span class="text-sm font-bold text-foreground">Cover Completed</span>
+                                            <div class="relative inline-flex h-5 w-9 shrink-0 cursor-pointer items-center justify-center rounded-full">
+                                                <input type="checkbox" class="peer sr-only" onchange="updateNotificationSettings('events', 'completed', this.checked)">
+                                                <div class="h-5 w-9 rounded-full bg-input peer-checked:bg-primary transition-colors after:absolute after:left-[2px] after:top-[2px] after:h-4 after:w-4 after:rounded-full after:bg-background after:transition-all peer-checked:after:translate-x-4"></div>
+                                            </div>
+                                        </label>
+                                        <label class="flex items-center justify-between p-4 rounded-xl border border-border/60 bg-background hover:border-primary/30 transition-colors cursor-pointer group col-span-1 md:col-span-2">
+                                            <div class="flex flex-col">
+                                                <span class="text-sm font-bold text-foreground flex items-center gap-2"><i class="ph-fill ph-warning-circle text-amber-500"></i> Cover Pending Alert</span>
+                                                <span class="text-xs text-muted-foreground mt-0.5">Notify if cover is still pending within 24 hours of departure.</span>
+                                            </div>
+                                            <div class="relative inline-flex h-5 w-9 shrink-0 cursor-pointer items-center justify-center rounded-full">
+                                                <input type="checkbox" class="peer sr-only" checked onchange="updateNotificationSettings('events', 'pendingAlert', this.checked)">
+                                                <div class="h-5 w-9 rounded-full bg-input peer-checked:bg-primary transition-colors after:absolute after:left-[2px] after:top-[2px] after:h-4 after:w-4 after:rounded-full after:bg-background after:transition-all peer-checked:after:translate-x-4"></div>
+                                            </div>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 3. Delivery Methods -->
+                            <div class="bg-card rounded-xl border border-border/60 shadow-sm overflow-hidden">
+                                <div class="px-6 py-5 border-b border-border/50 bg-muted/10 flex items-start gap-4">
+                                    <div class="p-2.5 bg-primary/10 rounded-lg text-primary mt-0.5">
+                                        <i class="ph-bold ph-paper-plane-tilt text-xl"></i>
+                                    </div>
+                                    <div>
+                                        <h2 class="text-lg font-bold text-foreground tracking-tight">Delivery Methods</h2>
+                                        <p class="text-sm text-muted-foreground mt-1">Choose how selected roles receive the triggered notifications.</p>
+                                    </div>
+                                </div>
+                                <div class="p-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <label class="flex items-center justify-between p-4 rounded-xl border border-border/60 bg-background hover:border-primary/30 transition-colors cursor-pointer group">
+                                        <div class="flex flex-col">
+                                            <span class="text-sm font-bold text-foreground flex items-center gap-2"><i class="ph ph-app-window"></i> In-App Dashboard</span>
+                                        </div>
+                                        <div class="relative inline-flex h-5 w-9 shrink-0 cursor-pointer items-center justify-center rounded-full">
+                                            <input type="checkbox" class="peer sr-only" checked onchange="updateNotificationSettings('methods', 'inApp', this.checked)">
+                                            <div class="h-5 w-9 rounded-full bg-input peer-checked:bg-primary transition-colors after:absolute after:left-[2px] after:top-[2px] after:h-4 after:w-4 after:rounded-full after:bg-background after:transition-all peer-checked:after:translate-x-4"></div>
+                                        </div>
+                                    </label>
+                                    <label class="flex items-center justify-between p-4 rounded-xl border border-border/60 bg-background hover:border-primary/30 transition-colors cursor-pointer group">
+                                        <div class="flex flex-col">
+                                            <span class="text-sm font-bold text-foreground flex items-center gap-2"><i class="ph ph-envelope-simple"></i> Email Notification</span>
+                                        </div>
+                                        <div class="relative inline-flex h-5 w-9 shrink-0 cursor-pointer items-center justify-center rounded-full">
+                                            <input type="checkbox" class="peer sr-only" onchange="updateNotificationSettings('methods', 'email', this.checked)">
+                                            <div class="h-5 w-9 rounded-full bg-input peer-checked:bg-primary transition-colors after:absolute after:left-[2px] after:top-[2px] after:h-4 after:w-4 after:rounded-full after:bg-background after:transition-all peer-checked:after:translate-x-4"></div>
+                                        </div>
+                                    </label>
+                                    <label class="flex items-center justify-between p-4 rounded-xl border border-border/60 bg-background hover:border-primary/30 transition-colors cursor-pointer group">
+                                        <div class="flex flex-col">
+                                            <span class="text-sm font-bold text-foreground flex items-center gap-2"><i class="ph ph-device-mobile"></i> Push Notification</span>
+                                        </div>
+                                        <div class="relative inline-flex h-5 w-9 shrink-0 cursor-pointer items-center justify-center rounded-full">
+                                            <input type="checkbox" class="peer sr-only" onchange="updateNotificationSettings('methods', 'push', this.checked)">
+                                            <div class="h-5 w-9 rounded-full bg-input peer-checked:bg-primary transition-colors after:absolute after:left-[2px] after:top-[2px] after:h-4 after:w-4 after:rounded-full after:bg-background after:transition-all peer-checked:after:translate-x-4"></div>
+                                        </div>
+                                    </label>
+                                    <label class="flex items-center justify-between p-4 rounded-xl border border-border/60 bg-background hover:border-primary/30 transition-colors cursor-pointer group">
+                                        <div class="flex flex-col">
+                                            <span class="text-sm font-bold text-foreground flex items-center gap-2"><i class="ph ph-files"></i> Daily Digest Summary</span>
+                                        </div>
+                                        <div class="relative inline-flex h-5 w-9 shrink-0 cursor-pointer items-center justify-center rounded-full">
+                                            <input type="checkbox" class="peer sr-only" checked onchange="updateNotificationSettings('methods', 'digest', this.checked)">
+                                            <div class="h-5 w-9 rounded-full bg-input peer-checked:bg-primary transition-colors after:absolute after:left-[2px] after:top-[2px] after:h-4 after:w-4 after:rounded-full after:bg-background after:transition-all peer-checked:after:translate-x-4"></div>
+                                        </div>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Audit Log & Notes Modal -->
+    <div id="sns-audit-modal" class="fixed inset-0 z-[200] hidden flex items-center justify-center bg-background/80 backdrop-blur-sm" onclick="closeSnsModal()">
+        <div class="bg-card w-full max-w-lg rounded-xl border border-border shadow-2xl flex flex-col max-h-[90vh]" onclick="event.stopPropagation()">
+            <div class="px-6 py-4 border-b border-border flex justify-between items-center">
+                <div>
+                    <h2 class="text-lg font-bold text-foreground">Audit Log & Notes</h2>
+                    <p class="text-xs text-muted-foreground" id="audit-modal-subtitle">Fixture Details</p>
+                </div>
+                <button onclick="closeSnsModal()" class="text-muted-foreground hover:text-foreground outline-none cursor-pointer"><i class="ph ph-x text-lg"></i></button>
+            </div>
+            <div class="p-6 overflow-y-auto flex-1 space-y-8 scrollbar-thin">
+                <!-- Notes -->
+                <div class="space-y-3">
+                    <label class="text-sm font-bold text-foreground flex items-center gap-2"><i class="ph-bold ph-note-pencil text-primary"></i> Instructions / Notes</label>
+                    <textarea id="modal-notes" class="w-full h-24 p-3 text-sm rounded-md border border-input bg-background outline-none focus:ring-1 focus:ring-primary placeholder:text-muted-foreground/50" placeholder="Add specific cover instructions or contextual notes here..."></textarea>
+                    <button onclick="saveSnsNotes()" class="text-xs bg-primary text-primary-foreground px-4 py-2 rounded-md font-medium hover:bg-primary/90 transition-colors shadow-sm w-full outline-none">Save Notes</button>
+                </div>
+                
+                <!-- History Timeline -->
+                <div class="space-y-3">
+                    <label class="text-sm font-bold text-foreground flex items-center gap-2"><i class="ph-bold ph-clock-counter-clockwise text-primary"></i> Audit History</label>
+                    <div class="border-l-2 border-border pl-4 space-y-5 ml-2 mt-2" id="modal-history-list">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification Container -->
+    <div id="toast-container" class="fixed bottom-6 right-6 z-[9999] flex flex-col gap-3 pointer-events-none"></div>
+
+    <script>
+        // --- DATA STATE ---
+        let currentModule = 'sns';
+        let activeStep = 1;
+        let isSidebarCollapsed = false;
+        let addedSupportStaff = [];
+        let currentSnsTab = 'All'; // Track active tab
+        let currentSnsSearch = ''; // Track search query
+        let datePickerInstance = null; // Track flatpickr instance
+        let currentSnsModalId = null; // Track active modal item
+        
+        // --- SETTINGS MOCK DATA ---
+        let currentSettingsTab = 'venues';
+        
+        const mockSettingsVenues = [
+            { id: 1, name: "St. James Gaels", address: "Dublin, D12 TY0R, Ireland" },
+            { id: 2, name: "Ardscoil Rís Sports Grounds", address: "Griffith Ave, Grace Park, Dublin, Ireland" },
+            { id: 3, name: "Automated Venue - 1769066264193", address: "123 Automation St, Playwright City, PW 12345" },
+            { id: 4, name: "Automated Venue - 1769067443351", address: "123 Automation St, Playwright City, PW 12345" },
+            { id: 5, name: "Automated Venue - 1769068679593", address: "123 Automation St, Playwright City, PW 12345" },
+            { id: 6, name: "Main Pitch - Home", address: "School Grounds" },
+            { id: 7, name: "UCD Sports Centre", address: "Belfield, Dublin 4" },
+            { id: 8, name: "Donnybrook Stadium", address: "Donnybrook, Dublin 4" }
+        ];
+
+        const mockSettingsFixtures = [
+            { id: 1, title: "Automated Fixture - 176...", desc: "This is a test description for the automated fixture type." },
+            { id: 2, title: "Automated Fixture - 176...", desc: "This is a test description for the automated fixture type." },
+            { id: 3, title: "Automated Fixture - 176...", desc: "This is a test description for the automated fixture type." },
+            { id: 4, title: "Automated Fixture - 176...", desc: "This is a test description for the automated fixture type." },
+            { id: 5, title: "Best-of Series edit", desc: "Used in professional leagues (e.g., best-of-3 or 5 match series)." },
+            { id: 6, title: "Friendly Match", desc: "Non-competitive practice matches between schools." },
+            { id: 7, title: "League Qualifier", desc: "Standard league matches for seasonal points." }
+        ];
+
+        // Advanced Notification Preferences State
+        let notificationSettings = {
+            roles: { sns: true, principal: true, office: true, yearhead: false },
+            events: { created: true, updated: true, cancelled: true, pendingAlert: true, completed: false },
+            methods: { inApp: true, email: false, push: false, digest: true }
+        };
+
+        // Infinite Scrolling State
+        let currentFilteredData = [];
+        let displayCount = 20;
+        const PAGE_SIZE = 20;
+        
+        // Dynamic Filter State
+        let activeSnsFilters = {
+            dateRange: { from: '', to: '' },
+            staff: '',
+            year: '',
+            cover: '',
+            status: ''
+        };
+
+        const steps = [
+            { id: 1, title: 'Fixture Details', subtitle: 'Step 1' },
+            { id: 2, title: 'Teachers', subtitle: 'Step 2' },
+            { id: 3, title: 'Team Selection', subtitle: 'Step 3 (Optional)' },
+            { id: 4, title: 'Supporters', subtitle: 'Step 4 (Optional)' },
+            { id: 5, title: 'Review', subtitle: 'Step 5' },
+        ];
+
+        const sidebarItems = [
+            { id: 'dashboard', icon: 'ph-squares-four', label: 'Dashboard' },
+            { id: 'sports', icon: 'ph-volleyball', label: 'Sports' },
+            { id: 'teams', icon: 'ph-users', label: 'Teams' },
+            { id: 'fixtures', icon: 'ph-trophy', label: 'Fixtures' },
+            { id: 'trainings', icon: 'ph-barbell', label: 'Trainings' },
+            { id: 'sns', icon: 'ph-monitor', label: 'Supervision and Substitution' },
+            { id: 'calendar', icon: 'ph-calendar-blank', label: 'Calendar' },
+            { id: 'pn-templates', icon: 'ph-bell', label: 'PN Templates' },
+            { id: 'coaches', icon: 'ph-address-book', label: 'Our Coaches' },
+            { id: 'settings', icon: 'ph-gear', label: 'Settings' },
+        ];
+
+        const schoolTeamsList = ["Senior Cup Rugby", "Junior Soccer", "U16 Gaelic Football", "Senior Hurling", "Athletics Squad", "Debating Team", "U15 Basketball", "Golf Team"];
+        const opponentsList = ["Belvedere College", "Blackrock College", "St. Michael's College", "Gonzaga College", "Clongowes Wood", "Loreto Abbey", "Terenure College", "St. Mary's College"];
+        const homeVenuesList = ["Main Pitch", "Astro Turf", "School Sports Hall", "UCD Sports Centre", "Donnybrook Stadium", "Irishtown Stadium"];
+        const fixtureTypesList = ["League", "Friendly", "Cup Match", "Championship", "Leinster Finals", "Blitz", "Regional Qualifiers"];
+        const venueTypesList = ["Home", "Away"];
+        const snsStatusList = ["Pending", "In Progress", "Completed", "Cancelled"];
+        
+        const snsYearGroupList = ["1st Year", "2nd Year", "3rd Year", "Transition Year", "5th Year", "6th Year"];
+        const snsCoverTypeList = ["Internal Cover", "External Sub", "Students Reassigned", "No Cover Needed"];
+        
+        const teamCoaches = ["Mr. O'Brien", "Ms. Kelly", "Mr. Murphy", "Ms. Walsh"];
+        const otherStaff = ["Mr. Gallagher", "Ms. Ní Chonchúir", "Mr. Doyle", "Ms. Byrne", "Mr. McCarthy", "Ms. O'Connor"];
+
+        // --- TIMETABLE LOGIC ---
+        const standardTimetable = [
+            { period: "P1", start: "08:50", end: "09:30" },
+            { period: "P2", start: "09:30", end: "10:10" },
+            { period: "Break", start: "10:10", end: "10:25" },
+            { period: "P3", start: "10:25", end: "11:05" },
+            { period: "P4", start: "11:05", end: "11:45" },
+            { period: "P5", start: "11:45", end: "12:25" },
+            { period: "Lunch", start: "12:25", end: "13:05" },
+            { period: "P6", start: "13:05", end: "13:45" },
+            { period: "P7", start: "13:45", end: "14:25" },
+            { period: "P8", start: "14:25", end: "15:05" },
+            { period: "P9", start: "15:05", end: "15:45" }
+        ];
+
+        function timeToMins(t) {
+            if (!t) return 0;
+            const [h, m] = t.split(':');
+            return parseInt(h) * 60 + parseInt(m);
+        }
+
+        function getAffectedPeriods(leaveTime, returnTime) {
+            if (!leaveTime || !returnTime) return "None";
+            const leaveMins = timeToMins(leaveTime);
+            const returnMins = timeToMins(returnTime);
+            
+            const affected = [];
+            let missedFullDay = false;
+
+            // Simple full day check (leaving before school starts and returning near the end)
+            if (leaveMins <= timeToMins("09:00") && returnMins >= timeToMins("15:00")) {
+                missedFullDay = true;
+            }
+            
+            standardTimetable.forEach(slot => {
+                if (slot.period === "Break" || slot.period === "Lunch") return; 
+                
+                const slotStart = timeToMins(slot.start);
+                const slotEnd = timeToMins(slot.end);
+                
+                // Overlap condition: leaves before slot ends AND returns after slot starts
+                if (leaveMins < slotEnd && returnMins > slotStart) {
+                    affected.push(slot.period);
+                }
+            });
+            
+            if (missedFullDay) return "All Day";
+            if (affected.length === 0) return "Outside school hours";
+            
+            return affected.join(", ");
+        }
+
+        function updateDetectedPeriodsUI() {
+            const leaveTime = document.getElementById('leaving-time')?.value;
+            const returnTime = document.getElementById('returning-time')?.value;
+            const textEl = document.getElementById('detected-periods-text');
+            
+            if (textEl && leaveTime && returnTime) {
+                const periods = getAffectedPeriods(leaveTime, returnTime);
+                textEl.innerHTML = `Affected Periods: <span class="font-bold">${periods}</span>`;
+            }
+        }
+
+        // --- SUMMARY METRICS LOGIC ---
+        function updateSummaryMetrics() {
+            const today = new Date();
+            const todayStr = `${String(today.getDate()).padStart(2, '0')}/${String(today.getMonth() + 1).padStart(2, '0')}/${today.getFullYear()}`;
+            
+            const tomorrow = new Date(today);
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            const tomorrowStr = `${String(tomorrow.getDate()).padStart(2, '0')}/${String(tomorrow.getMonth() + 1).padStart(2, '0')}/${tomorrow.getFullYear()}`;
+
+            const todayTime = new Date(today.getFullYear(), today.getMonth(), today.getDate()).getTime();
+            const sevenDaysAgoTime = todayTime - (7 * 24 * 60 * 60 * 1000);
+
+            let pendingToday = 0;
+            let pendingTomorrow = 0;
+            let overdue = 0;
+            let recentlyCompleted = 0;
+
+            snsData.forEach(row => {
+                const rowTime = parseDate(row.date);
+                
+                // Pending Today
+                if (row.date === todayStr && row.status === 'Pending') pendingToday++;
+                
+                // Pending Tomorrow
+                if (row.date === tomorrowStr && row.status === 'Pending') pendingTomorrow++;
+                
+                // Overdue unresolved
+                // Date is in the past, and it is neither completed nor cancelled
+                if (rowTime < todayTime && row.status !== 'Completed' && row.status !== 'Cancelled') overdue++;
+                
+                // Recently Completed (last 7 days including today)
+                if (row.status === 'Completed' && rowTime >= sevenDaysAgoTime && rowTime <= todayTime) recentlyCompleted++;
+            });
+
+            const mtToday = document.getElementById('metric-pending-today');
+            const mtTomorrow = document.getElementById('metric-pending-tomorrow');
+            const mtOverdue = document.getElementById('metric-overdue');
+            const mtCompleted = document.getElementById('metric-completed');
+            
+            if (mtToday) mtToday.innerText = pendingToday;
+            if (mtTomorrow) mtTomorrow.innerText = pendingTomorrow;
+            if (mtOverdue) mtOverdue.innerText = overdue;
+            if (mtCompleted) mtCompleted.innerText = recentlyCompleted;
+        }
+
+        // --- MOCK DATA GENERATOR ---
+        function generateMockData() {
+            const data = [];
+            // Start the mock data 10 days in the past so we have past, present, and future fixtures
+            const baseDate = new Date();
+            baseDate.setDate(baseDate.getDate() - 10);
+            baseDate.setHours(0,0,0,0);
+            
+            const allStaff = teamCoaches.concat(otherStaff);
+
+            for (let i = 0; i < 150; i++) {
+                // Random date within a ~60 day window
+                const dateObj = new Date(baseDate.getTime() + Math.floor(Math.random() * 60) * 86400000);
+                const dateStr = `${String(dateObj.getDate()).padStart(2, '0')}/${String(dateObj.getMonth() + 1).padStart(2, '0')}/${dateObj.getFullYear()}`;
+                
+                // Randomize logical departure/return times
+                const leaveHour = 8 + Math.floor(Math.random() * 5); // 08:00 to 12:00
+                const leaveMin = Math.random() > 0.5 ? "00" : "30";
+                const leaveStr = `${String(leaveHour).padStart(2, '0')}:${leaveMin}`;
+                
+                const duration = 2 + Math.floor(Math.random() * 4); // 2 to 5 hours
+                const returnHour = Math.min(17, leaveHour + duration); // Cap at 17:00
+                const returnMin = Math.random() > 0.5 ? "00" : "30";
+                const returnStr = `${String(returnHour).padStart(2, '0')}:${returnMin}`;
+
+                const calculatedPeriods = getAffectedPeriods(leaveStr, returnStr);
+
+                // Generate 1 to 3 staff members as a single line comma-separated string
+                const numStaff = 1 + Math.floor(Math.random() * 3);
+                const shuffledStaff = [...allStaff].sort(() => 0.5 - Math.random());
+                const staff = shuffledStaff.slice(0, numStaff).join(', ');
+
+                const team = schoolTeamsList[Math.floor(Math.random() * schoolTeamsList.length)];
+                const year = snsYearGroupList[Math.floor(Math.random() * snsYearGroupList.length)];
+                const status = snsStatusList[Math.floor(Math.random() * snsStatusList.length)];
+                
+                let cover = "";
+                let history = [];
+                
+                // Base creation event
+                history.push({
+                    timestamp: new Date(dateObj.getTime() - 86400000 * 5).toISOString(),
+                    user: "System Auto-Sync",
+                    action: "Item automatically generated from fixture creation"
+                });
+
+                if (status === 'Completed' || status === 'In Progress') {
+                    // 70% chance to assign specific text from dropdown list
+                    if (Math.random() > 0.3) {
+                        cover = snsCoverTypeList[Math.floor(Math.random() * snsCoverTypeList.length)];
+                        if (cover === "No Cover Needed") cover = ""; 
+                    } else {
+                        // 30% chance to assign another staff member
+                        cover = allStaff[Math.floor(Math.random() * allStaff.length)];
+                    }
+                    
+                    if(cover !== "") {
+                        history.push({
+                            timestamp: new Date(dateObj.getTime() - 86400000 * 2).toISOString(),
+                            user: "Ms. Deputy Principal",
+                            action: `Assigned cover: ${cover}`
+                        });
+                    }
+                } else if (status === 'Pending') {
+                    cover = "";
+                }
+
+                if (status === 'Completed') {
+                    history.push({
+                        timestamp: new Date(dateObj.getTime() + 86400000).toISOString(),
+                        user: "Ms. Deputy Principal",
+                        action: "Marked status as Completed"
+                    });
+                }
+                
+                // Randomly add notes to some items
+                let notes = Math.random() > 0.8 ? "Please ensure students are directed to the main hall before departure. Do not let them wait in the corridors." : "";
+
+                data.push({
+                    id: i,
+                    date: dateStr,
+                    departure: leaveStr,
+                    returnTime: returnStr,
+                    staff: staff,
+                    fixture: fixtureTypesList[Math.floor(Math.random() * fixtureTypesList.length)] + " " + team,
+                    team: team,
+                    year: year,
+                    periods: calculatedPeriods,
+                    status: status,
+                    cover: cover,
+                    notes: notes,
+                    history: history
+                });
+            }
+            
+            // Sort by date ascending
+            return data.sort((a, b) => {
+                const [d1, m1, y1] = a.date.split('/');
+                const [d2, m2, y2] = b.date.split('/');
+                return new Date(y1, m1 - 1, d1) - new Date(y2, m2 - 1, d2);
+            });
+        }
+
+        let snsData = generateMockData();
+
+        // --- DOM ELEMENTS ---
+        const sidebarNav = document.getElementById('sidebar-nav');
+        const sidebar = document.getElementById('sidebar');
+        const sidebarTitle = document.getElementById('sidebar-title');
+        const toggleSidebarBtn = document.getElementById('toggle-sidebar-btn');
+        const toggleIcon = document.getElementById('toggle-icon');
+
+        // --- INITIALIZATION ---
+        function init() {
+            renderSidebar();
+            renderTeamCoaches();
+            renderStaffSelect();
+            applyFiltersAndRender();
+            updateDetectedPeriodsUI();
+            updateSummaryMetrics();
+            
+            // Render settings mock data
+            renderSettingsVenues();
+            renderSettingsFixtures();
+            setSettingsTab('venues');
+
+            // Initialize Date Range Picker
+            datePickerInstance = flatpickr("#sns-date-range-picker", {
+                mode: "range",
+                dateFormat: "d/m/y",
+                placeholder: "Date Range",
+                onChange: function(selectedDates, dateStr, instance) {
+                    if (selectedDates.length === 2) {
+                        activeSnsFilters.dateRange = {
+                            from: selectedDates[0].setHours(0,0,0,0),
+                            to: selectedDates[1].setHours(23,59,59,999)
+                        };
+                        applyFiltersAndRender();
+                    } else if (selectedDates.length === 0) {
+                        activeSnsFilters.dateRange = { from: '', to: '' };
+                        applyFiltersAndRender();
+                    }
+                }
+            });
+            
+            // Re-initialize dropdowns safely with optional onChange callback
+            const safeSetup = (id, list, initVal, search = true, ph = null, onChange = null) => {
+                if (document.getElementById(id)) {
+                    setupDropdown(id, list, initVal, search, ph, onChange);
+                }
+            };
+            
+            safeSetup('dropdown-school-team', schoolTeamsList, 'Senior Cup Rugby');
+            safeSetup('dropdown-opponent', opponentsList, '');
+            safeSetup('dropdown-venue-type', venueTypesList, 'Home', false);
+            safeSetup('dropdown-home-venue', homeVenuesList, '');
+            safeSetup('dropdown-fixture-type', fixtureTypesList, '');
+            
+            const snsStaffList = teamCoaches.concat(otherStaff);
+            
+            // Link SNS dropdowns directly to our state and render function
+            safeSetup('dropdown-sns-staff', snsStaffList, '', true, 'Staff Member', (val) => { activeSnsFilters.staff = val; applyFiltersAndRender(); });
+            safeSetup('dropdown-sns-year', snsYearGroupList, '', false, 'Year Group', (val) => { activeSnsFilters.year = val; applyFiltersAndRender(); });
+            safeSetup('dropdown-sns-cover', snsCoverTypeList, '', false, 'Cover Type', (val) => { activeSnsFilters.cover = val; applyFiltersAndRender(); });
+            safeSetup('dropdown-sns-status', snsStatusList, '', false, 'Status', (val) => { activeSnsFilters.status = val; applyFiltersAndRender(); });
+            
+            // Setup Infinite Scrolling
+            const scrollContainer = document.getElementById('table-scroll-container');
+            if (scrollContainer) {
+                scrollContainer.addEventListener('scroll', function() {
+                    if (this.scrollTop + this.clientHeight >= this.scrollHeight - 50) {
+                        if (displayCount < currentFilteredData.length) {
+                            displayCount += PAGE_SIZE;
+                            renderSnsTable();
+                        }
+                    }
+                });
+            }
+
+            switchView(currentModule);
+        }
+
+        // --- TOAST NOTIFICATION LOGIC ---
+        function showToast(title, message, type = 'info') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            
+            // Icon mapping
+            const iconMap = {
+                'success': '<i class="ph-fill ph-check-circle text-emerald-500 text-xl"></i>',
+                'info': '<i class="ph-fill ph-info text-blue-500 text-xl"></i>',
+                'warning': '<i class="ph-fill ph-warning-circle text-amber-500 text-xl"></i>',
+                'error': '<i class="ph-fill ph-x-circle text-destructive text-xl"></i>'
+            };
+
+            toast.className = `flex items-start gap-3 p-4 bg-card border border-border rounded-xl shadow-2xl min-w-[300px] max-w-[400px] pointer-events-auto animate-in slide-in-from-right-8 fade-in duration-300`;
+            toast.innerHTML = `
+                <div class="shrink-0 mt-0.5">${iconMap[type] || iconMap['info']}</div>
+                <div class="flex-1">
+                    <h4 class="text-sm font-bold text-foreground">${title}</h4>
+                    <p class="text-xs text-muted-foreground mt-1 leading-relaxed">${message}</p>
+                </div>
+                <button onclick="this.parentElement.remove()" class="shrink-0 text-muted-foreground hover:text-foreground transition-colors"><i class="ph ph-x"></i></button>
+            `;
+            
+            container.appendChild(toast);
+
+            // Auto-remove after 5 seconds
+            setTimeout(() => {
+                if(toast.parentElement) {
+                    toast.classList.add('animate-out', 'slide-out-to-right-8', 'fade-out', 'duration-300');
+                    setTimeout(() => toast.remove(), 300);
+                }
+            }, 5000);
+        }
+
+        // Master function to trigger an alert checking user preferences
+        function dispatchAlert(eventType, title, message, type = 'info') {
+            // Check if this event type is enabled
+            if (eventType && !notificationSettings.events[eventType]) return;
+            
+            // Check if In-App notifications are enabled
+            if (notificationSettings.methods.inApp) {
+                showToast(title, message, type);
+            }
+            
+            // In a real app, this is where we'd dispatch to backend for Email/Push based on methods object
+            if (notificationSettings.methods.email) console.log(`[Email Dispatch]: ${title}`);
+            if (notificationSettings.methods.push) console.log(`[Push Dispatch]: ${title}`);
+        }
+
+        function updateNotificationSettings(category, key, isChecked) {
+            if (notificationSettings[category]) {
+                notificationSettings[category][key] = isChecked;
+                showToast('Settings Updated', 'Your notification preferences have been saved.', 'success');
+            }
+        }
+
+        // --- SIDEBAR & NAVIGATION ---
+        function renderSidebar() {
+            sidebarNav.innerHTML = sidebarItems.map(item => `
+                <button onclick="handleSidebarClick('${item.id}')" id="nav-${item.id}" class="nav-item inline-flex items-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors duration-200 h-10 w-full justify-start px-4 mb-1 text-left cursor-pointer outline-none text-primary hover:bg-muted font-medium">
+                    <i class="ph text-lg ${item.icon}"></i>
+                    <span class="sidebar-text ${isSidebarCollapsed ? 'hidden' : 'block truncate'}">${item.label}</span>
+                </button>
+            `).join('');
+            updateSidebarActiveState();
+        }
+
+        // --- SETTINGS TAB LOGIC ---
+        function setSettingsTab(tab) {
+            currentSettingsTab = tab;
+            const tabs = ['venues', 'fixtures', 'sns'];
+            
+            tabs.forEach(t => {
+                const btn = document.getElementById(`st-tab-${t}`);
+                const content = document.getElementById(`st-content-${t}`);
+                if (!btn || !content) return;
+                
+                if (t === tab) {
+                    btn.className = "flex-1 py-2 text-sm font-medium rounded-md bg-primary text-primary-foreground shadow-sm flex items-center justify-center gap-2 transition-all";
+                    content.classList.remove('hidden');
+                    content.classList.add('block');
+                } else {
+                    btn.className = "flex-1 py-2 text-sm font-medium rounded-md text-muted-foreground hover:text-foreground flex items-center justify-center gap-2 transition-all hover:bg-muted/50";
+                    content.classList.add('hidden');
+                    content.classList.remove('block');
+                }
+            });
+        }
+
+        function renderSettingsVenues() {
+            const tbody = document.getElementById('st-venues-tbody');
+            if(!tbody) return;
+            tbody.innerHTML = mockSettingsVenues.map(v => `
+                <tr class="hover:bg-muted/30 transition-colors">
+                    <td class="px-4 py-4 text-foreground font-medium">${v.name}</td>
+                    <td class="px-4 py-4 text-muted-foreground truncate max-w-[300px]">${v.address}</td>
+                    <td class="px-4 py-4">
+                        <div class="flex items-center justify-center gap-2">
+                            <button class="h-7 w-7 rounded border border-border flex items-center justify-center text-muted-foreground hover:bg-muted hover:text-foreground transition-colors outline-none" title="Edit">
+                                <i class="ph-bold ph-pencil-simple"></i>
+                            </button>
+                            <button class="h-7 w-7 rounded border border-red-200 bg-red-50/50 flex items-center justify-center text-red-500 hover:bg-red-100 hover:border-red-300 transition-colors outline-none" title="Delete">
+                                <i class="ph-bold ph-trash"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function renderSettingsFixtures() {
+            const tbody = document.getElementById('st-fixtures-tbody');
+            if(!tbody) return;
+            tbody.innerHTML = mockSettingsFixtures.map(f => `
+                <tr class="hover:bg-muted/30 transition-colors">
+                    <td class="px-4 py-4 text-foreground font-medium truncate max-w-[200px]">${f.title}</td>
+                    <td class="px-4 py-4 text-muted-foreground truncate max-w-[400px]">${f.desc}</td>
+                    <td class="px-4 py-4">
+                        <div class="flex items-center justify-center gap-2">
+                            <button class="h-7 w-7 rounded border border-border flex items-center justify-center text-muted-foreground hover:bg-muted hover:text-foreground transition-colors outline-none" title="Edit">
+                                <i class="ph-bold ph-pencil-simple"></i>
+                            </button>
+                            <button class="h-7 w-7 rounded border border-red-200 bg-red-50/50 flex items-center justify-center text-red-500 hover:bg-red-100 hover:border-red-300 transition-colors outline-none" title="Delete">
+                                <i class="ph-bold ph-trash"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function handleSidebarClick(id) {
+            if (id === 'sns') switchView('sns');
+            else if (id === 'fixtures') switchView('fixtures-list');
+            else switchView(id); // For missing modules, it will just show a blank space or keep current if handled
+        }
+
+        function switchView(viewId) {
+            currentModule = viewId;
+            document.querySelectorAll('.view-module').forEach(el => el.classList.add('hidden'));
+            
+            // Map sub-views to their main nav identifiers
+            const navIdMap = {
+                'fixtures-list': 'fixtures',
+                'fixtures-create': 'fixtures'
+            };
+            const mappedId = navIdMap[viewId] || viewId;
+
+            const targetView = document.getElementById(`view-${viewId}`);
+            if(targetView) {
+                targetView.classList.remove('hidden');
+                targetView.classList.add('block');
+            }
+            updateSidebarActiveState();
+        }
+
+        function updateSidebarActiveState() {
+            document.querySelectorAll('.nav-item').forEach(el => {
+                el.classList.remove('bg-muted', 'font-semibold', 'shadow-none', 'border', 'border-border/50');
+            });
+            const activeNavId = currentModule.startsWith('fixtures') ? 'fixtures' : currentModule;
+            const activeEl = document.getElementById(`nav-${activeNavId}`);
+            if(activeEl) {
+                activeEl.classList.add('bg-muted', 'font-semibold', 'shadow-none', 'border', 'border-border/50');
+            }
+        }
+
+        toggleSidebarBtn.addEventListener('click', () => {
+            isSidebarCollapsed = !isSidebarCollapsed;
+            if(isSidebarCollapsed) {
+                sidebar.classList.remove('w-[260px]');
+                sidebar.classList.add('w-20');
+                sidebarTitle.classList.add('hidden');
+                document.querySelectorAll('.sidebar-text').forEach(el => el.classList.add('hidden'));
+                toggleIcon.classList.add('rotate-180');
+            } else {
+                sidebar.classList.remove('w-20');
+                sidebar.classList.add('w-[260px]');
+                sidebarTitle.classList.remove('hidden');
+                document.querySelectorAll('.sidebar-text').forEach(el => {
+                    el.classList.remove('hidden');
+                    el.classList.add('block', 'truncate');
+                });
+                toggleIcon.classList.remove('rotate-180');
+            }
+        });
+
+        // --- FIXTURE CREATION (STEPPER) ---
+        function setStep(stepNum) {
+            activeStep = stepNum;
+            
+            // Update Tab UI
+            document.querySelectorAll('.step-tab').forEach((tab, index) => {
+                const s = index + 1;
+                if(s === activeStep) {
+                    tab.className = "step-tab inline-flex flex-1 items-center justify-center gap-1.5 px-2 text-[13px] font-normal whitespace-nowrap relative h-full transition-all duration-200 cursor-pointer rounded-md outline-none bg-primary text-primary-foreground";
+                } else {
+                    tab.className = "step-tab inline-flex flex-1 items-center justify-center gap-1.5 px-2 text-[13px] font-normal whitespace-nowrap relative h-full transition-all duration-200 cursor-pointer rounded-md outline-none hover:bg-muted text-muted-foreground";
+                }
+            });
+
+            // Update Content UI
+            const step1Content = document.getElementById('step-1-content');
+            const step2Content = document.getElementById('step-2-content');
+            const stepOtherContent = document.getElementById('step-other-content');
+            const btnPrev = document.getElementById('btn-prev-step');
+            const stepperControls = document.getElementById('stepper-controls');
+            
+            if (step1Content && step2Content && stepOtherContent && btnPrev) {
+                // Hide all sections first
+                step1Content.classList.add('hidden');
+                step1Content.classList.remove('block');
+                step2Content.classList.add('hidden');
+                step2Content.classList.remove('block');
+                stepOtherContent.classList.add('hidden');
+                stepOtherContent.classList.remove('block');
+
+                if(activeStep === 1) {
+                    step1Content.classList.remove('hidden');
+                    step1Content.classList.add('block');
+                    btnPrev.classList.add('invisible');
+                    btnPrev.classList.remove('visible');
+                    if(stepperControls) stepperControls.classList.remove('hidden');
+                } else if(activeStep === 2) {
+                    step2Content.classList.remove('hidden');
+                    step2Content.classList.add('block');
+                    btnPrev.classList.remove('invisible');
+                    btnPrev.classList.add('visible');
+                    if(stepperControls) stepperControls.classList.remove('hidden');
+                } else {
+                    stepOtherContent.classList.remove('hidden');
+                    stepOtherContent.classList.add('block');
+                    
+                    if (activeStep === 5) {
+                        // Hide global stepper controls and alter content layout for the Review step
+                        if(stepperControls) stepperControls.classList.add('hidden');
+                        stepOtherContent.className = "step-content block p-2 sm:p-4 animate-in fade-in duration-300";
+                        
+                        // Extract values dynamically from Step 1 for the summary
+                        const getVal = (id) => {
+                            const el = document.getElementById(id);
+                            if (!el) return 'Not specified';
+                            if (el.tagName === 'INPUT') return el.value || 'Not specified';
+                            const st = el.querySelector('.selected-text');
+                            if (!st) return 'Not specified';
+                            const text = st.innerText;
+                            if (text.toLowerCase().includes('select') || text.toLowerCase().includes('search') || text.toLowerCase() === 'venues' || text === '') return 'Not specified';
+                            return text;
+                        };
+
+                        const vDate = getVal('date');
+                        const vType = getVal('dropdown-venue-type');
+                        const vFixtureType = getVal('dropdown-fixture-type');
+                        const vSchoolTeam = getVal('dropdown-school-team');
+                        const vOpponent = getVal('dropdown-opponent');
+                        const vLocation = getVal('dropdown-home-venue');
+
+                        stepOtherContent.innerHTML = `
+                            <div class="text-left w-full max-w-5xl mx-auto border rounded-xl bg-card p-6 sm:p-8 shadow-sm">
+                                <h3 class="text-xl font-bold tracking-tight text-foreground mb-6">Fixture Summary</h3>
+                                
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                                    <!-- Basic Information -->
+                                    <div class="bg-muted/40 rounded-xl p-6">
+                                        <h4 class="text-[15px] font-medium text-primary mb-4">Basic Information</h4>
+                                        <div class="space-y-3.5 text-[13px]">
+                                            <div class="flex justify-between items-center"><span class="text-muted-foreground">Date:</span> <span class="font-medium text-foreground">${vDate}</span></div>
+                                            <div class="flex justify-between items-center"><span class="text-muted-foreground">Type:</span> <span class="font-bold text-foreground uppercase">${vType}</span></div>
+                                            <div class="flex justify-between items-center"><span class="text-muted-foreground">Sport:</span> <span class="font-medium text-foreground">Not specified</span></div>
+                                            <div class="flex justify-between items-center"><span class="text-muted-foreground">Fixture Type:</span> <span class="font-medium text-foreground">${vFixtureType}</span></div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Teams & Location -->
+                                    <div class="bg-muted/40 rounded-xl p-6">
+                                        <h4 class="text-[15px] font-medium text-primary mb-4">Teams & Location</h4>
+                                        <div class="space-y-3.5 text-[13px]">
+                                            <div class="flex justify-between items-center"><span class="text-muted-foreground">School Team:</span> <span class="font-medium text-foreground">${vSchoolTeam}</span></div>
+                                            <div class="flex justify-between items-center"><span class="text-muted-foreground">Opponent Team:</span> <span class="font-medium text-foreground">${vOpponent}</span></div>
+                                            <div class="flex justify-between items-center"><span class="text-muted-foreground">Location:</span> <span class="font-medium text-foreground">${vLocation !== 'Not specified' ? vLocation : vType}</span></div>
+                                            <div class="flex justify-between items-center"><span class="text-muted-foreground">Address:</span> <span class="font-medium text-foreground">Not specified</span></div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Selected Players -->
+                                <div class="mb-4">
+                                    <h4 class="text-[15px] font-medium text-primary mb-4">Selected Players (0)</h4>
+                                    <div class="border border-border rounded-xl h-48 flex items-center justify-center bg-card shadow-sm">
+                                        <span class="text-muted-foreground text-[13px]">No players selected</span>
+                                    </div>
+                                </div>
+
+                                <div class="flex items-center justify-end gap-3 mt-8 pt-2">
+                                    <button onclick="prevStep()" class="inline-flex items-center justify-center whitespace-nowrap rounded-lg text-sm font-medium border border-border bg-card shadow-sm hover:bg-accent hover:text-accent-foreground h-10 px-6 outline-none transition-colors">Back</button>
+                                    <button id="final-submit-btn" onclick="saveFixture()" class="inline-flex items-center justify-center whitespace-nowrap rounded-lg text-sm font-medium bg-primary text-primary-foreground shadow-sm hover:bg-primary/90 h-10 px-6 outline-none transition-colors">Create Fixture</button>
+                                </div>
+                            </div>
+                        `;
+                    } else {
+                        if(stepperControls) stepperControls.classList.remove('hidden');
+                        stepOtherContent.className = "step-content block p-20 text-center space-y-4 border rounded-xl bg-muted/10 m-6 animate-in zoom-in-95";
+                        stepOtherContent.innerHTML = `
+                            <h3 id="step-other-title" class="text-xl font-bold uppercase tracking-tight text-foreground">${steps[activeStep - 1].title}</h3>
+                            <p class="text-muted-foreground italic">Configuration for this step...</p>
+                        `;
+                    }
+                    
+                    btnPrev.classList.remove('invisible');
+                    btnPrev.classList.add('visible');
+                }
+            }
+
+            // Update Next Button
+            const btnNextText = document.getElementById('btn-next-text');
+            const btnNext = document.getElementById('btn-next-step');
+            
+            if (btnNextText && btnNext && activeStep < steps.length) {
+                btnNextText.innerText = steps[activeStep].title;
+                btnNext.onclick = nextStep;
+                btnNext.classList.remove('bg-emerald-600', 'hover:bg-emerald-700');
+                btnNext.classList.add('bg-primary', 'hover:bg-primary/90');
+            }
+        }
+
+        function nextStep() {
+            if(activeStep < steps.length) setStep(activeStep + 1);
+        }
+        function prevStep() {
+            if(activeStep > 1) setStep(activeStep - 1);
+        }
+
+        function saveFixture() {
+            const btn = document.getElementById('final-submit-btn');
+            if(btn) {
+                btn.innerHTML = '<i class="ph-bold ph-spinner animate-spin text-lg mr-2"></i> Saving...';
+                btn.disabled = true;
+                btn.classList.add('opacity-80', 'cursor-not-allowed');
+            }
+
+            const leaveTime = document.getElementById('leaving-time')?.value;
+            const returnTime = document.getElementById('returning-time')?.value;
+            const affectedPeriods = getAffectedPeriods(leaveTime, returnTime);
+            
+            // Redirect smoothly back to list, then fire toast notifications after delay
+            setTimeout(() => {
+                switchView('fixtures-list');
+                setStep(1);
+                
+                setTimeout(() => {
+                    // Alert Logic: New Item Created + School Hours Check
+                    if (affectedPeriods !== "None" && affectedPeriods !== "Outside school hours") {
+                        const activeRoles = [];
+                        if(notificationSettings.roles.sns) activeRoles.push("S&S Coordinator");
+                        if(notificationSettings.roles.principal) activeRoles.push("Principal");
+                        if(notificationSettings.roles.office) activeRoles.push("Office");
+                        if(notificationSettings.roles.yearhead) activeRoles.push("Year Head");
+                        
+                        if (activeRoles.length > 0) {
+                            dispatchAlert(
+                                'created', // Event Type
+                                'S&S Alert Triggered', 
+                                `Fixture scheduled during school hours (Periods: ${affectedPeriods}). Alerts dispatched to: ${activeRoles.join(', ')}.`, 
+                                'warning'
+                            );
+                        }
+                    } else {
+                        // Standard creation without S&S impact
+                        dispatchAlert('created', 'Fixture Created', 'The fixture has been successfully saved to the system.', 'success');
+                    }
+                }, 2500);
+
+            }, 600); // Wait slightly for the UI loading state to be visible
+        }
+
+        // --- CUSTOM DROPDOWN LOGIC ---
+        function setupDropdown(containerId, dataList, initialValue, hasSearch = true, placeholderText = null, onChange = null) {
+            const container = document.getElementById(containerId);
+            if (!container) return; // safety check
+            
+            const trigger = container.querySelector('.dropdown-trigger');
+            const menu = container.querySelector('.dropdown-menu');
+            const searchInput = container.querySelector('.dropdown-search');
+            const listEl = container.querySelector('.dropdown-list');
+            const selectedText = container.querySelector('.selected-text');
+
+            let currentValue = initialValue;
+
+            function renderList(filter = '') {
+                listEl.innerHTML = '';
+                
+                // Add clear option if applicable
+                if ((hasSearch || placeholderText) && currentValue) {
+                    const clearDiv = document.createElement('button');
+                    clearDiv.className = 'w-full text-left px-4 py-2.5 text-sm hover:bg-muted border-b flex items-center gap-2';
+                    clearDiv.innerHTML = `<i class="ph-bold ph-check text-primary opacity-0"></i> Clear selection`;
+                    clearDiv.onclick = (e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        currentValue = '';
+                        updateDisplay();
+                        closeAllDropdowns();
+                        if (onChange) onChange(currentValue);
+                    };
+                    listEl.appendChild(clearDiv);
+                }
+
+                const filtered = dataList.filter(item => item.toLowerCase().includes(filter.toLowerCase()));
+                filtered.forEach(item => {
+                    const isSelected = item === currentValue;
+                    const btn = document.createElement('button');
+                    btn.className = `w-full text-left px-4 py-2.5 text-sm flex items-center justify-between transition-colors ${isSelected ? 'bg-primary/5 text-primary font-normal' : 'hover:bg-muted'}`;
+                    btn.innerHTML = `
+                        <span class="flex items-center gap-2 truncate">
+                            ${hasSearch ? `<i class="ph-bold ph-check ${isSelected ? 'text-primary' : 'opacity-0'}"></i>` : ''} 
+                            ${item}
+                        </span>
+                        ${!hasSearch && isSelected ? `<i class="ph-bold ph-check text-primary"></i>` : ''}
+                    `;
+                    btn.onclick = (e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        currentValue = item;
+                        updateDisplay();
+                        closeAllDropdowns();
+                        if (onChange) onChange(currentValue);
+                    };
+                    listEl.appendChild(btn);
+                });
+            }
+
+            function updateDisplay() {
+                if(currentValue) {
+                    selectedText.innerText = currentValue;
+                    selectedText.classList.remove('text-muted-foreground');
+                    selectedText.classList.add('text-foreground', 'font-normal');
+                } else {
+                    selectedText.innerText = placeholderText || `Select ${containerId.replace('dropdown-', '').replace('-', ' ')}`;
+                    if(!placeholderText) selectedText.classList.add('text-muted-foreground');
+                    selectedText.classList.remove('text-foreground', 'font-normal');
+                }
+            }
+
+            container.clearSelection = (silent = false) => {
+                currentValue = '';
+                updateDisplay();
+                if (!silent && onChange) onChange(currentValue);
+            };
+
+            trigger.onclick = (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                const isHidden = menu.classList.contains('hidden');
+                closeAllDropdowns(); // Close others
+                if(isHidden) {
+                    menu.classList.remove('hidden');
+                    if(hasSearch) searchInput.focus();
+                    renderList(); // reset list
+                }
+            };
+
+            if(hasSearch && searchInput) {
+                searchInput.onclick = e => e.stopPropagation();
+                searchInput.oninput = (e) => renderList(e.target.value);
+            }
+
+            updateDisplay();
+            renderList();
+        }
+
+        function closeAllDropdowns() {
+            document.querySelectorAll('.dropdown-menu').forEach(m => m.classList.add('hidden'));
+        }
+
+        document.addEventListener('click', () => closeAllDropdowns());
+
+        function formatDisplayDate(dateStr) {
+            if(!dateStr) return '';
+            const parts = dateStr.split('/');
+            if(parts.length === 3) {
+                const d = new Date(parts[2], parts[1] - 1, parts[0]);
+                const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+                const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+                return `${days[d.getDay()]} ${d.getDate()} ${months[d.getMonth()]}`;
+            }
+            return dateStr;
+        }
+
+        // --- CALENDAR FILTER UTILS ---
+        function clearDateRangeFilter(silent = false) {
+            if (datePickerInstance) {
+                datePickerInstance.clear();
+            }
+            activeSnsFilters.dateRange = { from: '', to: '' };
+            if (!silent) applyFiltersAndRender();
+        }
+
+        function parseDate(dateStr) {
+            if(!dateStr) return null;
+            const [d, m, y] = dateStr.split('/');
+            return new Date(y, m - 1, d, 0, 0, 0).getTime();
+        }
+
+        function clearAllFilters() {
+            const filterIds = ['dropdown-sns-staff', 'dropdown-sns-year', 'dropdown-sns-cover', 'dropdown-sns-status'];
+            filterIds.forEach(id => {
+                const container = document.getElementById(id);
+                if (container && typeof container.clearSelection === 'function') {
+                    // clear silently to avoid simultaneous render triggers
+                    container.clearSelection(true); 
+                }
+            });
+            
+            // Reset active state
+            activeSnsFilters = { dateRange: { from: '', to: '' }, staff: '', year: '', cover: '', status: '' };
+            clearDateRangeFilter(true);
+            
+            // Reset global search
+            const searchInput = document.getElementById('sns-search-input');
+            const globalSearchInput = document.getElementById('sns-global-search-input');
+            if(searchInput) searchInput.value = '';
+            if(globalSearchInput) globalSearchInput.value = '';
+            currentSnsSearch = '';
+            
+            applyFiltersAndRender();
+        }
+
+        // --- STAFF SECTION LOGIC ---
+        function renderTeamCoaches() {
+            const container = document.getElementById('team-coaches-list');
+            if (!container) return; // Added null check
+            container.innerHTML = teamCoaches.map(name => `
+                <label class="flex items-center gap-3 p-3 rounded-lg border border-border/50 bg-card hover:border-primary/40 cursor-pointer transition-all group">
+                    <input type="checkbox" class="w-4 h-4 rounded border-border text-primary focus:ring-primary cursor-pointer" />
+                    <span class="text-sm font-normal group-hover:text-primary transition-colors">${name}</span>
+                </label>
+            `).join('');
+        }
+
+        function renderStaffSelect() {
+            const select = document.getElementById('staff-select');
+            const btn = document.getElementById('add-staff-btn');
+            
+            if (!select || !btn) return; // Added null check
+
+            const options = otherStaff.map(s => `<option value="${s}">${s}</option>`).join('');
+            select.innerHTML = `<option value="">Search all staff...</option>` + options;
+            
+            select.onchange = (e) => {
+                btn.disabled = !e.target.value;
+            };
+
+            btn.onclick = () => {
+                const val = select.value;
+                if(val && !addedSupportStaff.includes(val)) {
+                    addedSupportStaff.push(val);
+                    renderAddedStaff();
+                    select.value = "";
+                    btn.disabled = true;
+                }
+            };
+        }
+
+        function renderAddedStaff() {
+            const container = document.getElementById('added-staff-container');
+            if (!container) return; // Added null check
+            
+            container.innerHTML = addedSupportStaff.map(name => `
+                <div class="px-3 py-1.5 rounded-md bg-card border border-border text-[11px] font-normal flex items-center gap-2 animate-in zoom-in-95 group shadow-sm">
+                    ${name} <i class="ph-bold ph-x text-muted-foreground cursor-pointer hover:text-destructive transition-colors" onclick="removeStaff('${name}')"></i>
+                </div>
+            `).join('');
+        }
+
+        function removeStaff(name) {
+            addedSupportStaff = addedSupportStaff.filter(s => s !== name);
+            renderAddedStaff();
+        }
+
+        // --- SNS DASHBOARD LOGIC ---
+        function setSnsTab(tabName) {
+            currentSnsTab = tabName;
+            
+            // Clean ID string for selecting the correct tab
+            const cleanTabId = 'tab-' + tabName.replace(/\s+/g, '');
+            
+            // Update UI for Tabs
+            document.querySelectorAll('.sns-tab-btn').forEach(btn => {
+                if (btn.id === cleanTabId) {
+                    btn.classList.add('text-primary', 'border-primary');
+                    btn.classList.remove('border-transparent');
+                } else {
+                    btn.classList.remove('text-primary', 'border-primary');
+                    btn.classList.add('border-transparent');
+                }
+            });
+            
+            applyFiltersAndRender();
+        }
+
+        function handleSnsSearch(event) {
+            currentSnsSearch = event.target.value.toLowerCase();
+            
+            // Sync both search inputs
+            const globalInput = document.getElementById('sns-global-search-input');
+            const localInput = document.getElementById('sns-search-input');
+            if (globalInput && event.target !== globalInput) globalInput.value = event.target.value;
+            if (localInput && event.target !== localInput) localInput.value = event.target.value;
+            
+            applyFiltersAndRender();
+        }
+
+        // Applies filters and resets pagination
+        function applyFiltersAndRender() {
+            currentFilteredData = snsData.filter(row => {
+                // 1. Tab match
+                const matchesTab = currentSnsTab === 'All' || row.status === currentSnsTab;
+                
+                // 2. Search match
+                const matchesSearch = currentSnsSearch === '' || 
+                                      row.staff.toLowerCase().includes(currentSnsSearch) || 
+                                      row.fixture.toLowerCase().includes(currentSnsSearch) || 
+                                      row.team.toLowerCase().includes(currentSnsSearch) ||
+                                      row.cover.toLowerCase().includes(currentSnsSearch) ||
+                                      row.periods.toLowerCase().includes(currentSnsSearch);
+
+                // 3. Dropdown Matches
+                const f = activeSnsFilters;
+                const matchesStaff = !f.staff || row.staff === f.staff;
+                const matchesStatus = !f.status || row.status === f.status;
+                const matchesYear = !f.year || row.year === f.year;
+                
+                // 4. Date Range Filter
+                let matchesDate = true;
+                if (f.dateRange.from && f.dateRange.to) {
+                    const rowTime = parseDate(row.date);
+                    if (rowTime < f.dateRange.from || rowTime > f.dateRange.to) {
+                        matchesDate = false;
+                    }
+                }
+                
+                // 5. Cover Match
+                let matchesCover = true;
+                if (f.cover) {
+                    if (f.cover === "No Cover Needed") matchesCover = row.cover.trim() === "";
+                    else if (f.cover === "Internal Cover") matchesCover = row.cover.toLowerCase().includes("internal");
+                    else if (f.cover === "External Sub") matchesCover = row.cover.toLowerCase().includes("external");
+                    else if (f.cover === "Students Reassigned") matchesCover = row.cover.toLowerCase().includes("students reassigned");
+                    else matchesCover = row.cover !== ""; // Catch-all for other assignments
+                }
+
+                return matchesTab && matchesSearch && matchesStaff && matchesStatus && matchesDate && matchesCover && matchesYear;
+            });
+
+            // Reset pagination chunk
+            displayCount = PAGE_SIZE;
+            
+            renderSnsTable();
+        }
+
+        // Renders the visible chunk of data
+        function renderSnsTable() {
+            const tbody = document.getElementById('sns-table-body');
+            if (!tbody) return; 
+            
+            if (currentFilteredData.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="9" class="py-8 text-center text-sm font-medium text-muted-foreground">No records found matching your criteria.</td></tr>`;
+                return;
+            }
+
+            // Slice data for infinite scrolling
+            const visibleData = currentFilteredData.slice(0, displayCount);
+
+            tbody.innerHTML = visibleData.map((row) => {
+                // Find index to ensure direct data mutations apply properly
+                const originalIndex = row.id; 
+                
+                // Solid, high-contrast visual color assignments for scanning
+                let statusClasses = '';
+                if(row.status === 'Pending') {
+                    statusClasses = 'bg-red-100 text-red-800 border-red-300 focus:ring-red-500';
+                } else if(row.status === 'In Progress') {
+                    statusClasses = 'bg-amber-100 text-amber-800 border-amber-300 focus:ring-amber-500';
+                } else if(row.status === 'Completed') {
+                    statusClasses = 'bg-emerald-100 text-emerald-800 border-emerald-300 focus:ring-emerald-500';
+                } else if(row.status === 'Cancelled') {
+                    statusClasses = 'bg-gray-200 text-gray-800 border-gray-300 focus:ring-gray-500';
+                }
+
+                return `
+                <tr class="group hover:bg-muted/30 transition-colors text-sm font-normal">
+                    <td class="py-4 pl-6 pr-4 text-foreground font-medium truncate max-w-[140px]" title="${row.fixture}">${row.fixture}</td>
+                    <td class="py-4 px-4 whitespace-nowrap">
+                        <button onclick="viewTeam('${row.team.replace(/'/g, "\\'")}')" class="text-primary hover:underline font-medium text-left outline-none transition-colors">
+                            ${row.team}
+                        </button>
+                    </td>
+                    <td class="py-4 px-4 text-foreground whitespace-nowrap">${formatDisplayDate(row.date)}</td>
+                    <td class="py-4 px-4 text-foreground">${row.departure}</td>
+                    <td class="py-4 px-4 text-foreground">${row.returnTime}</td>
+                    <td class="py-4 px-4 text-foreground truncate max-w-[180px]" title="${row.staff}">${row.staff}</td>
+                    <td class="py-4 px-4 text-foreground whitespace-nowrap">${row.periods}</td>
+                    <td class="py-4 px-4 text-center">
+                        <select onchange="updateSnsStatus(${originalIndex}, this.value)" class="h-8 rounded-md border px-2 text-xs outline-none focus:ring-1 cursor-pointer font-semibold shadow-sm transition-colors ${statusClasses}">
+                            <option value="Pending" ${row.status === 'Pending' ? 'selected' : ''} class="bg-background text-foreground">Pending</option>
+                            <option value="In Progress" ${row.status === 'In Progress' ? 'selected' : ''} class="bg-background text-foreground">In Progress</option>
+                            <option value="Completed" ${row.status === 'Completed' ? 'selected' : ''} class="bg-background text-foreground">Completed</option>
+                            <option value="Cancelled" ${row.status === 'Cancelled' ? 'selected' : ''} class="bg-background text-foreground">Cancelled</option>
+                        </select>
+                    </td>
+                    <td class="py-4 pr-6 pl-2 text-center">
+                        <button onclick="openSnsModal(${originalIndex})" class="p-1.5 text-muted-foreground hover:text-primary hover:bg-primary/10 rounded-md transition-colors outline-none" title="View Audit Log & Notes">
+                            <i class="ph-bold ph-file-text text-lg"></i>
+                        </button>
+                    </td>
+                </tr>
+            `}).join('');
+            
+            // Add a loading indicator at the bottom if more records exist
+            if (displayCount < currentFilteredData.length) {
+                tbody.innerHTML += `
+                    <tr>
+                        <td colspan="9" class="py-4 text-center text-xs text-muted-foreground italic">
+                            Scroll down to load more...
+                        </td>
+                    </tr>
+                `;
+            }
+        }
+
+        function updateSnsStatus(id, newStatus) {
+            const row = snsData.find(r => r.id === id);
+            const oldStatus = row ? row.status : null;
+            
+            if (row) {
+                row.status = newStatus;
+                row.history.push({
+                    timestamp: new Date().toISOString(),
+                    user: "Admin (Current User)",
+                    action: `Changed status to ${newStatus}`
+                });
+                
+                // Dispatch notification based on status change
+                if (newStatus === 'Cancelled') {
+                    dispatchAlert('cancelled', 'Fixture Cancelled', `${row.fixture} has been marked as cancelled. Staff cover will be released.`, 'error');
+                } else if (newStatus === 'Completed') {
+                    dispatchAlert('completed', 'Cover Completed', `S&S requirements for ${row.fixture} have been marked as completed.`, 'success');
+                } else if (oldStatus && oldStatus !== newStatus) {
+                    dispatchAlert('updated', 'Status Updated', `${row.fixture} status changed to ${newStatus}.`, 'info');
+                }
+            }
+            
+            updateSummaryMetrics(); // Update metrics when status changes
+
+            // If we're filtering strictly by status dropdown, we might need to re-render to reflect removal
+            if (activeSnsFilters.status !== '' || currentSnsTab !== 'All') {
+               applyFiltersAndRender();
+            } else {
+               // Normal visual updates
+               renderSnsTable();
+            }
+        }
+
+        function updateSnsCover(id, newCover) {
+            const row = snsData.find(r => r.id === id);
+            if (!row) return;
+
+            row.cover = newCover;
+            row.history.push({
+                timestamp: new Date().toISOString(),
+                user: "Admin (Current User)",
+                action: newCover.trim() === "" ? "Removed assigned cover" : `Assigned cover: ${newCover}`
+            });
+            
+            // Dispatch update notification
+            if (newCover.trim() !== "") {
+                dispatchAlert('updated', 'Cover Assigned', `Assigned ${newCover} to cover ${row.fixture}.`, 'info');
+            }
+            
+            // Automatically update status based on cover assignment
+            if (newCover.trim() !== "" && row.status === 'Pending') {
+                row.status = 'In Progress';
+            } else if (newCover.trim() === "" && row.status === 'In Progress') {
+                row.status = 'Pending';
+            }
+            
+            updateSummaryMetrics(); // Update metrics when cover/status changes
+            
+            // Re-evaluate filters and render
+            applyFiltersAndRender(); 
+        }
+
+        // --- AUDIT MODAL LOGIC ---
+        function formatDateTime(isoString) {
+            const d = new Date(isoString);
+            return `${d.toLocaleDateString('en-GB')} at ${d.toLocaleTimeString('en-GB', {hour: '2-digit', minute:'2-digit'})}`;
+        }
+
+        function openSnsModal(id) {
+            const row = snsData.find(r => r.id === id);
+            if (!row) return;
+            
+            currentSnsModalId = id;
+            document.getElementById('audit-modal-subtitle').innerText = `${row.fixture} • ${row.date}`;
+            document.getElementById('modal-notes').value = row.notes || "";
+            
+            // Sort history latest first
+            const sortedHistory = [...row.history].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+            
+            const historyContainer = document.getElementById('modal-history-list');
+            if (sortedHistory.length === 0) {
+                historyContainer.innerHTML = `<p class="text-xs text-muted-foreground italic">No history available.</p>`;
+            } else {
+                historyContainer.innerHTML = sortedHistory.map(entry => `
+                    <div class="relative">
+                        <div class="absolute -left-[21px] top-1.5 h-2.5 w-2.5 rounded-full bg-primary ring-4 ring-card"></div>
+                        <p class="text-sm font-medium text-foreground">${entry.action}</p>
+                        <p class="text-xs text-muted-foreground mt-0.5">${entry.user} • ${formatDateTime(entry.timestamp)}</p>
+                    </div>
+                `).join('');
+            }
+            
+            document.getElementById('sns-audit-modal').classList.remove('hidden');
+        }
+
+        function closeSnsModal() {
+            document.getElementById('sns-audit-modal').classList.add('hidden');
+            currentSnsModalId = null;
+        }
+
+        function saveSnsNotes() {
+            if (currentSnsModalId === null) return;
+            const row = snsData.find(r => r.id === currentSnsModalId);
+            if (row) {
+                const newNotes = document.getElementById('modal-notes').value;
+                if (row.notes !== newNotes) {
+                    row.notes = newNotes;
+                    row.history.push({
+                        timestamp: new Date().toISOString(),
+                        user: "Admin (Current User)",
+                        action: "Updated instructions/notes"
+                    });
+                    // Refresh modal to show new history entry
+                    openSnsModal(currentSnsModalId);
+                }
+            }
+        }
+
+        function viewTeam(teamName) {
+            // Placeholder function to handle team viewing
+            showToast('Team Details', `Loading profile and roster for ${teamName}...`, 'info');
+            // If you have a specific view for teams, you would trigger it here, e.g.:
+            // switchView('teams'); 
+        }
+
+        // Run Init
+        document.addEventListener('DOMContentLoaded', init);
+
+    </script>
+</body>
+</html>
