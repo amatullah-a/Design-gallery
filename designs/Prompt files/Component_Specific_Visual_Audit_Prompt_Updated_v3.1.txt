@@ -1,0 +1,286 @@
+COMPONENT-SPECIFIC VISUAL AUDIT PROMPT
+Version 3.1 — Manual Visual Inspection, Evidence-Led Findings, and Structured Reporting
+
+1. PURPOSE AND DOCUMENT RELATIONSHIP
+
+Conduct a manual, evidence-led, component-by-component visual audit of a SaaS web application, dashboard, admin panel, management system, or prototype using the supplied rendered prototype, screenshots, screen recordings, and reference documents.
+
+Use this prompt alongside:
+1. Shared Skills / Design Rules — reusable visual standards and rules.
+2. Component Audit Specification — the component inventory and component-level inspection checklist.
+3. General UI/UX Audit Prompt, if supplied — a separate audit with its own scope.
+
+Keep the documents separate:
+- This prompt defines how to visually inspect, verify, document, and report findings.
+- The Component Audit Specification defines which component categories and properties to inspect.
+- The Shared Skills / Design Rules defines the standards used to judge visible component presentation.
+- The General UI/UX Audit Prompt, if supplied, remains separate. Do not import its broader UX scope into this component audit.
+
+If a referenced document is not supplied, state that limitation. Do not claim to have consulted it.
+
+2. STRICT AUDIT BOUNDARY
+
+IN SCOPE
+- Visible component presence and visual completeness only when an explicit supplied specification/reference establishes what should be present in that exact context.
+- Component dimensions, proportions, padding, spacing, alignment, typography, iconography, colour, contrast, borders, surfaces, radii, shadows, and visual hierarchy within components.
+- Text wrapping, truncation, clipping, overlap, collisions, distortion, overflow, crowding, uneven sizing, misalignment, and viewport-specific presentation defects.
+- Visible component states and variants only when actually shown in the supplied evidence.
+- Consistency between repeated component instances and equivalent components across supplied screens.
+- Comparison against explicit visual rules in the supplied Skills / Design Rules or Component Audit Specification.
+
+STRICTLY OUT OF SCOPE
+- Source code, HTML, DOM, CSS, JavaScript, code quality, implementation details, and technical root-cause analysis.
+- Backend, APIs, database/data correctness, business logic, state logic, event handling, and functional testing.
+- Testing whether buttons, filters, forms, navigation, menus, or controls actually work.
+- General UX reviews, usability heuristics, user journeys, workflow design, information architecture, and feature strategy.
+- Accessibility conformance claims that cannot be established from visible evidence.
+- Assumptions about hidden screens, unavailable states, unprovided viewport sizes, or components not required by a supplied specification.
+
+Describe the visible symptom and recommend the desired visual correction. Do not prescribe code or implementation changes.
+
+3. SOURCE PRIORITY AND EVIDENCE RULES
+
+Use this priority:
+1. Current supplied prototype/rendered interface as primary evidence of what is visibly present.
+2. Supplied component specification and shared skills/rules as criteria for judging presentation.
+3. Supplied screenshots or screen recordings as evidence of states and viewport sizes they actually show.
+4. Previous audit reports as historical context only; recheck each prior finding against the current prototype.
+
+Do not report a component as missing solely because it is a common SaaS convention. Do not infer a defect from source code or an unobserved state. Do not invent screens, content, findings, or design requirements. If evidence is insufficient, record the limitation rather than presenting an assumption as a confirmed defect.
+
+4. REQUIRED INSPECTION METHOD
+
+Pass 1 — Inventory
+- Identify every accessible screen/view and visible component family.
+- Record the evidence available for each screen: rendered view, screenshot, recording, and visible state.
+- Note incomplete evidence, such as partial-page screenshots, obscured areas, or unavailable viewport variants.
+
+Pass 2 — Component-by-component inspection
+- Inspect each visible component instance, not just one example of each type.
+- Check dimensions, spacing, alignment, typography, iconography, colour, contrast, borders, surface treatment, content fit, and visible state.
+- Review all applicable categories in Section 9 and the supplied Component Audit Specification.
+- Do not create findings for categories or states that are not present, applicable, or supported by evidence.
+
+Pass 3 — Consistency review
+- Compare repeated instances of the same component within a screen and across supplied screens.
+- Check equivalent buttons, fields, badges, tables, cards, chart labels, dialogs, menus, and other recurring components.
+- Report only meaningful, evidence-supported inconsistencies.
+
+Pass 4 — Historical finding verification
+- If a previous audit is supplied, review every prior finding against the current prototype.
+- Mark each prior finding as Confirmed, Partially Resolved, Resolved, Not Reproducible in Current Evidence, or Unable to Verify.
+- Preserve existing finding IDs where practical. Do not automatically repeat old findings without fresh verification.
+- Clearly distinguish new findings from carried-forward findings.
+
+Pass 5 — Reporting quality check
+- Confirm every finding identifies the screen and exact component location.
+- Confirm every finding includes visible evidence and a specific visual correction.
+- Remove duplicates, vague statements, personal preferences presented as defects, and claims outside scope.
+- Ensure the report follows exactly 12 sections, 12 tables, and five columns per table as specified in Section 10.
+
+5. REQUIRED FINDING DETAILS
+
+Each finding must contain:
+- Unique finding ID.
+- Exact screen/view and component location.
+- Component category and component name.
+- Objective description of what is visibly wrong or inconsistent.
+- Concrete visible evidence.
+- Visual property affected.
+- Severity.
+- Specific recommended visual correction.
+- Prior-finding status, if a previous audit was supplied.
+
+Use severity consistently:
+- Critical: A severe visible component defect that makes essential on-screen content or a major component unusable to interpret visually.
+- High: A prominent defect affecting a major component or causing substantial clipping, overlap, or loss of visual clarity.
+- Medium: A noticeable inconsistency or presentation defect that materially reduces clarity or consistency.
+- Low: A minor visual inconsistency with limited impact.
+- Observation / Needs Evidence: A possible concern that cannot be confirmed from supplied evidence. Keep separate from confirmed defects.
+
+Severity must reflect visible presentation impact, not assumptions about technical or business impact.
+
+6. EXACT-LOCATION REQUIREMENT
+
+Every finding must state the most precise location supported by the evidence:
+Screen/View > page section or panel > component > exact position, row, column, or label where applicable.
+
+Examples:
+- Students > table toolbar > search field > placeholder text at the left side of the field.
+- Employers > results table > Actions column > icon-only control in each row.
+- Dashboard > monthly chart > horizontal axis > labels beneath the bars.
+- Profile settings > security panel > password field > helper text beneath the field.
+- Modal > footer > primary and secondary buttons > right-aligned action group.
+
+Do not use vague locations such as “on the page,” “in the table,” or “in the dashboard” when more precise detail is visible. Never invent a row, column, label, or location that cannot be seen.
+
+7. RULES FOR COMPONENT COVERAGE
+
+- Review every applicable category in Section 9 and in the supplied Component Audit Specification.
+- Component categories are an inspection checklist, not a list of requirements for every screen.
+- Do not mark a component as missing unless a supplied specification or reference establishes that it should be visible in that context.
+- Record coverage status as Inspected — Finding, Inspected — No Finding, Not Present / Not Applicable, or Unable to Inspect.
+- Only report confirmed visual defects as findings. Keep evidence limitations and unconfirmed observations clearly labelled.
+- A finding should appear in the single most appropriate report section. Do not duplicate the same underlying issue across sections.
+- Do not claim responsive defects unless multiple viewport sizes are supplied or an explicit reference establishes the expected appearance. A table remaining tabular on mobile is not automatically a defect; report concrete clipping, overflow, unreadable density, or fit problems. A card/list treatment may be suggested as an optional improvement when appropriate.
+- Do not trigger interactions or test functionality to reveal hidden states. Inspect only states shown in supplied evidence. Treat any functional testing as a separate task requiring explicit user instruction.
+- If an area is obscured, cropped, or unavailable, record the limitation.
+
+8. ADDITIONAL COMPONENT FAMILIES TO CHECK EXPLICITLY
+
+The original taxonomy already covers many general SaaS components. These additions strengthen coverage where earlier categories were not explicit enough:
+
+A. Autocomplete and typeahead — suggestion panels, highlighted options when shown, option icons, text fit, panel alignment, boundaries, and clipping.
+B. Multi-select and tokenised inputs — selected-value chips/tokens, removable-token appearance, long selections, wrapping, overflow, dropdown alignment, and selected-value readability.
+C. File upload and attachment components — drop zones, upload buttons, file rows, file-type icons, previews, visible progress indicators, file metadata, and attachment-list consistency.
+D. Tree views and hierarchical selectors — indentation, hierarchy levels, expand/collapse indicators when visible, selected-node styling, nested labels, and clipping.
+E. Rich-text and content editors — visible editor boundaries, toolbar icons, grouped formatting controls, placeholder styling, padding, and content overflow. Do not test editing behaviour.
+F. Kanban boards and card-column layouts — board columns, column headers, cards, card density, card labels, visible drag handles, column spacing, and board overflow. Do not test dragging or workflow behaviour.
+G. Accordions and expandable content panels — header sizing, indicators, expanded-content spacing, indentation, separators, and visible expanded/collapsed variants.
+H. Steppers and wizard indicators — step numbers/icons, labels, connector lines, current/completed/upcoming visual treatments, and alignment. Do not evaluate flow or progression logic.
+I. File, image, document, and media previews — preview dimensions, image cropping, file-type identification, placeholder thumbnails, metadata, and preview-container consistency.
+J. Calendar and scheduling layouts — month/week/day grids, date headers, time slots, event blocks, overlapping labels, event chips, and visible scheduling content fit. Do not test scheduling functionality.
+K. Maps and location components — map container sizing, marker visibility, labels, legends, and fit of visible location details. Do not assess geospatial accuracy.
+L. Numeric and range controls — range sliders, track/thumb appearance, selected range, tick marks, value labels, and alignment with related fields. Do not test value changes.
+
+Also strengthen checks for table grouped headers and long values; filter summaries and active chips; chart units and label collisions; tall modal/drawer clipping; multiple badges in a cell; form prefixes/suffixes and inline helper text; distinct empty/no-results/loading/error states; numeric alignment; and repeated-component consistency.
+
+9. COMPONENT CATEGORY TAXONOMY — 45 CATEGORIES
+
+Review all categories against supplied evidence and report coverage. This taxonomy expands the previous 33-category checklist with 12 additional component families. Create detailed findings only where confirmed defects exist.
+
+9.1 App Shell and Structural Components — main content container, sidebar/content relationship, visible structural regions, gutters, dividers, and alignment.
+9.2 Page Headers and Toolbars — page title areas, subtitles, breadcrumbs, header actions, utility controls, and toolbar grouping.
+9.3 Navigation Components — visible navigation item dimensions, labels, icons, grouping, active/expanded visual treatments, and clipping. Do not audit navigation strategy or route behaviour.
+9.4 Search Components — search-field dimensions, search icon, placeholder/entered text, shortcut indicators, clear controls, padding, and truncation.
+9.5 Form and Input Components — text fields, text areas, labels, helper text, visible validation messages, input adornments, prefixes/suffixes, and input-group alignment.
+9.6 Selection Components — dropdowns, checkboxes, radio buttons, toggles, segmented controls, selected values, and visible selected/disabled states.
+9.7 Date and Time Components — date/time fields, calendars, date pickers, time selectors, displayed values, and associated icons when visible.
+9.8 Buttons and Action Controls — primary/secondary/destructive buttons, icon buttons, text actions, split buttons, button groups, dimensions, and visible variants.
+9.9 Filters and Sorting Components — filter fields, chips, applied-filter summaries, sorting indicators, grouping, alignment, and wrapping. Do not test operation.
+9.10 Tables and Tabular Layouts — headers, grouped headers, rows, cells, column alignment, row heights, dividers, action columns, badges, visible selected/hover states, long values, and table overflow.
+9.11 Pagination and Data Navigation — page numbers, previous/next controls, item-count presentation, page-size controls, disabled-looking controls, and spacing. Do not test page changes.
+9.12 Cards and Panels — card/panel dimensions, padding, content arrangement, titles, values, icons, surfaces, and repeated-card consistency.
+9.13 Metrics and Status Indicators — KPI values, counts, status labels, progress indicators, pills, badges, multiple badges in a cell, and visible hierarchy and consistency. Do not validate underlying values.
+9.14 Charts and Graphs — chart area, plot proportions, bars, lines, slices, gridlines, visual alignment, and fit within the containing component. Do not validate data or calculations.
+9.15 Chart Labels, Axes, Legends, and Data Labels — label placement, axis text and units, legend swatches, legend spacing, annotations where visible, data-label fit, truncation, collisions, and legibility.
+9.16 Lists, Repeated Rows, and Timelines — row/item dimensions, separators, indentation, metadata, timestamps, icons, avatars, and repeated-item consistency.
+9.17 Tabs and Content Switchers — tab sizing, spacing, labels, icons, selected indicator, dividers, and visible active/inactive variants.
+9.18 Modals, Dialogs, Drawers, and Popovers — overlay placement, panel dimensions, headers, close controls, body/footer spacing, button alignment, visible scroll areas, tall-content fit, and clipping.
+9.19 Menus, Dropdown Panels, and Context Menus — panel placement, item rows, icons, separators, grouping, visible highlighted/selected states, boundaries, and clipping.
+9.20 Tooltips and Small Overlays — visible tooltip/popover size, text fit, placement, contrast, padding, and clipping. Do not trigger hidden tooltips to test behaviour.
+9.21 Alerts, Banners, Toasts, and Inline Messages — message container, icon, text, close control, padding, contrast, state styling, and overlap with nearby content.
+9.22 Loading, Empty, Error, and Placeholder States — only states actually visible: skeletons, empty-state illustrations, no-results messages, error panels, placeholders, and their spacing and fit.
+9.23 Avatars and Identity Components — avatar/image dimensions, crop, initials, borders, alignment, and consistency across visible instances.
+9.24 Icons and Iconography — icon style, size, stroke/fill, alignment, padding, and consistency across component types.
+9.25 Typography Within Components — component-level font hierarchy, labels, values, helper text, captions, metadata, numeric alignment, wrapping, and clipping.
+9.26 Component Visibility, Clipping, and Overflow — partially hidden controls, clipped text, overlay collisions, off-screen content, visible scrollbars covering content, and overflow symptoms.
+9.27 Component Spacing and Alignment — internal and external spacing, alignment, baselines, gaps, and consistency between equivalent components.
+9.28 Component Sizing and Proportions — width, height, density, relative proportions, uneven repeated instances, and component fit within its container.
+9.29 Borders, Surfaces, and Visual Treatments — borders, dividers, backgrounds, shadows, radii, and surface treatment consistency.
+9.30 Visible Component States and Variants — only states shown in supplied evidence; compare visual distinction and consistency with explicit rules.
+9.31 Responsive Component Presentation — component wrapping, stacking, compression, overflow, clipping, and sizing across supplied viewport variants only.
+9.32 Cross-Screen Component Consistency — equivalent components across multiple supplied screens. Do not claim cross-screen inconsistency if only one screen is supplied.
+9.33 Footers and Bottom Action Areas — footer controls, bottom bars, sticky-looking visible regions, action grouping, alignment, and viewport-edge clipping.
+9.34 Autocomplete and Typeahead Components — suggestion panels, option rows, highlighted options when shown, option icons, text fit, alignment, and clipping.
+9.35 Multi-Select and Tokenised Inputs — selected tokens/chips, removable-token appearance, wrapping, long selections, overflow, and dropdown alignment.
+9.36 File Upload and Attachment Components — drop zones, upload controls, attachment rows, file-type icons, thumbnails, visible progress displays, and metadata fit.
+9.37 Tree Views and Hierarchical Selectors — indentation, hierarchy levels, visible expand/collapse indicators, selected-node styling, nested labels, and clipping.
+9.38 Rich-Text and Content Editors — editor boundaries, toolbar icon consistency, formatting-control groups, placeholder styling, padding, and visible content overflow.
+9.39 Kanban Boards and Card-Column Layouts — board columns, column headers, cards, card density, labels, visible drag handles, spacing, and board overflow. Do not test drag-and-drop behaviour.
+9.40 Accordions and Expandable Panels — header sizing, indicator alignment, expanded-content spacing, indentation, separators, and visible expanded/collapsed variants.
+9.41 Steppers and Wizard Indicators — step numbers/icons, labels, connectors, current/completed/upcoming treatments, and alignment. Do not assess flow logic.
+9.42 File, Image, Document, and Media Previews — preview dimensions, cropping, file-type indicators, placeholder thumbnails, metadata, and preview-container consistency.
+9.43 Calendar and Scheduling Layouts — month/week/day grids, date headers, time slots, event blocks, overlapping labels, event chips, and visible content fit. Do not test scheduling behaviour.
+9.44 Maps and Location Components — map container dimensions, visible markers and labels, legends, and fit of surrounding location details. Do not assess location-data accuracy.
+9.45 Numeric and Range Controls — range sliders, track/thumb appearance, selected range, tick marks, visible value labels, and alignment with related fields. Do not test value changes.
+
+10. MANDATORY REPORT FORMAT — EXACTLY 12 SECTIONS, 12 TABLES, FIVE COLUMNS EACH
+
+The final audit report must contain exactly 12 numbered sections. Every section must contain exactly one table with exactly five columns. All report content must be inside these 12 tables. Do not add prose paragraphs, bullet lists, standalone summaries, separate finding cards, or extra tables outside the 12 required tables. The section heading may appear above each table. Do not add rows or columns that change the five-column structure.
+
+SECTION 1 — Audit Identity and Scope
+Columns: Item | Details | Evidence Source | Scope / Limitation | Notes
+Include prototype name/version if available, audit date, supplied reference documents, evidence types, included scope, excluded scope, and evidence limitations.
+
+SECTION 2 — Screen and View Inventory
+Columns: Screen / View | Component Areas Reviewed | Evidence Available | Coverage Status | Limitations / Notes
+Include all screens/views actually inspected. Do not imply full coverage if only partial evidence is supplied.
+
+SECTION 3 — Previous Finding Verification
+Columns: Previous Finding ID | Screen / Component Location | Previous Finding Summary | Current Verification Status | Current Evidence / Required Follow-up
+Use Confirmed, Partially Resolved, Resolved, Not Reproducible in Current Evidence, or Unable to Verify. If no previous audit is supplied, state that in the table.
+
+SECTION 4 — Executive Findings Register
+Columns: Finding ID | Screen / Exact Location | Component and Observed Issue | Severity | Recommended Correction
+Include all confirmed findings, each with a unique ID. Do not include unconfirmed concerns as confirmed findings.
+
+SECTION 5 — Component-Level Findings
+Columns: Finding ID | Screen / Exact Component Location | Visible Evidence and Defect | Severity / Affected Visual Property | Specific Visual Correction
+Use for confirmed findings that do not fit more specifically into Sections 6–10. Do not duplicate findings already recorded elsewhere.
+
+SECTION 6 — Shared Components, Headers, Navigation, and Structure
+Columns: Finding ID / Status | Screen / Exact Location | Component / Visible Evidence | Issue / Severity | Recommended Correction / Notes
+Cover component presentation in the shared shell, headers, toolbars, navigation items, page structure, footers, and bottom action areas. Do not assess navigation strategy or user journeys.
+
+SECTION 7 — Data Components: Tables, Lists, Search, Filters, Sorting, and Pagination
+Columns: Finding ID / Status | Screen / Exact Location | Component / Visible Evidence | Issue / Severity | Recommended Correction / Notes
+Cover tables, grouped headers, row/cell presentation, lists, timelines, search fields, autocomplete, filters, chips, sorting indicators, selection controls, bulk-action presentation, pagination, page-size controls, and visible data-component overflow.
+
+SECTION 8 — Dashboards, Cards, Metrics, Charts, and Data Visualisation
+Columns: Finding ID / Status | Screen / Exact Location | Component / Visible Evidence | Issue / Severity | Recommended Correction / Notes
+Cover cards, KPI/metric components, charts, graph marks, axes, units, labels, legends, data labels, numeric alignment, repeated summary panels, and visual fit. Do not validate data correctness or calculations.
+
+SECTION 9 — Forms, Inputs, Selection Controls, and Overlays
+Columns: Finding ID / Status | Screen / Exact Location | Component / Visible Evidence | Issue / Severity | Recommended Correction / Notes
+Cover fields, text areas, dropdowns, multi-selects, checkboxes, radio buttons, toggles, date/time controls, sliders, upload controls, rich-text editors, modals, dialogs, drawers, popovers, menus, tooltips, and visible validation styling. Do not test functionality.
+
+SECTION 10 — Typography, Iconography, Status, Visibility, and Component States
+Columns: Finding ID / Status | Screen / Exact Location | Component / Visible Evidence | Issue / Severity | Recommended Correction / Notes
+Cover typography, icons, badges, alerts, banners, avatars, media previews, visible selected/disabled/loading/empty/error states, text fit, clipping, overlap, spacing, sizing, borders, surfaces, and responsive presentation only when supported by supplied viewport evidence.
+
+SECTION 11 — Cross-Screen Consistency and Evidence Limitations
+Columns: Finding ID / Status | Screens / Exact Locations Compared | Components and Visible Evidence | Inconsistency / Limitation | Correction / Additional Evidence Needed
+Compare equivalent components across supplied screens. Record coverage gaps and unconfirmed observations. Do not invent missing screens, states, or viewport behaviour.
+
+SECTION 12 — Prioritised Correction Plan and Final Quality Check
+Columns: Priority / Finding ID | Screen / Exact Location | Component Issue | Required Visual Correction | Verification Criteria / Status
+Order confirmed findings by severity, then by prominence and recurrence. Verification criteria must describe the desired visible result, not a code change or functional test. Include a concise final quality-check row confirming the 12-section, 12-table, five-column requirement and exclusion of code/functional/UX analysis.
+
+11. COVERAGE STATUS VALUES
+
+Use these status values consistently:
+- Inspected — Finding
+- Inspected — No Finding
+- Not Present / Not Applicable
+- Unable to Inspect
+- Confirmed
+- Partially Resolved
+- Resolved
+- Not Reproducible in Current Evidence
+- Unable to Verify
+- Observation / Needs Evidence
+
+Do not confuse “Not Present / Not Applicable” with “missing defect.” A missing-component finding requires explicit supplied evidence that the component should be visible in that exact context.
+
+12. FINAL EXECUTION INSTRUCTION
+
+Audit the current supplied prototype and all relevant visible screens/components thoroughly. Use the supplied Component Audit Specification and Shared Skills / Design Rules if available. Inspect all 45 categories in Section 9 for applicability, including the 12 additional component families. Verify previous findings against current evidence where a previous report is supplied. Identify new findings rather than merely repeating the previous report.
+
+Return the completed audit report, not an audit plan. Use exactly 12 numbered sections, exactly one table per section, exactly five columns per table, and no report content outside those tables. State evidence limitations accurately. Include exact screen and component location, visible evidence, severity, and concrete visual correction for every confirmed finding. Do not perform code analysis, functionality testing, backend analysis, business-logic analysis, or general UI/UX evaluation.
+
+
+13. MANUAL REVIEW MODE AND OPTIONAL IMPROVEMENTS
+
+This prompt is for manual visual inspection. Do not click controls, submit forms, test search/filter/sort/pagination, or infer hidden behaviour. A visible selected/disabled/error state may be inspected only when supplied in the evidence.
+
+Separate findings into:
+- Confirmed visual defect: an observable mismatch, clipping, overlap, legibility problem, inconsistent treatment, or other issue supported by the supplied reference/rule.
+- Required visual omission: an element is absent and its presence is established by a supplied requirement or reference.
+- Optional visual improvement: a reasonable design enhancement that is not a confirmed defect. Label it explicitly as optional and do not inflate its severity.
+
+For responsive review, record only supplied or actually inspected viewports. Do not claim full responsiveness if the evidence does not cover the relevant sizes. Avoid treating personal design preferences as universal rules.
+
+LABEL VALIDATION
+**Audit Prompt — Label & Message Validation**
+- Validate all on-screen labels, error messages, alerts, and validation feedback for grammatical correctness, clarity, contextual accuracy, professional wording, and consistency with the associated component or action. Provide corrected wording for every identified issue.

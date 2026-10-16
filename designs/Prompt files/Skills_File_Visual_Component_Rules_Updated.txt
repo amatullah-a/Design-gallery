@@ -1,0 +1,1135 @@
+# Shared Skills — SaaS Component Audit Rules
+**Version 2.1 — Manual Visual Audit Default**
+
+## 1. Purpose
+
+This document defines reusable rules for evaluating components in SaaS web application prototypes. The default audit mode is manual visual inspection. Functional rules are retained for a separately requested interaction-testing task and are not mandatory in a visual-only audit. It serves as the shared reference for component audits and should be used alongside:
+
+1. **SaaS Component Audit Prompt** — defines how to conduct the audit and structure the report.
+2. **SaaS Component Audit Specification** — defines the component categories and checks to inspect.
+3. **Shared Skills — SaaS Component Audit Rules** — defines the standards against which components are evaluated.
+
+The rules must be applied to the components and states that are relevant to the prototype being audited.
+
+## 2. Core Principles
+
+- In the default audit, evaluate the visible presentation of the prototype only.
+- Assess individual components and their consistency across screens.
+- Do not assume every possible SaaS component must be present on every screen.
+- Determine whether a component is expected from the supplied requirements, screen purpose, established patterns, and surrounding prototype.
+- Distinguish required visual omissions, confirmed visual defects, optional design improvements, and evidence limitations. Functional defects belong to a separately requested interaction-testing scope.
+- Record observable evidence rather than assumptions.
+- Do not report a defect simply because a component differs from a preferred design style.
+- Do not treat an unavailable interaction as a defect in a visual-only audit.
+- Apply rules proportionately to the component's purpose, complexity, and context.
+- Where no standard is specified, identify a clear usability or consistency problem before raising a finding.
+
+## 3. Rule Identification and References
+
+Assign stable IDs to reusable rules so that audit findings can reference them consistently.
+
+Use the following ID groups:
+
+| Rule prefix | Component category |
+|---|---|
+| CMP | General component completeness |
+| TYP | Typography |
+| ICO | Icons and iconography |
+| CLR | Colour and visual states |
+| VIS | Visibility and presentation |
+| BTN | Buttons and actions |
+| FLD | Form fields and inputs |
+| SRH | Search |
+| FIL | Filters |
+| TBL | Tables and tabular layouts |
+| PAG | Pagination |
+| NAV | Navigation components |
+| TAB | Tabs and segmented controls |
+| MOD | Modals and dialogs |
+| DRW | Drawers and side panels |
+| POP | Popovers, tooltips and contextual overlays |
+| DRO | Dropdowns and menus |
+| BAD | Badges, tags and chips |
+| ALT | Alerts, banners and notifications |
+| CAR | Cards and panels |
+| CHR | Charts, graphs and data visualisations |
+| PRO | Progress indicators |
+| STA | Status indicators |
+| LST | Lists and repeated items |
+| AVT | Avatars and identity components |
+| CAL | Calendars and date/time components |
+| TRV | Tree views and hierarchical components |
+| TOO | Toolbars and grouped actions |
+| EMP | Empty states |
+| LDG | Loading and skeleton states |
+| ERR | Error and validation states |
+| CON | Component consistency |
+| RSP | Responsive component behaviour |
+
+Keep rule IDs stable between revisions. Add new IDs when new rules are introduced; do not reuse an existing ID for a different rule.
+
+## 4. General Component Rules
+
+### CMP — Component Completeness
+
+**CMP-01 — Expected component presence**
+
+Confirm that a component required by the supplied specification or necessary for the demonstrated screen purpose is present.
+
+**CMP-02 — Component completeness**
+
+Check whether the component contains the expected visible elements, labels, controls, indicators, and contextual information.
+
+**CMP-03 — Component purpose**
+
+Confirm that the component's visible structure supports its apparent purpose.
+
+**CMP-04 — Component states**
+
+Where relevant and observable, inspect default, active, selected, disabled, loading, empty, error, and success states.
+
+**CMP-05 — Component hierarchy**
+
+Check whether the component's primary information and actions are visually distinguishable from secondary content.
+
+**CMP-06 — Component grouping**
+
+Check whether related controls and information are grouped together logically and visually.
+
+**CMP-07 — Redundant components**
+
+Identify duplicated, unnecessary, or conflicting component instances only where they create a demonstrable issue.
+
+**CMP-08 — Component boundaries**
+
+Check whether component sections are distinguishable without excessive borders, containers, or decorative separation.
+
+## 5. Typography Rules
+
+### TYP — Text Hierarchy and Readability
+
+**TYP-01 — Hierarchy**
+
+Titles, section headings, field labels, body text, helper text, metadata, and captions should have a distinguishable hierarchy.
+
+**TYP-02 — Readability**
+
+Text should be legible at the displayed size and in the intended viewing context.
+
+**TYP-03 — Consistency**
+
+Equivalent component types should use consistent typography across screens unless a deliberate variation is evident.
+
+**TYP-04 — Label clarity**
+
+Component labels should be clear and associated visually with the relevant content or control.
+
+**TYP-05 — Text truncation**
+
+Identify unintended clipping, truncation, overlapping text, or ellipses that hide information needed to understand the component.
+
+**TYP-06 — Wrapping**
+
+Check that long labels, values, and headings wrap appropriately rather than overlapping nearby content or breaking the component layout.
+
+**TYP-07 — Text density**
+
+Identify text that is unnecessarily cramped, excessively spaced, or difficult to scan within the component.
+
+**TYP-08 — Emphasis**
+
+Bold text, colour, size, and other emphasis should be used consistently to indicate meaningful hierarchy rather than applied arbitrarily.
+
+**TYP-09 — Numeric alignment**
+
+Where tabular comparison is important, numeric values should be presented consistently to support scanning and comparison.
+
+## 6. Iconography Rules
+
+### ICO — Icon Use and Presentation
+
+**ICO-01 — Meaning**
+
+Icons should communicate an identifiable action, status, or category in their context.
+
+**ICO-02 — Consistency**
+
+Icons representing the same action or concept should remain consistent across the prototype.
+
+**ICO-03 — Visual style**
+
+Icons within comparable components should use a consistent visual style, stroke weight, scale, and level of detail.
+
+**ICO-04 — Icon sizing**
+
+Icons should be proportionate to their controls and surrounding text.
+
+**ICO-05 — Alignment**
+
+Icons should align correctly with labels, buttons, badges, and other component elements.
+
+**ICO-06 — Icon-only actions**
+
+Icon-only controls should have an understandable meaning from their context. When the meaning is ambiguous, the interface should provide an appropriate visible label or contextual tooltip where supported by the design.
+
+**ICO-07 — Decorative versus functional icons**
+
+Functional icons should be visually distinguishable from decorative illustrations when confusion is possible.
+
+**ICO-08 — State representation**
+
+Icons used to represent statuses or actions should remain distinguishable in different visible states.
+
+## 7. Colour and Visual State Rules
+
+### CLR — Colour Consistency
+
+**CLR-01 — Semantic colour**
+
+Use colour consistently for comparable meanings, such as success, warning, error, neutral information, and primary actions.
+
+**CLR-02 — State distinction**
+
+Selected, active, disabled, hover, error, and other visible states should be distinguishable when applicable.
+
+**CLR-03 — Contrast**
+
+Text, icons, borders, and important indicators should remain sufficiently distinguishable from their backgrounds. Where formal accessibility compliance is required, verify it against the applicable standard rather than relying only on visual judgement.
+
+**CLR-04 — Status consistency**
+
+The same status or category should not use conflicting colours across comparable components without an evident reason.
+
+**CLR-05 — Overuse of emphasis**
+
+Avoid excessive use of strong colours that causes secondary information or actions to compete with primary content.
+
+**CLR-06 — Disabled appearance**
+
+Disabled components should look unavailable without becoming so faint that their labels or purpose cannot be understood.
+
+**CLR-07 — Colour-independent meaning**
+
+Important states should not rely on colour alone when doing so would make them difficult to distinguish.
+
+## 8. Visibility and Presentation Rules
+
+### VIS — Component Visibility
+
+**VIS-01 — Visibility**
+
+Required components and their essential content should be visible in the relevant screen state.
+
+**VIS-02 — Clipping**
+
+Check for components, labels, icons, or controls clipped by containers or viewport boundaries.
+
+**VIS-03 — Overlapping elements**
+
+Identify overlapping elements that obscure content or interfere with the component's presentation.
+
+**VIS-04 — Layering**
+
+Overlays, dialogs, dropdowns, and floating elements should appear above the content they are intended to cover.
+
+**VIS-05 — Spacing**
+
+Component padding, internal spacing, and separation from neighbouring components should be consistent and appropriate to the content.
+
+**VIS-06 — Alignment**
+
+Component edges, labels, controls, and repeated elements should align consistently where they serve comparable purposes.
+
+**VIS-07 — Density**
+
+Components should present information efficiently without becoming crowded or leaving excessive unused space.
+
+**VIS-08 — Viewport fit**
+
+Check whether important component content remains accessible within the observed viewport and layout.
+
+**VIS-09 — Visual priority**
+
+Primary content and actions should be visually identifiable without requiring the user to inspect every element.
+
+**VIS-10 — Content integrity**
+
+Component content should not be hidden behind sticky elements, fixed footers, floating buttons, or other overlapping interface elements.
+
+## 9. Buttons and Action Controls
+
+### BTN — Buttons
+
+**BTN-01 — Action hierarchy**
+
+Primary, secondary, tertiary, and destructive actions should be visually distinguishable when those roles are present.
+
+**BTN-02 — Label clarity**
+
+Button labels should communicate the intended action clearly.
+
+**BTN-03 — Consistency**
+
+Buttons with equivalent purposes should have consistent sizing, styling, and placement across comparable screens.
+
+**BTN-04 — Destructive actions**
+
+Destructive actions should be visually distinguishable from routine actions where accidental selection could have consequences.
+
+**BTN-05 — Disabled state**
+
+Unavailable actions should have a clear disabled appearance when that state is part of the interface.
+
+**BTN-06 — Grouped actions**
+
+Related actions should be grouped and ordered consistently, with sufficient spacing to avoid accidental selection.
+
+**BTN-07 — Icon and label alignment**
+
+Icons and text within buttons should be aligned and spaced consistently.
+
+**BTN-08 — Action visibility**
+
+Important actions should not be obscured, unintentionally clipped, or difficult to distinguish from decorative elements.
+
+**BTN-09 — Action density**
+
+Where many actions are available, their presentation should avoid visual clutter while preserving discoverability.
+
+## 10. Form Fields and Inputs
+
+### FLD — Form Controls
+
+**FLD-01 — Field identification**
+
+Each field should have a clear label or an appropriate contextual identifier.
+
+**FLD-02 — Input type presentation**
+
+Text fields, numeric inputs, date pickers, dropdowns, checkboxes, radio buttons, and other controls should be visually identifiable as the appropriate input type.
+
+**FLD-03 — Required and optional fields**
+
+Required and optional fields should be distinguished when that distinction is relevant to completing the form.
+
+**FLD-04 — Helper text**
+
+Supporting instructions should be visually associated with the relevant field.
+
+**FLD-05 — Validation presentation**
+
+Visible errors should be distinguishable from normal field states and clearly associated with the affected field or form section.
+
+**FLD-06 — Field state consistency**
+
+Default, focused, filled, selected, disabled, and invalid states should be visually consistent across comparable fields.
+
+**FLD-07 — Field sizing**
+
+Field dimensions should be appropriate for the expected content and consistent within comparable forms.
+
+**FLD-08 — Field grouping**
+
+Related fields should be grouped logically, with clear separation between unrelated groups.
+
+**FLD-09 — Selection controls**
+
+Checkboxes, radio buttons, switches, and other selection controls should have clearly distinguishable selected and unselected states.
+
+**FLD-10 — Form action placement**
+
+Submit, cancel, reset, and other form actions should be easy to identify and positioned consistently.
+
+## 11. Search and Filter Components
+
+### SRH — Search
+
+**SRH-01 — Search identification**
+
+Search controls should be identifiable as search inputs through a clear label, placeholder, icon, or combination appropriate to the design.
+
+**SRH-02 — Search scope**
+
+Where the search scope is not obvious, the interface should communicate what content is being searched.
+
+**SRH-03 — Search placement**
+
+Search should be positioned consistently in comparable screens and near the content it affects.
+
+**SRH-04 — Search state**
+
+Where observable, inspect empty, populated, cleared, and results-related states.
+
+### FIL — Filters
+
+**FIL-01 — Filter identification**
+
+Filters should have clear names or labels that communicate the attribute being filtered.
+
+**FIL-02 — Selected filters**
+
+Applied filter selections should be distinguishable from unselected options.
+
+**FIL-03 — Active filter visibility**
+
+When filters affect a list or table, active selections should be discoverable where relevant.
+
+**FIL-04 — Filter reset**
+
+A reset or clear-all control should be present when required by the specification or when the demonstrated filter design establishes that capability.
+
+**FIL-05 — Filter grouping**
+
+Related filters should be grouped and ordered consistently.
+
+**FIL-06 — Filter summary**
+
+Where multiple filters can be applied, the interface should communicate active selections or the resulting state when necessary to understand the current view.
+
+**FIL-07 — Filter density**
+
+Large sets of filters should be arranged to remain understandable without overwhelming the main content.
+
+## 12. Tables and Tabular Layouts
+
+### TBL — Tables
+
+**TBL-01 — Column clarity**
+
+Column headings should clearly describe the content in their columns.
+
+**TBL-02 — Header alignment**
+
+Headers should align consistently with the data they describe.
+
+**TBL-03 — Row readability**
+
+Rows should be visually distinguishable enough to support scanning across columns.
+
+**TBL-04 — Data alignment**
+
+Text, dates, numbers, statuses, and actions should use consistent alignment appropriate to their content.
+
+**TBL-05 — Action column**
+
+Row-level actions should be clearly associated with their corresponding row and presented consistently.
+
+**TBL-06 — Column density**
+
+Column widths should accommodate meaningful content without unnecessary clipping, excessive empty space, or unreadable compression.
+
+**TBL-07 — Long values**
+
+Long text and values should wrap, truncate, or otherwise display consistently without breaking the table.
+
+**TBL-08 — Status presentation**
+
+Status badges, labels, and icons should remain distinguishable and consistent across rows.
+
+**TBL-09 — Selection controls**
+
+Checkboxes and bulk-selection controls should be positioned consistently where included.
+
+**TBL-10 — Empty table state**
+
+An empty table should communicate the absence of results or records rather than appearing unintentionally broken.
+
+**TBL-11 — Table controls**
+
+Search, filters, pagination, export, and other table controls should be present when required by the specification or demonstrated workflow.
+
+**TBL-12 — Table density**
+
+Row heights, cell padding, and spacing should support efficient scanning while preserving readability.
+
+**TBL-13 — Table overflow**
+
+Horizontal or vertical overflow should not unintentionally conceal important columns, actions, or content.
+
+## 13. Pagination and Data Navigation
+
+### PAG — Pagination
+
+**PAG-01 — Page information**
+
+When applicable, the component should make the current page and available navigation understandable.
+
+**PAG-02 — Control states**
+
+Available and unavailable navigation actions should be visually distinguishable.
+
+**PAG-03 — Page-size selection**
+
+If page-size selection is provided, its label and selected value should be clear.
+
+**PAG-04 — Placement consistency**
+
+Pagination controls should be positioned consistently across comparable tables and lists.
+
+**PAG-05 — Result count**
+
+Where the design displays total results or the visible record range, the information should be readable and consistent with the pagination presentation.
+
+## 14. Navigation Components
+
+### NAV — Navigation
+
+**NAV-01 — Active item**
+
+The current navigation location should be distinguishable where an active state is expected.
+
+**NAV-02 — Labels**
+
+Navigation labels should communicate the destination or purpose of the item.
+
+**NAV-03 — Icon consistency**
+
+Navigation icons should be consistent in style and meaning.
+
+**NAV-04 — Grouping**
+
+Related navigation items should be grouped and separated clearly.
+
+**NAV-05 — Expanded and collapsed states**
+
+Where navigation can expand or collapse, the states should be visually understandable.
+
+**NAV-06 — Breadcrumbs**
+
+Breadcrumbs, when present or required, should communicate the current location and the hierarchy of preceding locations.
+
+**NAV-07 — Navigation density**
+
+Navigation should remain scannable when many items or nested levels are present.
+
+## 15. Tabs and Segmented Controls
+
+### TAB — Tabs
+
+**TAB-01 — Active tab**
+
+The active tab should be clearly distinguishable from inactive tabs.
+
+**TAB-02 — Label clarity**
+
+Tab labels should identify the content or view they represent.
+
+**TAB-03 — Consistency**
+
+Comparable tab groups should use consistent styling, spacing, and active-state treatment.
+
+**TAB-04 — Content association**
+
+The visible content should be clearly associated with the selected tab.
+
+**TAB-05 — Tab overflow**
+
+When many tabs are present, labels and controls should remain understandable and accessible within the observed layout.
+
+**TAB-06 — Segmented controls**
+
+Segmented controls should visually communicate both the available options and the current selection.
+
+## 16. Modals and Dialogs
+
+### MOD — Modal Components
+
+**MOD-01 — Title**
+
+The modal should have a clear title identifying its purpose.
+
+**MOD-02 — Context**
+
+Where needed, the modal should provide sufficient context for the task being performed.
+
+**MOD-03 — Content hierarchy**
+
+Modal headings, fields, explanatory text, and actions should be arranged in a clear hierarchy.
+
+**MOD-04 — Action distinction**
+
+Primary, secondary, cancel, and destructive actions should be distinguishable.
+
+**MOD-05 — Dismissal controls**
+
+Close and cancel controls should be clearly identifiable where provided or expected.
+
+**MOD-06 — Content fit**
+
+The modal should accommodate its visible content without unintended clipping or obscuring essential actions.
+
+**MOD-07 — Long content**
+
+Long forms or content should remain readable and should not hide the actions needed to complete or exit the task.
+
+**MOD-08 — Visual consistency**
+
+Comparable modals should use consistent header treatment, padding, dimensions, action placement, and styling.
+
+**MOD-09 — Destructive confirmation**
+
+Where the specification calls for confirmation of a consequential action, the confirmation dialog should clearly communicate the action and its consequence.
+
+## 17. Drawers and Side Panels
+
+### DRW — Drawers
+
+**DRW-01 — Purpose**
+
+The drawer title or header should identify the task or information displayed.
+
+**DRW-02 — Content structure**
+
+Content should be organised into readable sections.
+
+**DRW-03 — Action visibility**
+
+Primary actions and dismissal controls should remain discoverable.
+
+**DRW-04 — Content fit**
+
+The drawer should display its content without unintended clipping or overlap.
+
+**DRW-05 — Consistency**
+
+Comparable drawers should use consistent width, spacing, headings, and action placement.
+
+## 18. Popovers, Tooltips, Dropdowns and Menus
+
+### POP — Popovers and Tooltips
+
+**POP-01 — Contextual association**
+
+A popover or tooltip should be clearly associated with the control or content that triggers it.
+
+**POP-02 — Readability**
+
+Its content should be legible and should not be unnecessarily cramped.
+
+**POP-03 — Viewport fit**
+
+Visible overlay content should not be unintentionally clipped by viewport edges or other interface elements.
+
+**POP-04 — Information value**
+
+Tooltip content should clarify an action, icon, or label rather than repeat obvious information without benefit.
+
+### DRO — Dropdowns and Menus
+
+**DRO-01 — Trigger clarity**
+
+The control that opens a dropdown or menu should be identifiable.
+
+**DRO-02 — Option clarity**
+
+Menu options should use understandable labels and consistent spacing.
+
+**DRO-03 — Selection state**
+
+Selected options should be distinguishable when the component supports selection.
+
+**DRO-04 — Menu grouping**
+
+Related actions should be grouped, and destructive actions should be distinguishable where appropriate.
+
+**DRO-05 — Overlay visibility**
+
+Open menus should not obscure essential information or be clipped in the observed state.
+
+## 19. Cards and Panels
+
+### CAR — Cards
+
+**CAR-01 — Purpose**
+
+A card should communicate its subject through a title, label, or clearly identifiable content.
+
+**CAR-02 — Information hierarchy**
+
+Important values and information should be visually distinct from supporting content.
+
+**CAR-03 — Consistency**
+
+Comparable cards should use consistent spacing, typography, dimensions, and treatment.
+
+**CAR-04 — Action placement**
+
+Card actions should be clearly associated with the relevant card.
+
+**CAR-05 — Content density**
+
+Cards should avoid both overcrowding and excessive empty space.
+
+**CAR-06 — Repeated card alignment**
+
+Cards in a repeated layout should align consistently unless a deliberate variation is established.
+
+**CAR-07 — Interactive appearance**
+
+Cards that appear clickable should be visually distinguishable from static informational cards when confusion is possible.
+
+## 20. Badges, Tags and Status Indicators
+
+### BAD — Badges and Tags
+
+**BAD-01 — Meaning**
+
+Badge text or iconography should communicate a clear status, category, or attribute.
+
+**BAD-02 — Consistency**
+
+Equivalent values should use consistent labels and visual treatment.
+
+**BAD-03 — Readability**
+
+Badge content should remain readable without clipping or excessive compression.
+
+**BAD-04 — Distinction**
+
+Badges should be visually distinct from buttons and other interactive controls where their purpose differs.
+
+### STA — Status Indicators
+
+**STA-01 — Status clarity**
+
+Status indicators should communicate the current state clearly.
+
+**STA-02 — Semantic consistency**
+
+The same status should use consistent wording and presentation across comparable components.
+
+**STA-03 — Distinct states**
+
+Different states should remain visually distinguishable.
+
+**STA-04 — Status text**
+
+Where colour or an icon alone could be ambiguous, include a readable status label when appropriate.
+
+## 21. Alerts, Banners and Notifications
+
+### ALT — Alerts
+
+**ALT-01 — Message clarity**
+
+The message should communicate the relevant information, issue, or outcome clearly.
+
+**ALT-02 — Severity presentation**
+
+Success, informational, warning, and error messages should be visually distinguishable.
+
+**ALT-03 — Action association**
+
+Any action provided in an alert should be clearly associated with the message.
+
+**ALT-04 — Dismissal**
+
+Dismissal controls should be identifiable where the alert is dismissible.
+
+**ALT-05 — Placement**
+
+Alerts should appear near the relevant content or in a consistent notification location.
+
+**ALT-06 — Message visibility**
+
+Important alert content should not be obscured, clipped, or visually lost among unrelated content.
+
+## 22. Charts, Graphs and Data Visualisations
+
+### CHR — Charts
+
+**CHR-01 — Chart purpose**
+
+A chart should have a clear title, label, or surrounding context that explains what it represents.
+
+**CHR-02 — Axis and scale labels**
+
+Where applicable, axes, units, scales, and categories should be identifiable.
+
+**CHR-03 — Legend**
+
+Where multiple series or categories are shown, the legend should be understandable and visually associated with the chart.
+
+**CHR-04 — Distinguishability**
+
+Data series should be visually distinguishable without relying on subtle differences that are difficult to perceive.
+
+**CHR-05 — Label readability**
+
+Chart labels, legends, tick marks, and annotations should remain legible at the displayed size.
+
+**CHR-06 — Data emphasis**
+
+Visual emphasis should support interpretation rather than distort the apparent importance of the displayed information.
+
+**CHR-07 — Chart type**
+
+The selected visual form should suit the information being presented. Report only clear mismatches, not subjective chart preferences.
+
+**CHR-08 — Contextual values**
+
+Important values should be readable through appropriate labels, legends, summaries, or other visible context.
+
+**CHR-09 — Chart states**
+
+Where relevant and observable, inspect empty, loading, and error presentations.
+
+**CHR-10 — Responsive presentation**
+
+Charts should remain understandable at the observed viewport size, without labels or legends becoming unusable.
+
+## 23. Progress Indicators
+
+### PRO — Progress
+
+**PRO-01 — Progress meaning**
+
+The component should communicate what task, process, or measurement the progress represents.
+
+**PRO-02 — Progress value**
+
+Where applicable, progress values or stages should be labelled clearly.
+
+**PRO-03 — State distinction**
+
+Complete, in-progress, pending, and failed states should be distinguishable when relevant.
+
+**PRO-04 — Consistency**
+
+Equivalent progress components should use consistent visual treatments.
+
+## 24. Lists, Avatars and Identity Components
+
+### LST — Lists
+
+**LST-01 — Item separation**
+
+Repeated items should be distinguishable enough to support scanning.
+
+**LST-02 — Content hierarchy**
+
+Primary item content should be distinguishable from secondary details and metadata.
+
+**LST-03 — Repeated layout consistency**
+
+Equivalent list items should use consistent alignment, spacing, and structure.
+
+**LST-04 — Item actions**
+
+Actions should be clearly associated with the correct list item.
+
+### AVT — Avatars and Identity
+
+**AVT-01 — Identity consistency**
+
+Avatars, initials, and identity markers should use consistent sizing and presentation.
+
+**AVT-02 — Identity association**
+
+Identity indicators should be positioned clearly in relation to the person, organisation, or item they represent.
+
+**AVT-03 — Fallback appearance**
+
+Where fallback initials or placeholder imagery are displayed, they should remain visually consistent and legible.
+
+**AVT-04 — Avoid ambiguity**
+
+Identity indicators should not be presented in a way that makes the associated person or record unclear.
+
+## 25. Calendars and Date/Time Components
+
+### CAL — Calendar Components
+
+**CAL-01 — Date clarity**
+
+Dates and times should be presented in a clear, consistent format appropriate to the interface.
+
+**CAL-02 — Current selection**
+
+Selected dates, time slots, or calendar periods should be distinguishable where applicable.
+
+**CAL-03 — Calendar navigation**
+
+Month, week, day, or period navigation controls should be identifiable.
+
+**CAL-04 — Event distinction**
+
+Events, categories, and statuses should be visually distinguishable where the calendar presents them.
+
+**CAL-05 — Overflow**
+
+Multiple events or long labels should not obscure essential calendar information.
+
+**CAL-06 — Date/time field states**
+
+Selected, empty, disabled, and invalid date/time states should be visually consistent with other form controls.
+
+## 26. Tree Views and Hierarchical Components
+
+### TRV — Hierarchical Views
+
+**TRV-01 — Hierarchy clarity**
+
+Parent-child relationships should be visually understandable.
+
+**TRV-02 — Expand/collapse controls**
+
+Expandable items should be distinguishable from non-expandable items where relevant.
+
+**TRV-03 — Indentation consistency**
+
+Hierarchy levels should use consistent indentation and alignment.
+
+**TRV-04 — Selected item**
+
+Selected or active items should be clearly identifiable.
+
+**TRV-05 — Dense hierarchies**
+
+Large trees or nested lists should remain scannable without making relationships ambiguous.
+
+## 27. Toolbars and Grouped Actions
+
+### TOO — Toolbars
+
+**TOO-01 — Action grouping**
+
+Related actions should be grouped logically.
+
+**TOO-02 — Primary action emphasis**
+
+The primary action should be identifiable among secondary toolbar actions.
+
+**TOO-03 — Icon consistency**
+
+Toolbar icons should follow consistent sizing, style, spacing, and meaning.
+
+**TOO-04 — Overflow actions**
+
+Where actions are moved into an overflow menu, the menu trigger should be identifiable.
+
+**TOO-05 — Layout consistency**
+
+Comparable toolbars should use consistent alignment, spacing, and positioning.
+
+## 28. Empty, Loading and Error States
+
+### EMP — Empty States
+
+**EMP-01 — Explanation**
+
+An empty state should explain the absence of content where that explanation is useful.
+
+**EMP-02 — Next step**
+
+Where appropriate, the empty state should offer a relevant next action, such as creating a record or clearing filters.
+
+**EMP-03 — Context**
+
+The empty state should make clear which component, list, or view has no content.
+
+### LDG — Loading States
+
+**LDG-01 — Loading indication**
+
+Where loading is represented in the prototype, the component should make the loading state recognisable.
+
+**LDG-02 — Layout stability**
+
+Loading placeholders should resemble the expected content structure sufficiently to avoid confusing layout changes.
+
+**LDG-03 — Consistency**
+
+Comparable loading states should use consistent visual treatment.
+
+### ERR — Error and Validation States
+
+**ERR-01 — Error identification**
+
+Error states should be visually distinguishable from normal states.
+
+**ERR-02 — Error association**
+
+The error message should be associated with the affected component or action.
+
+**ERR-03 — Error clarity**
+
+Messages should identify the issue clearly enough to help users understand what needs attention.
+
+**ERR-04 — Recovery visibility**
+
+Where a recovery action is provided, it should be identifiable and associated with the error.
+
+## 29. Cross-Component Consistency
+
+### CON — Consistency Across Screens
+
+**CON-01 — Repeated component styling**
+
+Equivalent components should maintain consistent typography, spacing, dimensions, borders, and colour treatment.
+
+**CON-02 — Repeated action placement**
+
+Comparable actions should appear in consistent locations within equivalent components.
+
+**CON-03 — State consistency**
+
+Equivalent component states should be represented consistently throughout the prototype.
+
+**CON-04 — Label consistency**
+
+Equivalent actions, statuses, and component concepts should use consistent visible wording.
+
+**CON-05 — Icon consistency**
+
+Equivalent actions and statuses should not use conflicting icons without a clear contextual reason.
+
+**CON-06 — Pattern consistency**
+
+Equivalent component types should follow the same interaction pattern where the prototype establishes a common convention.
+
+**CON-07 — Intentional variation**
+
+Differences should not be flagged when the prototype or specification establishes a clear reason for the variation.
+
+**CON-08 — Shared component treatment**
+
+When a component appears across several screens, inspect whether changes in appearance or visible behaviour are justified by context.
+
+## 30. Responsive Component Behaviour
+
+### RSP — Responsive Presentation
+
+Apply these rules only to the viewport sizes and device layouts available for inspection.
+
+**RSP-01 — Component adaptation**
+
+Components should adapt to the observed viewport without losing their essential content or purpose.
+
+**RSP-02 — Overflow**
+
+Identify unintended clipping, inaccessible content, or overlapping controls at the tested viewport.
+
+**RSP-03 — Table adaptation**
+
+Tables should preserve access to important information and actions at the tested viewport.
+
+**RSP-04 — Modal and drawer fit**
+
+Overlays should fit the tested viewport without hiding essential content or actions.
+
+**RSP-05 — Control spacing**
+
+Controls should remain distinguishable and separated sufficiently to avoid visual ambiguity.
+
+**RSP-06 — Text adaptation**
+
+Text should wrap or resize appropriately without becoming unreadable or obscuring other elements.
+
+**RSP-07 — Navigation adaptation**
+
+Navigation components should remain understandable in the observed responsive layout.
+
+Do not claim full responsive compliance when only one viewport has been provided.
+
+## 31. Optional Appendix: Observable Functional Behaviour
+
+These rules are NOT part of the default manual visual audit. Apply them only when the user explicitly requests a separate interaction-testing scope and the prototype allows the interactions to be tested. They refer to observable outcomes, not implementation.
+
+**CMP-F01 — Interaction response**
+
+A control presented as interactive should produce the expected visible response when tested.
+
+**CMP-F02 — State change**
+
+Selection controls, tabs, dropdowns, and similar components should visibly reflect a changed state when their interaction is tested.
+
+**CMP-F03 — Action outcome**
+
+An action should lead to the expected visible result established by the supplied specification or demonstrated flow.
+
+**CMP-F04 — Form feedback**
+
+Where tested, form submission should provide appropriate visible feedback for success, validation failure, or other relevant outcomes.
+
+**CMP-F05 — Overlay behaviour**
+
+Where tested, modals, menus, popovers, and drawers should open, close, or change state as expected.
+
+**CMP-F06 — Search and filtering**
+
+Where the prototype provides testable behaviour, search and filter actions should visibly affect the presented results as expected.
+
+**CMP-F07 — Table controls**
+
+Where testable, sorting, pagination, row selection, and row-level actions should produce the expected visible outcome.
+
+**CMP-F08 — Consistent interaction patterns**
+
+Equivalent components should behave consistently when tested across comparable screens.
+
+**CMP-F09 — Feedback after actions**
+
+Where an action changes or submits information, the interface should provide an observable response appropriate to the action.
+
+**CMP-F10 — Prototype limitations**
+
+If an interaction cannot be tested because the prototype does not implement it, record the limitation separately. Do not automatically classify it as a defect.
+
+## 32. Rule Application and Finding Quality
+
+When applying these rules:
+
+1. Reference the relevant rule ID in each finding.
+2. Identify the exact screen and component.
+3. Describe what is actually visible or what occurred during a test.
+4. Explain the expected standard and why the observed result differs.
+5. Describe the practical impact on the component's clarity, consistency, usability, or operation.
+6. Give a specific correction rather than a vague recommendation.
+7. Use the same rule consistently across screens.
+8. Avoid duplicate findings for the same underlying issue; consolidate related observations when appropriate.
+9. Do not create findings solely to demonstrate that a rule was checked.
+10. Do not report an absence as a defect unless the component is expected in that context.
+
+## 33. Rule Status and Applicability
+
+Each rule may be classified during an audit as:
+
+- **Pass** — inspected and meets the applicable rule.
+- **Fail** — inspected and does not meet the applicable rule.
+- **Not Applicable** — the rule does not apply to the component or screen.
+- **Not Testable** — the required state, interaction, or viewport cannot be inspected with the available prototype.
+
+“Not Testable” is not a severity level and is not itself a defect.
+
+Do not mark a rule as passed merely because the relevant state or interaction could not be accessed.
+
+## 34. Maintenance
+
+Update this document when new reusable component patterns or recurring audit findings justify additional rules.
+
+When revising the document:
+
+- Preserve existing rule IDs wherever their meaning remains unchanged.
+- Add new rules under the relevant category.
+- Avoid duplicating an existing rule under different wording.
+- Keep the rules generic enough to apply to different SaaS products and prototype types.
+- Do not introduce application-specific requirements as universal rules.
+- Keep implementation-level and source-code checks outside this document.
+
+**End of Shared Skills — SaaS Component Audit Rules, Version 2.0.**
+
+## 35. Manual Visual Audit Defaults and Responsive Interpretation
+
+- The default audit is manual visual inspection of the rendered interface and supplied evidence. Do not require interaction testing, automated testing, source-code inspection, or implementation diagnostics.
+- Inspect only the viewports and component states that are actually supplied or available for visual review. Never claim full responsive compliance from one viewport.
+- A table remaining a table on mobile is not automatically a defect. Record a confirmed finding only when the observed layout causes a concrete problem such as clipped columns, unmanageable horizontal overflow, overlapping content, unreadable density, or truncated information.
+- Cards or lists on mobile may be recommended as an optional design improvement when they suit the content, but do not treat that pattern as mandatory unless a supplied design specification says so.
+- Keep rule status distinct from severity. “Not Testable” means evidence was unavailable; it is not a defect or severity.
+- Label recommendations that express a design preference as “Optional improvement” unless an explicit standard or demonstrable visual issue establishes a defect.
+- Functional rules CMP-F01 through CMP-F10 remain available only for a separately requested interaction-testing task.
+
+
+Label validation-
+**Skills File — Label & Message Rules**
+- Labels must be clear, grammatically correct, accurate, and consistent with their associated fields, components, and actions. Messages must use professional language, accurately communicate the issue, and provide actionable guidance where appropriate.
