@@ -13,10 +13,13 @@
     .hero h1 { margin: 0 0 4px; font-size: clamp(1.45rem, 2.5vw, 1.9rem); letter-spacing: -.04em; }
     .intro { margin: 0; color: #707589; line-height: 1.4; font-size: .9rem; }
     .hero-inner { display: flex; align-items: center; justify-content: space-between; gap: 24px; }
-    .header-prompt-hub { display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 7px; max-width: 58%; }
-    .header-prompt-title { width: 100%; text-align: right; color: #74788b; font-size: .68rem; font-weight: 700; }
-    .header-prompt-link { display: inline-block; max-width: 230px; padding: 7px 9px; border: 1px solid #e1dfff; border-radius: 8px; background: #f7f6ff; color: #5149c8; text-decoration: none; font-size: .72rem; line-height: 1.3; overflow-wrap: anywhere; }
-    .header-prompt-link:hover { background: #eeedff; border-color: #c9c5ff; }
+    .prompt-library-cta { display: flex; align-items: center; gap: 11px; min-width: 250px; max-width: 340px; padding: 12px 14px; border: 1px solid #e2dfff; border-radius: 12px; background: linear-gradient(135deg, #fbfaff, #f1efff); color: #302b63; text-decoration: none; box-shadow: 0 3px 10px #4f46e508; transition: transform .16s ease, box-shadow .16s ease; }
+    .prompt-library-cta:hover { transform: translateY(-2px); box-shadow: 0 8px 20px #4f46e51a; }
+    .prompt-library-icon { display: grid; place-items: center; flex: 0 0 36px; height: 36px; border-radius: 10px; background: #e7e4ff; color: #5b52d6; font-size: 1.2rem; }
+    .prompt-library-cta strong, .prompt-library-cta small { display: block; }
+    .prompt-library-cta strong { font-size: .82rem; }
+    .prompt-library-cta small { margin-top: 3px; color: #77738f; font-size: .68rem; }
+    .prompt-library-arrow { margin-left: auto; color: #5b52d6; font-size: 1rem; }
     .toolbar { display: flex; gap: 10px; margin: 14px 0 10px; }
     .search { width: 100%; min-width: 0; padding: 9px 12px; border: 1px solid #dfe2eb; border-radius: 12px; background: #fff; color: inherit; font: inherit; outline: none; }
     .search:focus { border-color: #7770ef; box-shadow: 0 0 0 3px #7770ef20; }
@@ -43,7 +46,7 @@
     .empty { padding: 28px; background: white; border: 1px dashed #d7dae5; border-radius: 16px; color: #777b8d; }
     .empty[hidden], .project-card[hidden] { display: none; }
     footer { margin-top: 30px; color: #9397a6; font-size: .78rem; text-align: center; }
-    @media (max-width: 700px) { .hero-inner { align-items: flex-start; flex-direction: column; gap: 12px; } .header-prompt-hub { max-width: 100%; justify-content: flex-start; } .header-prompt-title { text-align: left; } }
+    @media (max-width: 700px) { .hero-inner { align-items: flex-start; flex-direction: column; gap: 12px; } .prompt-library-cta { width: 100%; max-width: 420px; } }
     @media (max-width: 560px) { main { width: calc(100% - 28px); padding: 16px 0 28px; } .toolbar { margin-top: 12px; } .project-card { padding: 13px; } }
   </style>
 </head>
@@ -52,7 +55,7 @@
     <div class="hero-inner">
       <div><h1>Design Gallery</h1>
       <p class="intro">A collection of visual design projects.</p></div>
-      <nav class="header-prompt-hub" aria-label="Prompt files"><span class="header-prompt-title">Prompt Files</span><a class="header-prompt-link" href="designs/Prompt%20files/Component_Specific_Visual_Audit_Prompt_Updated_v3.1.txt" target="_blank" rel="noopener">Component Specific Visual Audit Prompt Updated V3.1</a><a class="header-prompt-link" href="designs/Prompt%20files/Skills_File_Visual_Component_Rules_Updated.txt" target="_blank" rel="noopener">Skills File Visual Component Rules Updated</a></nav>
+      <a class="prompt-library-cta" href="prompts.html"><span class="prompt-library-icon" aria-hidden="true">✳</span><span><strong>Prompt Library</strong><small>Browse audit prompts and rules</small></span><span class="prompt-library-arrow" aria-hidden="true">↗</span></a>
     </div>
   </main></header>
   <main>
