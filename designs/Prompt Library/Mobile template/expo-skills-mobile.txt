@@ -1,0 +1,42 @@
+[SECTION: UI REFERENCE – EXPO SKILLS (PRIMARY)]
+
+Primary UI / layout / navigation reference:
+https://docs.expo.dev/skills/
+
+When redesigning layout, UI, UX, navigation, components, spacing, color, typography, sheets, tabs, and interactions, follow the guidance from these Expo Skills (in priority order):
+
+0. expo-overview
+   https://github.com/expo/skills/blob/main/plugins/expo/skills/expo-overview/SKILL.md
+   → Entry point for Expo tasks. Use it to determine the appropriate Expo approach for app screens, navigation, UI patterns, and implementation context before applying the more specific skills below.
+
+1. expo-native-ui
+   https://github.com/expo/skills/blob/main/plugins/expo/skills/expo-native-ui/SKILL.md
+   → Native-feeling screens, Apple HIG, semantic colors, safe areas, spacing (prefer gap), continuous border curves, system typography feel, press states, haptics notes.
+
+2. expo-design-system
+   https://github.com/expo/skills/blob/main/plugins/expo/skills/expo-design-system/SKILL.md
+   → Design tokens (spacing 4-pt grid, typography scale, radius, shadows via boxShadow, motion durations), component variants / sizes / states, consistency rules.
+
+3. expo-ui
+   https://github.com/expo/skills/blob/main/plugins/expo/skills/expo-ui/SKILL.md
+   → Prefer native bottom sheets, pickers, switches, menus, and grouped form sections (as in @expo/ui patterns). Use for action sheets, filters, quick attendance actions, etc.
+
+4. expo-router
+   https://github.com/expo/skills/blob/main/plugins/expo/skills/expo-router/SKILL.md
+   → Navigation structure: bottom tabs (max 5), push stacks, modals, form sheets, header titles, back behavior.
+
+5. expo-animation
+   https://github.com/expo/skills/blob/main/plugins/expo/skills/expo-animation/SKILL.md
+   → Subtle motion for state changes, sheet presentation, press feedback, success states. Keep motion purposeful and short.
+
+6. expo-data-fetching
+   https://github.com/expo/skills/blob/main/plugins/expo/skills/expo-data-fetching/SKILL.md
+   → Use realistic loading, empty, error, refresh, caching, and offline states when screens depend on data. Keep data behavior consistent with the provided source and do not invent backend functionality.
+
+INSTRUCTIONS FOR USE:
+- Use Expo Skills only for visual design, layout structure, navigation patterns, component behavior, spacing, color system, interaction feedback, and realistic data states.
+- Do NOT invent new content, labels, data, or information hierarchy.
+- Content (text, status labels, student names, grades, etc.) must stay exactly the same as the provided design.
+- Only redesign: layout, visual hierarchy, navigation, touch targets, spacing density, states, and micro-interactions.
+- Prefer native iOS/HIG conventions adapted for a clean cross-platform B2B SaaS mobile app.
+- Bottom tab bar, bottom sheets for quick actions/filters, clear status badges with labels (never color alone), 44pt minimum touch targets, safe-area respect.

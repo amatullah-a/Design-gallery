@@ -1,0 +1,1552 @@
+================================================================================
+WEB & SAAS DESIGN SYSTEM — COMPLETE SKILLS FILE
+================================================================================
+Reference: www.skills.sh
+Version: 1.0
+Purpose: Authoritative source of design rules for web and application
+         design, with a strong SaaS/product-design extension. Used by both
+         the Redesign Prompt and the Audit Prompt.
+Rule: When in doubt, this file wins for rules that are applicable to the
+      design type being evaluated.
+================================================================================
+
+
+================================================================================
+SECTION 0: REFERENCED SKILLS FROM SKILLS.SH
+================================================================================
+
+The following skills from the skills.sh registry are referenced by this
+system. Consult them as supplementary guidance when designing or auditing
+SaaS interfaces.
+
+STRATEGY SKILLS
+---------------
+content-strategy
+https://www.skills.sh/openclaudia/openclaudia-skills/content-strategy
+
+site-architecture
+https://www.skills.sh/borghei/claude-skills/site-architecture
+
+brand-guidelines
+https://www.skills.sh/kenneth-liao/ai-launchpad-marketplace/brand-guidelines
+
+DESIGN & WIREFRAMING SKILLS
+---------------------------
+claude-design
+https://skills.sh/jiji262/claude-design-skill/claude-design
+
+ui-ux-pro-max
+https://www.skills.sh/nextlevelbuilder/ui-ux-pro-max-skill/ui-ux-pro-max
+
+ux-design
+https://www.skills.sh/whawkinsiv/solo-founder-superpowers/ux-design
+
+huashu-design
+https://www.skills.sh/alchaincyf/huashu-design
+
+minimalist-ui
+https://www.skills.sh/leonxlnx/taste-skill/minimalist-ui
+
+design-taste-frontend-v1
+https://www.skills.sh/leonxlnx/taste-skill/design-taste-frontend-v1
+
+ui-radar
+https://www.skills.sh/site/uizze.com/ui-radar
+
+canvas-design
+https://www.skills.sh/hainamchung/agent-assistant/canvas-design
+
+design
+https://www.skills.sh/nextlevelbuilder/ui-ux-pro-max-skill/ckm:design
+
+ui-styling
+https://www.skills.sh/jackspace/claudeskillz/ui-styling
+
+baseline-ui
+https://www.skills.sh/ibelick/ui-skills/baseline-ui
+
+FRONTEND & DESIGN-SYSTEM SKILLS
+-------------------------------
+frontend-design
+https://skills.sh/anthropics/skills/frontend-design
+
+tailwind-design-system
+https://www.skills.sh/wshobson/agents/tailwind-design-system
+
+pick-ui-library
+https://raw.githubusercontent.com/emilkowalski/skills/main/skills/pick-ui-library/SKILL.md
+
+shadcn-ui
+https://www.skills.sh/nextlevelbuilder/ui-ux-pro-max-skill/shadcn-ui
+
+INSTRUCTIONS FOR USE
+--------------------
+1. Refer primarily to DESIGN & WIREFRAMING skills for UI/UX guidance and
+   STRATEGY skills for information architecture, navigation, and product
+   structure.
+2. Use design-system skills for component, styling, and interface consistency
+   guidance. These are design references, not permission to inspect source code.
+3. When auditing a prototype, evaluate only the user-facing design and
+   experience: what users can see, understand, navigate, interact with, and
+   experience.
+4. Functionality in an audit means observable user-facing functionality and
+   interaction behavior only. It does not mean code, DOM, API, backend,
+   database, security, or implementation analysis.
+
+AUDIT SCOPE — ABSOLUTE BOUNDARY
+------------------------------
+The Audit Prompt uses this skills file to evaluate DESIGN, UI, UX, and the
+USER EXPERIENCE only. The audit must contain ZERO coding or implementation
+analysis.
+
+Do NOT inspect, infer, report, or score:
+- HTML, CSS, JavaScript, source code, or code quality
+- DOM structure or selectors
+- JavaScript/state-management implementation
+- APIs, backend logic, databases, persistence, or server behavior
+- security vulnerabilities or security implementation
+- framework/library implementation
+- component source code or architecture
+- CSS architecture or styling implementation
+- ARIA attributes or semantic markup as code findings
+- event handlers, variables, functions, or source-line issues
+- technical performance or code-level optimisation
+
+If a user-facing requirement cannot be verified visually or through the
+available prototype interaction, mark it NOT VERIFIABLE. Never substitute
+source-code inspection for missing visual or interaction evidence.
+
+The audit should cover, when applicable:
+- visual design and hierarchy
+- UI layout, spacing, density, alignment, and composition
+- UX and task usability
+- observable functionality and interaction behavior
+- information architecture and site/product architecture
+- navigation and wayfinding
+- user flows and task flows
+- typography and readability
+- iconography and icon meaning
+- components and component consistency
+- forms, tables, filters, search, and actions
+- modals, sheets, dialogs, tooltips, and feedback
+- loading, empty, error, success, disabled, selected, and processing states
+- content clarity, labels, terminology, and microcopy
+- accessibility as experienced by the user
+- responsive and mobile behavior
+- consistency, scalability, and design-system coherence
+- SaaS/product patterns where relevant
+- missing features or states when supported by the product context
+- visual and interaction anti-patterns
+
+
+
+================================================================================
+SECTION 1: CORE PRINCIPLES
+================================================================================
+
+1.0 DESIGN CONTEXT & RULE APPLICABILITY
+
+Before applying any rule, identify the design context:
+- Design type: marketing website, landing page, content/editorial, ecommerce,
+  SaaS/application, admin dashboard, portal, internal tool, or other.
+- Primary user and primary task.
+- Data density: low, medium, or high.
+- Interaction complexity: low, medium, or high.
+- Responsive targets: desktop, tablet, mobile, or all.
+
+RULE LAYERS
+- CORE: Applies broadly to web/application experiences unless clearly
+  inappropriate for the context. Examples: task clarity, hierarchy,
+  accessibility, responsive behavior, usable states, consistency, and
+  functional feedback.
+- SAAS: Strong defaults for data-heavy professional applications. Examples:
+  tables, filtering, bulk actions, workspaces, permissions, auditability,
+  dense layouts, and repeated professional workflows.
+- DESIGN-SYSTEM: Component, typography, iconography, styling, and visual-system
+  guidance. Apply these as design criteria when relevant; do not turn them into
+  source-code or implementation findings.
+
+APPLICABILITY RULE
+- Never mark a context-specific rule as a failure when the feature is not
+  relevant to the design type or user task.
+- If a rule does not apply, mark it N/A rather than FAIL.
+- If the available artifact cannot verify the requirement, mark it
+  NOT VERIFIABLE rather than assuming failure or success.
+- When a SaaS rule conflicts with explicit product requirements, user task,
+  accessibility, or established product conventions, do not apply it blindly.
+
+DESIGN STANDARD VS PRODUCT PREFERENCE
+- Treat accessibility standards, semantic structure, keyboard operation,
+  sufficient contrast, usable feedback, and clear interaction behavior as
+  quality requirements.
+- Treat font family, exact color palette, sidebar placement, table borders,
+  component library, breakpoint values, and preferred interaction patterns as
+  design-system preferences unless explicitly required by the project.
+- Strong defaults may be recommended, but must not be presented as universal
+  standards without evidence.
+
+EVIDENCE & VERIFICATION
+When reviewing an existing artifact, use only user-facing evidence:
+- A — Visual evidence from the rendered design, screenshot, or supplied image.
+- B — Interaction evidence from the available prototype behavior.
+- C — Not verifiable from the supplied artifact.
+
+A and B are the only positive evidence types for the design audit. Never use
+source code, DOM structure, implementation details, backend behavior, or
+security analysis as evidence. If visual or interaction evidence is unavailable,
+mark the requirement NOT VERIFIABLE.
+
+Do not inspect source code to compensate for missing visual or interaction
+evidence. This skills file does not authorise implementation, security, backend,
+DOM, or code-quality analysis during a design audit.
+
+
+1.1 DESIGN FOR THE TASK, NOT THE AESTHETIC
+- Every screen must serve a clear user goal.
+- Before designing, determine: Who is the user? What is their primary task?
+  What data do they need? What actions will they take most frequently?
+- Never add UI elements just because they look sophisticated.
+
+1.2 OPTIMIZE FOR REPEATED PROFESSIONAL USE
+- Power users matter more than first-time delight.
+- Interfaces must be fast, predictable, and consistent.
+- Reduce cognitive load at every step.
+- Prefer stable layouts over clever animations.
+
+1.3 INFORMATION DENSITY
+- Prefer medium-to-high density on data-heavy screens.
+- Avoid overly spacious consumer-style layouts.
+- Show only essential columns/fields by default.
+- Use progressive disclosure for secondary information.
+
+1.4 CLEAR COGNITIVE HIERARCHY
+- Every screen must follow: Purpose -> Key Data -> Primary Action.
+- Page title -> Section heading -> Subsection/Card title -> Body ->
+  Helper text -> Caption.
+- Use weight and size (not just color) to create hierarchy.
+
+1.5 VISUAL RESTRAINT
+- Prefer restraint over decoration.
+- No gradients for decoration.
+- No heavy shadows or glow effects.
+- No excessive badges or status chips.
+- No decorative illustrations unless truly helpful.
+- No charts or graphs unless the requirements explicitly need them.
+- Polish comes from hierarchy, spacing, alignment, contrast, and consistency.
+
+1.6 CONSISTENCY & PREDICTABILITY
+- Same component = same behavior everywhere.
+- Same action = same location everywhere.
+- Same status = same visual treatment everywhere.
+- Terminology must be consistent across the product.
+
+1.7 ACCESSIBILITY IS NON-NEGOTIABLE
+- WCAG 2.2 AA minimum.
+- Visible focus rings on all interactive elements.
+- Never rely on color alone to convey meaning.
+- Sufficient target sizes (minimum 44x44px on touch).
+- Clear, visible labels and understandable control names.
+
+1.8 NEVER DESIGN ONLY THE HAPPY PATH
+- Every data view must include: loading, empty, zero-results, error,
+  selected, disabled, processing.
+- Plan for partial success in bulk operations.
+- Plan for undo/soft-delete where feasible.
+
+1.8A FUNCTIONALITY — USER-FACING ONLY
+- Audit whether the interface allows users to understand and complete the intended task.
+- Evaluate observable interactions such as navigation, filtering, search, selection,
+  form submission, feedback, state changes, confirmation, and recovery.
+- Describe what the user experiences, not how the product is implemented.
+- If an interaction cannot be tested or observed, mark it NOT VERIFIABLE.
+- Never infer a code defect from a user-facing result and never inspect source code
+  to explain an interaction issue.
+
+1.9 DESIGN DECISION PRIORITY (STRICT ORDER)
+When requirements conflict, follow this order:
+  1. User requirements & business rules
+  2. User task & workflow
+  3. Information architecture & data relationships
+  4. Functional correctness
+  5. Usability & cognitive load
+  6. Accessibility (WCAG 2.2 AA)
+  7. Consistency & scalability
+  8. Visual design
+  9. Decorative styling
+
+
+================================================================================
+SECTION 1A: SAAS / DATA-HEAVY APPLICATION EXTENSION
+================================================================================
+
+Apply this section when the product is a SaaS application, admin dashboard,
+portal, or other data-heavy professional tool. Do not force these rules onto
+marketing, editorial, content, or simple transactional experiences.
+
+- Optimize for repeated professional use and predictable workflows.
+- Favor medium-to-high information density when it improves scanning and task
+  completion.
+- Use tables for genuinely tabular datasets; use cards/lists when comparison
+  or content structure is better served by them.
+- Use search, filters, sorting, bulk actions, export, and selection patterns
+  when the dataset and user workflow require them.
+- Support permission-aware states, multi-user/workspace context, auditability,
+  and destructive-action safeguards when relevant.
+- Design for loading, empty, zero-results, error, processing, partial success,
+  permission-restricted, and unsaved-change states.
+- Prefer scalable information architecture and stable navigation over novelty.
+
+================================================================================
+SECTION 2: LAYOUT & PAGE ANATOMY
+================================================================================
+
+2.1 PAGE HEADER — TOP (ORIENTATION)
+- Use breadcrumbs on inner pages when the information architecture has meaningful hierarchy or when they improve orientation; not required for every site or app.
+- Clear page title + optional one-line description.
+- Page title must be prominent but not hero-sized.
+- Avoid overly large titles on application screens.
+
+2.2 PAGE HEADER — MIDDLE (METRICS, CONDITIONAL)
+- KPI cards or status indicators only when they directly support
+  decision-making.
+- Never force metrics or charts.
+- Numeric metrics must be plain text only — no square badges, pills, chips,
+  or gray boxes around numbers.
+
+2.3 PAGE HEADER — BOTTOM (CONTROLS)
+- Use search and filters on list/table pages when users need to find or segment records.
+- Provide sorting and export when they support the user task and the dataset warrants them; do not force them onto every table.
+- Primary action (Create, Invite, Import, etc.) clearly visible and
+  right-aligned or top-right.
+- Keep important/high-frequency filters visible by default. Use progressive disclosure for secondary or numerous filters when that reduces clutter without harming discoverability.
+- Filters should appear as individual controls (selects, date pickers,
+  multi-selects, etc.) in a horizontal or wrapping filter bar above the
+  table.
+- Search input and every dropdown/select filter MUST show a clear (x) button
+  when they have an active value. Clicking the clear button must reset that
+  filter and immediately re-filter the table.
+
+2.4 MAIN CONTENT
+- Primary display: Table (preferred for structured data), Card Grid, List,
+  or Form.
+- Choose pagination, load-more, infinite scroll, or virtualization based on dataset size, task continuity, accessibility, deep-linking, scanning, and product requirements.
+- Show only essential columns/fields by default.
+- Use progressive disclosure for secondary information.
+
+2.5 ACTIONS
+- Place actions close to the data they affect.
+- Clear visual hierarchy: Primary > Secondary > Tertiary / Destructive.
+- Bulk action buttons (Publish, Unpublish, Delete, etc.) must ALWAYS be
+  visible by default in the UI. They must be rendered in a disabled state
+  until at least one row is selected.
+- Do NOT hide or collapse the bulk action bar when nothing is selected —
+  only disable the buttons and show a live selection count of 0.
+- When one or more rows are selected, enable the bulk action buttons and
+  update the selection count.
+- Always show selection count (including "0 selected" when nothing is
+  selected).
+
+2.6 NAVIGATION
+- Use a stable primary-navigation pattern appropriate to the product; a persistent left sidebar is a strong SaaS default, not a universal requirement.
+- Logical grouping, maximum 2 levels deep.
+- Keep primary navigation stable across the product.
+
+2.7 SIDEBAR RULES
+- For SaaS/admin applications, a persistent left sidebar is a strong default when navigation is multi-section. Other products may use top navigation, tabs, or another suitable pattern.
+- Prefer a restrained sidebar that maintains sufficient contrast and visual hierarchy. White is a recommended SaaS default, not a universal requirement.
+- Clearly highlighted active menu item (background + weight/color).
+- Collapsible behavior on tablet and mobile.
+- Simple outlined icons + labels.
+- Stable, shallow hierarchy (maximum two levels).
+
+2.8 HEADER RULES
+- Keep account/profile controls in a predictable, discoverable location; top-right is a common SaaS default but not mandatory.
+- Breadcrumbs on inner pages.
+- Page title + optional description.
+- No oversized hero-style titles.
+
+2.9 CONTENT GROUPING
+- Use meaningful grouping (cards or sections) but do not wrap every element
+  in a card.
+- Avoid extra cards, tabs, or panels that do not serve hierarchy or grouping.
+
+2.10 RESPONSIVE BEHAVIOR
+- Desktop (>=1024px): Full layout, persistent white sidebar, multi-column
+  where useful.
+- Tablet (768-1023px): Collapsed or narrower sidebar, adapted controls.
+- Mobile (<768px): Single column, hidden sidebar + trigger, touch-friendly
+  targets (minimum 44x44px), reorganized actions, mobile-appropriate table
+  handling.
+- Never simply scale down a desktop layout. Reorganize information based on
+  available space.
+
+
+================================================================================
+SECTION 3: TABLES & DATA DISPLAY
+================================================================================
+
+3.1 TABLE REQUIREMENTS (NON-NEGOTIABLE)
+
+STRUCTURE
+- Table must have a clearly visible bordered container (1px border-slate-200).
+- Sticky header must have a distinct bottom border that separates it from
+  the body.
+- Every row must have a visible horizontal divider (border-b border-slate-100
+  or border-slate-200).
+- Column headers must be visually distinct (background + weight) so the
+  column structure is immediately scannable.
+- Do not produce a borderless or "ghost" table. The table structure
+  (columns + rows) must be obvious at a glance.
+
+HEADER
+- Sticky header.
+- Consistent row height.
+- Clear column alignment (right-align numbers).
+- Essential columns only by default.
+
+BODY
+- Subtle row hover.
+- Clear selected state with checkbox.
+- Truncation + tooltip for long content.
+- Never let text overflow or break layout.
+
+3.2 NUMERIC METRICS
+- Numeric metrics (Total, Pending, Submitted, Opt-out, counts, percentages,
+  etc.) must be displayed as plain text only.
+- Do NOT wrap numbers in square badges, pills, chips, rounded rectangles, or
+  any background-filled containers.
+- No gray boxes around numbers.
+
+3.3 PAGINATION
+- Infinite scrolling is required for all data tables.
+- Do not use traditional pagination.
+- Load more records as the user scrolls.
+
+3.4 SEARCH & FILTERS
+- Search and all filters must sit directly above the table.
+- Record count should be visible.
+- Keep important/high-frequency filters visible by default. Use progressive disclosure for secondary or numerous filters when that reduces clutter without harming discoverability.
+- Search and every dropdown filter MUST show a clear (x) button when active.
+- Clearing must reset the filter and re-filter the table immediately.
+
+3.5 ACTIONS
+- Every icon-only row action (preview, edit, view, duplicate, more, etc.)
+  must be clickable and produce visible feedback.
+- Action icons must be on the right side of the table.
+- Bulk action buttons (Publish, Unpublish, Delete, etc.) must ALWAYS be
+  visible by default.
+- They must be disabled until at least 1 row is selected.
+- Live selection count must always be shown (including "0 selected").
+
+3.6 EXPORT
+- Every table must have an Export option (CSV / Excel / PDF).
+- Export must be functional.
+
+3.7 SORTING
+- Every table must support column sorting.
+- Sort indicators must be visible.
+
+3.8 STATES
+- Loading: skeleton loaders (never centered spinners).
+- Empty: icon + message + primary CTA.
+- Zero-results: different message from true empty.
+- Error: clear message + Retry button.
+- Selected: highlighted row + checkbox + selection count.
+
+3.9 DENSITY
+- Prefer medium-to-high information density.
+- Avoid excessive whitespace that forces unnecessary scrolling.
+- Use consistent column alignment.
+- Right-align numbers.
+- Make status, priority, and key dates immediately scannable (color + label,
+  not color alone).
+
+
+================================================================================
+SECTION 4: FILTERS, SEARCH & ACTIONS
+================================================================================
+
+4.1 FILTERS — VISIBILITY
+- All filters must be visible by default.
+- Do not hide filters under a single "Filters" button.
+- Filters should appear as individual controls (selects, date pickers,
+  multi-selects, etc.) in a horizontal or wrapping filter bar above the
+  table.
+
+4.2 FILTERS — BEHAVIOR
+- Clicking or typing in any filter must update the table data in real time
+  (or simulate realistic client-side filtering with immediate visual results).
+- Every filter must be fully interactive and functional.
+- Static/non-working filters are unacceptable.
+
+4.3 FILTERS — CLEAR BUTTON
+- Search input and every dropdown/select filter MUST show a clear (x) button
+  when they have an active value.
+- Clicking the clear button must reset that filter and immediately re-filter
+  the table.
+- Clear button must be visible only when the filter has an active value.
+
+4.4 FILTER TYPES
+- Text search
+- Dropdown select
+- Multi-select
+- Date picker
+- Date range
+- Checkbox group
+- Radio group
+
+4.5 SEARCH — REQUIREMENTS
+- Search must be present on every list/table page.
+- Search must be functional.
+- Search must show a clear (x) button when active.
+- Clearing must reset and re-filter immediately.
+- Search must be positioned directly above the table.
+
+4.6 ACTIONS — PRIMARY
+- Primary action (Create, Invite, Import, etc.) clearly visible and
+  right-aligned or top-right.
+- Primary action must be visually strongest.
+- Primary action must use dark gray or black.
+
+4.7 ACTIONS — BULK
+- Bulk action buttons (Publish, Unpublish, Delete, etc.) must ALWAYS be
+  visible by default in the UI.
+- They must be rendered in a disabled state until at least one row is selected.
+- Do NOT hide or collapse the bulk action bar when nothing is selected —
+  only disable the buttons.
+- Show a live selection count of 0 when nothing is selected.
+- When one or more rows are selected, enable the bulk action buttons and
+  update the selection count.
+- Always show the selection count (including "0 selected" when nothing is
+  selected).
+
+4.8 ACTIONS — ROW
+- Every icon-only row action (preview, edit, view, duplicate, more, etc.)
+  must be clickable and produce visible feedback.
+- Every icon-only button must have a tooltip.
+- Row actions must be on the right side of the table.
+
+4.9 ACTIONS — DESTRUCTIVE
+- All error and destructive actions (Delete, Remove, error toasts, error
+  confirmation buttons, destructive bulk actions) MUST use red color (text,
+  border, and/or background as appropriate).
+- Never style destructive actions in neutral gray or black.
+- Prefer soft-delete + Archive + Restore over permanent delete.
+- Show clear consequences in confirmation dialogs.
+- After destructive actions, offer Undo via toast when technically feasible.
+- For bulk destructive actions, show how many items will be affected and any
+  that will be skipped.
+- Never make destructive actions the most prominent button.
+
+4.10 ACTIONS — HIERARCHY
+- Clear visual hierarchy: Primary > Secondary > Tertiary / Destructive.
+- Avoid clusters of equally weighted buttons.
+- Primary action is visually strongest.
+
+4.11 ACTIONS — BUTTON COLORS
+- All action buttons use dark gray or black color (filled or outline variants
+  of #0f172a).
+- No bright blue or other accent colors for action buttons.
+- Accent blue is reserved only for links, focus rings, and selected states —
+  used sparingly.
+
+4.12 MULTI-TENANT / WORKSPACE AWARENESS
+- Always make the current workspace / tenant visible.
+- Critical actions should be clearly scoped to the current tenant.
+- Support audit logs for sensitive actions.
+- Design with permissions in mind (hide or disable unauthorized actions —
+  never show them as available).
+
+
+================================================================================
+SECTION 5: BUTTONS, FORMS & INPUTS
+================================================================================
+
+5.1 BUTTONS — HIERARCHY
+- Primary (filled dark) -> Secondary (outline dark) -> Ghost -> Destructive
+  (red).
+- Avoid clusters of equally weighted buttons.
+- Primary action is visually strongest.
+
+5.2 BUTTONS — COLORS
+- All action buttons use dark gray or black color (filled or outline variants
+  of #0f172a).
+- No bright blue or other accent colors for action buttons.
+- Accent blue is reserved only for links, focus rings, and selected states —
+  used sparingly.
+- Destructive actions must use red.
+
+5.3 BUTTONS — STATES
+- Default
+- Hover
+- Focus (visible focus ring)
+- Active
+- Disabled
+- Loading
+
+5.4 BUTTONS — SIZES
+- Consistent button heights across the product.
+- Touch targets minimum 44x44px on mobile.
+
+5.5 FORMS — STRUCTURE
+- Clear labels above fields.
+- Consistent field height and padding.
+- Visible required indicators.
+- Helper text when needed.
+- Inline error messages that are specific and actionable.
+- Logical visual grouping.
+
+5.6 FORMS — REQUIRED FIELDS
+- Required fields marked clearly (e.g., asterisk).
+
+5.7 FORMS — VALIDATION
+- Inline validation with specific, actionable error messages.
+- Error messages must explain what went wrong and what the user can do.
+
+5.8 FORMS — DEFAULTS
+- Sensible defaults.
+- Dependent/conditional fields.
+
+5.9 FORMS — SAVE OPTIONS
+- Support Save, Save & Close, and Cancel.
+- Detect unsaved changes and warn before navigation.
+- Autosave + "Last saved" timestamp for longer forms when appropriate.
+- Never unexpectedly discard user input.
+
+5.10 FORMS — INPUT TYPES
+- Text
+- Number
+- Email
+- Phone
+- Date
+- Date range
+- Dropdown
+- Multi-select
+- Checkbox
+- Radio
+- Textarea
+- File upload
+
+5.11 FORMS — CLEAR BUTTON
+- Search inputs and dropdown filters must show a clear (x) button when active.
+- Clicking clear must reset and re-filter immediately.
+
+5.12 DROPDOWNS — BEHAVIOR
+- Fully interactive.
+- Clear (x) button when active.
+- Keyboard navigable (arrow keys, Enter, Escape).
+- Click outside to close.
+
+5.13 DROPDOWNS — VISUAL
+- Consistent with Shadcn/ui patterns.
+- Subtle border.
+- Light shadow only when floating.
+
+5.14 CHECKBOXES & RADIO BUTTONS — BEHAVIOR
+- Fully interactive.
+- Clear selected state.
+- Accessible labels.
+
+5.15 CHECKBOXES & RADIO BUTTONS — VISUAL
+- Consistent size.
+- Consistent spacing.
+- Accent color: #0f172a.
+
+
+================================================================================
+SECTION 6: MODALS, SHEETS & FEEDBACK
+================================================================================
+
+6.1 INTERACTION PATTERNS (STRICT CONSISTENCY)
+
+  Action Type              | Pattern
+  -------------------------|------------------------------------------------
+  View record              | Modal
+  Create / Edit            | Right Side Sheet
+  Destructive action       | Confirmation modal
+  Success / Error / Warning / Info | Toast (green / red / yellow / blue)
+  Loading                  | Skeleton loaders (never spinners)
+  Empty state              | Icon + message + primary CTA
+  Error state              | Clear message + Retry
+  Selected rows            | Highlight + checkbox + count
+
+6.2 MODALS — PURPOSE
+- View record details.
+- Confirmation dialogs.
+- Focused tasks that don't require full-page navigation.
+
+6.3 MODALS — STRUCTURE
+- Header with title + close button.
+- Body with content.
+- Footer with actions (primary + secondary).
+- Backdrop with blur.
+- Centered on desktop.
+- Full-screen or near-full-screen on mobile.
+
+6.4 MODALS — BEHAVIOR
+- Escape to close.
+- Click outside to close (for non-destructive modals).
+- Focus trap.
+- Keyboard navigable.
+
+6.5 MODALS — VISUAL
+- Subtle border.
+- Light shadow (shadow-xl).
+- Consistent border-radius.
+- White background.
+
+6.6 SIDE SHEETS — PURPOSE
+- Create / Edit forms.
+- Multi-step wizards.
+- Detailed editing that benefits from more space.
+
+6.7 SIDE SHEETS — STRUCTURE
+- Slides in from the right.
+- Header with title + close button.
+- Body with form/content.
+- Footer with actions.
+- Backdrop with blur.
+
+6.8 SIDE SHEETS — BEHAVIOR
+- Escape to close.
+- Click outside to close (with unsaved changes warning).
+- Focus trap.
+- Keyboard navigable.
+- Detect unsaved changes and warn before closing.
+
+6.9 SIDE SHEETS — VISUAL
+- Subtle border.
+- Light shadow.
+- Consistent border-radius.
+- White background.
+- Width: min(520px, 100vw) on desktop.
+
+6.10 CONFIRMATION DIALOGS — PURPOSE
+- Destructive actions (Delete, Remove, etc.).
+- Irreversible actions.
+- High-impact actions.
+
+6.11 CONFIRMATION DIALOGS — STRUCTURE
+- Header with title + close button.
+- Body with clear message explaining consequences.
+- Footer with Cancel + Confirm (red for destructive).
+
+6.12 CONFIRMATION DIALOGS — BEHAVIOR
+- Escape to close.
+- Click outside to close (acts as Cancel).
+- Focus trap.
+- Keyboard navigable.
+
+6.13 CONFIRMATION DIALOGS — VISUAL
+- Warning/error icon (red for destructive).
+- Clear, specific message.
+- Destructive confirm button in red.
+
+6.14 CONFIRMATION DIALOGS — RULES
+- Show clear consequences.
+- For bulk destructive actions, show how many items will be affected.
+- Offer Undo via toast when technically feasible.
+- Never make destructive actions the most prominent button.
+
+6.15 TOASTS — PURPOSE
+- Success feedback.
+- Error feedback.
+- Warning feedback.
+- Info feedback.
+
+6.16 TOASTS — STRUCTURE
+- Icon + message + close button.
+- Auto-dismiss non-critical transient feedback after an appropriate interval; do not auto-dismiss important errors, warnings, or information users may need to act on.
+- Manual dismiss via close button.
+
+6.17 TOASTS — TYPES
+- Success: green
+- Error: red
+- Warning: yellow
+- Info: blue
+
+6.18 TOASTS — BEHAVIOR
+- Stack from top-right or bottom-right.
+- Auto-dismiss.
+- Manual dismiss.
+- Accessible feedback for users, including assistive-technology users.
+
+6.19 TOASTS — VISUAL
+- Subtle border.
+- Light shadow.
+- Consistent border-radius.
+- White background with colored accent.
+
+6.20 TOOLTIPS — PURPOSE
+- Explain icon-only buttons.
+- Show full text for truncated content.
+- Provide additional context.
+
+6.21 TOOLTIPS — BEHAVIOR
+- Show on hover.
+- Show on focus.
+- Hide on mouse leave / blur.
+- Keyboard accessible.
+
+6.22 TOOLTIPS — VISUAL
+- Dark background.
+- Light text.
+- Small font size.
+- Consistent border-radius.
+- Subtle shadow.
+- Arrow pointing to trigger.
+
+
+================================================================================
+SECTION 7: STATES & EDGE CASES
+================================================================================
+
+7.1 MANDATORY STATES
+Every data view must design for:
+
+  1. Loading
+     - Use skeleton loaders.
+     - Never use centered spinners for page content.
+     - Skeleton must match the structure of the loaded content.
+
+  2. Empty (No Data Ever Existed)
+     - Icon + message + primary CTA.
+     - Message must guide the user toward the next useful action.
+
+  3. Zero Results (Filters/Search Returned Nothing)
+     - Different message from true empty.
+     - Must be visually distinct from empty state.
+
+  4. Error (With Retry)
+     - Clear message explaining what went wrong.
+     - Retry button.
+
+  5. Selected
+     - Highlighted row.
+     - Checkbox checked.
+     - Selection count indicator.
+     - Bulk actions enabled.
+
+  6. Disabled / Permission-Restricted
+     - Visually disabled (opacity, cursor).
+     - Tooltip explaining why.
+     - Never show unauthorized actions as available.
+
+  7. Processing / Optimistic Update
+     - Show processing state (spinner in button, skeleton in row).
+     - Optimistic update where applicable.
+     - Rollback on failure.
+
+  8. Partial Success (Bulk Operations)
+     - Show how many items succeeded.
+     - Show how many items failed.
+     - Show which items failed and why.
+     - Offer retry for failed items.
+
+7.2 NEVER DESIGN ONLY THE HAPPY PATH
+- Plan for all states above.
+- Plan for edge cases: long text, missing data, slow network, permission
+  errors.
+- Plan for keyboard-only users.
+- Plan for screen readers.
+
+7.3 STATE TRANSITIONS
+- Loading -> Loaded
+- Loading -> Error
+- Empty -> Loading -> Loaded
+- Zero-results -> Clear Filters -> Loaded
+- Selected -> Action -> Processing -> Success/Error
+- Disabled -> Enabled (when permission granted)
+
+
+================================================================================
+SECTION 8: COLOR, TYPOGRAPHY & SPACING
+================================================================================
+
+8.1 COLOR — PRIMARY THEME
+- Neutral black/gray scale centered on #0f172a (slate-900).
+- Neutral scale is dominant for backgrounds, text, borders, and structure.
+- Primary actions and strong emphasis use shades of #0f172a (dark gray/black).
+
+8.2 COLOR — ACTION BUTTONS
+- Use a consistent action-color system with clear hierarchy and sufficient contrast. Dark gray/black is a strong neutral SaaS default; do not treat it as universal.
+- Accent colors may be used for primary actions when they fit the established design system and maintain accessibility.
+
+8.3 COLOR — ACCENT BLUE
+- Reserved only for links, focus rings, and selected states.
+- Used sparingly.
+
+8.4 COLOR — SEMANTIC
+- Green (success)
+- Red (error/destructive)
+- Amber (warning)
+- Blue (info)
+- Only for meaning.
+- Never use color for pure decoration.
+- Never rely on color alone to convey meaning.
+
+8.5 COLOR — CONTRAST
+- Maintain strong contrast for text and interactive elements (WCAG AA
+  minimum).
+
+8.6 COLOR — DARK MODE
+- If supported, use the same principles with inverted neutrals.
+- Ensure contrast remains WCAG AA compliant.
+
+8.7 TYPOGRAPHY — FONT FAMILY
+- Use the project design-system font. Inter is a strong SaaS default when no font is specified.
+- Fallback: ui-sans-serif, system-ui, sans-serif.
+
+8.8 TYPOGRAPHY — HIERARCHY
+- Strict hierarchy: Page title -> Section heading -> Subsection/Card title
+  -> Body -> Helper/Description -> Caption/Meta.
+- Consistent font sizes, weights, and line-heights across the product.
+- Use weight and size (not just color) to create hierarchy.
+- Body text must remain highly readable.
+- Truncate long text with ellipsis + tooltip. Never let text overflow or
+  break layout.
+- Avoid overly large hero-style titles on application screens.
+
+8.9 TYPOGRAPHY — SIZES
+- Page title: text-2xl or text-3xl (not larger).
+- Section heading: text-lg or text-xl.
+- Card title: text-base or text-lg.
+- Body: text-sm or text-base.
+- Helper: text-xs or text-sm.
+- Caption: text-xs.
+
+8.10 TYPOGRAPHY — WEIGHTS
+- Bold (700) for page titles and primary actions.
+- Semibold (600) for section headings and card titles.
+- Medium (500) for body emphasis.
+- Normal (400) for body text.
+- Light (300) for helper text (sparingly).
+
+8.11 TYPOGRAPHY — LINE HEIGHT
+- Tight for headings.
+- Normal for body.
+- Relaxed for long-form text.
+
+8.12 SPACING — SCALE
+- Use a consistent spacing scale (prefer Tailwind's default scale).
+- Tight spacing for related elements (label + input, icon + text).
+- Moderate spacing inside components.
+- Clear separation between major sections.
+
+8.13 SPACING — DENSITY
+- On tables and lists: favor scannability and density over large empty
+  regions.
+- Avoid both extremes: cramped layouts and excessively airy layouts.
+- Align elements to a clean vertical and horizontal rhythm.
+
+8.14 BORDERS
+- Prefer subtle borders.
+- 1px border-slate-200 for containers.
+- 1px border-slate-100 for row dividers.
+- Exception for tables: table structure must remain clearly visible. Use a
+  1px bordered container, a distinct header bottom border, and a visible
+  horizontal divider on every row.
+
+8.15 ELEVATION
+- Use elevation only when it communicates hierarchy or that something is
+  floating (modals, sheets, dropdowns, popovers).
+- Avoid heavy shadows, thick borders, or decorative elevation.
+
+8.16 RADIUS
+- Maintain consistent border-radius across cards, buttons, inputs, modals,
+  sheets, and badges (follow Shadcn defaults).
+- Do not mix unrelated radius styles.
+
+
+================================================================================
+SECTION 9: RESPONSIVE & ACCESSIBILITY
+================================================================================
+
+9.1 RESPONSIVE — DESKTOP (>=1024px)
+- Full layout.
+- Persistent white sidebar.
+- Multi-column where useful.
+- Full table with all essential columns.
+
+9.2 RESPONSIVE — TABLET (768-1023px)
+- Collapsed or narrower sidebar.
+- Adapted controls.
+- Fewer columns in tables (hide secondary columns).
+- Touch-friendly targets.
+
+9.3 RESPONSIVE — MOBILE (<768px)
+- Single column.
+- Hidden sidebar + trigger (hamburger menu).
+- Touch-friendly targets (minimum 44x44px).
+- Reorganized actions.
+- Mobile-appropriate table handling (cards instead of table, or horizontal
+  scroll).
+- Bottom sheets or full-screen patterns for edit/create.
+- Keep critical actions reachable.
+
+9.4 RESPONSIVE — RULES
+- Never simply scale down a desktop layout.
+- Reorganize information based on available space.
+- Prioritize primary tasks on mobile.
+- Maintain usability on all screen sizes.
+
+9.5 ACCESSIBILITY — WCAG 2.2 AA COMPLIANCE
+- Sufficient color contrast (minimum 4.5:1 for normal text, 3:1 for large
+  text).
+- Visible focus states on all interactive elements.
+- Clear, visible labels and understandable control names.
+- Full keyboard operability.
+- Screen reader compatible.
+- Do not rely on color alone to convey meaning.
+
+9.6 ACCESSIBILITY — KEYBOARD SUPPORT
+- Enter to submit.
+- Escape to close.
+- Full Tab navigation.
+- Arrow keys for dropdowns, radio groups, and tabs.
+- Space to toggle checkboxes.
+
+9.7 ACCESSIBILITY — FOCUS MANAGEMENT
+- Visible focus rings.
+- Focus trap in modals and sheets.
+- Focus returns to trigger on close.
+- Skip links for main content.
+
+9.8 ACCESSIBILITY — SCREEN READERS
+- Semantic heading order.
+- Proper labels on form fields.
+- Understandable accessible names for icon-only controls.
+- Important feedback is perceivable and announced appropriately when assistive technology is used.
+- Custom components remain understandable and operable for users.
+
+9.9 ACCESSIBILITY — TOUCH TARGETS
+- Minimum 44x44px on mobile.
+- Adequate spacing between touch targets.
+
+9.10 ACCESSIBILITY — MOTION
+- Respect prefers-reduced-motion.
+- Avoid unnecessary animations.
+- No flashing or strobe effects.
+
+
+================================================================================
+SECTION 10: SAAS PATTERNS & ANTI-PATTERNS
+================================================================================
+
+10.1 DO'S — LAYOUT
+- Use a persistent left sidebar with white background.
+- Put profile icon in the top-right corner.
+- Use breadcrumbs on inner pages.
+- Use clear page titles + optional descriptions.
+- Show KPIs only when they support decision-making.
+
+10.2 DO'S — TABLES
+- Use bordered containers.
+- Use sticky headers with distinct bottom borders.
+- Use visible horizontal row dividers.
+- Right-align numbers.
+- Use infinite scroll.
+- Show record count.
+- Provide export.
+- Provide sorting.
+- Provide filters.
+- Provide bulk actions.
+- Show selection count (including "0 selected").
+
+10.3 DO'S — FILTERS
+- Show all filters by default.
+- Show clear (x) buttons on active filters.
+- Re-filter immediately on change.
+- Position filters directly above the table.
+
+10.4 DO'S — ACTIONS
+- Use dark gray/black for action buttons.
+- Use red for destructive actions.
+- Show tooltips on icon-only buttons.
+- Provide visible feedback on every action.
+- Always show bulk actions (disabled until selection).
+
+10.5 DO'S — FORMS
+- Clear labels above fields.
+- Required indicators.
+- Inline validation with specific messages.
+- Sensible defaults.
+- Unsaved changes warning.
+
+10.6 DO'S — FEEDBACK
+- Use toasts for success, error, warning, info.
+- Use skeleton loaders for loading.
+- Use confirmation modals for destructive actions.
+- Use side sheets for create/edit.
+- Use modals for view.
+
+10.7 DON'TS — LAYOUT
+- Do not use a dark or colored sidebar background.
+- Do not put profile icon anywhere other than top-right.
+- Do not create more than 2 levels of navigation.
+- Do not wrap every element in a card.
+- Do not use oversized hero titles on application screens.
+- Do not hide filters behind a single "Filters" button.
+
+10.8 DON'TS — TABLES
+- Do not produce a borderless or "ghost" table.
+- Do not wrap numbers in badges, pills, chips, or gray boxes.
+- Do not force or prohibit pagination universally; choose the dataset-navigation pattern based on task, scale, accessibility, and product needs.
+- Do not hide bulk actions when nothing is selected — only disable them.
+- Do not ship static, non-working controls.
+- Do not omit the clear (x) button on active filters.
+- Do not omit export or sorting when they are relevant to the dataset/task.
+- Do not omit row dividers.
+- Do not omit sticky header.
+- Do not omit bordered container.
+
+10.9 DON'TS — ACTIONS
+- Do not use arbitrary accent colors that conflict with the established action hierarchy.
+- Do not style destructive actions in neutral gray or black.
+- Do not hide bulk actions.
+- Do not make destructive actions the most prominent button.
+- Do not cluster equally weighted buttons.
+- Do not omit tooltips on icon-only buttons.
+
+10.10 DON'TS — FEEDBACK
+- Do not use centered spinners for page content loading.
+- Do not omit confirmation for destructive actions.
+- Do not omit toast feedback.
+- Do not omit tooltips on icon-only buttons.
+- Do not use a modal, sheet, drawer, page, or inline pattern when it is inappropriate for the task complexity; choose the best-fit interaction pattern.
+- Do not omit escape-to-close.
+- Do not omit focus trap.
+- Do not omit unsaved changes warning.
+
+10.11 DON'TS — VISUAL
+- Do not use color for pure decoration.
+- Do not rely on color alone to convey meaning.
+- Do not use gradients for decoration.
+- Do not use heavy shadows or glow effects.
+- Do not use excessive badges or status chips.
+- Do not add decorative illustrations unless truly helpful.
+- Do not add charts or graphs unless the requirements explicitly need them.
+- Do not add extra cards, tabs, or panels that do not serve hierarchy or
+  grouping.
+- Do not add random animations or micro-interactions that do not aid
+  understanding.
+
+10.12 DON'TS — SCOPE
+- Do not add UI elements just because they are possible.
+- Do not invent functionality, business rules, statuses, roles, permissions,
+  data fields, workflows, integrations, modules, or system behavior unless
+  provided by the requirements or clearly labeled as a recommendation.
+
+
+================================================================================
+SECTION 11: EVALUATION CHECKLIST
+================================================================================
+
+Use this checklist to audit the applicable web/application design. First identify
+the design context. Mark each item as PASS, PARTIAL, FAIL, N/A, or NOT VERIFIABLE.
+For each FAIL or PARTIAL, note the specific issue and applicable rule. Group
+findings by severity: Critical -> Major -> Minor.
+
+11.1 PAGE ANATOMY
+[ ] Breadcrumbs when hierarchy/orientation benefits from them.
+[ ] Clear page title + optional description.
+[ ] KPIs only when they support decision-making.
+[ ] Numeric metrics as plain text (no badges, pills, chips, gray boxes).
+[ ] Search is available when discovery is needed.
+[ ] Important/high-frequency filters are discoverable.
+[ ] Progressive disclosure is used when many secondary filters would add clutter.
+[ ] Sorting is available when useful for the dataset/task.
+[ ] Export is available when useful and expected for the dataset/task.
+[ ] Primary action clearly visible.
+[ ] Primary action right-aligned or top-right.
+[ ] Table preferred for structured data.
+[ ] Dataset navigation uses an appropriate strategy: pagination, load-more, infinite scroll, or virtualization.
+[ ] Only essential columns/fields by default.
+[ ] Progressive disclosure for secondary information.
+[ ] Actions close to the data they affect.
+[ ] Clear action hierarchy.
+[ ] Bulk actions always visible.
+[ ] Bulk actions disabled until selection.
+[ ] Live selection count (including "0 selected").
+[ ] Appropriate stable primary-navigation pattern.
+[ ] Clearly highlighted active state.
+[ ] Maximum 2 levels of navigation.
+[ ] Stable navigation across product.
+
+11.2 SIDEBAR
+[ ] Appropriate desktop navigation pattern.
+[ ] Navigation maintains sufficient contrast and visual hierarchy.
+[ ] Active menu item clearly highlighted.
+[ ] Collapsible on tablet/mobile.
+[ ] Simple outlined icons + labels.
+[ ] Maximum 2 levels deep.
+[ ] No dark or colored background.
+
+11.3 HEADER
+[ ] Account/profile controls are predictable and discoverable.
+[ ] Breadcrumbs on inner pages.
+[ ] Page title + optional description.
+[ ] No oversized hero titles.
+
+11.4 TABLES — STRUCTURE
+[ ] Bordered container (1px border-slate-200).
+[ ] Sticky header with distinct bottom border.
+[ ] Visible horizontal row dividers.
+[ ] Column headers visually distinct.
+[ ] Not a borderless or "ghost" table.
+
+11.5 TABLES — HEADER
+[ ] Sticky.
+[ ] Consistent row height.
+[ ] Right-aligned numbers.
+[ ] Essential columns only by default.
+
+11.6 TABLES — BODY
+[ ] Subtle row hover.
+[ ] Clear selected state with checkbox.
+[ ] Truncation + tooltip for long content.
+[ ] No text overflow.
+
+11.7 TABLES — NUMERIC METRICS
+[ ] Plain text only.
+[ ] No square badges.
+[ ] No pills.
+[ ] No chips.
+[ ] No gray boxes.
+
+11.8 TABLES — PAGINATION
+[ ] Appropriate dataset navigation strategy based on task, scale, accessibility, and product requirements.
+
+11.9 TABLES — SEARCH & FILTERS
+[ ] Search is placed near the dataset when discovery is needed.
+[ ] Filters are placed where they are easy to discover and use.
+[ ] Record count shown when useful.
+[ ] Important filters are discoverable; secondary filters may use progressive disclosure.
+[ ] Clear (x) button on active search/filters.
+[ ] Clearing resets and re-filters immediately.
+
+11.10 TABLES — ACTIONS
+[ ] Action icons on the right.
+[ ] Every icon-only row action clickable.
+[ ] Every icon-only row action produces visible feedback.
+[ ] Every icon-only button has a tooltip.
+[ ] Bulk actions always visible.
+[ ] Bulk actions disabled until selection.
+[ ] Live selection count (including "0 selected").
+[ ] Export functional.
+[ ] Sorting functional.
+[ ] Sort indicators visible.
+
+11.11 TABLES — STATES
+[ ] Loading (skeleton).
+[ ] Empty (no data ever existed).
+[ ] Zero-results (filters returned nothing).
+[ ] Error (with retry).
+[ ] Selected.
+[ ] Disabled.
+[ ] Processing.
+
+11.12 FILTERS & SEARCH — VISIBILITY
+[ ] All filters visible by default.
+[ ] Not hidden behind a single "Filters" button.
+[ ] Individual controls.
+[ ] Horizontal or wrapping filter bar above the table.
+
+11.13 FILTERS & SEARCH — BEHAVIOR
+[ ] Clicking or typing updates table data in real time.
+[ ] All filters fully interactive.
+[ ] No static, non-working filters.
+[ ] Clear (x) button on active filters.
+[ ] Clicking clear resets and re-filters immediately.
+
+11.14 ACTIONS — PRIMARY
+[ ] Clearly visible.
+[ ] Right-aligned or top-right.
+[ ] Visually strongest.
+[ ] Dark gray or black.
+
+11.15 ACTIONS — BULK
+[ ] Always visible by default.
+[ ] Disabled until selection.
+[ ] Not hidden when nothing is selected.
+[ ] Live selection count (including "0 selected").
+[ ] Enabled when at least 1 row selected.
+
+11.16 ACTIONS — ROW
+[ ] Every icon-only row action clickable.
+[ ] Every icon-only row action produces visible feedback.
+[ ] Every icon-only button has a tooltip.
+[ ] Row actions on the right side.
+
+11.17 ACTIONS — DESTRUCTIVE
+[ ] Red color (text, border, and/or background).
+[ ] Not neutral gray or black.
+[ ] Soft-delete + Archive + Restore preferred.
+[ ] Clear consequences in confirmation dialogs.
+[ ] Undo via toast when feasible.
+[ ] Bulk destructive: show how many affected.
+[ ] Never the most prominent button.
+
+11.18 ACTIONS — HIERARCHY
+[ ] Primary > Secondary > Tertiary / Destructive.
+[ ] No clusters of equally weighted buttons.
+[ ] Primary action visually strongest.
+
+11.19 BUTTONS
+[ ] Clear hierarchy.
+[ ] Consistent heights.
+[ ] Default, hover, focus, active, disabled, loading states.
+[ ] Touch targets >=44x44px on mobile.
+[ ] Dark gray/black for action buttons.
+[ ] Red for destructive actions.
+[ ] No arbitrary action colors that conflict with the established design hierarchy.
+
+11.20 FORMS
+[ ] Clear labels above fields.
+[ ] Consistent field height and padding.
+[ ] Visible required indicators.
+[ ] Helper text when needed.
+[ ] Inline error messages specific and actionable.
+[ ] Logical visual grouping.
+[ ] Sensible defaults.
+[ ] Dependent/conditional fields.
+[ ] Save, Save & Close, Cancel.
+[ ] Unsaved changes warning.
+[ ] Autosave + "Last saved" for longer forms.
+[ ] Never discard user input unexpectedly.
+
+11.21 MODALS
+[ ] Header with title + close button.
+[ ] Body with content.
+[ ] Footer with actions.
+[ ] Backdrop with blur.
+[ ] Centered on desktop.
+[ ] Full-screen or near-full-screen on mobile.
+[ ] Escape to close.
+[ ] Click outside to close (for non-destructive).
+[ ] Focus trap.
+[ ] Keyboard navigable.
+[ ] Subtle border.
+[ ] Light shadow.
+[ ] Consistent border-radius.
+[ ] White background.
+
+11.22 SIDE SHEETS
+[ ] Slides in from the right.
+[ ] Header with title + close button.
+[ ] Body with form/content.
+[ ] Footer with actions.
+[ ] Backdrop with blur.
+[ ] Escape to close.
+[ ] Click outside to close (with unsaved changes warning).
+[ ] Focus trap.
+[ ] Keyboard navigable.
+[ ] Unsaved changes warning.
+[ ] Subtle border.
+[ ] Light shadow.
+[ ] Consistent border-radius.
+[ ] White background.
+[ ] Width: min(520px, 100vw) on desktop.
+
+11.23 CONFIRMATION DIALOGS
+[ ] Header with title + close button.
+[ ] Body with clear message explaining consequences.
+[ ] Footer with Cancel + Confirm (red for destructive).
+[ ] Escape to close.
+[ ] Click outside to close (acts as Cancel).
+[ ] Focus trap.
+[ ] Keyboard navigable.
+[ ] Warning/error icon (red for destructive).
+[ ] Clear, specific message.
+[ ] Destructive confirm button in red.
+[ ] Show clear consequences.
+[ ] Bulk destructive: show how many affected.
+[ ] Undo via toast when feasible.
+[ ] Never the most prominent button.
+
+11.24 TOASTS
+[ ] Icon + message + close button.
+[ ] Auto-dismiss after 5 seconds.
+[ ] Manual dismiss via close button.
+[ ] Success: green.
+[ ] Error: red.
+[ ] Warning: yellow.
+[ ] Info: blue.
+[ ] Stack from top-right or bottom-right.
+[ ] Accessible feedback for users, including assistive-technology users.
+[ ] Subtle border.
+[ ] Light shadow.
+[ ] Consistent border-radius.
+[ ] White background with colored accent.
+
+11.25 TOOLTIPS
+[ ] Show on hover.
+[ ] Show on focus.
+[ ] Hide on mouse leave / blur.
+[ ] Keyboard accessible.
+[ ] Dark background.
+[ ] Light text.
+[ ] Small font size.
+[ ] Consistent border-radius.
+[ ] Subtle shadow.
+[ ] Arrow pointing to trigger.
+
+11.26 STATES
+[ ] Loading (skeleton).
+[ ] Empty (no data ever existed).
+[ ] Zero-results (filters returned nothing).
+[ ] Error (with retry).
+[ ] Selected.
+[ ] Disabled / Permission-restricted.
+[ ] Processing / Optimistic update.
+[ ] Partial success (bulk operations).
+
+11.27 COLOR
+[ ] Neutral black/gray scale dominant (#0f172a).
+[ ] Action buttons dark gray/black.
+[ ] No arbitrary action colors that conflict with the established design hierarchy.
+[ ] Accent blue reserved for links, focus rings, selected states.
+[ ] Semantic colors: green (success), red (error/destructive), amber
+    (warning), blue (info).
+[ ] Only for meaning.
+[ ] No color for pure decoration.
+[ ] No color-only meaning.
+[ ] WCAG AA contrast.
+
+11.28 TYPOGRAPHY
+[ ] Inter font family.
+[ ] Strict hierarchy.
+[ ] Consistent font sizes, weights, line-heights.
+[ ] Weight and size create hierarchy (not just color).
+[ ] Body text highly readable.
+[ ] Long text truncated with ellipsis + tooltip.
+[ ] No text overflow.
+[ ] No oversized hero titles.
+
+11.29 SPACING
+[ ] Consistent spacing scale.
+[ ] Tight spacing for related elements.
+[ ] Moderate spacing inside components.
+[ ] Clear separation between major sections.
+[ ] Scannability and density on tables/lists.
+[ ] No cramped layouts.
+[ ] No excessively airy layouts.
+
+11.30 BORDERS, ELEVATION & RADIUS
+[ ] Subtle borders.
+[ ] 1px border-slate-200 for containers.
+[ ] 1px border-slate-100 for row dividers.
+[ ] Table structure clearly visible.
+[ ] Elevation only for floating elements.
+[ ] No heavy shadows.
+[ ] No thick borders.
+[ ] No decorative elevation.
+[ ] Consistent border-radius.
+[ ] No mixing unrelated radius styles.
+
+11.31 RESPONSIVE
+[ ] Desktop (>=1024px): Full layout.
+[ ] Tablet (768-1023px): Collapsed/narrower sidebar, adapted controls.
+[ ] Mobile (<768px): Single column, hidden sidebar + trigger, touch-friendly
+    targets, reorganized actions, mobile-appropriate table handling.
+[ ] Never simply scale down desktop layout.
+[ ] Reorganize information based on available space.
+[ ] Prioritize primary tasks on mobile.
+[ ] Maintain usability on all screen sizes.
+
+11.32 ACCESSIBILITY
+[ ] WCAG 2.2 AA compliance.
+[ ] Sufficient color contrast (4.5:1 normal, 3:1 large).
+[ ] Visible focus states.
+[ ] Clear, visible labels and understandable control names.
+[ ] Full keyboard operability.
+[ ] Screen reader compatible.
+[ ] No color-only meaning.
+[ ] Touch targets >=44x44px.
+[ ] Respect prefers-reduced-motion.
+[ ] Enter to submit.
+[ ] Escape to close.
+[ ] Full Tab navigation.
+[ ] Arrow keys for dropdowns, radio groups, tabs.
+[ ] Space to toggle checkboxes.
+[ ] Focus trap in modals and sheets.
+[ ] Focus returns to trigger on close.
+[ ] Skip links for main content.
+[ ] Semantic heading order.
+[ ] Proper labels on form fields.
+[ ] Understandable accessible names for icon-only controls.
+[ ] Important feedback is perceivable and announced appropriately when assistive technology is used.
+[ ] Custom components remain understandable and operable for users.
+
+11.33 ANTI-PATTERNS
+[ ] No borderless or "ghost" tables.
+[ ] No numbers in badges, pills, chips, or gray boxes.
+[ ] No hidden bulk actions.
+[ ] No unnecessarily hidden or undiscoverable important filters.
+[ ] No static, non-working controls.
+[ ] No arbitrary action colors that conflict with the established design hierarchy.
+[ ] No centered spinners for page content.
+[ ] No decorative noise.
+[ ] No inappropriate dataset-navigation pattern.
+[ ] Account controls are not unexpectedly placed or difficult to discover.
+[ ] Navigation maintains accessible contrast and a coherent visual hierarchy.
+[ ] No more than 2 levels of navigation.
+[ ] No every element wrapped in a card.
+[ ] No oversized hero titles on application screens.
+[ ] No color for pure decoration.
+[ ] No color-only meaning.
+[ ] No destructive actions in neutral gray or black.
+[ ] No missing clear (x) buttons on active filters.
+[ ] No missing tooltips on icon-only buttons.
+[ ] No missing confirmation for destructive actions.
+[ ] No missing toast feedback.
+[ ] No inappropriate modal/sheet/page pattern for the task.
+[ ] Use the interaction container that best fits content complexity and workflow.
+[ ] No missing escape-to-close.
+[ ] No missing focus trap.
+[ ] No missing unsaved changes warning.
+
+11.34 MATURITY LEVEL
+- PROTOTYPE: Basic structure; important features/states may be missing.
+- MVP: Core user tasks are present; some states/polish may remain.
+- PRODUCTION-READY: Core tasks, states, responsive behavior, accessibility, and visual consistency are sufficiently complete.
+- MATURE PRODUCT / MATURE SAAS: Strong completeness, scalability, consistency, accessibility, and edge-case coverage. Use the SaaS label only when the product is actually SaaS.
+
+
+================================================================================
+SECTION 12: OUTPUT REQUIREMENTS
+================================================================================
+
+12.1 FOR NEW DESIGNS
+- Complete, self-contained HTML file.
+- Tailwind CSS via CDN.
+- Inter font family.
+- Shadcn/ui visual patterns.
+- Lucide icons.
+- Realistic sample data driven by JavaScript.
+- Full interactivity (vanilla JavaScript).
+- All mandatory states.
+- Responsive behavior.
+- No decorative noise.
+
+12.2 FOR AUDITS
+- Structured audit report.
+- Executive summary.
+- Critical / Major / Minor issues.
+- Missing features.
+- Missing states.
+- Rule violations by section.
+- Prioritized recommendations.
+- Positive findings.
+
+For each issue, include:
+- WHAT: Description.
+- WHERE: Screen/component/region.
+- WHY IT MATTERS: Impact.
+- RULE VIOLATED: Skills file reference.
+- FIX: Specific, actionable recommendation.
+
+
+================================================================================
+END OF SKILLS FILE
+================================================================================

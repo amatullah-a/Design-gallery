@@ -1,27 +1,4 @@
-<!doctype html>
-<html lang="en"><head><meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Component Specific Visual Audit Prompt Updated V3.1 · Prompt Library</title>
-<style>
-:root { color-scheme: light; font-family: Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif; color:#202333; background:#f6f7fb; }
-* { box-sizing:border-box; } body { margin:0; }
-header { background:#fff; border-bottom:1px solid #e8eaf1; }
-.wrap { width:min(900px,calc(100% - 32px)); margin:0 auto; }
-.head { padding:22px 0 20px; }
-a { color:#5149c8; } .back { text-decoration:none; font-size:.85rem; font-weight:650; }
-h1 { margin:16px 0 6px; font-size:clamp(1.5rem,4vw,2.15rem); letter-spacing:-.035em; overflow-wrap:anywhere; }
-.subtitle { margin:0; color:#777b8d; font-size:.85rem; }
-main { padding:24px 0 44px; }
-.content { background:#fff; border:1px solid #e5e7ef; border-radius:14px; padding:clamp(16px,3vw,28px); box-shadow:0 5px 18px #20233308; }
-pre { margin:0; white-space:pre-wrap; overflow-wrap:anywhere; font: .9rem/1.75 ui-monospace,SFMono-Regular,Consolas,"Liberation Mono",monospace; color:#303447; }
-.actions { display:flex; flex-wrap:wrap; gap:10px; margin-top:18px; }
-.action { display:inline-flex; align-items:center; padding:9px 12px; border-radius:8px; background:#5b52d6; color:#fff; text-decoration:none; font-size:.82rem; font-weight:650; }
-.action.secondary { background:#eeedff; color:#5149c8; }
-footer { padding:0 0 24px; color:#9397a6; text-align:center; font-size:.78rem; }
-</style></head><body>
-<header><div class="wrap head"><a class="back" href="../prompts.html">← Back to Prompt Library</a>
-<h1>Component Specific Visual Audit Prompt Updated V3.1</h1><p class="subtitle">Component_Specific_Visual_Audit_Prompt_Updated_v3.1.txt</p></div></header>
-<main class="wrap"><article class="content"><pre>COMPONENT-SPECIFIC VISUAL AUDIT PROMPT
+COMPONENT-SPECIFIC VISUAL AUDIT PROMPT
 Version 3.1 — Manual Visual Inspection, Evidence-Led Findings, and Structured Reporting
 
 1. PURPOSE AND DOCUMENT RELATIONSHIP
@@ -126,14 +103,14 @@ Severity must reflect visible presentation impact, not assumptions about technic
 6. EXACT-LOCATION REQUIREMENT
 
 Every finding must state the most precise location supported by the evidence:
-Screen/View &gt; page section or panel &gt; component &gt; exact position, row, column, or label where applicable.
+Screen/View > page section or panel > component > exact position, row, column, or label where applicable.
 
 Examples:
-- Students &gt; table toolbar &gt; search field &gt; placeholder text at the left side of the field.
-- Employers &gt; results table &gt; Actions column &gt; icon-only control in each row.
-- Dashboard &gt; monthly chart &gt; horizontal axis &gt; labels beneath the bars.
-- Profile settings &gt; security panel &gt; password field &gt; helper text beneath the field.
-- Modal &gt; footer &gt; primary and secondary buttons &gt; right-aligned action group.
+- Students > table toolbar > search field > placeholder text at the left side of the field.
+- Employers > results table > Actions column > icon-only control in each row.
+- Dashboard > monthly chart > horizontal axis > labels beneath the bars.
+- Profile settings > security panel > password field > helper text beneath the field.
+- Modal > footer > primary and secondary buttons > right-aligned action group.
 
 Do not use vague locations such as “on the page,” “in the table,” or “in the dashboard” when more precise detail is visible. Never invent a row, column, label, or location that cannot be seen.
 
@@ -305,82 +282,5 @@ Separate findings into:
 For responsive review, record only supplied or actually inspected viewports. Do not claim full responsiveness if the evidence does not cover the relevant sizes. Avoid treating personal design preferences as universal rules.
 
 LABEL VALIDATION
-**Audit Prompt — Label &amp; Message Validation**
+**Audit Prompt — Label & Message Validation**
 - Validate all on-screen labels, error messages, alerts, and validation feedback for grammatical correctness, clarity, contextual accuracy, professional wording, and consistency with the associated component or action. Provide corrected wording for every identified issue.
-</pre>
-<div class="actions"><a class="action secondary" href="../prompts.html">Back to Prompt Library</a>
-<a class="action" href="https://github.com/amatullah-a/Design-gallery/blob/main/designs/Prompt%20files/Component_Specific_Visual_Audit_Prompt_Updated_v3.1.txt" target="_blank" rel="noopener">View source file ↗</a></div>
-</article></main><footer class="wrap">Design Gallery · Prompt Library</footer>
-
-<style id="gallery-password-gate-style">
-#gallery-password-overlay { position:fixed; inset:0; z-index:2147483647; display:flex; align-items:center; justify-content:center; padding:24px; background:rgba(245,246,251,.98); backdrop-filter:blur(10px); font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif; color:#202333; }
-#gallery-password-overlay[hidden] { display:none !important; }
-#gallery-password-overlay .gate-card { width:min(100%,410px); padding:30px; border:1px solid #e4e6ef; border-radius:20px; background:#fff; box-shadow:0 20px 70px #2023331c; }
-#gallery-password-overlay .gate-mark { display:grid; place-items:center; width:46px; height:46px; margin-bottom:18px; border-radius:14px; background:#eeedff; color:#5b52d6; font-size:22px; }
-#gallery-password-overlay h1 { margin:0 0 8px; font-size:1.5rem; letter-spacing:-.03em; }
-#gallery-password-overlay p { margin:0 0 20px; color:#73778a; font-size:.92rem; line-height:1.55; }
-#gallery-password-overlay label { display:block; margin-bottom:7px; font-size:.8rem; font-weight:700; }
-#gallery-password-input { width:100%; padding:12px 13px; border:1px solid #dfe2eb; border-radius:10px; font:inherit; outline:none; }
-#gallery-password-input:focus { border-color:#7770ef; box-shadow:0 0 0 3px #7770ef20; }
-#gallery-password-submit { width:100%; margin-top:12px; padding:12px; border:0; border-radius:10px; background:#5b52d6; color:#fff; font:inherit; font-weight:700; cursor:pointer; }
-#gallery-password-error { min-height:1.3em; margin-top:10px !important; color:#b42318 !important; font-size:.82rem !important; }
-#gallery-lock-button { position:fixed; right:14px; bottom:14px; z-index:2147483000; padding:8px 11px; border:1px solid #e0e2eb; border-radius:999px; background:#fff; color:#5149c8; font:600 12px/1.2 Inter,ui-sans-serif,system-ui,sans-serif; box-shadow:0 4px 15px #20233314; cursor:pointer; }
-</style>
-<div id="gallery-password-overlay" role="dialog" aria-modal="true" aria-labelledby="gallery-password-title">
-  <form class="gate-card" id="gallery-password-form">
-    <div class="gate-mark" aria-hidden="true">⌑</div>
-    <h1 id="gallery-password-title">Design Gallery</h1>
-    <p>Enter the gallery password to continue.</p>
-    <label for="gallery-password-input">Password</label>
-    <input id="gallery-password-input" type="password" autocomplete="current-password" required autofocus>
-    <button id="gallery-password-submit" type="submit">Unlock gallery</button>
-    <p id="gallery-password-error" role="status" aria-live="polite"></p>
-  </form>
-</div>
-<button id="gallery-lock-button" type="button" hidden>Lock gallery</button>
-<script id="gallery-password-gate-script">
-(function () {
-  const expectedHash = "ef797c8118f02dfb649607dd5d3f8c7623048c9c063d532cc95c5ed7a898a64f";
-  const storageKey = "designGalleryUnlocked_ef797c8118f02dfb";
-  const overlay = document.getElementById("gallery-password-overlay");
-  const form = document.getElementById("gallery-password-form");
-  const input = document.getElementById("gallery-password-input");
-  const error = document.getElementById("gallery-password-error");
-  const lockButton = document.getElementById("gallery-lock-button");
-  function isUnlocked() { try { return sessionStorage.getItem(storageKey) === "yes"; } catch (_) { return false; } }
-  function showUnlocked(unlocked) {
-    overlay.hidden = unlocked;
-    document.documentElement.style.overflow = unlocked ? "" : "hidden";
-    lockButton.hidden = !unlocked;
-  }
-  async function digest(value) {
-    const bytes = new TextEncoder().encode(value);
-    const hash = await crypto.subtle.digest("SHA-256", bytes);
-    return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, "0")).join("");
-  }
-  showUnlocked(isUnlocked());
-  form.addEventListener("submit", async function (event) {
-    event.preventDefault();
-    error.textContent = "";
-    const submit = document.getElementById("gallery-password-submit");
-    submit.disabled = true;
-    try {
-      if (await digest(input.value) === expectedHash) {
-        try { sessionStorage.setItem(storageKey, "yes"); } catch (_) {}
-        showUnlocked(true);
-      } else {
-        error.textContent = "That password doesn't match. Try again.";
-        input.select();
-      }
-    } catch (_) { error.textContent = "Password check failed in this browser."; }
-    finally { submit.disabled = false; }
-  });
-  lockButton.addEventListener("click", function () {
-    try { sessionStorage.removeItem(storageKey); } catch (_) {}
-    showUnlocked(false);
-    input.value = "";
-    input.focus();
-  });
-})();
-</script>
-</body></html>

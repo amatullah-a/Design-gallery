@@ -1,0 +1,132 @@
+SKILLS.SH SKILLS REFERENCE
+www.skills.sh
+
+REFERENCE GUIDE: Use the following skills from the skills.sh registry as reference and guidance while designing, developing, and generating code for web applications, SaaS platforms, and management systems. Refer to these skills to ensure high-quality, production-ready outputs.
+
+[SECTION: STRATEGY SKILLS]
+content-strategy
+https://www.skills.sh/openclaudia/openclaudia-skills/content-strategy
+
+site-architecture
+https://www.skills.sh/borghei/claude-skills/site-architecture
+
+brand-guidelines
+https://www.skills.sh/kenneth-liao/ai-launchpad-marketplace/brand-guidelines
+
+
+[SECTION: DESIGN & WIREFRAMING SKILLS]
+claude-design
+https://skills.sh/jiji262/claude-design-skill/claude-design
+
+ui-ux-pro-max
+https://www.skills.sh/nextlevelbuilder/ui-ux-pro-max-skill/ui-ux-pro-max
+
+ux-design
+https://www.skills.sh/whawkinsiv/solo-founder-superpowers/ux-design
+
+huashu-design
+https://www.skills.sh/alchaincyf/huashu-design
+
+minimalist-ui
+https://www.skills.sh/leonxlnx/taste-skill/minimalist-ui
+
+design-taste-frontend-v1
+https://www.skills.sh/leonxlnx/taste-skill/design-taste-frontend-v1
+
+ui-radar
+https://www.skills.sh/site/uizze.com/ui-radar
+
+canvas-design
+https://www.skills.sh/hainamchung/agent-assistant/canvas-design
+
+design
+https://www.skills.sh/nextlevelbuilder/ui-ux-pro-max-skill/ckm:design
+
+ui-styling
+https://www.skills.sh/jackspace/claudeskillz/ui-styling
+
+baseline-ui
+https://www.skills.sh/ibelick/ui-skills/baseline-ui
+
+
+[SECTION: FRONTEND & WEB DEVELOPMENT SKILLS]
+web-artifacts-builder
+https://officialskills.sh/anthropics/skills/web-artifacts-builder
+
+frontend-design
+https://skills.sh/anthropics/skills/frontend-design
+
+web-development
+https://www.skills.sh/tencentcloudbase/awesome-cloudbase-examples/web-development
+
+tailwind
+https://skills.sh/hairyf/skills/tailwindcss
+
+tailwind-design-system
+https://www.skills.sh/wshobson/agents/tailwind-design-system
+
+pick-ui-library
+https://raw.githubusercontent.com/emilkowalski/skills/main/skills/pick-ui-library/SKILL.md
+
+shadcn-ui
+https://www.skills.sh/nextlevelbuilder/ui-ux-pro-max-skill/shadcn-ui
+
+
+[SECTION: AUTHENTICATION, SECURITY & DATA HANDLING]
+auth-implementation-patterns
+https://www.skills.sh/smithery/ai/auth-implementation-patterns
+
+security-expert
+https://skills.sh/shipshitdev/library/security-expert
+
+databricks-data-handling
+https://www.skills.sh/jeremylongshore/claude-code-plugins-plus-skills/databricks-data-handling
+
+stream-processing
+https://www.skills.sh/alphaonedev/openclaw-graph/stream-processing
+
+moai-formats-data
+https://www.skills.sh/modu-ai/moai-rank/moai-formats-data
+
+gdpr-data-handling
+https://www.skills.sh/wshobson/agents/gdpr-data-handling
+
+
+[SECTION: MANAGEMENT, WORKFLOW & BEST PRACTICES]
+vercel-composition-patterns
+https://skills.sh/vercel-labs/agent-skills/vercel-composition-patterns
+
+agent-browser
+https://skills.sh/vercel-labs/agent-browser/agent-browser
+
+web-quality-audit
+https://www.skills.sh/tech-leads-club/agent-skills/web-quality-audit
+
+playwright-best-practices
+https://www.skills.sh/midudev/autoskills/playwright-best-practices
+
+nestjs-best-practices
+https://www.skills.sh/midudev/autoskills/nestjs-best-practices
+
+nodejs-best-practices
+https://www.skills.sh/midudev/autoskills/nodejs-best-practices
+
+supabase-postgres-best-practices
+https://www.skills.sh/midudev/autoskills/supabase-postgres-best-practices
+
+stripe-best-practices
+https://www.skills.sh/midudev/autoskills/stripe-best-practices
+
+skill-best-practices
+https://www.skills.sh/pedronauck/skills/skill-best-practices
+
+
+[SECTION: ADDITIONAL TOOLS]
+vercel-react-native-skills
+https://skills.sh/vercel-labs/agent-skills/vercel-react-native-skills
+
+
+INSTRUCTIONS FOR USE:
+1. Refer to DESIGN & WIREFRAMING skills for UI/UX guidance and STRATEGY skills for architecture decisions
+2. Apply BEST PRACTICES and WEB QUALITY AUDIT skills to validate and review final output
+3. All filters, search inputs, dropdowns, action buttons, bulk actions, and icon actions must be fully interactive and functional. Search and dropdown filters must show a clear (×) button when active.

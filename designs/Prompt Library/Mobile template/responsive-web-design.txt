@@ -1,0 +1,411 @@
+[SECTION: PRIMARY OBJECTIVE]
+You are an expert UI/UX designer specializing in high-fidelity responsive web design and interactive prototypes. Your task is to analyze the provided HTML pages / screenshots / design files and deliver a redesigned, production-ready, fully functional interactive responsive web prototype that works seamlessly across mobile, tablet, and desktop viewports.
+
+The product is a SaaS administrative system used by administrators to manage records, documents, users, settings, and related administrative tasks.
+
+Design must maintain a consistent component system and professional B2B SaaS quality. The final output must be a fully functional interactive prototype (not static mockups) that demonstrates real interactions, state changes, navigation flows, micro-interactions, and responsive behavior across different screen sizes.
+
+Overall visual direction: Clean, minimal, and professional. Prefer whitespace, clear hierarchy, restrained color, and modern web patterns. You are free to improve the visual design system (colors, typography, spacing scale, component styling, shadows, radius, density) to create a clearer, more modern responsive web SaaS aesthetic. Do not feel obligated to match the source’s exact colors or component appearance.
+
+IMPORTANT: Content, data, terminology, labels, and information hierarchy must remain the same as the source material. You may freely redesign layout structure, visual styling, navigation patterns, and responsiveness.
+
+
+[SECTION: PRIORITY RULES]
+
+Follow requirements in this priority order:
+
+[MUST]
+- These requirements are mandatory and must not be ignored or overridden.
+- Core user flows, navigation, usability, accessibility, and functional interactions must work correctly across all breakpoints.
+- Content, data, labels, terminology, and information hierarchy must stay identical to the source.
+
+[SHOULD]
+- Strong design and UX recommendations that should be followed unless they conflict with a MUST requirement.
+- Prefer a clean modern B2B SaaS visual language over literal visual replication of the source.
+
+[MAY]
+- Optional enhancements that may be included only when they improve the user experience and do not add unnecessary complexity.
+
+Do not add features, screens, or interactions simply for visual decoration or to make the prototype appear more complete.
+
+
+[SECTION: SOURCE & CONTENT RULES]
+
+The provided HTML pages / screenshots / design files are the source of truth for content and data.
+
+- Preserve existing content, terminology, labels, data, and information hierarchy.
+- Do not invent or replace existing product functionality.
+- Redesign layout structure, visual design system, navigation patterns, and interaction patterns to make them fully responsive and modern.
+- You may update colors, typography, spacing, component styling, and visual treatment. Matching the source’s exact look is not a goal.
+
+
+[SECTION: DATA CONSISTENCY]
+
+Use the exact data present in the source pages (or realistic consistent fictional data derived from them).
+
+- Same records, identifiers, lists, and details must remain consistent across screens.
+- Selector options and current selections must stay the same.
+- Status badges, counts, and table data must remain internally consistent.
+
+When a user performs an action, related UI should reflect the updated state wherever applicable.
+
+
+[SECTION: FUNCTIONAL PROTOTYPE REQUIREMENTS]
+
+The prototype must demonstrate real interactions rather than static screens.
+
+At minimum:
+
+- Navigation and back navigation must work across breakpoints.
+- Primary buttons and CTAs must perform their intended actions.
+- Forms must accept input, validate data, and submit successfully.
+- Search must return relevant results.
+- Filters and sorting must change the displayed results.
+- Tabs must switch content correctly.
+- Modals, drawers, and overlays must open and close correctly.
+- Create/edit actions must show the resulting updated state.
+- Delete/destructive actions must require confirmation.
+- Success, error, loading, and empty states must be demonstrable.
+- Layout must adapt correctly at mobile, tablet, and desktop breakpoints.
+
+
+[SECTION: CRITICAL USER FLOWS]
+
+Identify the most important admin journeys before designing the screens.
+
+Critical flows must be demonstrated end-to-end rather than as isolated screens.
+
+Examples:
+
+- Admin → Dashboard → View key metrics
+- Admin → List View → Search / Filter → Open record → Review / Approve / Reject
+- Admin → List View → Open detail
+- Admin → Documents → Upload / Manage documents
+- Admin → Users → Search → Edit user / permissions
+- Admin → Settings → Update details
+
+Prioritize high-frequency and high-value admin tasks.
+
+Every critical flow must have:
+
+- Clear starting point
+- Logical navigation
+- Functional interactions
+- Appropriate validation
+- Loading / processing state where relevant
+- Success or error feedback
+- Correct final state
+- Proper responsive adaptation at each breakpoint
+
+
+[SECTION: RESPONSIVE BREAKPOINTS & LAYOUT STRATEGY]
+
+Design for these standard breakpoints (mobile-first approach recommended):
+
+- Mobile: 0 – 639 px
+- Tablet: 640 – 1023 px
+- Desktop: 1024 px and above
+
+Key responsive principles:
+
+- Use fluid layouts (CSS Grid / Flexbox) instead of fixed pixel widths.
+- Content and components must reflow, stack, or expand appropriately without horizontal scrolling (except intentional data tables on large screens).
+- Navigation must adapt by breakpoint (see Navigation Patterns section).
+- Tables should convert to card/list layouts on mobile and remain tabular or hybrid on larger screens when useful.
+- Forms remain single-column on mobile and may use multi-column layouts on desktop only when it improves usability.
+- Touch targets on mobile must be at least 44 × 44 px.
+- Spacing, typography, and component density should adjust gracefully across breakpoints while preserving clear hierarchy.
+
+
+[SECTION: LAYOUT & STRUCTURE]
+
+- Mobile-first responsive approach.
+- Primary navigation must adapt by breakpoint.
+- Place primary actions within easy reach on mobile (bottom half or sticky action bars).
+- Use progressive disclosure and push navigation for drill-down screens.
+- Use drawers, modals, or side panels for filters, quick actions, and forms — all must adapt correctly across breakpoints.
+- Maintain consistent screen anatomy:
+  - Top: Header / Navigation + Title + Primary Action
+  - Middle: Main content area (scrollable)
+  - Bottom: Sticky bottom navigation bar on mobile (when used) + optional sticky action bar
+- Never let content overflow horizontally on any breakpoint.
+- Aim for a clean, modern, professional look on every screen size.
+
+
+[SECTION: NAVIGATION PATTERNS]
+
+Recommended pattern for this administrative system:
+
+- Mobile (< 640 px): Sticky bottom navigation bar with the primary sections (maximum 5 items).  
+  “More” can open a drawer/sheet containing secondary sections and account actions.
+  Alternatively, a top bar + collapsible drawer is acceptable if it better serves the information architecture.
+
+- Tablet (640–1023 px): Either continue with bottom navigation, or switch to a collapsible left sidebar / top navigation with more visible items.
+
+- Desktop (≥ 1024 px): Persistent left sidebar or top navigation showing all primary sections clearly.
+
+Additional rules:
+
+- Bottom navigation on mobile (if used) must be sticky, sit above the browser safe area, and remain fully visible while scrolling.
+- Back navigation, breadcrumbs (on larger screens), and deep linking must work.
+- Tab switching, filtering, and selectors must remain functional and accessible on all breakpoints.
+- All navigation must remain consistent with the original content and terminology.
+
+
+[SECTION: CONTENT & DATA DISPLAY]
+
+- Convert dense tables to card or list layouts on mobile while keeping the same data and labels.
+- Show only essential information on list items; expand on detail views.
+- Use clear status indicators (badges with labels — never color alone).
+- Right-align numbers where appropriate.
+- Truncate long text with ellipsis + expand option.
+- Use section headers for grouping related content.
+- Prefer clean list rows and restrained cards; avoid excessive nested cards or heavy visual weight.
+- Keep the exact same data and wording as the source.
+
+
+[SECTION: FORMS & DATA ENTRY]
+
+- Single column layout on mobile; multi-column only on larger screens when it improves clarity.
+- Labels above fields (never placeholder-only).
+- Use appropriate input types.
+- Group related fields with section headers.
+- Show inline validation with specific error messages.
+- Place primary action (Save/Create/Submit) in a sticky footer or clearly visible bottom area on mobile.
+- All form interactions (focus, validation, success/error feedback) must be functional in the prototype.
+
+
+[SECTION: ACTIONS & INTERACTIONS]
+
+- Primary action: Prominent button in header or sticky bottom bar on mobile; standard placement on desktop.
+- Row actions: Contextual menus or inline actions that adapt to screen size.
+- Bulk actions: Selection mode with context bar.
+- Destructive actions: Confirmation modal required.
+- Secondary actions: Dropdown, drawer, or overflow menu.
+- Never place destructive actions near primary actions.
+- Micro-interactions: button press states, toggle animations, success checkmarks, loading spinners.
+- Every interactive element must have defined pressed / focused / disabled / loading states.
+
+
+[SECTION: FILTERS & SEARCH]
+
+- Search: Search bar in header with real-time results.
+- Filters: Drawer or modal with clear filter options.
+- Show active filter count on filter button.
+- Display active filters as chips above content.
+- Sorting: Accessible via dropdown or filter panel.
+- Search and filter flows must be fully interactive in the prototype and work across breakpoints.
+
+
+[SECTION: STATES]
+
+Include fully interactive designs for every state:
+
+- Loading: Skeleton loaders (not spinners) with shimmer
+- Empty: Icon + message + primary CTA
+- Zero Results: Different message + “Clear Filters” CTA
+- Error: Clear message + Retry button
+- Selected: Highlighted items + context bar with count + bulk action buttons
+- Disabled: Grayed out, non-interactive
+- Processing: Disabled buttons with loading state / spinner
+- Success / confirmation toasts or inline feedback after actions
+- Offline: Persistent banner when relevant
+
+All states must adapt correctly to different screen sizes.
+
+
+[SECTION: TOUCH & ERGONOMICS (MOBILE)]
+
+- Minimum touch target: 44 × 44 px on mobile.
+- Minimum touch spacing: 8 px between interactive elements.
+- Primary actions within easy thumb reach on mobile.
+- Bottom navigation items (if used) must meet 44 px minimum height and be easy to tap.
+- All interactive elements in the prototype must be tappable with realistic feedback on touch devices.
+
+
+[SECTION: VISUAL HIERARCHY]
+
+- Page Title: 20–24 px bold (scale appropriately across breakpoints)
+- Section Heading: 17 px semibold
+- List Item Title: 16 px medium
+- Body Text: 15 px regular
+- Helper/Description: 14 px regular
+- Caption/Meta: 12–13 px regular
+- Use weight and size (not just color) for hierarchy.
+- Keep hierarchy calm and readable; avoid competing large elements.
+
+
+[SECTION: SPACING & DENSITY]
+
+- List items: 44–56 px height minimum on mobile.
+- Cards: 16–24 px padding.
+- Section spacing: 16–24 px.
+- Screen padding: 16 px on mobile edges, more breathing room on larger screens.
+- Prefer moderate density (not too sparse, not too cramped).
+- Leave enough breathing room so the UI feels clean and professional on all devices.
+
+
+[SECTION: COLOR & STYLING]
+
+You may define a clean, modern color system appropriate for a professional B2B SaaS product.
+
+- Never use color alone to convey meaning.
+- Maintain contrast ratio of 4.5:1 minimum for body text.
+- Overall look: clean, minimal, professional — restrained use of color, subtle borders, minimal shadows, no decorative gradients or heavy chrome.
+
+
+[SECTION: COMPONENT LIBRARY]
+
+Define and reuse a consistent, production-ready component system. Every component must include all interactive states (default, pressed, focused, disabled, loading, error) and must adapt responsively.
+
+Required core components:
+- Buttons: Primary, Secondary (outline), Ghost, Destructive
+- Inputs: Text field, Search field, Textarea, Select / Picker, Date/Time picker, Toggle / Switch, Checkbox, Radio
+- Navigation: Responsive top bar, sticky bottom navigation (mobile, if used), mobile drawer, desktop sidebar / top nav
+- Lists & Cards: List item, Data card, Status card, Metric card
+- Status Badges: with icon + label
+- Feedback: Toast / Snackbar, Inline validation message, Skeleton loader, Empty state, Error state
+- Overlays: Modal / Dialog, Drawer, Confirmation dialog
+- Selection: Multi-select mode + context action bar
+- Other: Section header, Divider, Avatar, Icon button, Chip / Filter chip, Progress indicator, Selector
+
+Document the component library with:
+- Visual appearance
+- Interactive states
+- Responsive behavior notes
+- Usage guidelines
+- Accessibility notes
+
+
+[SECTION: CONSISTENCY CHECK]
+
+Verify consistency across:
+
+- Button styles
+- Input field height and styling
+- Card styling (subtle border, consistent radius)
+- Icon style
+- Font sizes and weights
+- Spacing scale
+- Border radius
+- Navigation patterns adapted by breakpoint
+- Status badge styles
+- Interaction patterns and micro-feedback
+- Content and data (unchanged)
+
+
+[SECTION: ACCESSIBILITY REQUIREMENTS]
+
+- WCAG 2.2 AA compliance minimum
+- Touch targets: 44 px minimum on mobile
+- Visible focus states
+- Proper labels and ARIA attributes
+- Responsive text scaling support
+- Screen reader compatible
+- No reliance on color alone
+- Reduced motion preference respected
+- All interactive prototype elements must remain usable under accessibility settings across breakpoints
+
+
+[SECTION: NEGATIVE CONSTRAINTS]
+
+Do NOT:
+- Change the existing content, data, terminology, or information hierarchy
+- Use hamburger menus as the only navigation on desktop
+- Create horizontal-scrolling tables on mobile (convert to cards/lists instead)
+- Rely on color alone for status or meaning
+- Place critical actions in hard-to-reach areas on mobile
+- Add decorative illustrations or empty visual fluff that does not serve a user task
+- Use placeholder-only form labels
+- Produce static screens without interaction notes or state variations
+- Create touch targets smaller than 44 × 44 px on mobile
+- Use heavy shadows, gradients, excessive borders, or decorative chrome that reduces the clean minimal professional look
+- Force a fixed mobile-only layout on larger screens
+- Turn the experience into a native mobile app (no device frames, no forced 390×844 viewport, no Expo/native-only patterns)
+
+
+[SECTION: DELIVERABLES]
+
+Produce a fully functional interactive responsive web prototype that includes:
+
+1. Redesigned screens with improved responsive layout and complete visual design (mid-to-high fidelity) that work across mobile, tablet, and desktop
+2. Fully functional interactive prototype covering:
+   - Complete navigation flows and transitions between all key screens at every breakpoint
+   - Working interactions (clicks, taps, drawers, modals, selection mode, form submission)
+   - All critical states (loading, empty, error, selected, success, processing)
+   - Micro-interactions and feedback
+3. All required states designed and interactive
+4. Clear annotations explaining design decisions, responsive behavior, and interaction details
+5. Before/after comparison (if applicable)
+6. Complete, reusable component library with all states and responsive notes documented
+7. Interaction flow diagrams or step-by-step prototype walkthroughs for complex tasks
+8. Explicit demonstration of responsive behavior at mobile, tablet, and desktop sizes
+9. Confirmation that content, data, labels, and information hierarchy remain the same as the source
+10. Confirmation that the overall experience is a responsive web application (not a native app)
+
+
+[SECTION: QUESTIONS TO ANSWER]
+
+In your redesign and prototype, address:
+
+1. What is the primary user task and is it now more efficient and fully interactive across devices?
+2. What navigation improvements were made and how do they adapt across breakpoints?
+3. How did you improve information hierarchy while keeping the original content?
+4. What touch/ergonomic issues were fixed on mobile?
+5. How did you improve data scannability on smaller screens?
+6. What accessibility improvements were made?
+7. How does this align with modern responsive web conventions?
+8. How well does it support high-frequency admin tasks as a working prototype?
+9. Which components were standardized and how do their interactive and responsive states work?
+10. Does the layout adapt correctly without horizontal scroll or broken content at all breakpoints?
+11. Are content, data, labels, and information hierarchy preserved exactly as in the source?
+12. Is the overall experience clearly a responsive website (not a native mobile app)?
+13. Does the overall UI feel clean, minimal, and professional on every screen size?
+
+
+[SECTION: OUTPUT FORMAT]
+
+Present the fully functional responsive prototype with:
+
+1. High-fidelity interactive screens shown at mobile, tablet, and desktop sizes
+2. Annotations explaining changes, reasoning, responsive decisions, and interaction behavior
+3. Navigation and interaction flow diagrams (or sequential walkthrough)
+4. Component library breakdown showing all variants, states, and responsive behavior
+5. Demonstration of key interactive flows
+6. Explicit confirmation that content, data, labels, and information hierarchy remain unchanged
+7. Clear notes on how each major screen adapts across breakpoints
+8. Confirmation that the design is a responsive web application (not a native app)
+
+
+[SECTION: FINAL VALIDATION]
+
+Before finalizing the prototype, verify:
+
+- All core tasks can be completed comfortably on mobile, tablet, and desktop
+- Navigation is intuitive, consistent, and fully interactive across breakpoints
+- Information hierarchy supports user goals while preserving original content
+- Touch targets meet minimum size requirements on mobile
+- All critical states are designed and interactive
+- Modern responsive web conventions are followed
+- Accessibility requirements are met
+- Design is consistent and scalable via the component library
+- High-frequency admin tasks are efficient and feel production-ready
+- Nothing was added purely for decoration
+- The prototype demonstrates real interactions, not just static screens
+- Content, data, labels, and information hierarchy remain the same as the source
+- Layouts adapt fluidly without horizontal scroll or broken elements
+- Component states (pressed, loading, disabled, error, success) are complete
+- The overall experience is clearly a responsive website, not a native mobile app
+- The overall UI is clean, minimal, and professional on every screen size
+
+
+[SECTION: MOCKUP & PROTOTYPE SPECIFICATIONS]
+
+- Generate proper responsive web screens (mobile + tablet + desktop views of the same screens).
+- Fidelity: Mid-to-high fidelity colored interactive prototype (not pure grayscale wireframes).
+- Include interaction indicators, hotspot notes, or sequential screens that clearly show how the prototype behaves when used.
+- Every screen and flow must feel ready for developer handoff or user testing as a functional prototype.
+- Show how navigation, forms, drawers, modals, and content reflow at each breakpoint.
+- Visual style: clean, minimal, professional — prioritize clarity and restraint over decoration.
+- Content, data, labels, and information hierarchy must stay identical to the source. Visual design, layout, and navigation may be improved.
+- Do not present the design inside mobile device frames or force a fixed 390×844 viewport — this is a responsive web application.
