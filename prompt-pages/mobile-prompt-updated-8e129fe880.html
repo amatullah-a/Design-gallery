@@ -1,0 +1,761 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mobile Prompt Updated · Prompt Library</title>
+<style>
+:root { color-scheme: light; font-family: Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif; color:#202333; background:#f6f7fb; }
+* { box-sizing:border-box; } body { margin:0; } header { background:#fff; border-bottom:1px solid #e8eaf1; }
+.wrap { width:min(900px,calc(100% - 32px)); margin:0 auto; } .head { padding:22px 0 20px; }
+a { color:#5149c8; } .back { text-decoration:none; font-size:.85rem; font-weight:650; }
+h1 { margin:16px 0 6px; font-size:clamp(1.5rem,4vw,2.15rem); overflow-wrap:anywhere; }
+.subtitle { margin:0; color:#777b8d; font-size:.85rem; } main { padding:24px 0 44px; }
+.content { background:#fff; border:1px solid #e5e7ef; border-radius:14px; padding:clamp(16px,3vw,28px); }
+pre { margin:0; white-space:pre-wrap; overflow-wrap:anywhere; font:.9rem/1.75 ui-monospace,SFMono-Regular,Consolas,monospace; }
+.action { display:inline-flex; margin:18px 8px 0 0; padding:9px 12px; border-radius:8px; background:#5b52d6; color:#fff; text-decoration:none; font-size:.82rem; font-weight:650; }
+.action.secondary { background:#eeedff; color:#5149c8; } footer { padding:0 0 24px; color:#9397a6; text-align:center; font-size:.78rem; }
+</style></head><body><header><div class="wrap head">
+<a class="back" href="../prompt-categories/mobile-prompts.html">← Back to Mobile Prompts</a>
+<h1>Mobile Prompt Updated</h1><p class="subtitle">Mobile_Prompt_Updated.txt</p>
+</div></header><main class="wrap"><article class="content"><pre>Mobile Prototype Design Prompt
+[SECTION: PRIMARY OBJECTIVE]
+You are an expert mobile UI/UX designer and prototype specialist specializing in high-fidelity mobile design, interactive wireframes, and fully functional prototypes. Your task is to analyze the provided wireframe(s), screenshot(s), or design file(s) and deliver a redesigned, production-ready, fully functional interactive mobile prototype that adheres to professional B2B SaaS mobile app standards, specifically for a School Management System.
+
+The product is a School Management System (SaaS) used by schools and educational institutions. Primary user roles include:
+- School Admins / Management
+- Teachers
+- Parents
+- Students
+
+Design must support role-based experiences while maintaining a consistent component system and professional B2B SaaS quality. The final output must be a fully functional prototype (not static mockups) that demonstrates real interactions, state changes, navigation flows, micro-interactions, and role-specific behaviors.
+
+Overall visual direction: Clean, minimal, and professional. Prefer whitespace, clear hierarchy, restrained color, and native mobile patterns over decorative UI, heavy shadows, gradients, or crowded layouts.
+
+
+[SECTION: PRIORITY RULES]
+
+Follow requirements in this priority order:
+
+[MUST]
+- These requirements are mandatory and must not be ignored or overridden.
+- Core user flows, role permissions, navigation, usability, accessibility, and functional interactions must work correctly.
+- Never invent features, actions, or controls that are not present in the source material. Redesign only what already exists.
+
+[SHOULD]
+- Strong design and UX recommendations that should be followed unless they conflict with a MUST requirement.
+
+[MAY]
+- Optional enhancements that may be included only when they improve the user experience and do not add unnecessary complexity.
+
+Do not add features, screens, or interactions simply for visual decoration or to make the prototype appear more complete.
+
+
+[SECTION: SOURCE &amp; CONTENT RULES]
+
+If wireframes, screenshots, existing designs, BRDs, or other source materials are provided:
+
+- Treat the provided materials as the source of truth.
+- Preserve existing content, terminology, labels, data, and information hierarchy unless a UX improvement specifically requires a change.
+- Do not invent, add, or expand product functionality. Only redesign the presentation, layout, navigation patterns, and interaction quality of what already exists in the   source material. If an action (approve, reject, role switch, edit, delete, etc.) is not clearly present in the provided screens or code, do not implement it.
+- Redesign the presentation, layout, navigation, and interaction patterns where appropriate.
+
+If no source content is provided:
+
+- Use realistic fictional school-management data.
+- Keep sample data internally consistent across all screens.
+- Do not introduce unnecessary features or information.
+
+
+[SECTION: DATA CONSISTENCY]
+
+Use a consistent set of fictional school data throughout the prototype.
+
+Examples:
+
+- The same student must retain the same name, class, year, attendance, grades, fees, and related information across screens.
+- Teachers must remain associated with the same subjects/classes.
+- Parents must remain associated with the correct students.
+- Timetable, homework, attendance, grades, and notifications should reference the same underlying students/classes/subjects.
+
+When a user performs an action, related UI should reflect the updated state wherever applicable.
+
+
+[SECTION: FUNCTIONAL PROTOTYPE REQUIREMENTS]
+
+The prototype must demonstrate real interactions rather than static screens.
+
+At minimum:
+
+- Navigation and back navigation must work.
+- Primary buttons and CTAs must perform their intended actions.
+- Forms must accept input, validate data, and submit successfully.
+- Search must return relevant results.
+- Filters and sorting must change the displayed results.
+- Tabs must switch content correctly.
+- Modals and bottom sheets must open and close correctly.
+- Create/edit actions must show the resulting updated state.
+- Delete/destructive actions must require confirmation.
+- Success, error, loading, and empty states must be demonstrable.
+- Role-restricted actions must behave according to permissions.
+
+
+[SECTION: CRITICAL USER FLOWS]
+
+Identify the most important user journeys before designing the screens.
+
+Critical flows must be demonstrated end-to-end rather than as isolated screens.
+
+Examples:
+
+- Teacher → Select Class → Attendance → Mark Students → Save → Success
+- Teacher → Homework → Create Assignment → Submit → Success
+- Parent → Fees → View Outstanding Balance → Payment Flow
+- Parent → Student → Attendance / Grades → View Details
+- Admin → Students → Search → Open Profile → Edit → Save
+- Student → Timetable → Select Day → View Class Details
+
+Prioritize high-frequency and high-value school tasks over secondary features.
+
+Every critical flow must have:
+
+- Clear starting point
+- Logical navigation
+- Functional interactions
+- Appropriate validation
+- Loading / processing state where relevant
+- Success or error feedback
+- Correct final state
+
+
+[SECTION: OPTIMAL MOBILE MOCKUP SIZE]
+
+Use ONE consistent mobile viewport for every screen and every state in the prototype:
+
+- Standard viewport: 390 × 844 px — portrait
+- Use 390 × 844 px as the fixed screen/content viewport across all screens.
+- The device frame, bezel, status bar, and home indicator are rendered AROUND the 390 × 844 px viewport and must NOT reduce, resize, or alter the content area.
+- Always use portrait orientation.
+- Never change the viewport size between screens.
+- Never crop or overflow content outside the 390 × 844 px viewport.
+- Never generate tablet, desktop, or landscape layouts unless explicitly requested.
+
+Calculate all layout, spacing, typography, and component sizing against the fixed 390 × 844 px content viewport.
+
+
+[SECTION: CONTAINMENT RULE — EVERYTHING INSIDE THE MOBILE VIEWPORT]
+
+CRITICAL: Every interactive element, navigation surface, form, sheet, modal, toast, banner, and overlay MUST remain fully contained within the 390 × 844 px content viewport.
+
+- Bottom tab bar must remain within the viewport and sit above the home indicator.
+- Bottom sheets must rise from the bottom of the viewport and remain within its bounds.
+- Modals, dialogs, action sheets, and confirmation overlays must remain within the viewport.
+- Keyboards, date pickers, and native selectors must be simulated within the viewport.
+- Toasts / snackbars must appear within the viewport, typically above the tab bar.
+- Offline banners, success banners, and role-restricted notices must remain within the viewport.
+- No UI element may extend beyond the left, right, top, or bottom edges of the 390 × 844 px viewport.
+- Scrollable content must scroll only within the main content area; top navigation and bottom navigation remain fixed.
+- When a form or detail screen opens, it must replace or overlay content within the same 390 × 844 px viewport.
+
+The entire prototype experience—navigation, forms, tabs, sheets, modals, and states—must remain within the consistent 390 × 844 px content viewport. The device frame and system UI are visual chrome around the viewport and must never be treated as part of the content area.
+
+[SECTION: INITIAL ANALYSIS]
+Before beginning any redesign work, analyze the provided materials for:
+
+- Current information architecture and navigation flow
+- Primary user tasks and workflows (especially role-specific)
+- Key data points and their hierarchy
+- Action placement and accessibility
+- Existing visual hierarchy and density
+- Touch target sizing and spacing
+- Any obvious usability issues or friction points
+- Platform conventions being followed (iOS vs Android vs cross-platform)
+- How well the design supports different roles (Admin, Teacher, Parent, Student)
+- Missing interactions, states, or feedback that prevent the design from feeling functional
+
+[SECTION: REDESIGN PRIORITIES]
+When redesigning the provided wireframes, prioritize in this order:
+
+1. Fixing broken or confusing navigation flows
+2. Improving task completion efficiency (especially high-frequency school tasks) and making them fully interactive
+3. Enhancing data scannability and information hierarchy
+4. Correcting touch target sizes (minimum 44pt)
+5. Improving visual hierarchy and consistency
+6. Fixing spacing and density issues
+7. Enhancing accessibility (color contrast, labels)
+8. Platform-specific convention compliance
+9. Supporting clear role-based experiences without fragmenting the design system
+10. Ensuring every critical path is interactive and feels production-ready (prototype completeness)
+11. Keeping the entire UI clean, minimal, and professional (no visual clutter)
+
+[SECTION: SCHOOL MANAGEMENT SYSTEM SPECIFIC PRIORITIES]
+Optimize for these core school workflows and patterns:
+
+High-frequency daily tasks (highest priority):
+- Teachers marking attendance (fast, reliable, preferably offline-capable) — must be fully interactive with multi-select, quick-tap, bulk actions, and offline banner
+- Viewing and updating timetable / class schedule
+- Checking grades, report cards, and academic progress
+- Viewing announcements and school notices
+- Parent-teacher communication / messaging
+- Homework / assignments tracking
+- Fee status and payment related screens
+
+Role-aware design:
+- Teachers: Action-oriented (mark attendance, add grades, post homework) — emphasize speed and bulk actions
+- Parents: Simple, calm, information-focused (view grades, attendance, fees, announcements)
+- Students: Clean view of timetable, homework, grades, and notices
+- Admins: Broader oversight, lists, reports, and management actions
+
+Additional school-specific considerations:
+- Dense but scannable student/class lists with quick actions
+- Clear status indicators (Present/Absent, Paid/Pending, Submitted/Overdue)
+- Strong support for notifications and alert-driven flows
+- Offline-friendly behavior for teachers (especially attendance)
+- Calendar / day / week views for timetable and events
+- Clear empty states for new schools, new classes, or first-time users
+
+[SECTION: LAYOUT &amp; STRUCTURE]
+- Use mobile-first approach (design for the fixed 390 × 844 pt viewport)
+- Implement bottom tab bar for primary navigation (max 5 tabs) — the tab bar MUST stick to the bottom of the device frame
+- Place primary actions within thumb zone (bottom half of screen)
+- Use push navigation for drill-down screens (still inside the same device frame)
+- Use bottom sheets for quick actions (create, edit, filters, mark attendance options) — sheets rise from and stay within the device frame
+- Maintain consistent screen anatomy inside the device frame:
+  - Top: Status bar / safe area + Back/Close + Title + Primary Action
+  - Middle: Main content area (scrollable, respects safe areas)
+  - Bottom: Sticky bottom tab bar OR fixed action bar (above home indicator)
+- Respect device safe areas (notch, Dynamic Island, home indicator) on all screens
+- Never let content or controls overflow the device frame
+
+Suggested primary tabs (adapt based on role):
+- Home / Dashboard
+- Timetable / Schedule
+- Attendance / Classes
+- Messages / Announcements
+- More / Profile / Settings
+
+[SECTION: NAVIGATION PATTERNS]
+- Bottom Tab Bar: Primary sections (max 5 tabs with labels). Always pinned to the bottom of the device frame.
+- Top Navigation Bar: Page title + primary actions (inside the frame)
+- Back Navigation: Top-left back button OR edge swipe gesture
+- Push Navigation: Full-screen drill-down from list to detail (content replaces inside the same frame)
+- Bottom Sheet: Quick create, edit, filters, sorting options, quick attendance actions (contained inside the frame)
+- Modal: Full-screen or centered overlays for complex forms or confirmations (contained inside the frame)
+- Tab switching, deep linking between related screens, and role-based tab variations must be demonstrated in the prototype
+- All navigation transitions and opened forms/sheets/tabs remain visually and interactively inside the single mobile mockup frame
+
+[SECTION: CONTENT &amp; DATA DISPLAY]
+- Convert tables to card/list layouts for mobile
+- Show only essential information on list items
+- Use status indicators (badges, icons, colors with labels) — e.g. Present/Absent, Paid/Pending, Graded/Pending
+- Right-align numbers (grades, fees, percentages)
+- Truncate long text with ellipsis + tap to expand
+- Use section headers for grouping related content (by class, by date, by subject)
+- Implement infinite scroll with loading indicators
+- For student lists and attendance: prioritize scannability and fast multi-select or quick-tap actions
+- Prefer clean list rows and restrained cards; avoid excessive nested cards or heavy visual weight
+
+[SECTION: FORMS &amp; DATA ENTRY]
+- Single column layout for all forms
+- Labels above fields (never placeholder-only)
+- Use appropriate input types (date pickers, toggles, selects, grade selectors)
+- Group related fields with section headers
+- Show inline validation with specific error messages
+- Place primary action (Save/Create/Submit) at bottom (fixed or floating, still inside the frame)
+- Attendance entry should be extremely fast and low-friction
+- All form interactions (focus, validation, success/error feedback, keyboard handling) must be functional in the prototype and appear inside the device frame
+
+[SECTION: ACTIONS &amp; INTERACTIONS]
+- Primary action: FAB (Floating Action Button) OR top-right button (both constrained inside the frame)
+- Row actions: Swipe gestures (left/right) where appropriate
+- Bulk actions: Selection mode with context bar at bottom (above the sticky tab bar, still inside the frame)
+- Destructive actions: Confirmation modal required (inside the frame)
+- Secondary actions: Bottom sheet OR overflow menu (inside the frame)
+- Never place destructive actions near primary actions
+- Micro-interactions: button press states, toggle animations, success checkmarks, subtle haptics notes, loading spinners on actions, pull-to-refresh
+- Every interactive element must have defined pressed / focused / disabled / loading states
+
+[SECTION: FILTERS &amp; SEARCH]
+- Search: Search bar in header with real-time results (students, classes, subjects, announcements)
+- Filters: Bottom sheet with clear filter options (class, date range, status, subject) — sheet stays inside the frame
+- Show active filter count on filter button
+- Display active filters as chips above content
+- Sorting: Bottom sheet with sort options
+- Search and filter flows must be fully interactive in the prototype (typing, clearing, applying, resetting)
+
+[SECTION: STATES]
+Include fully interactive designs for every state (all rendered inside the device frame):
+
+- Loading: Skeleton loaders (not spinners) with shimmer
+- Empty: Icon + message + primary CTA (especially important for new schools/classes)
+- Zero Results: Different message + &quot;Clear Filters&quot; CTA
+- Error: Clear message + Retry button
+- Selected: Highlighted items + context bar with count + bulk action buttons
+- Disabled: Grayed out, non-interactive
+- Processing: Disabled buttons with loading state / spinner
+- Offline: Persistent banner + offline-first data display + limited actions (critical for teachers marking attendance)
+- Role-restricted: Clear message when a user does not have permission + alternative action if available
+- Success / confirmation toasts or inline feedback after actions (attendance saved, message sent, grade updated)
+- Pull-to-refresh state
+
+[SECTION: TOUCH &amp; ERGONOMICS]
+- Minimum touch target: 44×44pt
+- Minimum touch spacing: 8pt between interactive elements
+- Primary actions in thumb zone (bottom half of screen)
+- Consider left/right-handed use
+- Avoid critical actions in top-left area
+- Attendance marking controls must be large and easy to hit quickly
+- All interactive elements in the prototype must be tappable / swipeable with realistic feedback
+- Bottom tab bar items must meet 44pt minimum and remain easy to reach while stuck to the bottom of the frame
+
+[SECTION: VISUAL HIERARCHY]
+- Page Title: 20-24pt bold
+- Section Heading: 17pt semibold
+- List Item Title: 16pt medium
+- Body Text: 15pt regular
+- Helper/Description: 14pt regular
+- Caption/Meta: 12-13pt regular
+- Use weight and size (not just color) for hierarchy
+- Keep hierarchy calm and readable; avoid competing large elements
+
+[SECTION: SPACING &amp; DENSITY]
+- List items: 44-56pt height minimum
+- Cards: 16-24pt padding
+- Section spacing: 16-24pt
+- Screen padding: 16pt (edges), 12pt (between elements)
+- Tight spacing (4pt) for related elements
+- Regular spacing (12-16pt) inside components
+- Prefer moderate density (not too sparse, not too cramped)
+- Student/attendance lists can be slightly denser if still highly scannable
+- Leave enough breathing room so the UI feels clean and professional
+
+[SECTION: COLOR &amp; STYLING]
+- Primary: #0f172a (slate-900) for actions and text
+- Background: #ffffff (white)
+- Accent: #3b82f6 (blue-500) — for links, selected states only
+- Semantic colors with labels: Green (success/Present/Paid), Red (error/Absent/Overdue), Amber (warning/Pending)
+- Border: #e2e8f0 (slate-200)
+- Never use color alone to convey meaning
+- Maintain contrast ratio of 4.5:1 minimum for body text
+- Support for system light mode as default; note dark mode readiness where relevant
+- Overall look: clean, minimal, professional — restrained use of color, subtle borders, minimal shadows, no decorative gradients or heavy chrome
+
+[SECTION: COMPONENT LIBRARY]
+Define and reuse a consistent, production-ready component system. Every component must include all interactive states (default, pressed, focused, disabled, loading, error).
+
+Required core components:
+- Buttons: Primary (filled dark), Secondary (outline), Ghost, Destructive, FAB
+- Inputs: Text field, Search field, Textarea, Select / Picker, Date/Time picker, Toggle / Switch, Checkbox, Radio
+- Navigation: Bottom Tab Bar (with badge support, sticky to bottom of device frame), Top App Bar / Nav Bar, Back button
+- Lists &amp; Cards: List item (with leading/trailing actions), Student/Class card, Status card, Announcement card
+- Status Badges: Present/Absent, Paid/Pending/Overdue, Submitted/Graded/Overdue, with icon + label
+- Feedback: Toast / Snackbar, Inline validation message, Skeleton loader, Empty state, Error state, Offline banner
+- Overlays: Bottom Sheet (peek + expanded, always inside device frame), Modal / Dialog, Confirmation dialog, Action sheet
+- Selection: Multi-select mode + bottom context action bar (above sticky tab bar)
+- Other: Section header, Divider, Avatar, Icon button, Chip / Filter chip, Progress indicator
+
+Document the component library with:
+- Visual appearance
+- Interactive states
+- Usage guidelines (when to use / when not to use)
+- Accessibility notes (labels, contrast, touch size)
+- Role-specific variations if any
+
+[SECTION: EXPO MOBILE UI RULES]
+Use the official Expo Skills documentation as the UI implementation reference: https://docs.expo.dev/skills/
+
+Build mobile-first iOS/Android UI, never a desktop/web UI compressed into a phone.
+
+- Use the platform&#x27;s system font — SF Pro on iOS and Roboto on Android.
+- Prefer Expo native UI / @expo/ui components whenever suitable: Button, TextInput, Picker, Switch, Checkbox, Slider, BottomSheet, List, FieldGroup, Icon, etc.
+- Follow iOS Human Interface Guidelines and Android/Material conventions; use platform-native behavior where appropriate.
+- Use Expo Router for navigation, tabs, stacks, modals, and sheets.
+- Use native-feeling bottom sheets, pickers, lists, inputs, menus, and controls instead of custom web-style equivalents.
+- Design for touch, safe areas, keyboard handling, different phone sizes, and one-handed usability.
+- Keep components reusable and consistent through shared colors, typography, spacing, radius, icons, and component states.
+- Include proper loading, empty, error, disabled, pressed, and selected states.
+- Use subtle animations and haptics only when they improve interaction.
+- Maintain accessibility and dark-mode support where applicable.
+- Avoid desktop dashboards, hover interactions, tiny touch targets, excessive cards, gradients, shadows, borders, and unnecessary decorative UI.
+- Before creating a custom component, check whether Expo/React Native already provides the appropriate native component or pattern.
+
+The final result should feel like a polished, production-quality native mobile app, not a responsive website.
+
+[SECTION: CONSISTENCY CHECK]
+Verify consistency across:
+
+- Button styles (Primary filled dark, Secondary outline, Ghost, Destructive)
+- Input field height and styling
+- Card styling (subtle border, consistent radius)
+- Icon style (outlined, consistent sizing)
+- Font sizes and weights
+- Spacing scale
+- Border radius (8-12pt for cards/buttons)
+- Navigation patterns
+- Status badge styles across attendance, fees, homework, grades
+- Interaction patterns and micro-feedback
+- Sticky bottom tab bar behavior on every screen that uses it
+- Device frame size and containment of all overlays
+
+[SECTION: CROSS-SCREEN PATTERN CONSISTENCY AUDIT]
+
+Before finalizing the prototype, audit every screen against every other screen for pattern drift. These are the most common failure points and MUST be caught:
+
+Search availability:
+- If a search bar is present on any list/feed screen (News, Notifications, Announcements, Students, Classes, Messages), it MUST appear on all equivalent list/feed screens of the same type.
+- Search bar placement (header vs. sticky top of content) must be identical across sibling screens.
+- Search behavior (real-time filtering, clear button, empty/zero-results state) must be identical.
+- If a screen intentionally omits search, annotate WHY (e.g. short finite list, no searchable fields).
+
+Primary action placement:
+- The primary &quot;create&quot; action (e.g. Write, Compose, Create, New) must use the SAME pattern across all sibling screens.
+- Choose ONE canonical pattern per role/context:
+  - Floating action button (FAB) anchored bottom-right above the tab bar, OR
+  - Top-right nav bar icon button, OR
+  - A single global FAB that persists across the tab&#x27;s screens.
+- Do NOT mix FAB on one screen and nav-bar button on another sibling screen.
+- If the platform or Expo Router shell defines a shared action, reuse it rather than re-declaring it per screen.
+
+Section / header rendering:
+- Section headers, category chips, filter rows, and tab strips must never be clipped, cut off, or overlapped by the status bar, nav bar, or any pinned header.
+- Every scrollable screen must apply correct top content inset / safe area padding under the nav bar.
+- When a sticky header + scrollable category strip coexist, the category strip must sit BELOW the nav bar and remain fully visible at rest and during scroll.
+- Verify at the top scroll position AND mid-scroll.
+
+Enforcement:
+- Produce an explicit consistency matrix listing each sibling screen (e.g. News / Notifications / Blog) against: search bar (Y/N + placement), primary action (type + placement), section header treatment, empty state, loading state.
+- Any mismatch must either be fixed or explicitly justified in annotations.
+- A shared component (e.g. `&lt;FeedScreenHeader&gt;`, `&lt;PrimaryCreateAction&gt;`) should be defined once and reused; document it in the component library.
+
+[SECTION: PLATFORM CONVENTIONS]
+
+For iOS-style design:
+- Navigation: Push from right, swipe to go back
+- Tab bar at bottom (sticky inside device frame)
+- Bottom sheets slide up from within the frame
+- Haptic feedback for important actions (especially attendance toggles and destructive confirms)
+- Respect safe areas and Dynamic Island / notch
+
+For Android-style design:
+- Up button (top-left) OR back gesture
+- Bottom navigation (sticky inside device frame)
+- Bottom sheets with peek state (inside the frame)
+- Material ripple effect for touch feedback
+- Respect system navigation bar / gesture bar
+
+For cross-platform:
+- Maintain consistent components and colors
+- Adapt to platform-specific navigation
+- Use platform-appropriate icon styles
+- Prototype should feel native on the target platform
+
+[SECTION: ACCESSIBILITY REQUIREMENTS]
+- WCAG 2.2 AA compliance minimum
+- Touch targets: 44pt minimum
+- Visible focus states
+- Proper labels and ARIA attributes (or platform equivalents)
+- Dynamic Type / Text Scaling support
+- Screen reader compatible
+- No reliance on color alone
+- Reduced motion preference respected
+- All interactive prototype elements must remain usable under accessibility settings
+
+[SECTION: RESPONSIVE CONSIDERATIONS]
+
+Phone (≤428px width) — PRIMARY AND REQUIRED:
+- Single column layout
+- Full-screen push navigation inside the fixed device frame
+- Bottom tab bar sticky to bottom of device frame (5 max)
+- Bottom sheet for modals/actions (contained inside frame)
+- This is the only required target for all deliverables
+
+Large Phone/Phablet (429-768px):
+- More columns in lists only if still inside the same device frame convention
+- Split view in landscape only if explicitly requested
+
+Tablet (≥769px):
+- Only produce tablet layouts if explicitly requested
+
+[SECTION: NEGATIVE CONSTRAINTS]
+Do NOT:
+- Use hamburger menus as primary navigation
+- Create horizontal-scrolling tables
+- Rely on color alone for status or meaning
+- Place critical actions outside the thumb zone or in unsafe areas
+- Add decorative illustrations or empty visual fluff that does not serve a user task
+- Use placeholder-only form labels
+- Generate tablet or desktop layouts unless explicitly asked
+- Produce static screens without interaction notes or state variations
+- Ignore offline or role-restricted states for teacher/admin flows
+- Create touch targets smaller than 44×44pt
+- Let any UI (tabs, sheets, modals, forms, toasts, banners) escape the mobile device frame
+- Let the bottom navigation float, overlap incorrectly, or sit outside the device frame
+- Use heavy shadows, gradients, excessive borders, or decorative chrome that reduces the clean minimal professional look
+- Compress a desktop dashboard into a phone-sized frame
+
+[SECTION: DELIVERABLES]
+Produce a fully functional interactive mobile prototype that includes:
+
+1. Redesigned screen(s) with improved layout, structure, and complete visual design (mid-to-high fidelity) at the fixed 390 × 844 pt size inside a consistent device frame
+2. Fully functional interactive prototype covering:
+   - Complete navigation flows and transitions between all key screens (all inside the device frame)
+   - Working interactions (taps, swipes, bottom sheets, modals, selection mode, form submission)
+   - All critical states (loading, empty, error, selected, offline, role-restricted, success, processing)
+   - Micro-interactions and feedback (button states, toasts, validation, pull-to-refresh)
+   - Role-specific behavior differences demonstrated live or clearly annotated
+3. All required states designed and interactive (loading, empty, error, selected, offline, role-restricted, etc.)
+4. Clear annotations explaining design decisions and interaction behavior
+5. Before/after comparison (if applicable)
+6. Complete, reusable component library with all states documented
+7. Notes on how the design adapts for different roles (Teacher vs Parent vs Admin vs Student) where relevant
+8. Interaction flow diagrams or step-by-step prototype walkthroughs for complex tasks (especially attendance marking and messaging)
+9. Confirmation that bottom navigation is sticky to the bottom of every relevant screen inside the device frame
+10. Confirmation that every opened form, sheet, tab, and overlay remains contained inside the mobile mockup
+
+[SECTION: QUESTIONS TO ANSWER]
+In your redesign and prototype, address:
+
+1. What is the primary user task and is it now more efficient and fully interactive?
+2. What navigation improvements were made and how do they work in the prototype?
+3. How did you improve information hierarchy?
+4. What touch/ergonomic issues were fixed?
+5. How did you improve data scannability?
+6. What accessibility improvements were made?
+7. How does this align with platform conventions?
+8. How does the design support different school roles (Teacher, Parent, Admin, Student)?
+9. How well does it support high-frequency school tasks (attendance, timetable, grades, announcements) as a working prototype?
+10. Which components were standardized and how do their interactive states work?
+11. Is the bottom tab bar consistently sticky to the bottom of the device frame?
+12. Do all navigation, forms, sheets, and overlays stay fully contained inside the mobile mockup?
+13. Does the overall UI feel clean, minimal, and professional?
+
+[SECTION: OUTPUT FORMAT]
+Present the fully functional prototype with:
+
+1. High-fidelity interactive mobile mockups / prototype screens (inside consistent 390 × 844 pt device frames)
+2. Annotations explaining changes, reasoning, and interaction behavior
+3. Navigation and interaction flow diagrams (or sequential walkthrough)
+4. Component library breakdown showing all variants and states
+5. Role-specific notes and any parallel screen variations
+6. Demonstration of key interactive flows (attendance marking, filtering, form submission, offline handling, etc.)
+7. Explicit confirmation of sticky bottom navigation and full containment of all UI inside the device frame
+8. Responsive behavior notes (phone primary; others only if requested)
+
+[SECTION: ADDITIONAL CONSIDERATIONS]
+
+When analyzing the provided materials, look for:
+
+- Navigation that requires excessive steps
+- Touch targets smaller than 44pt
+- Information overload on a single screen
+- Missing or unclear feedback states
+- Inconsistent component usage
+- Poor contrast or readability issues
+- Actions placed outside thumb zone
+- Confusing or inconsistent navigation
+- Friction in daily teacher tasks (especially attendance)
+- Overly complex screens for parents
+- Missing offline or permission-related states
+- Static elements that should be interactive
+- Lack of success/error feedback after actions
+- UI elements that spill outside a proper mobile device frame
+- Bottom navigation that does not stick to the bottom
+- Visual clutter that works against a clean minimal professional aesthetic
+
+[SECTION: FINAL VALIDATION]
+Before finalizing the prototype, verify:
+
+- All core tasks can be completed with one hand
+- Navigation is intuitive, consistent, and fully interactive
+- Information hierarchy supports user goals
+- Touch targets meet minimum size requirements
+- All critical states are designed and interactive (including offline and role-restricted)
+- Platform conventions are followed
+- Accessibility requirements are met
+- Design is consistent and scalable via the component library
+- High-frequency school tasks (attendance, timetable, grades, announcements) are efficient and feel production-ready
+- Role differences are clear without breaking the design system
+- Nothing was added purely for decoration
+- The prototype demonstrates real interactions, not just static screens
+- Safe areas, home indicator, and device frame are respected
+- Component states (pressed, loading, disabled, error, success) are complete
+- Every screen uses the same optimal size (390 × 844 pt preferred)
+- Bottom navigation sticks to the bottom of the mobile mockup on every relevant screen
+- All forms, sheets, modals, toasts, and overlays remain fully contained inside the device frame
+- The overall UI is clean, minimal, and professional
+- Expo / native mobile patterns were preferred over web-style approximations
+
+[SECTION: DEFINITION OF DONE — PER SCREEN]
+
+- A screen is only considered complete when ALL of the following are true:
+- Default state renders correctly
+- Loading state renders correctly (skeleton, not spinner, for lists)
+- Empty state renders when the data source is empty
+- Zero-results state renders when a search or filter returns nothing
+- Error state renders when data fails to load, with a retry action
+- Every interactive element has a pressed state
+- Every form field has an error state and inline validation message
+- Every destructive action has a confirmation dialog
+- Every successful action shows a toast or inline confirmation
+- Every failed action shows an error toast or inline error
+- Screen respects safe areas (top and bottom)
+- Screen content is fully contained within the 390×844 viewport
+- All touch targets are at least 44×44pt
+- All icon-only buttons have aria-labels
+- Screen uses only components from the shared component library
+A screen that is missing even one of these is a draft, not a deliverable.
+
+[SECTION: STATE COVERAGE RULE]
+
+Every list screen must implement and be demonstrable in all of these states:
+Default (data present)
+Empty (no data at all)
+Zero results (search or filter returned nothing)
+Loading (skeleton, on first render)
+Error (retry available)
+Refreshing (pull-to-refresh indicator)
+Selected (multi-select mode active)
+Offline (banner visible, limited actions)
+
+Every form screen must implement:
+Default
+Focused (input border color changes)
+Validation error (inline message + red border)
+Submitting (button disabled + spinner)
+Success (toast + navigation)
+Failure (error toast + form preserved)
+
+Every button must have:
+Default, pressed, focused, disabled, loading
+Every card that shows status must have:
+All applicable variants (paid/pending/overdue, present/absent/late, published/draft)
+Deliver a state matrix as part of the manifest. Any cell marked &#x27;x&#x27; must be justified.
+
+[SECTION: ACCESSIBILITY CHECKLIST — MUST PASS]
+
+Before delivery, verify each of the following on every screen:
+
+- Every icon-only button has aria-label or accessibilityLabel
+- Every form input has a visible label AND an aria-label
+- Every interactive element is reachable via keyboard Tab
+- Every focused element has a visible focus ring
+- Every toast has role=&quot;status&quot; and aria-live=&quot;polite&quot;
+- Every tab bar has role=&quot;tablist&quot; and its items have role=&quot;tab&quot;
+- No status is conveyed by color alone (always paired with text or icon)
+- Body text contrast is at least 4.5:1
+- All touch targets are at least 44×44pt
+- Reduced motion preference is respected (prefers-reduced-motion)
+- Dynamic type scaling doesn&#x27;t break layout (test at 200%)
+Present this checklist at the end of the deliverable with each box checked or justified.
+
+[SECTION: NAVIGATION MAP — REQUIRED DELIVERABLE]
+- Before finalizing, produce a navigation map showing:
+- All top-level tabs
+- All sub-screens reachable from each tab
+- All modals, sheets, and dialogs and what triggers them
+- All terminal screens (no way forward except back)
+- All screens that can be reached from more than one place
+- Deliver this as a tree or a list. Any screen not in the map is either dead code or a forgotten screen — both are unacceptable.
+
+[SECTION: STRICT FIDELITY &amp; CONSISTENCY – MUST]
+
+- Source material (screens, wireframes, screenshots, code) is the only source of truth for features.
+- Redesign only layout, visual hierarchy, spacing, typography, navigation patterns, component styling, states, and micro-interactions.
+- Do not invent or add any new features, screens, actions, buttons, workflows, role switchers, approve/reject controls, or settings that are not clearly present in the source.
+- If an action or control is not visible in the source, do not implement it. Prefer simpler view-only behavior when unsure.
+- Keep the entire prototype consistent:
+- Same bottom tab bar (icons, labels, order, badges) on every tab screen
+- Same primary action pattern (top-right button or FAB — never mixed)
+- Same button styles, status badges, cards, list rows, search bars, and empty/loading/error states
+- Same navigation behavior (back, sheets, modals) and feedback (toasts, validation)
+
+Any inconsistency in flow, navigation, components, or buttons must be fixed.
+Shared components are preferred over one-off variations.
+
+
+[SECTION: MOCKUP &amp; PROTOTYPE SPECIFICATIONS]
+- Generate only proper mobile mockups / prototype screens (phone-sized).
+- Use a standard mobile device frame at fixed size: preferred iPhone 14 / 15 — 390 × 844 pt (or 375 × 812 pt).
+- Portrait orientation only (unless specifically asked for landscape).
+- Do not generate tablet or desktop layouts unless explicitly requested.
+- Keep all screens at the same consistent mobile size for easy comparison.
+- Show the design inside a clean mobile device frame on every screen.
+- Fidelity: Mid-to-high fidelity colored interactive prototype (not pure grayscale wireframes).
+- Include interaction indicators, hotspot notes, or sequential screens that clearly show how the prototype behaves when used.
+- Every screen and flow must feel ready for developer handoff or user testing as a functional prototype.
+- Bottom tab bar must visually and functionally stick to the bottom of the device frame.
+- Any navigation, form opening, tab switch, bottom sheet, modal, or overlay must remain entirely inside the mobile mockup screen while keeping content properly structured and readable.
+- Visual style: clean, minimal, professional — prioritize clarity and restraint over decoration.</pre>
+<a class="action secondary" href="../prompts.html">Prompt Library</a>
+<a class="action" href="https://github.com/amatullah-a/Design-gallery/blob/main/designs/Prompt%20Library/Mobile%20template/Mobile_Prompt_Updated.txt" target="_blank" rel="noopener">View source file ↗</a>
+</article></main><footer class="wrap">Design Gallery · Prompt Library</footer>
+<style id="gallery-password-gate-style">
+#gallery-password-overlay { position:fixed; inset:0; z-index:2147483647; display:flex; align-items:center; justify-content:center; padding:24px; background:rgba(245,246,251,.98); backdrop-filter:blur(10px); font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif; color:#202333; }
+#gallery-password-overlay[hidden] { display:none !important; }
+#gallery-password-overlay .gate-card { width:min(100%,410px); padding:30px; border:1px solid #e4e6ef; border-radius:20px; background:#fff; box-shadow:0 20px 70px #2023331c; }
+#gallery-password-overlay .gate-mark { display:grid; place-items:center; width:46px; height:46px; margin-bottom:18px; border-radius:14px; background:#eeedff; color:#5b52d6; font-size:22px; }
+#gallery-password-overlay h1 { margin:0 0 8px; font-size:1.5rem; letter-spacing:-.03em; }
+#gallery-password-overlay p { margin:0 0 20px; color:#73778a; font-size:.92rem; line-height:1.55; }
+#gallery-password-overlay label { display:block; margin-bottom:7px; font-size:.8rem; font-weight:700; }
+#gallery-password-input { width:100%; padding:12px 13px; border:1px solid #dfe2eb; border-radius:10px; font:inherit; outline:none; }
+#gallery-password-input:focus { border-color:#7770ef; box-shadow:0 0 0 3px #7770ef20; }
+#gallery-password-submit { width:100%; margin-top:12px; padding:12px; border:0; border-radius:10px; background:#5b52d6; color:#fff; font:inherit; font-weight:700; cursor:pointer; }
+#gallery-password-error { min-height:1.3em; margin-top:10px !important; color:#b42318 !important; font-size:.82rem !important; }
+#gallery-lock-button { position:fixed; right:14px; bottom:14px; z-index:2147483000; padding:8px 11px; border:1px solid #e0e2eb; border-radius:999px; background:#fff; color:#5149c8; font:600 12px/1.2 Inter,ui-sans-serif,system-ui,sans-serif; box-shadow:0 4px 15px #20233314; cursor:pointer; }
+</style>
+<div id="gallery-password-overlay" role="dialog" aria-modal="true" aria-labelledby="gallery-password-title">
+  <form class="gate-card" id="gallery-password-form">
+    <div class="gate-mark" aria-hidden="true">⌑</div>
+    <h1 id="gallery-password-title">Design Gallery</h1>
+    <p>Enter the gallery password to continue.</p>
+    <label for="gallery-password-input">Password</label>
+    <input id="gallery-password-input" type="password" autocomplete="current-password" required autofocus>
+    <button id="gallery-password-submit" type="submit">Unlock gallery</button>
+    <p id="gallery-password-error" role="status" aria-live="polite"></p>
+  </form>
+</div>
+<button id="gallery-lock-button" type="button" hidden>Lock gallery</button>
+<script id="gallery-password-gate-script">
+(function () {
+  const expectedHash = "ef797c8118f02dfb649607dd5d3f8c7623048c9c063d532cc95c5ed7a898a64f";
+  const storageKey = "designGalleryUnlocked_ef797c8118f02dfb";
+  const overlay = document.getElementById("gallery-password-overlay");
+  const form = document.getElementById("gallery-password-form");
+  const input = document.getElementById("gallery-password-input");
+  const error = document.getElementById("gallery-password-error");
+  const lockButton = document.getElementById("gallery-lock-button");
+  function isUnlocked() { try { return sessionStorage.getItem(storageKey) === "yes"; } catch (_) { return false; } }
+  function showUnlocked(unlocked) {
+    overlay.hidden = unlocked;
+    document.documentElement.style.overflow = unlocked ? "" : "hidden";
+    lockButton.hidden = !unlocked;
+  }
+  async function digest(value) {
+    const bytes = new TextEncoder().encode(value);
+    const hash = await crypto.subtle.digest("SHA-256", bytes);
+    return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, "0")).join("");
+  }
+  showUnlocked(isUnlocked());
+  form.addEventListener("submit", async function (event) {
+    event.preventDefault();
+    error.textContent = "";
+    const submit = document.getElementById("gallery-password-submit");
+    submit.disabled = true;
+    try {
+      if (await digest(input.value) === expectedHash) {
+        try { sessionStorage.setItem(storageKey, "yes"); } catch (_) {}
+        showUnlocked(true);
+      } else {
+        error.textContent = "That password doesn't match. Try again.";
+        input.select();
+      }
+    } catch (_) { error.textContent = "Password check failed in this browser."; }
+    finally { submit.disabled = false; }
+  });
+  lockButton.addEventListener("click", function () {
+    try { sessionStorage.removeItem(storageKey); } catch (_) {}
+    showUnlocked(false);
+    input.value = "";
+    input.focus();
+  });
+})();
+</script>
+</body></html>

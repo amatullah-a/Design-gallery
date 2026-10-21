@@ -1,0 +1,292 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Visual Design Grok · Prompt Library</title>
+<style>
+:root { color-scheme: light; font-family: Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif; color:#202333; background:#f6f7fb; }
+* { box-sizing:border-box; } body { margin:0; } header { background:#fff; border-bottom:1px solid #e8eaf1; }
+.wrap { width:min(900px,calc(100% - 32px)); margin:0 auto; } .head { padding:22px 0 20px; }
+a { color:#5149c8; } .back { text-decoration:none; font-size:.85rem; font-weight:650; }
+h1 { margin:16px 0 6px; font-size:clamp(1.5rem,4vw,2.15rem); overflow-wrap:anywhere; }
+.subtitle { margin:0; color:#777b8d; font-size:.85rem; } main { padding:24px 0 44px; }
+.content { background:#fff; border:1px solid #e5e7ef; border-radius:14px; padding:clamp(16px,3vw,28px); }
+pre { margin:0; white-space:pre-wrap; overflow-wrap:anywhere; font:.9rem/1.75 ui-monospace,SFMono-Regular,Consolas,monospace; }
+.action { display:inline-flex; margin:18px 8px 0 0; padding:9px 12px; border-radius:8px; background:#5b52d6; color:#fff; text-decoration:none; font-size:.82rem; font-weight:650; }
+.action.secondary { background:#eeedff; color:#5149c8; } footer { padding:0 0 24px; color:#9397a6; text-align:center; font-size:.78rem; }
+</style></head><body><header><div class="wrap head">
+<a class="back" href="../prompt-categories/web-prompts.html">← Back to Web Prompts</a>
+<h1>Visual Design Grok</h1><p class="subtitle">Visual_design_GROK.txt</p>
+</div></header><main class="wrap"><article class="content"><pre>VISUAL DESIGN SYSTEM PROMPT (v3)
+NOTE: Any text inside square brackets [ ] is a comment for the user only and should be ignored by the AI. These are not instructions to execute. This entire prompt is for understanding purposes only (for both the user and the AI).
+
+[SECTION: CORE VISUAL PRINCIPLES]
+- The interface must feel calm, clean, structured, professional, and trustworthy.
+- Visual design exists to support the user’s task — never compete with it.
+- Prioritize: clear hierarchy → readability → scannability → consistency → accessibility.
+- Prefer restraint over decoration.
+- Prefer medium-to-high information density on data-heavy screens (lists, tables, dashboards). Avoid overly spacious consumer-style layouts.
+- The final result must look like a real production SaaS product, not a Dribbble concept, marketing page, or generic AI mockup.
+
+[SECTION: TECHNICAL FOUNDATION]
+- Complete, self-contained HTML file that opens correctly in a browser.
+- Use Tailwind CSS via CDN.
+- Use Inter as the primary font family.
+- Strictly follow Shadcn/ui visual patterns and component styles for buttons, inputs, selects, checkboxes, tables, cards, badges, sidebar, dialog (modal), sheet, tooltip, toast, dropdowns, and tabs.
+- Do not invent custom component styles that break Shadcn consistency.
+- No external UI libraries beyond Tailwind + simple outlined icons (Lucide recommended).
+
+[SECTION: COLOR SYSTEM]
+- Primary theme: Neutral black/gray scale centered on #0f172a (slate-900).
+- Neutral scale is dominant for backgrounds, text, borders, and structure.
+- Primary actions and strong emphasis use shades of #0f172a (dark gray / black).
+- All action buttons (Primary, Secondary, and bulk actions) must use dark gray or black color. Do not use bright blue or other accent colors for action buttons.
+- Accent blue is reserved only for links, focus rings, and selected states — used sparingly.
+- Semantic colors: Green (success), Red (error/destructive), Amber (warning), Blue (info) — only for meaning.
+- Never use color for pure decoration.
+- Never rely on color alone to convey meaning.
+- Maintain strong contrast for text and interactive elements (WCAG AA minimum).
+
+[SECTION: TYPOGRAPHY]
+- Strict hierarchy: Page title → Section heading → Subsection / Card title → Body → Helper / Description → Caption / Meta.
+- Consistent font sizes, weights, and line-heights across the product.
+- Use weight and size (not just color) to create hierarchy.
+- Body text must remain highly readable.
+- Truncate long text with ellipsis + tooltip. Never let text overflow or break layout.
+- Avoid overly large hero-style titles on application screens.
+
+[SECTION: SPACING AND DENSITY]
+- Use a consistent spacing scale (prefer Tailwind’s default scale).
+- Tight spacing for related elements (label + input, icon + text).
+- Moderate spacing inside components.
+- Clear separation between major sections.
+- On tables and lists: favor scannability and density over large empty regions.
+- Avoid both extremes: cramped layouts and excessively airy layouts.
+- Align elements to a clean vertical and horizontal rhythm.
+
+[SECTION: BORDERS, ELEVATION AND RADIUS]
+- Prefer subtle borders and very light shadows.
+- Use elevation only when it communicates hierarchy or that something is floating (modals, sheets, dropdowns, popovers).
+- Avoid heavy shadows, thick borders, or decorative elevation.
+- Maintain consistent border-radius across cards, buttons, inputs, modals, sheets, and badges (follow Shadcn defaults).
+- Do not mix unrelated radius styles.
+- EXCEPTION FOR TABLES: Table structure must remain clearly visible. Use a 1px bordered container, a distinct header bottom border, and a visible horizontal divider on every row. Do not let “subtle borders” produce a borderless or ghost table.
+
+[SECTION: LAYOUT AND STRUCTURE]
+- Left sidebar background color must be the same as the main content area (white / pure white).
+- Profile icon / user avatar must always be located in the top-right corner of the page header.
+- Page header structure:
+  - Top: Breadcrumbs (on inner pages) + Page title + optional short description
+  - Middle: KPIs or status indicators only when they genuinely help decision-making
+  - Bottom: Search + all filters + primary action buttons
+- Main content area sits below the page header.
+- All content should use meaningful grouping (cards or sections) but do not wrap every element in a card.
+
+[SECTION: SIDEBAR]
+- Persistent left sidebar on desktop.
+- Sidebar background must be white (same as the main content area).
+- Clearly highlighted active menu item (background + weight/color).
+- Collapsible behavior on tablet and mobile.
+- Simple outlined icons + labels.
+- Stable, shallow hierarchy (maximum two levels).
+
+[SECTION: TABLES]
+- Sticky header.
+- Consistent row height.
+- Clear column alignment (right-align numbers).
+- Subtle row hover.
+- Clear selected state with checkbox.
+- Essential columns only by default.
+- Truncation + tooltip for long content.
+- Infinite scrolling is required for all data tables (do not use traditional pagination).
+- Search and all filters must sit directly above the table.
+- Record count should be visible.
+- Table must have a clearly visible bordered container (1px border-slate-200).
+- Sticky header must have a distinct bottom border that separates it from the body.
+- Every row must have a visible horizontal divider (border-b border-slate-100 or border-slate-200).
+- Column headers must be visually distinct (background + weight) so the column structure is immediately scannable.
+- Do not produce a borderless or “ghost” table. The table structure (columns + rows) must be obvious at a glance.
+- Numeric metrics (Total, Pending, Submitted, Opt-out, counts, percentages, etc.) must be displayed as plain text only. Do NOT wrap numbers in square badges, pills, chips, rounded rectangles, or any background-filled containers. No gray boxes around numbers.
+
+[SECTION: FILTERS AND ACTIONS]
+- All filters must be visible by default. Do not hide filters under a single “Filters” button.
+- Filters should appear as individual controls (selects, date pickers, multi-selects, etc.) in a horizontal or wrapping filter bar above the table.
+- CRITICAL: All filters, search inputs, dropdowns, action buttons, bulk actions, icon-only row actions, checkboxes, and pagination controls MUST be fully dynamic, interactive, clickable, and functional in the delivered HTML. Static/non-working UI is not acceptable.
+- Clicking or typing in any filter must update the table data in real time (or simulate realistic client-side filtering with immediate visual results).
+- Search input and every dropdown/select filter MUST show a clear (×) button when they have an active value. Clicking the clear button must reset that filter and immediately re-filter the table.
+- Action buttons (including bulk actions and icon actions in table rows) must be fully clickable and trigger appropriate UI feedback (toasts, modals, sheets, confirmation dialogs, or state changes).
+- Bulk action buttons (Publish, Unpublish, Delete, etc.) must ALWAYS be visible by default in the UI. They must be rendered in a disabled state until at least one row is selected. Do NOT hide or collapse the bulk action bar when nothing is selected — only disable the buttons and show a live selection count of 0.
+- When one or more rows are selected, enable the bulk action buttons and update the selection count.
+- Always show the selection count (including “0 selected” when nothing is selected).
+- Every icon-only button (preview, edit, view users, duplicate, more, etc.) must have a tooltip and perform a visible action (open modal, open sheet, show toast, or update state).
+
+[SECTION: BUTTONS]
+- All action buttons use dark gray or black color (filled or outline variants of #0f172a).
+- Clear hierarchy: Primary (filled dark) → Secondary (outline dark) → Ghost → Destructive (red).
+- Avoid clusters of equally weighted buttons.
+- Primary action is visually strongest.
+- All error and destructive actions (Delete, Remove, error toasts, error confirmation buttons, destructive bulk actions) MUST use red color (text, border, and/or background as appropriate). Never style destructive actions in neutral gray or black.
+
+[SECTION: FORMS]
+- Clear labels above fields.
+- Consistent field height and padding.
+- Visible required indicators.
+- Helper text when needed.
+- Inline error messages that are specific and actionable.
+- Logical visual grouping.
+
+[SECTION: INTERACTION AND FUNCTIONALITY]
+- View record → Modal.
+- Create / Edit → Right Side Sheet.
+- Destructive actions → Confirmation modal.
+- Feedback → Toast messages (success, error, warning, info).
+- Every meaningful action must produce immediate visual feedback.
+- Tooltips on all icon-only buttons and truncated text.
+- All interactive elements (buttons, filters, checkboxes, row selection, sidebar items, pagination alternatives) must be fully functional and clickable.
+- Support keyboard: Enter to submit, Escape to close, full Tab navigation.
+- Loading content → Skeleton loaders (never centered spinners for page content).
+- Empty state → Icon + message + primary CTA.
+- Zero-results state (after filtering) → Different message from true empty state.
+- Error state → Clear message + Retry button.
+- Selected rows → Highlighted + checkbox + selection count indicator.
+
+[SECTION: STATES]
+Every data view must include visual treatment for:
+- Loading (skeleton)
+- Empty (no data ever existed)
+- Zero results (filters returned nothing)
+- Error (with retry)
+- Selected
+- Disabled / Permission-restricted
+- Processing / Optimistic update where applicable
+
+Never design only the happy path.
+
+[SECTION: RESPONSIVE BEHAVIOR]
+- Desktop (≥1024px): Full layout, persistent white sidebar, multi-column where useful.
+- Tablet (768–1023px): Collapsed or narrower sidebar, adapted controls.
+- Mobile (&lt;768px): Single column, hidden sidebar + trigger, touch-friendly targets (minimum 44×44px), reorganized actions, mobile-appropriate table handling.
+- Never simply scale down a desktop layout. Reorganize information based on available space.
+
+[SECTION: VISUAL RESTRAINT]
+Do not add:
+- Gradients used for decoration
+- Heavy shadows or glow effects
+- Excessive badges or status chips
+- Square badges, pills, chips, or rounded gray boxes around plain numbers or metric values
+- Decorative illustrations or empty-state artwork unless truly helpful
+- Charts or graphs unless the requirements explicitly need them
+- Extra cards, tabs, or panels that do not serve hierarchy or grouping
+- Random animations or micro-interactions that do not aid understanding
+
+Polish comes from hierarchy, spacing, alignment, contrast, and consistency — not from ornament.
+
+[SECTION: ACCESSIBILITY]
+- WCAG 2.2 AA contrast minimum.
+- Visible focus rings on all interactive elements.
+- Do not rely on color alone.
+- Sufficient target sizes.
+- Proper visual structure for screen readers (semantic heading order, labels).
+
+[SECTION: OUTPUT REQUIREMENTS]
+Produce one complete, self-contained HTML file that opens correctly in a browser.
+
+Must demonstrate:
+- Correct Shadcn-style components
+- White sidebar background matching the main content area
+- Profile icon permanently in the top-right corner
+- All filters visible by default (not hidden behind a button)
+- Fully interactive and functional filters, search, dropdowns, bulk actions, and every icon action (no static/non-working controls)
+- Search and every dropdown filter must display a clear (×) button when active; clearing must reset the filter and re-filter the table immediately
+- Realistic sample data driven by JavaScript so filters and actions actually change the UI
+- Infinite scrolling on tables
+- All interactive behavior must be implemented with vanilla JavaScript inside the same HTML file (no external frameworks)
+- Dark gray / black action buttons
+- Proper visual hierarchy and density
+- Sidebar with correct active state
+- Table with sticky header, hover, and selection
+- Table must show clear column headers, horizontal row dividers, and a bordered container. A table that looks like a plain list or has invisible lines is not acceptable.
+- Modal (View) + Side Sheet (Edit) + Confirmation dialogs
+- Toasts and Tooltips
+- Skeleton, Empty, Zero-results, and Error states
+- Bulk action buttons (Publish, Unpublish, Delete) always visible by default and only disabled (never hidden) until ≥1 row is selected; live selection count always shown (including “0 selected”)
+- Realistic sample data
+- Responsive behavior
+- No decorative noise
+- Numeric metrics rendered as plain text only (no square badges/pills/chips around numbers)
+- All error and destructive actions styled in red
+</pre>
+<a class="action secondary" href="../prompts.html">Prompt Library</a>
+<a class="action" href="https://github.com/amatullah-a/Design-gallery/blob/main/designs/Prompt%20Library/Web%20template/Visual_design_GROK.txt" target="_blank" rel="noopener">View source file ↗</a>
+</article></main><footer class="wrap">Design Gallery · Prompt Library</footer>
+<style id="gallery-password-gate-style">
+#gallery-password-overlay { position:fixed; inset:0; z-index:2147483647; display:flex; align-items:center; justify-content:center; padding:24px; background:rgba(245,246,251,.98); backdrop-filter:blur(10px); font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif; color:#202333; }
+#gallery-password-overlay[hidden] { display:none !important; }
+#gallery-password-overlay .gate-card { width:min(100%,410px); padding:30px; border:1px solid #e4e6ef; border-radius:20px; background:#fff; box-shadow:0 20px 70px #2023331c; }
+#gallery-password-overlay .gate-mark { display:grid; place-items:center; width:46px; height:46px; margin-bottom:18px; border-radius:14px; background:#eeedff; color:#5b52d6; font-size:22px; }
+#gallery-password-overlay h1 { margin:0 0 8px; font-size:1.5rem; letter-spacing:-.03em; }
+#gallery-password-overlay p { margin:0 0 20px; color:#73778a; font-size:.92rem; line-height:1.55; }
+#gallery-password-overlay label { display:block; margin-bottom:7px; font-size:.8rem; font-weight:700; }
+#gallery-password-input { width:100%; padding:12px 13px; border:1px solid #dfe2eb; border-radius:10px; font:inherit; outline:none; }
+#gallery-password-input:focus { border-color:#7770ef; box-shadow:0 0 0 3px #7770ef20; }
+#gallery-password-submit { width:100%; margin-top:12px; padding:12px; border:0; border-radius:10px; background:#5b52d6; color:#fff; font:inherit; font-weight:700; cursor:pointer; }
+#gallery-password-error { min-height:1.3em; margin-top:10px !important; color:#b42318 !important; font-size:.82rem !important; }
+#gallery-lock-button { position:fixed; right:14px; bottom:14px; z-index:2147483000; padding:8px 11px; border:1px solid #e0e2eb; border-radius:999px; background:#fff; color:#5149c8; font:600 12px/1.2 Inter,ui-sans-serif,system-ui,sans-serif; box-shadow:0 4px 15px #20233314; cursor:pointer; }
+</style>
+<div id="gallery-password-overlay" role="dialog" aria-modal="true" aria-labelledby="gallery-password-title">
+  <form class="gate-card" id="gallery-password-form">
+    <div class="gate-mark" aria-hidden="true">⌑</div>
+    <h1 id="gallery-password-title">Design Gallery</h1>
+    <p>Enter the gallery password to continue.</p>
+    <label for="gallery-password-input">Password</label>
+    <input id="gallery-password-input" type="password" autocomplete="current-password" required autofocus>
+    <button id="gallery-password-submit" type="submit">Unlock gallery</button>
+    <p id="gallery-password-error" role="status" aria-live="polite"></p>
+  </form>
+</div>
+<button id="gallery-lock-button" type="button" hidden>Lock gallery</button>
+<script id="gallery-password-gate-script">
+(function () {
+  const expectedHash = "ef797c8118f02dfb649607dd5d3f8c7623048c9c063d532cc95c5ed7a898a64f";
+  const storageKey = "designGalleryUnlocked_ef797c8118f02dfb";
+  const overlay = document.getElementById("gallery-password-overlay");
+  const form = document.getElementById("gallery-password-form");
+  const input = document.getElementById("gallery-password-input");
+  const error = document.getElementById("gallery-password-error");
+  const lockButton = document.getElementById("gallery-lock-button");
+  function isUnlocked() { try { return sessionStorage.getItem(storageKey) === "yes"; } catch (_) { return false; } }
+  function showUnlocked(unlocked) {
+    overlay.hidden = unlocked;
+    document.documentElement.style.overflow = unlocked ? "" : "hidden";
+    lockButton.hidden = !unlocked;
+  }
+  async function digest(value) {
+    const bytes = new TextEncoder().encode(value);
+    const hash = await crypto.subtle.digest("SHA-256", bytes);
+    return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, "0")).join("");
+  }
+  showUnlocked(isUnlocked());
+  form.addEventListener("submit", async function (event) {
+    event.preventDefault();
+    error.textContent = "";
+    const submit = document.getElementById("gallery-password-submit");
+    submit.disabled = true;
+    try {
+      if (await digest(input.value) === expectedHash) {
+        try { sessionStorage.setItem(storageKey, "yes"); } catch (_) {}
+        showUnlocked(true);
+      } else {
+        error.textContent = "That password doesn't match. Try again.";
+        input.select();
+      }
+    } catch (_) { error.textContent = "Password check failed in this browser."; }
+    finally { submit.disabled = false; }
+  });
+  lockButton.addEventListener("click", function () {
+    try { sessionStorage.removeItem(storageKey); } catch (_) {}
+    showUnlocked(false);
+    input.value = "";
+    input.focus();
+  });
+})();
+</script>
+</body></html>

@@ -1,0 +1,568 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Design Evaluation Prompt (1) · Prompt Library</title>
+<style>
+:root { color-scheme: light; font-family: Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif; color:#202333; background:#f6f7fb; }
+* { box-sizing:border-box; } body { margin:0; } header { background:#fff; border-bottom:1px solid #e8eaf1; }
+.wrap { width:min(900px,calc(100% - 32px)); margin:0 auto; } .head { padding:22px 0 20px; }
+a { color:#5149c8; } .back { text-decoration:none; font-size:.85rem; font-weight:650; }
+h1 { margin:16px 0 6px; font-size:clamp(1.5rem,4vw,2.15rem); overflow-wrap:anywhere; }
+.subtitle { margin:0; color:#777b8d; font-size:.85rem; } main { padding:24px 0 44px; }
+.content { background:#fff; border:1px solid #e5e7ef; border-radius:14px; padding:clamp(16px,3vw,28px); }
+pre { margin:0; white-space:pre-wrap; overflow-wrap:anywhere; font:.9rem/1.75 ui-monospace,SFMono-Regular,Consolas,monospace; }
+.action { display:inline-flex; margin:18px 8px 0 0; padding:9px 12px; border-radius:8px; background:#5b52d6; color:#fff; text-decoration:none; font-size:.82rem; font-weight:650; }
+.action.secondary { background:#eeedff; color:#5149c8; } footer { padding:0 0 24px; color:#9397a6; text-align:center; font-size:.78rem; }
+</style></head><body><header><div class="wrap head">
+<a class="back" href="../prompt-categories/website-audits.html">← Back to Website Audits</a>
+<h1>Design Evaluation Prompt (1)</h1><p class="subtitle">design-evaluation-prompt (1).txt</p>
+</div></header><main class="wrap"><article class="content"><pre>How to use the prompts for AI review
+
+
+1. Identify your evaluation objective and choose the relevant prompt category (Design System, UI, Components, Layout, UX, etc.).
+2. Navigate to the respective tab and use the prompt exactly as written—each is designed for a specific audit scope.
+3. Input your wireframe or design into the AI tool along with the selected prompt, without altering instructions.
+4. Ensure the response strictly follows the defined output format (tables, sections, ratings) for consistency.
+5. Analyze results within the prompt&#x27;s boundaries—avoid overlapping insights across different evaluation types.
+6. Run multiple prompts sequentially for a holistic review, then synthesize key findings into a final assessment.
+
+
+Please refer to the attached HTML report and provide your output using the given HTML report as a template:
+https://drive.google.com/drive/folders/16Ng81S61otAKCdNB_uY93brMT7icdZVM?usp=sharing
+
+
+1. Unified design system evaluation
+Design evaluation/assessment prompts
+
+Objective: Check if the entire UI follows one consistent design system across all screens and components, but do not provide a solution redesign.
+
+Prompt 1:
+Unified Design System Evaluation
+
+Act as a senior UI/UX design auditor.
+Evaluate the website only from a system consistency perspective. Do not redesign anything.
+Focus only on:
+• Consistency of components (buttons, forms, tables)
+• Consistent styles (border radius, shadows, icons)
+• Interaction states (hover, active, disabled)
+• Reuse of patterns across screens
+
+Identify:
+• System-level inconsistencies
+• Pattern mismatches
+• Missing or broken design rules
+Cross-page consistency of components and patterns on the live site.
+
+
+Output Requirement (Strict)
+• Output must be a downloadable HTML file only.
+• Follow the provided HTML report structure exactly.
+• Use proper HTML tags for tables, sections, and headings.
+• No additional text outside the HTML.
+
+
+Output Format (Strict)
+• Structured table with:
+
+| # | Category | Sub-Category | Rating (1–10) | Key Issue | Impact | Area of Action | Real-World Example | URL | Critical (Yes/No) |
+
+Rules
+• Each major section must start with a section header row:
+--- SECTION NAME ---
+• No design system docs unless unavoidable
+• Keep findings specific, not generic
+
+
+
+2. UI audit
+Objective: Check overall visual quality and cleanliness of the UI., but do not provide a solution redesign.
+
+Prompt 2:
+
+
+Act as a UI auditor.
+Evaluate the visual quality of the wireframe. Do not redesign.
+Focus only on:
+• Typography usage (sizes, weights, hierarchy)
+• Visual consistency of UI elements
+• Alignment of elements (not grid system, just visual neatness)
+• Button and element clarity
+
+Identify:
+• Visual inconsistencies
+• Poor readability
+• Misaligned or cluttered UI
+Visual issues that appear only on mobile / different breakpoints.
+
+Do not evaluate UX flows or deep layout structure.
+
+
+Output Requirement (Strict)
+• Output must be a downloadable HTML file only.
+• Follow the provided HTML report structure exactly.
+• Use proper HTML tags for tables, sections, and headings.
+• No additional text outside the HTML.
+
+
+Output in a table:
+| Area | Issue | Impact | What Needs Attention |
+
+
+3. Component Audit
+Objective: Check if individual components are built and used correctly. but do not provide a solution redesign.
+
+
+Prompt 3:
+
+
+Act as a senior UI component auditor.
+Evaluate the wireframe strictly at a component level. Do not redesign.
+________________
+
+
+Evaluation Scope
+Buttons
+• Size, padding, and alignment consistency
+• Variant usage (primary, secondary, ghost, etc.)
+• Consistency across similar actions
+• Disabled / loading states
+
+Form Elements
+• Inputs, dropdowns, checkboxes, radio buttons
+• Label alignment and spacing
+• Error states and validation behavior
+Actual working behaviour of forms, dropdowns, buttons on the live beta (not just appearance).
+
+Cards &amp; Containers
+• Header, body, footer consistency
+• Internal spacing and structure
+• Reusability of patterns
+
+Component States
+• Hover, focus, active, disabled
+• Missing or inconsistent states
+Actual working behaviour of forms, dropdowns, buttons on the live beta (not just appearance).
+
+
+What to Identify
+• Incorrect component usage
+• Missing states
+• Inconsistent patterns
+• One-off or custom components breaking system
+
+________________
+
+
+Strict Boundaries
+• Do NOT evaluate layout structure
+• Do NOT evaluate UX flows
+• Do NOT evaluate typography system broadly
+
+________________
+
+
+Output Requirement (Strict)
+• Output must be a downloadable HTML file only.
+• Follow the provided HTML report structure exactly.
+• Use proper HTML tags for tables, sections, and headings.
+• No additional text outside the HTML.
+
+Sections in Table:
+• Components—Buttons
+• Components—Forms
+• Components—Containers
+• Components—States
+
+
+4. Layout &amp; Structural Audit
+Objective: Check how well the screen layout is structured, spaced, and visually balanced, but do not provide a solution redesign.
+
+Prompt 4:
+
+Act as a Layout Auditor.
+Evaluate only layout and structure. Do not redesign.
+________________
+
+Evaluation Scope
+Grid &amp; Alignment
+• Column alignment
+• Edge alignment
+• Consistency across sections
+
+Spacing System
+• Vertical and horizontal spacing consistency
+• Padding and margins
+• Rhythm between sections
+
+Section Grouping
+• Logical grouping of related elements
+• Separation between sections
+• Clear start and end of sections
+
+Visual Balance
+• Distribution of content
+• Whitespace usage
+• Density (too crowded / too empty)
+
+Hierarchy
+• Clear primary vs secondary areas
+• Flow of attention
+
+Layout — 
+Responsiveness (breakpoints, mobile layout, touch targets, horizontal scroll, orientation).
+
+What to Identify
+• Misalignment
+• Inconsistent spacing
+• Poor grouping
+• Visual imbalance
+• Layout inefficiencies
+
+Strict Boundaries
+• Do NOT evaluate UI styling (colors, typography)
+• Do NOT evaluate UX flows
+• Do NOT evaluate component correctness
+
+Output Requirement (Strict)
+• Output must be a downloadable HTML file only.
+• Follow the provided HTML report structure exactly.
+• Use proper HTML tags for tables, sections, and headings.
+• No additional text outside the HTML.
+
+Sections in Table:
+• Layout—Grid &amp; Alignment
+• Layout—Spacing
+• Layout—Grouping
+• Layout—Balance &amp; Density
+
+
+
+5. Comprehensive UX Audit
+Objective: Check how easy and smooth it is for users to complete tasks, but do not provide a solution redesign.
+
+Prompt 5:
+Act as a UX Auditor.
+Evaluate usability using real user flows. Do not redesign.
+________________
+
+
+Evaluation Scope
+Navigation
+• Clarity of movement across screens
+• Predictability of actions
+• Visibility of options
+
+User Flows
+• Step-by-step task completion
+• Number of steps
+• Friction points
+
+Feedback &amp; System Visibility
+• Loading states
+• Success / error feedback
+• System response clarity
+
+Error Handling
+• Prevention
+• Recovery
+• Clarity of messages
+
+Cognitive Load
+• Too many decisions
+• Confusing actions
+• Information overload
+
+Multi-audience journeys (prospective parents, current parents, students, staff)
+
+Functionality &amp; Feature Completeness (admissions forms, calendar, news, search, document downloads, contact forms, any parent portal)
+
+Mobile task success (can the key tasks be completed easily on a phone?)
+
+Performance impact on UX (slow pages that cause drop-off)
+
+________________
+
+
+What to Identify
+• Confusing flows
+• Missing feedback
+• Task friction
+• Dead ends
+• Unclear actions
+
+________________
+
+Output Requirement (Strict)
+• Output must be a downloadable HTML file only.
+• Follow the provided HTML report structure exactly.
+• Use proper HTML tags for tables, sections, and headings.
+• No additional text outside the HTML.
+
+Sections in Table:
+• UX — Navigation
+• UX — Task Flows
+• UX — Feedback
+• UX — Errors
+• UX — Cognitive Load
+• UX — Functionality
+• UX — Mobile Experience
+• UX — Multi-audience Friendliness
+
+
+________________
+
+
+Additional Instructions
+• Ratings must be justified in the &quot;Key Findings&quot; column.
+• &quot;Areas of Action&quot; should describe what needs improvement, not how to redesign it.
+• Real-world examples must be:
+  • Live websites or real digital interfaces (not design system documentation).
+  • Specifically relevant to school/education platforms.
+  • Include direct clickable URLs only (no placeholders).
+  • Keep tone professional and analytical.
+  • Avoid speculative assumptions beyond what is visible in the wireframe.
+  • Highlight the Top 3 Critical Issues at the end in a short summary section.
+
+If evaluating multiple wireframes, include:
+• A comparative score summary table at the end.
+• An overall performance rating for each prototype.
+
+
+
+6. UX &amp; Design System Evaluation Audit
+Objective: Check how well UX and design consistency work together across the entire product, but do not provide a solution redesign.
+
+
+Prompt 6:
+Act as a Product Design Auditor.
+Evaluate system-level experience across multiple screens. Do not redesign.
+________________
+
+
+Evaluation Scope
+Cross-Screen Consistency
+• Same actions behaving the same everywhere
+• Consistent navigation patterns
+• Uniform interaction logic
+
+Pattern Reusability
+• Repeated UI patterns across flows
+• Avoidance of one-off solutions
+
+System Scalability
+• Can new features fit easily into the system?
+• Is the design modular?
+
+Accessibility Basics
+• Contrast
+• Click/tap targets
+• Readability
+
+UX + UI Alignment
+• Do design patterns support usability?
+• Any mismatch between UI and user expectations?
+
+________________
+
+
+What to Identify
+• System-level inconsistencies
+• Pattern breakdown across flows
+• Scalability issues
+• UX and UI misalignment
+
+________________
+
+
+Output Requirement (Strict)
+• Output must be a downloadable HTML file only.
+• Follow the provided HTML report structure exactly.
+• Use proper HTML tags for tables, sections, and headings.
+• No additional text outside the HTML.
+
+Sections in Table:
+• System — Cross-Screen Consistency
+• System — Patterns
+• System — Scalability
+• System — Accessibility
+• System — UX/UI Alignment
+System — Accessibility (full WCAG 2.2 AA)
+System — Responsiveness &amp; Mobile
+System — Privacy / GDPR Basics
+System — Irish School Context &amp; Content Compliance (required pages, policies, bilingual readiness)
+
+WF correction prompt
+Wireframe correction prompt:
+
+Analyze the attached report and evaluate whether any structural, layout, hierarchy, or UI consistency updates are required in the current wireframe. If improvements are necessary, implement the revisions directly within the wireframe. Do not introduce or modify the existing color palette under any circumstances.
+
+
+
+
+Labels, wording, typography, readability,
+Objective: Assess wireframe labels, wording, typography, readability, consistency, and grammar quality.
+
+Evaluate the entire wireframe focusing on labels, wording, typography, and text quality across the interface.
+Assess the following:
+1. Label clarity – Are field names, section titles, and table headers clear and understandable?
+2. Terminology consistency – Are similar terms and actions used consistently across the interface?
+3. Typography hierarchy – Do headings, labels, and table headers follow a clear visual hierarchy?
+4. Readability – Are font sizes, spacing, and text density easy to read and scan?
+5. Button and action labels – Do buttons clearly communicate the intended action?
+6. Grammar and spelling – Identify any typos, incorrect capitalization, or grammatical issues.
+
+Provide the results in a table format with:
+| Category | Element / Label | Issue | Severity (Low / Medium / High) | Recommendation |
+Keep the evaluation strictly analytical and concise, without redesigning the interface.
+
+
+Parameter audit
+PROMPT 
+
+You are a senior UI/UX auditor and front-end developer.
+Generate a complete UI/UX Audit Report in downloadable HTML format for the given website.
+________________
+
+
+INPUT
+Website URL: [PASTE LINK]
+________________
+
+
+OUTPUT RULES
+• Return only clean HTML code (no explanations)
+• Fully functional in browser
+• Pre-filled with real audit findings
+________________
+
+
+REQUIRED SECTIONS
+1. Color &amp; Contrast
+2. Typography
+3. Layout &amp; Spacing
+4. Components &amp; Interactions
+5. Accessibility (WCAG)
+6. Navigation &amp; Footer
+7. Link States
+8. Key Pages (Gallery, News, etc.)
+9. Functional Pages (Calendar, Forms)
+10. Mobile UX
+11. Performance
+12. Cross-page Recommendations
+________________
+
+
+TABLE FORMAT (ALL SECTIONS)
+• Heading
+• Subheading
+• Observation
+• Affected Element / Flow
+• Severity (High / Medium / Low)
+• Comments (AI) (editable textarea — pre-filled by the auditor AI with findings/notes)
+• Developer Comments (editable textarea — left empty for the developer/team to fill in)
+• Status (dropdown: Fixed / Not Fixed / In Progress / Deferred / NA)
+________________
+
+
+FEATURES (MANDATORY)
+• Auto-save (localStorage for AI comments + developer comments + status)
+• Toolbar with: Visit Site, Export JSON, Export CSV, Import JSON, Reset
+• Status color coding
+• Save indicator (&quot;Saving…&quot; → &quot;Saved&quot;)
+• Export JSON/CSV must include both Comments (AI) and Developer Comments fields
+• Import JSON must restore both comment fields when present
+________________
+
+
+
+UX DEPTH
+Include real issues across:
+• usability, accessibility, mobile
+• navigation friction
+• performance gaps
+________________
+
+
+DESIGN
+• Clean audit-style UI
+• Structured tables
+• Professional typography
+________________
+
+
+Generate the HTML report now.</pre>
+<a class="action secondary" href="../prompts.html">Prompt Library</a>
+<a class="action" href="https://github.com/amatullah-a/Design-gallery/blob/main/designs/Prompt%20Library/Website%20template/design-evaluation-prompt%20%281%29.txt" target="_blank" rel="noopener">View source file ↗</a>
+</article></main><footer class="wrap">Design Gallery · Prompt Library</footer>
+<style id="gallery-password-gate-style">
+#gallery-password-overlay { position:fixed; inset:0; z-index:2147483647; display:flex; align-items:center; justify-content:center; padding:24px; background:rgba(245,246,251,.98); backdrop-filter:blur(10px); font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif; color:#202333; }
+#gallery-password-overlay[hidden] { display:none !important; }
+#gallery-password-overlay .gate-card { width:min(100%,410px); padding:30px; border:1px solid #e4e6ef; border-radius:20px; background:#fff; box-shadow:0 20px 70px #2023331c; }
+#gallery-password-overlay .gate-mark { display:grid; place-items:center; width:46px; height:46px; margin-bottom:18px; border-radius:14px; background:#eeedff; color:#5b52d6; font-size:22px; }
+#gallery-password-overlay h1 { margin:0 0 8px; font-size:1.5rem; letter-spacing:-.03em; }
+#gallery-password-overlay p { margin:0 0 20px; color:#73778a; font-size:.92rem; line-height:1.55; }
+#gallery-password-overlay label { display:block; margin-bottom:7px; font-size:.8rem; font-weight:700; }
+#gallery-password-input { width:100%; padding:12px 13px; border:1px solid #dfe2eb; border-radius:10px; font:inherit; outline:none; }
+#gallery-password-input:focus { border-color:#7770ef; box-shadow:0 0 0 3px #7770ef20; }
+#gallery-password-submit { width:100%; margin-top:12px; padding:12px; border:0; border-radius:10px; background:#5b52d6; color:#fff; font:inherit; font-weight:700; cursor:pointer; }
+#gallery-password-error { min-height:1.3em; margin-top:10px !important; color:#b42318 !important; font-size:.82rem !important; }
+#gallery-lock-button { position:fixed; right:14px; bottom:14px; z-index:2147483000; padding:8px 11px; border:1px solid #e0e2eb; border-radius:999px; background:#fff; color:#5149c8; font:600 12px/1.2 Inter,ui-sans-serif,system-ui,sans-serif; box-shadow:0 4px 15px #20233314; cursor:pointer; }
+</style>
+<div id="gallery-password-overlay" role="dialog" aria-modal="true" aria-labelledby="gallery-password-title">
+  <form class="gate-card" id="gallery-password-form">
+    <div class="gate-mark" aria-hidden="true">⌑</div>
+    <h1 id="gallery-password-title">Design Gallery</h1>
+    <p>Enter the gallery password to continue.</p>
+    <label for="gallery-password-input">Password</label>
+    <input id="gallery-password-input" type="password" autocomplete="current-password" required autofocus>
+    <button id="gallery-password-submit" type="submit">Unlock gallery</button>
+    <p id="gallery-password-error" role="status" aria-live="polite"></p>
+  </form>
+</div>
+<button id="gallery-lock-button" type="button" hidden>Lock gallery</button>
+<script id="gallery-password-gate-script">
+(function () {
+  const expectedHash = "ef797c8118f02dfb649607dd5d3f8c7623048c9c063d532cc95c5ed7a898a64f";
+  const storageKey = "designGalleryUnlocked_ef797c8118f02dfb";
+  const overlay = document.getElementById("gallery-password-overlay");
+  const form = document.getElementById("gallery-password-form");
+  const input = document.getElementById("gallery-password-input");
+  const error = document.getElementById("gallery-password-error");
+  const lockButton = document.getElementById("gallery-lock-button");
+  function isUnlocked() { try { return sessionStorage.getItem(storageKey) === "yes"; } catch (_) { return false; } }
+  function showUnlocked(unlocked) {
+    overlay.hidden = unlocked;
+    document.documentElement.style.overflow = unlocked ? "" : "hidden";
+    lockButton.hidden = !unlocked;
+  }
+  async function digest(value) {
+    const bytes = new TextEncoder().encode(value);
+    const hash = await crypto.subtle.digest("SHA-256", bytes);
+    return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, "0")).join("");
+  }
+  showUnlocked(isUnlocked());
+  form.addEventListener("submit", async function (event) {
+    event.preventDefault();
+    error.textContent = "";
+    const submit = document.getElementById("gallery-password-submit");
+    submit.disabled = true;
+    try {
+      if (await digest(input.value) === expectedHash) {
+        try { sessionStorage.setItem(storageKey, "yes"); } catch (_) {}
+        showUnlocked(true);
+      } else {
+        error.textContent = "That password doesn't match. Try again.";
+        input.select();
+      }
+    } catch (_) { error.textContent = "Password check failed in this browser."; }
+    finally { submit.disabled = false; }
+  });
+  lockButton.addEventListener("click", function () {
+    try { sessionStorage.removeItem(storageKey); } catch (_) {}
+    showUnlocked(false);
+    input.value = "";
+    input.focus();
+  });
+})();
+</script>
+</body></html>

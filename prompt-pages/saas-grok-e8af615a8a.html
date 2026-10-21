@@ -1,0 +1,339 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Saas Grok · Prompt Library</title>
+<style>
+:root { color-scheme: light; font-family: Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif; color:#202333; background:#f6f7fb; }
+* { box-sizing:border-box; } body { margin:0; } header { background:#fff; border-bottom:1px solid #e8eaf1; }
+.wrap { width:min(900px,calc(100% - 32px)); margin:0 auto; } .head { padding:22px 0 20px; }
+a { color:#5149c8; } .back { text-decoration:none; font-size:.85rem; font-weight:650; }
+h1 { margin:16px 0 6px; font-size:clamp(1.5rem,4vw,2.15rem); overflow-wrap:anywhere; }
+.subtitle { margin:0; color:#777b8d; font-size:.85rem; } main { padding:24px 0 44px; }
+.content { background:#fff; border:1px solid #e5e7ef; border-radius:14px; padding:clamp(16px,3vw,28px); }
+pre { margin:0; white-space:pre-wrap; overflow-wrap:anywhere; font:.9rem/1.75 ui-monospace,SFMono-Regular,Consolas,monospace; }
+.action { display:inline-flex; margin:18px 8px 0 0; padding:9px 12px; border-radius:8px; background:#5b52d6; color:#fff; text-decoration:none; font-size:.82rem; font-weight:650; }
+.action.secondary { background:#eeedff; color:#5149c8; } footer { padding:0 0 24px; color:#9397a6; text-align:center; font-size:.78rem; }
+</style></head><body><header><div class="wrap head">
+<a class="back" href="../prompt-categories/web-prompts.html">← Back to Web Prompts</a>
+<h1>Saas Grok</h1><p class="subtitle">Saas_GROK.txt</p>
+</div></header><main class="wrap"><article class="content"><pre>PROFESSIONAL SAAS DESIGN SYSTEM PROMPT 
+
+NOTE: Any text inside square brackets [ ] is a comment for the user only and should be ignored by the AI. These are not instructions to execute. This entire prompt is for understanding purposes only (for both the user and the AI).
+
+
+[SECTION: CORE PRINCIPLES]
+
+- Optimize for speed, clarity, efficiency, predictability, and low cognitive load.
+- Prefer consistency and stability over visual creativity.
+- Every screen must follow a clear cognitive hierarchy: **Purpose → Key Data → Primary Action**.
+- Design for repeated professional use (power users matter more than first-time delight).
+- Never sacrifice usability, accessibility, or workflow clarity for aesthetics.
+- Prefer dense, information-rich interfaces over spacious consumer-style layouts when the task involves scanning or managing data.
+
+[SECTION: DESIGN DECISION PRIORITY]
+
+When requirements conflict, follow this order strictly:
+
+1. User requirements &amp; business rules  
+2. User task &amp; workflow  
+3. Information architecture &amp; data relationships  
+4. Functional correctness  
+5. Usability &amp; cognitive load  
+6. Accessibility (WCAG 2.2 AA)  
+7. Consistency &amp; scalability  
+8. Visual design  
+9. Decorative styling  
+
+Do not add UI elements, patterns, or features just because they are possible or look sophisticated.
+
+[SECTION: UNDERSTAND THE USER TASK FIRST]
+
+Before designing any screen, determine:
+
+- Who is the primary user and what is their role?
+- What is the single most important goal on this screen?
+- What information is essential vs secondary?
+- What actions will be performed most frequently?
+- How complex is the data and how many records are typical?
+- What statuses, permissions, and related records exist?
+- Is this a high-frequency power-user screen or occasional use?
+
+Design around the user’s task, not around available UI components.
+
+
+[SECTION: PAGE ANATOMY (STANDARD STRUCTURE)]
+
+### Page Header
+**Top – Orientation**
+- Breadcrumbs on all inner pages (Home / Parent / Current)
+- Clear page title + optional one-line description
+
+**Middle – Metrics (conditional)**
+- KPI cards or status indicators only when they directly support decision-making
+- Never force metrics or charts
+
+**Bottom – Controls**
+- Search + Filters required on every list/table page
+- Column sorting + Export (CSV / Excel / PDF) on every table
+- Primary action (Create, Invite, Import, etc.) clearly visible and right-aligned or top-right
+- CRITICAL: Every search input, dropdown filter, action button, bulk action, and icon action must be fully interactive and functional. Static/non-working controls are not acceptable.
+- Search and every dropdown/select filter MUST show a clear (×) button when they contain an active value. Clicking clear must reset that control and immediately update the table results.
+
+### Main Content
+- Primary display: Table (preferred for structured data), Card Grid, List, or Form
+- Prefer infinite scroll or virtualization for large datasets
+- Show only essential columns/fields by default
+- Use progressive disclosure for secondary information
+
+### Actions
+- Place actions close to the data they affect
+- Clear visual hierarchy: Primary &gt; Secondary &gt; Tertiary / Destructive
+- Bulk action buttons (Publish, Unpublish, Delete, etc.) must ALWAYS be visible by default in the UI. They must be rendered in a disabled state until at least one row is selected. Do NOT hide or collapse the bulk action bar when nothing is selected — only disable the buttons and show a live selection count of 0.
+- When one or more rows are selected, enable the bulk action buttons and update the selection count.
+- Always show selection count (including “0 selected” when nothing is selected).
+
+### Navigation
+- Persistent left sidebar with clearly highlighted active state
+- Logical grouping, maximum 2 levels deep
+- Keep primary navigation stable across the product
+
+
+[SECTION: INTERACTION PATTERNS (STRICT CONSISTENCY)]
+
+| Action Type              | Pattern                          |
+|--------------------------|----------------------------------|
+| View record              | Modal                            |
+| Create / Edit            | Right Side Sheet                 |
+| Destructive action       | Confirmation modal               |
+| Success / Error / Warning / Info | Toast (green / red / yellow / blue) |
+| Loading                  | Skeleton loaders (never spinners) |
+| Empty state              | Icon + message + primary CTA     |
+| Error state              | Clear message + Retry            |
+| Selected rows            | Highlight + checkbox + count     |
+
+Additional rules:
+- Tooltips on all icon-only buttons and truncated text
+- Keyboard support: Enter = submit, Escape = close, full Tab navigation
+- Prefer undo / soft-delete over hard confirmation when the action is reversible
+- For high-impact irreversible actions, use a stronger confirmation (type-to-confirm or explicit “I understand”)
+
+
+[SECTION: DATA DENSITY &amp; SCANNABILITY]
+
+- Prefer medium-to-high information density on list and table screens
+- Use consistent column alignment, right-align numbers, and clear visual separation
+- Avoid excessive whitespace that forces unnecessary scrolling
+- Make status, priority, and key dates immediately scannable (color + label, not color alone)
+- Truncate long text with tooltip on hover; never let text overflow break layout
+- Table structure (headers, columns, row lines) must remain visually clear even when using a restrained colour palette.
+- Table must have a clearly visible bordered container, sticky header with a distinct bottom border, and a visible horizontal divider on every row. Column headers must be visually distinct (background + weight). A borderless or “ghost” table is not acceptable.
+- Numeric metrics (Total, Pending, Submitted, Opt-out, counts, percentages, etc.) must be displayed as plain text only. Do NOT wrap numbers in square badges, pills, chips, rounded rectangles, or any background-filled containers. No gray boxes around numbers.
+
+
+[SECTION: STATES (MANDATORY)]
+
+Every data view must design for:
+- Loading (skeleton)
+- Empty (no data ever existed)
+- Zero results (filters/search returned nothing) — different message from true empty
+- Error (with retry)
+- Partial success (bulk operations)
+- Selected
+- Disabled / Permission-restricted
+- Processing / Optimistic update (when applicable)
+
+Never design only the “happy path”.
+
+
+[SECTION: DESTRUCTIVE ACTIONS &amp; RECOVERY]
+
+- Prefer soft-delete + Archive + Restore over permanent delete
+- Show clear consequences in confirmation dialogs
+- After destructive actions, offer Undo via toast when technically feasible
+- For bulk destructive actions, show how many items will be affected and any that will be skipped
+- Never make destructive actions the most prominent button
+- All error and destructive actions (Delete, Remove, error toasts, error confirmation buttons, destructive bulk actions) MUST use red color (text, border, and/or background as appropriate). Never style destructive actions in neutral gray or black.
+
+
+[SECTION: FORMS &amp; DATA ENTRY]
+
+- Logical grouping and clear visual hierarchy
+- Required fields marked clearly
+- Inline validation with specific, actionable error messages
+- Sensible defaults and dependent/conditional fields
+- Support Save, Save &amp; Close, and Cancel
+- Detect unsaved changes and warn before navigation
+- Autosave + “Last saved” timestamp for longer forms when appropriate
+- Never unexpectedly discard user input
+
+
+[SECTION: ADVANCED PATTERNS (USE ONLY WHEN JUSTIFIED)]
+
+Only introduce these when the task genuinely requires them:
+- Saved Views
+- Advanced filters (AND/OR, relative dates, empty/not empty)
+- Multi-step wizards
+- Approvals &amp; assignment workflows
+- Activity / audit timelines
+- Comments &amp; @mentions
+- File versioning
+- Import wizards (Upload → Map → Validate → Preview → Import)
+- Background job progress for long operations
+
+Do not invent business rules, statuses, roles, permissions, or modules.
+
+
+[SECTION: RESPONSIVE &amp; MULTI-DEVICE BEHAVIOR]
+
+- Desktop-first for complex data-heavy screens
+- Tablet: Maintain usability; collapse secondary panels
+- Mobile: Prioritize primary tasks; use bottom sheets or full-screen patterns for edit/create; keep critical actions reachable
+- Touch targets minimum 44×44px
+- Sidebar becomes collapsible or off-canvas on smaller screens
+
+
+[SECTION: MICROCOPY &amp; TONE]
+
+- Use clear, concise, action-oriented language
+- Prefer “Save changes” over “Submit”
+- Error messages must explain what went wrong and what the user can do
+- Empty states should guide the user toward the next useful action
+- Avoid clever or playful copy in core workflows
+- Be consistent with terminology across the entire product
+
+
+[SECTION: ACCESSIBILITY (NON-NEGOTIABLE)]
+
+- WCAG 2.2 AA compliance
+- Sufficient color contrast
+- Visible focus states
+- Proper labels and ARIA attributes
+- Full keyboard operability
+- Screen reader compatible
+- Do not rely on color alone to convey meaning
+
+
+[SECTION: MULTI-TENANT / WORKSPACE AWARENESS]
+
+- Always make the current workspace / tenant visible
+- Critical actions should be clearly scoped to the current tenant
+- Support audit logs for sensitive actions
+- Design with permissions in mind (hide or disable unauthorized actions — never show them as available)
+
+
+[SECTION: OUTPUT REQUIREMENTS]
+
+Produce a complete, self-contained HTML file that opens correctly in a browser.
+
+Must include:
+- Realistic, internally consistent sample data driven by JavaScript so filters and actions actually change the UI
+- Loading (skeleton), Empty, Zero-results, and Error states
+- Fully interactive Search, Filters, Sort, and Export on tables (no static controls)
+- Search and every dropdown filter must show a clear (×) button when active; clearing must reset the filter and re-filter results immediately
+- Every icon-only row action (preview, edit, view, duplicate, more, etc.) must be clickable and produce visible feedback
+- All interactivity implemented with vanilla JavaScript inside the same HTML file
+- Sidebar with correct active state
+- Modal (View) + Side Sheet (Edit) + Confirmation dialogs
+- Toasts and Tooltips
+- Bulk action buttons (Publish, Unpublish, Delete) always visible by default and only disabled (never hidden) until ≥1 row is selected; live selection count always shown (including “0 selected”)
+- KPIs only when they provide real decision value
+- Proper visual hierarchy and professional density
+- Table must show clear column headers, horizontal row dividers, and a bordered container. A table that looks like a plain list or has invisible lines is not acceptable.
+- Numeric metrics rendered as plain text only (no square badges/pills/chips around numbers)
+- All error and destructive actions styled in red
+
+
+[SECTION: FINAL QUALITY CHECK]
+
+Before finishing, verify:
+
+- Is the primary user and primary task immediately clear?
+- Is the workflow efficient for repeated use?
+- Are important actions easy to find and irrelevant ones hidden?
+- Are all critical states designed (loading, empty, zero-results, error, selected)?
+- Is user context (filters, sort, selection) preserved where expected?
+- Does the interface feel dense and professional rather than sparse and consumer-like?
+- Has anything been added purely for visual interest?
+- Does the final result feel like a mature B2B SaaS product?
+- Are ALL filters, search, dropdowns, action buttons, bulk actions, and icon actions fully functional and interactive (not static)?
+- Do search and dropdown filters show a clear (×) button when they have an active value?
+- Is the table structure clearly visible (bordered container, distinct header, horizontal row dividers, scannable columns)? A borderless or “ghost” table is a failure.
+- Are bulk action buttons (Publish, Unpublish, Delete) always visible and only disabled (not hidden) when no rows are selected?
+- Are numeric metrics shown as plain text only (no square badges or gray boxes around numbers)?
+- Are all error and destructive actions styled in red?
+</pre>
+<a class="action secondary" href="../prompts.html">Prompt Library</a>
+<a class="action" href="https://github.com/amatullah-a/Design-gallery/blob/main/designs/Prompt%20Library/Web%20template/Saas_GROK.txt" target="_blank" rel="noopener">View source file ↗</a>
+</article></main><footer class="wrap">Design Gallery · Prompt Library</footer>
+<style id="gallery-password-gate-style">
+#gallery-password-overlay { position:fixed; inset:0; z-index:2147483647; display:flex; align-items:center; justify-content:center; padding:24px; background:rgba(245,246,251,.98); backdrop-filter:blur(10px); font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif; color:#202333; }
+#gallery-password-overlay[hidden] { display:none !important; }
+#gallery-password-overlay .gate-card { width:min(100%,410px); padding:30px; border:1px solid #e4e6ef; border-radius:20px; background:#fff; box-shadow:0 20px 70px #2023331c; }
+#gallery-password-overlay .gate-mark { display:grid; place-items:center; width:46px; height:46px; margin-bottom:18px; border-radius:14px; background:#eeedff; color:#5b52d6; font-size:22px; }
+#gallery-password-overlay h1 { margin:0 0 8px; font-size:1.5rem; letter-spacing:-.03em; }
+#gallery-password-overlay p { margin:0 0 20px; color:#73778a; font-size:.92rem; line-height:1.55; }
+#gallery-password-overlay label { display:block; margin-bottom:7px; font-size:.8rem; font-weight:700; }
+#gallery-password-input { width:100%; padding:12px 13px; border:1px solid #dfe2eb; border-radius:10px; font:inherit; outline:none; }
+#gallery-password-input:focus { border-color:#7770ef; box-shadow:0 0 0 3px #7770ef20; }
+#gallery-password-submit { width:100%; margin-top:12px; padding:12px; border:0; border-radius:10px; background:#5b52d6; color:#fff; font:inherit; font-weight:700; cursor:pointer; }
+#gallery-password-error { min-height:1.3em; margin-top:10px !important; color:#b42318 !important; font-size:.82rem !important; }
+#gallery-lock-button { position:fixed; right:14px; bottom:14px; z-index:2147483000; padding:8px 11px; border:1px solid #e0e2eb; border-radius:999px; background:#fff; color:#5149c8; font:600 12px/1.2 Inter,ui-sans-serif,system-ui,sans-serif; box-shadow:0 4px 15px #20233314; cursor:pointer; }
+</style>
+<div id="gallery-password-overlay" role="dialog" aria-modal="true" aria-labelledby="gallery-password-title">
+  <form class="gate-card" id="gallery-password-form">
+    <div class="gate-mark" aria-hidden="true">⌑</div>
+    <h1 id="gallery-password-title">Design Gallery</h1>
+    <p>Enter the gallery password to continue.</p>
+    <label for="gallery-password-input">Password</label>
+    <input id="gallery-password-input" type="password" autocomplete="current-password" required autofocus>
+    <button id="gallery-password-submit" type="submit">Unlock gallery</button>
+    <p id="gallery-password-error" role="status" aria-live="polite"></p>
+  </form>
+</div>
+<button id="gallery-lock-button" type="button" hidden>Lock gallery</button>
+<script id="gallery-password-gate-script">
+(function () {
+  const expectedHash = "ef797c8118f02dfb649607dd5d3f8c7623048c9c063d532cc95c5ed7a898a64f";
+  const storageKey = "designGalleryUnlocked_ef797c8118f02dfb";
+  const overlay = document.getElementById("gallery-password-overlay");
+  const form = document.getElementById("gallery-password-form");
+  const input = document.getElementById("gallery-password-input");
+  const error = document.getElementById("gallery-password-error");
+  const lockButton = document.getElementById("gallery-lock-button");
+  function isUnlocked() { try { return sessionStorage.getItem(storageKey) === "yes"; } catch (_) { return false; } }
+  function showUnlocked(unlocked) {
+    overlay.hidden = unlocked;
+    document.documentElement.style.overflow = unlocked ? "" : "hidden";
+    lockButton.hidden = !unlocked;
+  }
+  async function digest(value) {
+    const bytes = new TextEncoder().encode(value);
+    const hash = await crypto.subtle.digest("SHA-256", bytes);
+    return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, "0")).join("");
+  }
+  showUnlocked(isUnlocked());
+  form.addEventListener("submit", async function (event) {
+    event.preventDefault();
+    error.textContent = "";
+    const submit = document.getElementById("gallery-password-submit");
+    submit.disabled = true;
+    try {
+      if (await digest(input.value) === expectedHash) {
+        try { sessionStorage.setItem(storageKey, "yes"); } catch (_) {}
+        showUnlocked(true);
+      } else {
+        error.textContent = "That password doesn't match. Try again.";
+        input.select();
+      }
+    } catch (_) { error.textContent = "Password check failed in this browser."; }
+    finally { submit.disabled = false; }
+  });
+  lockButton.addEventListener("click", function () {
+    try { sessionStorage.removeItem(storageKey); } catch (_) {}
+    showUnlocked(false);
+    input.value = "";
+    input.focus();
+  });
+})();
+</script>
+</body></html>
