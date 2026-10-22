@@ -48,37 +48,6 @@ main {padding:28px 0 48px} .guide-section {padding:4px 0 24px;margin-bottom:24px
 <li>The main component audit prompt explicitly excludes source-code/DOM/CSS inspection, backend/API/data correctness, functional testing, broad UX review, and unsupported accessibility claims.</li>
 <li>The shared rules are evaluation criteria, not proof that a defect exists. Apply rules only where relevant to the supplied prototype.</li>
 <li>If a referenced document is missing, the audit must disclose that limitation.</li>
-</ul></div></section>
-<section class="guide-section"><h2>Website template instructions</h2><div class="guide-content"><h2>Website Template — How to Use</h2>
-<h3>Why this folder exists</h3>
-<p>This folder contains the prompt workflow for reviewing websites using distinct evaluation categories, such as design-system consistency, UI quality, components, layout, and UX.</p>
-<h3>File in this folder</h3>
-<ul>
-<li><strong><code>design-evaluation-prompt.txt</code></strong> — explains how to select and run evaluation prompts and includes individual audit prompts and strict output requirements.</li>
-</ul>
-<h3>Recommended process</h3>
-<ol>
-<li><strong>Set the evaluation objective.</strong> Decide which aspect you need to review: design-system consistency, overall UI, components, layout, UX, or another category provided in the prompt file.</li>
-<li><strong>Choose one audit scope.</strong> Use the relevant prompt section rather than treating all evaluation categories as interchangeable.</li>
-<li><strong>Provide the source.</strong> Supply the wireframe/design, website URL, screenshots, or prototype and any context required by that prompt.</li>
-<li><strong>Attach the output template.</strong> Attach <code>Audit_Report_Output_Template.html</code> from this folder together with the selected audit prompt and the source design/site. In the AI tool, explicitly ask it to use the attached HTML file as the report structure. If the selected prompt specifies a stricter or different format, follow that prompt and update the template accordingly. The prompt also references a shared Drive folder; use its original template instead if you have access to it and it is the required source.</li>
-<li><strong>Keep the prompt intact.</strong> Follow the selected section's scope, exclusions, table fields, and strict output format.</li>
-<li><strong>Run additional audits sequentially if needed.</strong> Keep their findings within separate scopes, then synthesize the results after each individual audit is complete.</li>
-<li><strong>Check the output.</strong> Confirm that it follows the required HTML/report structure and that findings are specific to the supplied evidence.</li>
-</ol>
-<h3>Inputs to provide</h3>
-<ul>
-<li>The design/wireframe/prototype or accessible website URL</li>
-<li>The evaluation category and audit scope</li>
-<li>Relevant screenshots or viewport evidence</li>
-<li><code>Audit_Report_Output_Template.html</code> (attach this with the audit prompt; use the original shared-Drive template instead if available and required)</li>
-</ul>
-<h3>Expected output</h3>
-<p>The output format specified by the chosen audit section. The file includes strict requirements for downloadable HTML-only output in several audit sections; follow the exact section used.</p>
-<h3>Important notes</h3>
-<ul>
-<li>The included HTML file is a practical starter template based on the field structure described in the prompt; it has not been verified as the original file stored in the shared Drive folder. If the original template is available, prefer that original.</li>
-<li>Do not mix scopes or invent findings. Respect the exclusions listed in the selected audit prompt.</li>
 </ul></div></section></main><footer>Design Gallery · Prompt Library</footer>
 <style id="gallery-password-gate-style">
 #gallery-password-overlay { position:fixed; inset:0; z-index:2147483647; display:flex; align-items:center; justify-content:center; padding:24px; background:rgba(245,246,251,.98); backdrop-filter:blur(10px); font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif; color:#202333; }

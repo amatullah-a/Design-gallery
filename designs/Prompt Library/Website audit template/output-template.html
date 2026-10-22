@@ -1,0 +1,404 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Coláiste Cholmcille — Beta UI/UX Audit Report</title>
+<style>
+:root{--bg:#f5f7fa;--panel:#fff;--ink:#172033;--muted:#657083;--line:#dfe4ec;--accent:#3b4b68;--high:#b42318;--medium:#9a6700;--low:#067647;--shadow:0 2px 10px rgba(23,32,51,.07)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.55 Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Arial,sans-serif}
+header{background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:20}.wrap{max-width:1500px;margin:auto;padding:18px 22px}
+h1{margin:0;font-size:25px;letter-spacing:-.02em}h2{font-size:20px;margin:30px 0 12px}.small{color:var(--muted);font-size:12px}
+.toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-top:13px}button,.button{border:1px solid #c8cfda;background:#fff;color:var(--ink);padding:8px 12px;border-radius:7px;cursor:pointer;text-decoration:none;font-weight:600}.primary{background:var(--accent);color:#fff;border-color:var(--accent)}
+#saveState{margin-left:auto;align-self:center;color:var(--muted);font-size:12px}main{max-width:1500px;margin:auto;padding:24px 22px 70px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:10px;box-shadow:var(--shadow);padding:18px;margin:14px 0}
+.kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}.kpi{background:#fff;border:1px solid var(--line);border-radius:10px;padding:15px}.kpi b{font-size:24px;display:block}.kpi span{color:var(--muted);font-size:12px}
+table{width:100%;border-collapse:separate;border-spacing:0;border:1px solid var(--line);background:#fff;border-radius:9px;overflow:hidden}th,td{padding:10px 11px;border-bottom:1px solid var(--line);vertical-align:top;text-align:left}th{background:#f0f3f7;font-size:12px;text-transform:uppercase;letter-spacing:.04em}tr:last-child td{border-bottom:0}
+.table-scroll{overflow:auto;border-radius:9px}textarea{width:200px;min-height:58px;border:1px solid #cbd3df;border-radius:6px;padding:7px;font:inherit;resize:vertical}select{border:1px solid #cbd3df;border-radius:6px;padding:7px;background:#fff}
+.severity{display:inline-block;padding:3px 8px;border-radius:999px;font-weight:700;font-size:11px}.severity.high{background:#fdecec;color:var(--high)}.severity.medium{background:#fff4d6;color:var(--medium)}.severity.low{background:#eaf7f0;color:var(--low)}
+.notice{border-left:4px solid var(--accent);background:#f7f9fc;padding:12px 14px;border-radius:6px}a{color:#234e88}.section-tag{display:inline-block;padding:4px 8px;border-radius:999px;background:#eef2f7;color:#4b5870;font-size:11px;font-weight:700}
+.footer{color:var(--muted);font-size:12px;margin-top:25px}@media(max-width:800px){.kpis{grid-template-columns:repeat(2,1fr)}header{position:static}main,.wrap{padding-left:12px;padding-right:12px}}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+<h1>Coláiste Cholmcille — Beta UI/UX Audit Report</h1>
+<div class="small">Live beta reviewed: <a href="https://exciting-jang.46-22-143-170.plesk.page/" target="_blank" rel="noopener">https://exciting-jang.46-22-143-170.plesk.page/</a> · Audit date: 03 September 2026</div>
+<div class="toolbar">
+<a class="button primary" href="https://exciting-jang.46-22-143-170.plesk.page/" target="_blank" rel="noopener">Visit Site</a>
+<button onclick="exportJSON()">Export JSON</button><button onclick="exportCSV()">Export CSV</button>
+<label class="button" for="importFile">Import JSON</label><input id="importFile" type="file" accept=".json,application/json" hidden onchange="importJSON(event)">
+<button onclick="resetAudit()">Reset</button><span id="saveState">Saved</span>
+</div></div></header>
+<main>
+<section class="card"><div class="section-tag">Scope & evidence</div><h2>Audit basis</h2>
+<p>This report applies the evaluation parameters supplied in the uploaded design-evaluation prompt. It covers design-system consistency, UI quality, components, layout, UX, accessibility, mobile, functionality, performance and Irish-school content considerations.</p>
+<p class="notice"><strong>Evidence rule:</strong> findings are based on the live beta pages accessible during review plus the site's published accessibility/privacy/cookie statements. Where the accessible crawl could not verify a visual or interactive property (for example exact CSS sizes, hover states or Core Web Vitals), the report marks it as unverified rather than presenting it as a confirmed defect.</p></section>
+<section><div class="kpis"><div class="kpi"><b>5.9/10</b><span>Overall audit score</span></div><div class="kpi"><b>42</b><span>Detailed findings</span></div><div class="kpi"><b>19</b><span>High-severity findings</span></div><div class="kpi"><b>2026</b><span>Review year</span></div></div></section>
+<section class="card"><h2>1. Color &amp; Contrast</h2><div class="table-scroll"><table><thead><tr><th>#</th><th>Heading</th><th>Subheading</th><th>Observation</th><th>Affected Element / Flow</th><th>Severity</th><th>Comments (AI)</th><th>Developer Comments</th><th>Status</th><th>Evidence</th></tr></thead><tbody><tr data-id="1" data-category="Color &amp; Contrast" data-sub="Contrast compliance" data-severity="High">
+<td>1</td><td><strong>Color &amp; Contrast</strong></td><td>Contrast compliance</td><td>The site&#x27;s June 2026 accessibility statement explicitly records some text/design combinations below the 4.5:1 AA contrast threshold, including third-party plug-ins.</td><td>Site-wide / third-party plug-ins</td>
+<td><span class="severity high">High</span></td>
+<td><textarea class="comment" aria-label="Comments for finding 1" placeholder="Add audit notes...">Confirmed by the site&#x27;s own accessibility statement; rendered contrast testing should still identify the exact affected components.</textarea></td>
+<td><textarea class="dev-comment" aria-label="Developer comments" placeholder="Developer notes..."></textarea></td>
+<td><select class="status" aria-label="Status for finding 1"><option>Not Fixed</option><option>In Progress</option><option>Fixed</option><option>Deferred</option><option>NA</option></select></td>
+<td><a href="https://exciting-jang.46-22-143-170.plesk.page/wp-content/uploads/2026/06/Accessibility-Statement.pdf" target="_blank" rel="noopener">Open</a></td></tr><tr data-id="2" data-category="Color &amp; Contrast" data-sub="Color-only states" data-severity="Low">
+<td>2</td><td><strong>Color &amp; Contrast</strong></td><td>Color-only states</td><td>The text crawl cannot establish whether hover, error, selected or status states rely on color alone. This is an unverified WCAG risk rather than a confirmed defect.</td><td>Interactive states</td>
+<td><span class="severity low">Low</span></td>
+<td><textarea class="comment" aria-label="Comments for finding 2" placeholder="Add audit notes...">Verify visually and with keyboard testing before release.</textarea></td>
+<td><textarea class="dev-comment" aria-label="Developer comments" placeholder="Developer notes..."></textarea></td>
+<td><select class="status" aria-label="Status for finding 2"><option>Not Fixed</option><option>In Progress</option><option>Fixed</option><option>Deferred</option><option>NA</option></select></td>
+<td><a href="https://www.w3.org/TR/WCAG22/" target="_blank" rel="noopener">Open</a></td></tr></tbody></table></div></section>
+<section class="card"><h2>2. Typography</h2><div class="table-scroll"><table><thead><tr><th>#</th><th>Heading</th><th>Subheading</th><th>Observation</th><th>Affected Element / Flow</th><th>Severity</th><th>Comments (AI)</th><th>Developer Comments</th><th>Status</th><th>Evidence</th></tr></thead><tbody><tr data-id="3" data-category="Typography" data-sub="Technical hero labels" data-severity="High">
+<td>3</td><td><strong>Typography</strong></td><td>Technical hero labels</td><td>The homepage exposes labels such as “home_banner_1” and “home_banner_2” in the accessible page content, which read as implementation labels rather than user-facing copy.</td><td>Homepage hero</td>
+<td><span class="severity high">High</span></td>
+<td><textarea class="comment" aria-label="Comments for finding 3" placeholder="Add audit notes...">Remove technical labels from the user-facing presentation.</textarea></td>
+<td><textarea class="dev-comment" aria-label="Developer comments" placeholder="Developer notes..."></textarea></td>
+<td><select class="status" aria-label="Status for finding 3"><option>Not Fixed</option><option>In Progress</option><option>Fixed</option><option>Deferred</option><option>NA</option></select></td>
+<td><a href="https://exciting-jang.46-22-143-170.plesk.page/" target="_blank" rel="noopener">Open</a></td></tr><tr data-id="4" data-category="Typography" data-sub="Placeholder copy" data-severity="High">
+<td>4</td><td><strong>Typography</strong></td><td>Placeholder copy</td><td>Gallery entries dated June 12, 2026 contain Lorem Ipsum descriptions, making the interface look unfinished and reducing content readability.</td><td>Gallery cards</td>
+<td><span class="severity high">High</span></td>
+<td><textarea class="comment" aria-label="Comments for finding 4" placeholder="Add audit notes...">Replace placeholder content before release.</textarea></td>
+<td><textarea class="dev-comment" aria-label="Developer comments" placeholder="Developer notes..."></textarea></td>
+<td><select class="status" aria-label="Status for finding 4"><option>Not Fixed</option><option>In Progress</option><option>Fixed</option><option>Deferred</option><option>NA</option></select></td>
+<td><a href="https://exciting-jang.46-22-143-170.plesk.page/gallery/" target="_blank" rel="noopener">Open</a></td></tr><tr data-id="5" data-category="Typography" data-sub="Dense directory content" data-severity="Medium">
+<td>5</td><td><strong>Typography</strong></td><td>Dense directory content</td><td>The staff page presents a long sequence of names with limited visible hierarchy in the content structure, making scanning harder than the rest of the site.</td><td>Staff page</td>
+<td><span class="severity medium">Medium</span></td>
+<td><textarea class="comment" aria-label="Comments for finding 5" placeholder="Add audit notes...">Review grouping and scanability without changing the site&#x27;s content model.</textarea></td>
+<td><textarea class="dev-comment" aria-label="Developer comments" placeholder="Developer notes..."></textarea></td>
+<td><select class="status" aria-label="Status for finding 5"><option>Not Fixed</option><option>In Progress</option><option>Fixed</option><option>Deferred</option><option>NA</option></select></td>
+<td><a href="https://exciting-jang.46-22-143-170.plesk.page/our-school/staff/" target="_blank" rel="noopener">Open</a></td></tr></tbody></table></div></section>
+<section class="card"><h2>3. Layout &amp; Spacing</h2><div class="table-scroll"><table><thead><tr><th>#</th><th>Heading</th><th>Subheading</th><th>Observation</th><th>Affected Element / Flow</th><th>Severity</th><th>Comments (AI)</th><th>Developer Comments</th><th>Status</th><th>Evidence</th></tr></thead><tbody><tr data-id="6" data-category="Layout &amp; Spacing" data-sub="Repeated navigation structure" data-severity="Medium">
+<td>6</td><td><strong>Layout &amp; Spacing</strong></td><td>Repeated navigation structure</td><td>The same large navigation tree is surfaced twice in the page structure on sampled pages, consistent with duplicated desktop/mobile navigation markup. This should be verified visually and for assistive technology exposure.</td><td>Global header/navigation</td>
+<td><span class="severity medium">Medium</span></td>
+<td><textarea class="comment" aria-label="Comments for finding 6" placeholder="Add audit notes...">Confirm that only the intended navigation representation is exposed and that hidden/mobile markup is appropriately managed.</textarea></td>
+<td><textarea class="dev-comment" aria-label="Developer comments" placeholder="Developer notes..."></textarea></td>
+<td><select class="status" aria-label="Status for finding 6"><option>Not Fixed</option><option>In Progress</option><option>Fixed</option><option>Deferred</option><option>NA</option></select></td>
+<td><a href="https://exciting-jang.46-22-143-170.plesk.page/news/" target="_blank" rel="noopener">Open</a></td></tr><tr data-id="7" data-category="Layout &amp; Spacing" data-sub="Calendar embed dependency" data-severity="Medium">
+<td>7</td><td><strong>Layout &amp; Spacing</strong></td><td>Calendar embed dependency</td><td>The Calendar page is largely a heading plus two third-party iframe embeds, leaving little native context around the functional content.</td><td>Calendar page</td>
+<td><span class="severity medium">Medium</span></td>
+<td><textarea class="comment" aria-label="Comments for finding 7" placeholder="Add audit notes...">Verify iframe dimensions, spacing, failure behaviour and mobile containment.</textarea></td>
+<td><textarea class="dev-comment" aria-label="Developer comments" placeholder="Developer notes..."></textarea></td>
+<td><select class="status" aria-label="Status for finding 7"><option>Not Fixed</option><option>In Progress</option><option>Fixed</option><option>Deferred</option><option>NA</option></select></td>
+<td><a href="https://exciting-jang.46-22-143-170.plesk.page/our-school/calendar/" target="_blank" rel="noopener">Open</a></td></tr><tr data-id="8" data-category="Layout &amp; Spacing" data-sub="Long content pages" data-severity="Medium">
+<td>8</td><td><strong>Layout &amp; Spacing</strong></td><td>Long content pages</td><td>Staff and student-testimonial pages are content-dense and require extended vertical scanning.</td><td>Staff / testimonials</td>
+<td><span class="severity medium">Medium</span></td>
+<td><textarea class="comment" aria-label="Comments for finding 8" placeholder="Add audit notes...">Check section grouping, whitespace rhythm and mobile scanability.</textarea></td>
+<td><textarea class="dev-comment" aria-label="Developer comments" placeholder="Developer notes..."></textarea></td>
+<td><select class="status" aria-label="Status for finding 8"><option>Not Fixed</option><option>In Progress</option><option>Fixed</option><option>Deferred</option><option>NA</option></select></td>
+<td><a href="https://exciting-jang.46-22-143-170.plesk.page/admissions/what-our-students-say/" target="_blank" rel="noopener">Open</a></td></tr></tbody></table></div></section>
+<section class="card"><h2>4. Components &amp; Interactions</h2><div class="table-scroll"><table><thead><tr><th>#</th><th>Heading</th><th>Subheading</th><th>Observation</th><th>Affected Element / Flow</th><th>Severity</th><th>Comments (AI)</th><th>Developer Comments</th><th>Status</th><th>Evidence</th></tr></thead><tbody><tr data-id="9" data-category="Components &amp; Interactions" data-sub="Generic Read More actions" data-severity="High">
+<td>9</td><td><strong>Components &amp; Interactions</strong></td><td>Generic Read More actions</td><td>News and gallery listings repeatedly use “Read More”. The site&#x27;s accessibility statement also identifies ambiguous “read more”/“click here” links as a known WCAG issue.</td><td>News / Gallery listings</td>
+<td><span class="severity high">High</span></td>
+<td><textarea class="comment" aria-label="Comments for finding 9" placeholder="Add audit notes...">Use context-specific link naming consistently across repeated cards and lists.</textarea></td>
+<td><textarea class="dev-comment" aria-label="Developer comments" placeholder="Developer notes..."></textarea></td>
+<td><select class="status" aria-label="Status for finding 9"><option>Not Fixed</option><option>In Progress</option><option>Fixed</option><option>Deferred</option><option>NA</option></select></td>
+<td><a href="https://exciting-jang.46-22-143-170.plesk.page/news/" target="_blank" rel="noopener">Open</a></td></tr><tr data-id="10" data-category="Components &amp; Interactions" data-sub="Interaction-state coverage" data-severity="Medium">
+<td>10</td><td><strong>Components &amp; Interactions</strong></td><td>Interaction-state coverage</td><td>Hover, focus, active, disabled and loading states cannot be established from the accessible crawl, so consistency across components remains unverified.</td><td>Buttons, links, menus, pagination</td>
+<td><span class="severity medium">Medium</span></td>
+<td><textarea class="comment" aria-label="Comments for finding 10" placeholder="Add audit notes...">Complete rendered mouse and keyboard state testing across representative components.</textarea></td>
+<td><textarea class="dev-comment" aria-label="Developer comments" placeholder="Developer notes..."></textarea></td>
+<td><select class="status" aria-label="Status for finding 10"><option>Not Fixed</option><option>In Progress</option><option>Fixed</option><option>Deferred</option><option>NA</option></select></td>
+<td><a href="https://exciting-jang.46-22-143-170.plesk.page/" target="_blank" rel="noopener">Open</a></td></tr><tr data-id="11" data-category="Components &amp; Interactions" data-sub="External-service controls" data-severity="Medium">
+<td>11</td><td><strong>Components &amp; Interactions</strong></td><td>External-service controls</td><td>VSWare, App, social links and the calendar rely on external destinations or services.</td><td>Header / footer / calendar</td>
+<td><span class="severity medium">Medium</span></td>
+<td><textarea class="comment" aria-label="Comments for finding 11" placeholder="Add audit notes...">Verify focus treatment, external-link expectations and failure handling.</textarea></td>
+<td><textarea class="dev-comment" aria-label="Developer comments" placeholder="Developer notes..."></textarea></td>
+<td><select class="status" aria-label="Status for finding 11"><option>Not Fixed</option><option>In Progress</option><option>Fixed</option><option>Deferred</option><option>NA</option></select></td>
+<td><a href="https://exciting-jang.46-22-143-170.plesk.page/" target="_blank" rel="noopener">Open</a></td></tr></tbody></table></div></section>
+<section class="card"><h2>5. Accessibility (WCAG)</h2><div class="table-scroll"><table><thead><tr><th>#</th><th>Heading</th><th>Subheading</th><th>Observation</th><th>Affected Element / Flow</th><th>Severity</th><th>Comments (AI)</th><th>Developer Comments</th><th>Status</th><th>Evidence</th></tr></thead><tbody><tr data-id="12" data-category="Accessibility (WCAG)" data-sub="Declared partial compliance" data-severity="High">
+<td>12</td><td><strong>Accessibility (WCAG)</strong></td><td>Declared partial compliance</td><td>The site&#x27;s accessibility statement declares partial WCAG 2.1/2.2 AA compliance.</td><td>Site-wide</td>
+<td><span class="severity high">High</span></td>
+<td><textarea class="comment" aria-label="Comments for finding 12" placeholder="Add audit notes...">Treat the listed non-compliances as tracked release issues and re-test after remediation.</textarea></td>
+<td><textarea class="dev-comment" aria-label="Developer comments" placeholder="Developer notes..."></textarea></td>
+<td><select class="status" aria-label="Status for finding 12"><option>Not Fixed</option><option>In Progress</option><option>Fixed</option><option>Deferred</option><option>NA</option></select></td>
+<td><a href="https://exciting-jang.46-22-143-170.plesk.page/wp-content/uploads/2026/06/Accessibility-Statement.pdf" target="_blank" rel="noopener">Open</a></td></tr><tr data-id="13" data-category="Accessibility (WCAG)" data-sub="Image alternative text" data-severity="High">
+<td>13</td><td><strong>Accessibility (WCAG)</strong></td><td>Image alternative text</td><td>The accessibility statement says some historical images lack descriptive alt text.</td><td>Images site-wide</td>
+<td><span class="severity high">High</span></td>
+<td><textarea class="comment" aria-label="Comments for finding 13" placeholder="Add audit notes...">Audit informative images and decorative-image semantics.</textarea></td>
+<td><textarea class="dev-comment" aria-label="Developer comments" placeholder="Developer notes..."></textarea></td>
+<td><select class="status" aria-label="Status for finding 13"><option>Not Fixed</option><option>In Progress</option><option>Fixed</option><option>Deferred</option><option>NA</option></select></td>
+<td><a href="https://exciting-jang.46-22-143-170.plesk.page/wp-content/uploads/2026/06/Accessibility-Statement.pdf" target="_blank" rel="noopener">Open</a></td></tr><tr data-id="14" data-category="Accessibility (WCAG)" data-sub="Link purpose" data-severity="High">
+<td>14</td><td><strong>Accessibility (WCAG)</strong></td><td>Link purpose</td><td>The accessibility statement identifies ambiguous link wording such as “click here” or “read more” as a non-compliance.</td><td>Historical/content links</td>
+<td><span class="severity high">High</span></td>
+<td><textarea class="comment" aria-label="Comments for finding 14" placeholder="Add audit notes...">Audit link names in context, including repeated card links.</textarea></td>
+<td><textarea class="dev-comment" aria-label="Developer comments" placeholder="Developer notes..."></textarea></td>
+<td><select class="status" aria-label="Status for finding 14"><option>Not Fixed</option><option>In Progress</option><option>Fixed</option><option>Deferred</option><option>NA</option></select></td>
+<td><a href="https://exciting-jang.46-22-143-170.plesk.page/wp-content/uploads/2026/06/Accessibility-Statement.pdf" target="_blank" rel="noopener">Open</a></td></tr><tr data-id="15" data-category="Accessibility (WCAG)" data-sub="Document accessibility" data-severity="High">
+<td>15</td><td><strong>Accessibility (WCAG)</strong></td><td>Document accessibility</td><td>The statement notes that legacy PDFs/Word files may lack headings, structural tags or reading order.</td><td>Policies / downloads / newsletters</td>
+<td><span class="severity high">High</span></td>
+<td><textarea class="comment" aria-label="Comments for finding 15" placeholder="Add audit notes...">Audit essential documents and provide accessible alternatives where necessary.</textarea></td>
+<td><textarea class="dev-comment" aria-label="Developer comments" placeholder="Developer notes..."></textarea></td>
+<td><select class="status" aria-label="Status for finding 15"><option>Not Fixed</option><option>In Progress</option><option>Fixed</option><option>Deferred</option><option>NA</option></select></td>
+<td><a href="https://exciting-jang.46-22-143-170.plesk.page/wp-content/uploads/2026/06/Accessibility-Statement.pdf" target="_blank" rel="noopener">Open</a></td></tr><tr data-id="16" data-category="Accessibility (WCAG)" data-sub="Target size / keyboard focus" data-severity="Medium">
+<td>16</td><td><strong>Accessibility (WCAG)</strong></td><td>Target size / keyboard focus</td><td>The crawl cannot measure CSS target sizes or focus appearance. WCAG 2.2 AA sets a 24×24 CSS-pixel minimum for pointer targets except defined exceptions.</td><td>Global interactive controls</td>
+<td><span class="severity medium">Medium</span></td>
+<td><textarea class="comment" aria-label="Comments for finding 16" placeholder="Add audit notes...">Measure controls and verify focus visibility and order at mobile and desktop widths.</textarea></td>
+<td><textarea class="dev-comment" aria-label="Developer comments" placeholder="Developer notes..."></textarea></td>
+<td><select class="status" aria-label="Status for finding 16"><option>Not Fixed</option><option>In Progress</option><option>Fixed</option><option>Deferred</option><option>NA</option></select></td>
+<td><a href="https://www.w3.org/TR/WCAG22/" target="_blank" rel="noopener">Open</a></td></tr></tbody></table></div></section>
+<section class="card"><h2>6. Navigation &amp; Footer</h2><div class="table-scroll"><table><thead><tr><th>#</th><th>Heading</th><th>Subheading</th><th>Observation</th><th>Affected Element / Flow</th><th>Severity</th><th>Comments (AI)</th><th>Developer Comments</th><th>Status</th><th>Evidence</th></tr></thead><tbody><tr data-id="17" data-category="Navigation &amp; Footer" data-sub="Very broad information architecture" data-severity="Medium">
+<td>17</td><td><strong>Navigation &amp; Footer</strong></td><td>Very broad information architecture</td><td>The main navigation spans Our School, Curriculum, Parents, Students, Staff, Extra Curricular and Admissions, with many nested destinations. It is comprehensive but creates a high navigation-choice load.</td><td>Global navigation</td>
+<td><span class="severity medium">Medium</span></td>
+<td><textarea class="comment" aria-label="Comments for finding 17" placeholder="Add audit notes...">Validate findability against representative parent, student and staff tasks.</textarea></td>
+<td><textarea class="dev-comment" aria-label="Developer comments" placeholder="Developer notes..."></textarea></td>
+<td><select class="status" aria-label="Status for finding 17"><option>Not Fixed</option><option>In Progress</option><option>Fixed</option><option>Deferred</option><option>NA</option></select></td>
+<td><a href="https://exciting-jang.46-22-143-170.plesk.page/" target="_blank" rel="noopener">Open</a></td></tr><tr data-id="18" data-category="Navigation &amp; Footer" data-sub="Footer consistency" data-severity="Low">
+<td>18</td><td><strong>Navigation &amp; Footer</strong></td><td>Footer consistency</td><td>Sampled pages consistently expose address, phone, email, privacy, cookie and accessibility links.</td><td>Global footer</td>
+<td><span class="severity low">Low</span></td>
+<td><textarea class="comment" aria-label="Comments for finding 18" placeholder="Add audit notes...">Retain the consistent footer pattern and verify keyboard order.</textarea></td>
+<td><textarea class="dev-comment" aria-label="Developer comments" placeholder="Developer notes..."></textarea></td>
+<td><select class="status" aria-label="Status for finding 18"><option>Not Fixed</option><option>In Progress</option><option>Fixed</option><option>Deferred</option><option>NA</option></select></td>
+<td><a href="https://exciting-jang.46-22-143-170.plesk.page/" target="_blank" rel="noopener">Open</a></td></tr><tr data-id="19" data-category="Navigation &amp; Footer" data-sub="Admissions CTA depth" data-severity="High">
+<td>19</td><td><strong>Navigation &amp; Footer</strong></td><td>Admissions CTA depth</td><td>The homepage says “Now Enrolling!” but the visible CTA routes to the general Admissions area rather than directly to an application action.</td><td>Homepage → Admissions</td>
+<td><span class="severity high">High</span></td>
+<td><textarea class="comment" aria-label="Comments for finding 19" placeholder="Add audit notes...">Validate the prospective-parent path from first click through application completion.</textarea></td>
+<td><textarea class="dev-comment" aria-label="Developer comments" placeholder="Developer notes..."></textarea></td>
+<td><select class="status" aria-label="Status for finding 19"><option>Not Fixed</option><option>In Progress</option><option>Fixed</option><option>Deferred</option><option>NA</option></select></td>
+<td><a href="https://exciting-jang.46-22-143-170.plesk.page/" target="_blank" rel="noopener">Open</a></td></tr></tbody></table></div></section>
+<section class="card"><h2>7. Link States</h2><div class="table-scroll"><table><thead><tr><th>#</th><th>Heading</th><th>Subheading</th><th>Observation</th><th>Affected Element / Flow</th><th>Severity</th><th>Comments (AI)</th><th>Developer Comments</th><th>Status</th><th>Evidence</th></tr></thead><tbody><tr data-id="20" data-category="Link States" data-sub="Repeated link labels" data-severity="High">
+<td>20</td><td><strong>Link States</strong></td><td>Repeated link labels</td><td>Multiple items use identical “Read More” labels, making links difficult to distinguish when encountered outside their surrounding card context.</td><td>News / Gallery</td>
+<td><span class="severity high">High</span></td>
+<td><textarea class="comment" aria-label="Comments for finding 20" placeholder="Add audit notes...">Audit accessible names and contextual uniqueness.</textarea></td>
+<td><textarea class="dev-comment" aria-label="Developer comments" placeholder="Developer notes..."></textarea></td>
+<td><select class="status" aria-label="Status for finding 20"><option>Not Fixed</option><option>In Progress</option><option>Fixed</option><option>Deferred</option><option>NA</option></select></td>
+<td><a href="https://exciting-jang.46-22-143-170.plesk.page/news/" target="_blank" rel="noopener">Open</a></td></tr><tr data-id="21" data-category="Link States" data-sub="External destinations" data-severity="Medium">
+<td>21</td><td><strong>Link States</strong></td><td>External destinations</td><td>Header/footer include VSWare, App and social destinations, while the crawl does not establish whether external links are consistently distinguished.</td><td>Header / footer</td>
+<td><span class="severity medium">Medium</span></td>
+<td><textarea class="comment" aria-label="Comments for finding 21" placeholder="Add audit notes...">Verify destination cues and behaviour for external links.</textarea></td>
+<td><textarea class="dev-comment" aria-label="Developer comments" placeholder="Developer notes..."></textarea></td>
+<td><select class="status" aria-label="Status for finding 21"><option>Not Fixed</option><option>In Progress</option><option>Fixed</option><option>Deferred</option><option>NA</option></select></td>
+<td><a href="https://exciting-jang.46-22-143-170.plesk.page/" target="_blank" rel="noopener">Open</a></td></tr><tr data-id="22" data-category="Link States" data-sub="Pagination states" data-severity="Low">
+<td>22</td><td><strong>Link States</strong></td><td>Pagination states</td><td>News and testimonials use numbered pagination and “Next” links.</td><td>News / testimonials</td>
+<td><span class="severity low">Low</span></td>
+<td><textarea class="comment" aria-label="Comments for finding 22" placeholder="Add audit notes...">Verify current-page semantics, focus order and mobile target size.</textarea></td>
+<td><textarea class="dev-comment" aria-label="Developer comments" placeholder="Developer notes..."></textarea></td>
+<td><select class="status" aria-label="Status for finding 22"><option>Not Fixed</option><option>In Progress</option><option>Fixed</option><option>Deferred</option><option>NA</option></select></td>
+<td><a href="https://exciting-jang.46-22-143-170.plesk.page/news/" target="_blank" rel="noopener">Open</a></td></tr></tbody></table></div></section>
+<section class="card"><h2>8. Key Pages (Gallery, News, etc.)</h2><div class="table-scroll"><table><thead><tr><th>#</th><th>Heading</th><th>Subheading</th><th>Observation</th><th>Affected Element / Flow</th><th>Severity</th><th>Comments (AI)</th><th>Developer Comments</th><th>Status</th><th>Evidence</th></tr></thead><tbody><tr data-id="23" data-category="Key Pages (Gallery, News, etc.)" data-sub="Stale news content" data-severity="High">
+<td>23</td><td><strong>Key Pages (Gallery, News, etc.)</strong></td><td>Stale news content</td><td>The homepage and News page prominently surface news from August 2020 and May 2020 despite the site being current in 2026.</td><td>Homepage / News</td>
+<td><span class="severity high">High</span></td>
+<td><textarea class="comment" aria-label="Comments for finding 23" placeholder="Add audit notes...">Review public-content freshness and archive handling before release.</textarea></td>
+<td><textarea class="dev-comment" aria-label="Developer comments" placeholder="Developer notes..."></textarea></td>
+<td><select class="status" aria-label="Status for finding 23"><option>Not Fixed</option><option>In Progress</option><option>Fixed</option><option>Deferred</option><option>NA</option></select></td>
+<td><a href="https://exciting-jang.46-22-143-170.plesk.page/news/" target="_blank" rel="noopener">Open</a></td></tr><tr data-id="24" data-category="Key Pages (Gallery, News, etc.)" data-sub="Gallery placeholder content" data-severity="High">
+<td>24</td><td><strong>Key Pages (Gallery, News, etc.)</strong></td><td>Gallery placeholder content</td><td>The Gallery page contains June 2026 entries with Lorem Ipsum descriptions.</td><td>Gallery</td>
+<td><span class="severity high">High</span></td>
+<td><textarea class="comment" aria-label="Comments for finding 24" placeholder="Add audit notes...">Complete or remove unfinished content before launch.</textarea></td>
+<td><textarea class="dev-comment" aria-label="Developer comments" placeholder="Developer notes..."></textarea></td>
+<td><select class="status" aria-label="Status for finding 24"><option>Not Fixed</option><option>In Progress</option><option>Fixed</option><option>Deferred</option><option>NA</option></select></td>
+<td><a href="https://exciting-jang.46-22-143-170.plesk.page/gallery/" target="_blank" rel="noopener">Open</a></td></tr><tr data-id="25" data-category="Key Pages (Gallery, News, etc.)" data-sub="Gallery image naming" data-severity="Medium">
+<td>25</td><td><strong>Key Pages (Gallery, News, etc.)</strong></td><td>Gallery image naming</td><td>Gallery/homepage images are exposed with generic image labels in parts of the accessible crawl.</td><td>Homepage / Gallery</td>
+<td><span class="severity medium">Medium</span></td>
+<td><textarea class="comment" aria-label="Comments for finding 25" placeholder="Add audit notes...">Verify alt text and card naming against image purpose.</textarea></td>
+<td><textarea class="dev-comment" aria-label="Developer comments" placeholder="Developer notes..."></textarea></td>
+<td><select class="status" aria-label="Status for finding 25"><option>Not Fixed</option><option>In Progress</option><option>Fixed</option><option>Deferred</option><option>NA</option></select></td>
+<td><a href="https://exciting-jang.46-22-143-170.plesk.page/gallery/" target="_blank" rel="noopener">Open</a></td></tr><tr data-id="26" data-category="Key Pages (Gallery, News, etc.)" data-sub="Staff directory scanability" data-severity="Medium">
+<td>26</td><td><strong>Key Pages (Gallery, News, etc.)</strong></td><td>Staff directory scanability</td><td>The staff page is a large text directory with no obvious search/filter affordance in the sampled content.</td><td>Staff</td>
+<td><span class="severity medium">Medium</span></td>
+<td><textarea class="comment" aria-label="Comments for finding 26" placeholder="Add audit notes...">Review whether the directory can be scanned efficiently by different audiences.</textarea></td>
+<td><textarea class="dev-comment" aria-label="Developer comments" placeholder="Developer notes..."></textarea></td>
+<td><select class="status" aria-label="Status for finding 26"><option>Not Fixed</option><option>In Progress</option><option>Fixed</option><option>Deferred</option><option>NA</option></select></td>
+<td><a href="https://exciting-jang.46-22-143-170.plesk.page/our-school/staff/" target="_blank" rel="noopener">Open</a></td></tr></tbody></table></div></section>
+<section class="card"><h2>9. Functional Pages (Calendar, Forms)</h2><div class="table-scroll"><table><thead><tr><th>#</th><th>Heading</th><th>Subheading</th><th>Observation</th><th>Affected Element / Flow</th><th>Severity</th><th>Comments (AI)</th><th>Developer Comments</th><th>Status</th><th>Evidence</th></tr></thead><tbody><tr data-id="27" data-category="Functional Pages (Calendar, Forms)" data-sub="Calendar integration" data-severity="Medium">
+<td>27</td><td><strong>Functional Pages (Calendar, Forms)</strong></td><td>Calendar integration</td><td>The calendar page embeds third-party content from uniqueschoolapp.ie.</td><td>Calendar</td>
+<td><span class="severity medium">Medium</span></td>
+<td><textarea class="comment" aria-label="Comments for finding 27" placeholder="Add audit notes...">Test load reliability, keyboard access, responsive height and failure messaging.</textarea></td>
+<td><textarea class="dev-comment" aria-label="Developer comments" placeholder="Developer notes..."></textarea></td>
+<td><select class="status" aria-label="Status for finding 27"><option>Not Fixed</option><option>In Progress</option><option>Fixed</option><option>Deferred</option><option>NA</option></select></td>
+<td><a href="https://exciting-jang.46-22-143-170.plesk.page/our-school/calendar/" target="_blank" rel="noopener">Open</a></td></tr><tr data-id="28" data-category="Functional Pages (Calendar, Forms)" data-sub="Admissions portal discoverability" data-severity="High">
+<td>28</td><td><strong>Functional Pages (Calendar, Forms)</strong></td><td>Admissions portal discoverability</td><td>How to Apply says applications are processed through an online portal, but the sampled page does not expose a direct application portal link.</td><td>How to Apply</td>
+<td><span class="severity high">High</span></td>
+<td><textarea class="comment" aria-label="Comments for finding 28" placeholder="Add audit notes...">Confirm that the current application portal is reachable through one clear, explicit action.</textarea></td>
+<td><textarea class="dev-comment" aria-label="Developer comments" placeholder="Developer notes..."></textarea></td>
+<td><select class="status" aria-label="Status for finding 28"><option>Not Fixed</option><option>In Progress</option><option>Fixed</option><option>Deferred</option><option>NA</option></select></td>
+<td><a href="https://exciting-jang.46-22-143-170.plesk.page/admissions/how-to-apply/" target="_blank" rel="noopener">Open</a></td></tr><tr data-id="29" data-category="Functional Pages (Calendar, Forms)" data-sub="Public forms" data-severity="Medium">
+<td>29</td><td><strong>Functional Pages (Calendar, Forms)</strong></td><td>Public forms</td><td>No on-site contact/admissions form was visible in the sampled public pages; contact is presented as email/phone. The privacy policy, however, refers to contact and enrollment forms.</td><td>Public pages / Privacy Policy</td>
+<td><span class="severity medium">Medium</span></td>
+<td><textarea class="comment" aria-label="Comments for finding 29" placeholder="Add audit notes...">Confirm whether forms are intentionally absent or missing from the beta.</textarea></td>
+<td><textarea class="dev-comment" aria-label="Developer comments" placeholder="Developer notes..."></textarea></td>
+<td><select class="status" aria-label="Status for finding 29"><option>Not Fixed</option><option>In Progress</option><option>Fixed</option><option>Deferred</option><option>NA</option></select></td>
+<td><a href="https://exciting-jang.46-22-143-170.plesk.page/wp-content/uploads/2026/06/Privacy-Policy.pdf" target="_blank" rel="noopener">Open</a></td></tr><tr data-id="30" data-category="Functional Pages (Calendar, Forms)" data-sub="Policy downloads" data-severity="Low">
+<td>30</td><td><strong>Functional Pages (Calendar, Forms)</strong></td><td>Policy downloads</td><td>Admissions and Policies expose current-looking admission notices alongside a sizeable policy library.</td><td>Admissions / Policies</td>
+<td><span class="severity low">Low</span></td>
+<td><textarea class="comment" aria-label="Comments for finding 30" placeholder="Add audit notes...">Verify every download opens correctly and has an appropriate accessible document structure.</textarea></td>
+<td><textarea class="dev-comment" aria-label="Developer comments" placeholder="Developer notes..."></textarea></td>
+<td><select class="status" aria-label="Status for finding 30"><option>Not Fixed</option><option>In Progress</option><option>Fixed</option><option>Deferred</option><option>NA</option></select></td>
+<td><a href="https://exciting-jang.46-22-143-170.plesk.page/our-school/policies/" target="_blank" rel="noopener">Open</a></td></tr></tbody></table></div></section>
+<section class="card"><h2>10. Mobile UX</h2><div class="table-scroll"><table><thead><tr><th>#</th><th>Heading</th><th>Subheading</th><th>Observation</th><th>Affected Element / Flow</th><th>Severity</th><th>Comments (AI)</th><th>Developer Comments</th><th>Status</th><th>Evidence</th></tr></thead><tbody><tr data-id="31" data-category="Mobile UX" data-sub="Large mobile navigation" data-severity="High">
+<td>31</td><td><strong>Mobile UX</strong></td><td>Large mobile navigation</td><td>The site has a very large multi-level navigation tree. The accessible crawl cannot verify the mobile menu&#x27;s actual interaction.</td><td>Global navigation</td>
+<td><span class="severity high">High</span></td>
+<td><textarea class="comment" aria-label="Comments for finding 31" placeholder="Add audit notes...">Test common phone widths for menu reachability, focus, scroll locking and tap targets.</textarea></td>
+<td><textarea class="dev-comment" aria-label="Developer comments" placeholder="Developer notes..."></textarea></td>
+<td><select class="status" aria-label="Status for finding 31"><option>Not Fixed</option><option>In Progress</option><option>Fixed</option><option>Deferred</option><option>NA</option></select></td>
+<td><a href="https://exciting-jang.46-22-143-170.plesk.page/" target="_blank" rel="noopener">Open</a></td></tr><tr data-id="32" data-category="Mobile UX" data-sub="Calendar iframe" data-severity="High">
+<td>32</td><td><strong>Mobile UX</strong></td><td>Calendar iframe</td><td>Third-party iframe content can create horizontal overflow or awkward nested scrolling on small screens if not fully responsive.</td><td>Calendar</td>
+<td><span class="severity high">High</span></td>
+<td><textarea class="comment" aria-label="Comments for finding 32" placeholder="Add audit notes...">Test at 320–430px widths and with browser zoom.</textarea></td>
+<td><textarea class="dev-comment" aria-label="Developer comments" placeholder="Developer notes..."></textarea></td>
+<td><select class="status" aria-label="Status for finding 32"><option>Not Fixed</option><option>In Progress</option><option>Fixed</option><option>Deferred</option><option>NA</option></select></td>
+<td><a href="https://exciting-jang.46-22-143-170.plesk.page/our-school/calendar/" target="_blank" rel="noopener">Open</a></td></tr><tr data-id="33" data-category="Mobile UX" data-sub="Dense content" data-severity="Medium">
+<td>33</td><td><strong>Mobile UX</strong></td><td>Dense content</td><td>Staff and testimonial pages require substantial scrolling and scanning on phones.</td><td>Staff / testimonials</td>
+<td><span class="severity medium">Medium</span></td>
+<td><textarea class="comment" aria-label="Comments for finding 33" placeholder="Add audit notes...">Check heading rhythm, spacing and content chunking on mobile.</textarea></td>
+<td><textarea class="dev-comment" aria-label="Developer comments" placeholder="Developer notes..."></textarea></td>
+<td><select class="status" aria-label="Status for finding 33"><option>Not Fixed</option><option>In Progress</option><option>Fixed</option><option>Deferred</option><option>NA</option></select></td>
+<td><a href="https://exciting-jang.46-22-143-170.plesk.page/admissions/what-our-students-say/" target="_blank" rel="noopener">Open</a></td></tr><tr data-id="34" data-category="Mobile UX" data-sub="Touch target measurement" data-severity="Medium">
+<td>34</td><td><strong>Mobile UX</strong></td><td>Touch target measurement</td><td>The rendered CSS sizes of controls cannot be measured from the crawl.</td><td>Global controls</td>
+<td><span class="severity medium">Medium</span></td>
+<td><textarea class="comment" aria-label="Comments for finding 34" placeholder="Add audit notes...">Measure touch targets against WCAG 2.2 AA&#x27;s 24×24 CSS-pixel minimum.</textarea></td>
+<td><textarea class="dev-comment" aria-label="Developer comments" placeholder="Developer notes..."></textarea></td>
+<td><select class="status" aria-label="Status for finding 34"><option>Not Fixed</option><option>In Progress</option><option>Fixed</option><option>Deferred</option><option>NA</option></select></td>
+<td><a href="https://www.w3.org/TR/WCAG22/" target="_blank" rel="noopener">Open</a></td></tr></tbody></table></div></section>
+<section class="card"><h2>11. Performance</h2><div class="table-scroll"><table><thead><tr><th>#</th><th>Heading</th><th>Subheading</th><th>Observation</th><th>Affected Element / Flow</th><th>Severity</th><th>Comments (AI)</th><th>Developer Comments</th><th>Status</th><th>Evidence</th></tr></thead><tbody><tr data-id="35" data-category="Performance" data-sub="Third-party request dependency" data-severity="Medium">
+<td>35</td><td><strong>Performance</strong></td><td>Third-party request dependency</td><td>Calendar, VSWare, analytics/cookie tooling and social destinations introduce third-party dependencies.</td><td>Calendar / global chrome</td>
+<td><span class="severity medium">Medium</span></td>
+<td><textarea class="comment" aria-label="Comments for finding 35" placeholder="Add audit notes...">Measure request cost, failure impact and blocking behaviour with Lighthouse and real devices.</textarea></td>
+<td><textarea class="dev-comment" aria-label="Developer comments" placeholder="Developer notes..."></textarea></td>
+<td><select class="status" aria-label="Status for finding 35"><option>Not Fixed</option><option>In Progress</option><option>Fixed</option><option>Deferred</option><option>NA</option></select></td>
+<td><a href="https://exciting-jang.46-22-143-170.plesk.page/" target="_blank" rel="noopener">Open</a></td></tr><tr data-id="36" data-category="Performance" data-sub="Homepage media payload" data-severity="Medium">
+<td>36</td><td><strong>Performance</strong></td><td>Homepage media payload</td><td>The homepage contains multiple banner/gallery images; the crawl does not expose byte sizes or loading strategy.</td><td>Homepage media</td>
+<td><span class="severity medium">Medium</span></td>
+<td><textarea class="comment" aria-label="Comments for finding 36" placeholder="Add audit notes...">Measure image payload, responsive delivery, compression and lazy-loading behaviour.</textarea></td>
+<td><textarea class="dev-comment" aria-label="Developer comments" placeholder="Developer notes..."></textarea></td>
+<td><select class="status" aria-label="Status for finding 36"><option>Not Fixed</option><option>In Progress</option><option>Fixed</option><option>Deferred</option><option>NA</option></select></td>
+<td><a href="https://exciting-jang.46-22-143-170.plesk.page/" target="_blank" rel="noopener">Open</a></td></tr><tr data-id="37" data-category="Performance" data-sub="Evidence gap" data-severity="Low">
+<td>37</td><td><strong>Performance</strong></td><td>Evidence gap</td><td>No Core Web Vitals/Lighthouse measurements can be established from the accessible crawl alone.</td><td>Site-wide</td>
+<td><span class="severity low">Low</span></td>
+<td><textarea class="comment" aria-label="Comments for finding 37" placeholder="Add audit notes...">Run a browser-based performance pass before production release.</textarea></td>
+<td><textarea class="dev-comment" aria-label="Developer comments" placeholder="Developer notes..."></textarea></td>
+<td><select class="status" aria-label="Status for finding 37"><option>Not Fixed</option><option>In Progress</option><option>Fixed</option><option>Deferred</option><option>NA</option></select></td>
+<td><a href="https://exciting-jang.46-22-143-170.plesk.page/" target="_blank" rel="noopener">Open</a></td></tr></tbody></table></div></section>
+<section class="card"><h2>12. Cross-page Recommendations</h2><div class="table-scroll"><table><thead><tr><th>#</th><th>Heading</th><th>Subheading</th><th>Observation</th><th>Affected Element / Flow</th><th>Severity</th><th>Comments (AI)</th><th>Developer Comments</th><th>Status</th><th>Evidence</th></tr></thead><tbody><tr data-id="38" data-category="Cross-page Recommendations" data-sub="Site-wide link naming rule" data-severity="High">
+<td>38</td><td><strong>Cross-page Recommendations</strong></td><td>Site-wide link naming rule</td><td>The repeated “Read More” pattern is both a consistency issue and an accessibility issue.</td><td>News / Gallery / lists</td>
+<td><span class="severity high">High</span></td>
+<td><textarea class="comment" aria-label="Comments for finding 38" placeholder="Add audit notes...">Set a consistent rule for descriptive, context-specific action labels.</textarea></td>
+<td><textarea class="dev-comment" aria-label="Developer comments" placeholder="Developer notes..."></textarea></td>
+<td><select class="status" aria-label="Status for finding 38"><option>Not Fixed</option><option>In Progress</option><option>Fixed</option><option>Deferred</option><option>NA</option></select></td>
+<td><a href="https://exciting-jang.46-22-143-170.plesk.page/" target="_blank" rel="noopener">Open</a></td></tr><tr data-id="39" data-category="Cross-page Recommendations" data-sub="Content governance" data-severity="High">
+<td>39</td><td><strong>Cross-page Recommendations</strong></td><td>Content governance</td><td>2020 news remains prominent while 2026 gallery content contains placeholder copy.</td><td>News / Gallery</td>
+<td><span class="severity high">High</span></td>
+<td><textarea class="comment" aria-label="Comments for finding 39" placeholder="Add audit notes...">Add release-readiness checks for freshness and placeholder content.</textarea></td>
+<td><textarea class="dev-comment" aria-label="Developer comments" placeholder="Developer notes..."></textarea></td>
+<td><select class="status" aria-label="Status for finding 39"><option>Not Fixed</option><option>In Progress</option><option>Fixed</option><option>Deferred</option><option>NA</option></select></td>
+<td><a href="https://exciting-jang.46-22-143-170.plesk.page/" target="_blank" rel="noopener">Open</a></td></tr><tr data-id="40" data-category="Cross-page Recommendations" data-sub="Component state regression" data-severity="Medium">
+<td>40</td><td><strong>Cross-page Recommendations</strong></td><td>Component state regression</td><td>Global interaction states are not verifiable from the crawl.</td><td>Site-wide components</td>
+<td><span class="severity medium">Medium</span></td>
+<td><textarea class="comment" aria-label="Comments for finding 40" placeholder="Add audit notes...">Run a state regression pass for header, cards, links, pagination and cookie controls.</textarea></td>
+<td><textarea class="dev-comment" aria-label="Developer comments" placeholder="Developer notes..."></textarea></td>
+<td><select class="status" aria-label="Status for finding 40"><option>Not Fixed</option><option>In Progress</option><option>Fixed</option><option>Deferred</option><option>NA</option></select></td>
+<td><a href="https://exciting-jang.46-22-143-170.plesk.page/" target="_blank" rel="noopener">Open</a></td></tr><tr data-id="41" data-category="Cross-page Recommendations" data-sub="Accessibility remediation tracking" data-severity="High">
+<td>41</td><td><strong>Cross-page Recommendations</strong></td><td>Accessibility remediation tracking</td><td>The site&#x27;s own accessibility statement lists alt text, link context, contrast and document-structure issues.</td><td>Site-wide</td>
+<td><span class="severity high">High</span></td>
+<td><textarea class="comment" aria-label="Comments for finding 41" placeholder="Add audit notes...">Track each issue to closure and re-test against WCAG 2.2 AA.</textarea></td>
+<td><textarea class="dev-comment" aria-label="Developer comments" placeholder="Developer notes..."></textarea></td>
+<td><select class="status" aria-label="Status for finding 41"><option>Not Fixed</option><option>In Progress</option><option>Fixed</option><option>Deferred</option><option>NA</option></select></td>
+<td><a href="https://exciting-jang.46-22-143-170.plesk.page/wp-content/uploads/2026/06/Accessibility-Statement.pdf" target="_blank" rel="noopener">Open</a></td></tr><tr data-id="42" data-category="Cross-page Recommendations" data-sub="Admissions journey" data-severity="High">
+<td>42</td><td><strong>Cross-page Recommendations</strong></td><td>Admissions journey</td><td>Admissions information exists, but the route from “Now Enrolling” to the actual application portal is not clearly represented in sampled content.</td><td>Homepage / Admissions</td>
+<td><span class="severity high">High</span></td>
+<td><textarea class="comment" aria-label="Comments for finding 42" placeholder="Add audit notes...">Validate the complete prospective-parent journey end-to-end.</textarea></td>
+<td><textarea class="dev-comment" aria-label="Developer comments" placeholder="Developer notes..."></textarea></td>
+<td><select class="status" aria-label="Status for finding 42"><option>Not Fixed</option><option>In Progress</option><option>Fixed</option><option>Deferred</option><option>NA</option></select></td>
+<td><a href="https://exciting-jang.46-22-143-170.plesk.page/admissions/how-to-apply/" target="_blank" rel="noopener">Open</a></td></tr></tbody></table></div></section>
+<section class="card"><h2>Parameter score summary</h2><div class="table-scroll"><table><thead><tr><th>Audit family</th><th>Sub-category</th><th>Rating</th><th>Key findings / justification</th></tr></thead><tbody><tr><td>Design System</td><td>Component consistency</td><td><strong>6/10</strong></td><td>Core navigation/footer patterns are reused across sampled pages, but repeated generic links, external-service patterns and unclear state coverage reduce system consistency.</td></tr><tr><td>Design System</td><td>Style consistency</td><td><strong>6/10</strong></td><td>The text crawl cannot reliably measure radius, shadow or icon tokens; visual-token consistency is therefore only partially evidenced.</td></tr><tr><td>Design System</td><td>Interaction states</td><td><strong>5/10</strong></td><td>Hover/focus/active/disabled/loading states are not exposed by the crawl and require rendered testing.</td></tr><tr><td>Design System</td><td>Pattern reuse</td><td><strong>7/10</strong></td><td>The same global information architecture and footer pattern recur across pages.</td></tr><tr><td>UI Audit</td><td>Typography</td><td><strong>6/10</strong></td><td>Hierarchy is serviceable at page-title level, but technical hero labels, dense staff content and placeholder gallery copy weaken visual/text quality.</td></tr><tr><td>UI Audit</td><td>Visual cleanliness</td><td><strong>6/10</strong></td><td>The core page structure is conventional, but stale news and Lorem Ipsum materially reduce perceived polish.</td></tr><tr><td>UI Audit</td><td>Alignment / clarity</td><td><strong>7/10</strong></td><td>Sampled pages use consistent page headings and navigation; exact visual alignment requires rendered inspection.</td></tr><tr><td>Component Audit</td><td>Buttons / actions</td><td><strong>6/10</strong></td><td>Primary navigation and CTA patterns exist, but generic Read More actions and unverified states are weaknesses.</td></tr><tr><td>Component Audit</td><td>Forms</td><td><strong>5/10</strong></td><td>No public on-page form was observed in sampled pages, while the privacy policy describes forms; this creates a completeness/verification gap.</td></tr><tr><td>Component Audit</td><td>Containers / cards</td><td><strong>6/10</strong></td><td>News/gallery card patterns exist, but repeated generic actions and placeholder copy weaken component quality.</td></tr><tr><td>Component Audit</td><td>States</td><td><strong>5/10</strong></td><td>Focus, hover, active, disabled and loading states cannot be confirmed from the crawl.</td></tr><tr><td>Layout Audit</td><td>Grid &amp; alignment</td><td><strong>7/10</strong></td><td>Sampled pages share consistent global chrome; exact grid measurements are not available from the text crawl.</td></tr><tr><td>Layout Audit</td><td>Spacing</td><td><strong>6/10</strong></td><td>Long-form pages and dense staff content warrant further spacing/scanability review.</td></tr><tr><td>Layout Audit</td><td>Grouping</td><td><strong>7/10</strong></td><td>Top-level groups are clearly represented in navigation and page headings.</td></tr><tr><td>Layout Audit</td><td>Balance &amp; density</td><td><strong>6/10</strong></td><td>News, staff and testimonial pages can become text-heavy; gallery placeholder content also affects perceived balance.</td></tr><tr><td>UX Audit</td><td>Navigation</td><td><strong>6/10</strong></td><td>The information architecture is comprehensive but broad and choice-heavy.</td></tr><tr><td>UX Audit</td><td>Task flows</td><td><strong>5/10</strong></td><td>The admissions flow is the largest concern: the site describes an online portal without a clear direct application action on the sampled How to Apply page.</td></tr><tr><td>UX Audit</td><td>Feedback / system visibility</td><td><strong>5/10</strong></td><td>Calendar and other external dependencies require verification of loading/failure feedback.</td></tr><tr><td>UX Audit</td><td>Errors / recovery</td><td><strong>5/10</strong></td><td>The crawl does not expose validation/error states or recovery flows for forms.</td></tr><tr><td>UX Audit</td><td>Cognitive load</td><td><strong>6/10</strong></td><td>Large navigation trees and long content pages create scanning burden.</td></tr><tr><td>UX Audit</td><td>Functionality</td><td><strong>6/10</strong></td><td>Calendar, news, gallery and document areas exist, but freshness, placeholder content and application-portal discoverability need attention.</td></tr><tr><td>UX Audit</td><td>Mobile</td><td><strong>5/10</strong></td><td>The navigation and iframe calendar are the two highest mobile-risk areas; rendered mobile testing is still required.</td></tr><tr><td>UX Audit</td><td>Multi-audience friendliness</td><td><strong>6/10</strong></td><td>The site explicitly serves parents, students and staff through separate navigation groups, but the broad architecture may still increase task time.</td></tr><tr><td>System Audit</td><td>Cross-screen consistency</td><td><strong>7/10</strong></td><td>Global navigation and footer recur consistently across sampled pages.</td></tr><tr><td>System Audit</td><td>Patterns</td><td><strong>6/10</strong></td><td>Repeated content patterns exist, but generic links and mixed external services create pattern variation.</td></tr><tr><td>System Audit</td><td>Scalability</td><td><strong>6/10</strong></td><td>The navigation taxonomy is broad enough to support content growth, but density suggests a need for governance as content expands.</td></tr><tr><td>System Audit</td><td>Accessibility</td><td><strong>5/10</strong></td><td>The site&#x27;s own statement records partial WCAG 2.1/2.2 AA compliance and several known issues.</td></tr><tr><td>System Audit</td><td>UX/UI alignment</td><td><strong>6/10</strong></td><td>The structure generally supports school information discovery, but admissions and content-freshness issues interrupt task confidence.</td></tr><tr><td>System Audit</td><td>Responsiveness &amp; Mobile</td><td><strong>5/10</strong></td><td>Mobile behaviour cannot be confirmed from the crawl; navigation breadth and embedded calendar are key risks.</td></tr><tr><td>System Audit</td><td>Privacy / GDPR basics</td><td><strong>7/10</strong></td><td>Privacy, cookie and accessibility statements are surfaced in the footer; the privacy policy identifies a controller, purposes, rights and retention principles.</td></tr><tr><td>System Audit</td><td>Irish school context / content compliance</td><td><strong>6/10</strong></td><td>Admissions notices, policies, accessibility and privacy pages are present, but bilingual readiness is not evident in the sampled public navigation/content.</td></tr></tbody></table></div></section>
+<section class="card"><h2>Top 3 Critical Issues</h2><div class="table-scroll"><table><thead><tr><th>#</th><th>Issue</th><th>Severity</th><th>Why it matters</th><th>Evidence</th></tr></thead><tbody><tr><td><strong>1</strong></td><td>Admissions journey / application portal</td><td><span class="severity high">High</span></td><td>The homepage says “Now Enrolling”, while the How to Apply page describes an online portal without exposing a direct application action in the sampled content.</td><td><a href="https://exciting-jang.46-22-143-170.plesk.page/admissions/how-to-apply/" target="_blank" rel="noopener">Evidence</a></td></tr><tr><td><strong>2</strong></td><td>Accessibility compliance debt</td><td><span class="severity high">High</span></td><td>The site&#x27;s own June 2026 accessibility statement declares partial WCAG 2.1/2.2 AA compliance and lists contrast, alt-text, link-context and document-structure issues.</td><td><a href="https://exciting-jang.46-22-143-170.plesk.page/wp-content/uploads/2026/06/Accessibility-Statement.pdf" target="_blank" rel="noopener">Evidence</a></td></tr><tr><td><strong>3</strong></td><td>Content readiness / trust</td><td><span class="severity high">High</span></td><td>The public News area prominently surfaces 2020 content while the 2026 Gallery contains Lorem Ipsum. This creates an unfinished/stale impression on a school site where parents rely on current information.</td><td><a href="https://exciting-jang.46-22-143-170.plesk.page/news/" target="_blank" rel="noopener">Evidence</a></td></tr></tbody></table></div></section>
+<section class="card"><h2>Real-world education interface examples</h2><p class="small">Live school/education websites used as contextual examples, as required by the supplied parameters.</p><div class="table-scroll"><table><thead><tr><th>Website</th><th>Relevant pattern observed</th><th>Direct URL</th></tr></thead><tbody><tr><td>St Mary&#x27;s Secondary School, Baldoyle</td><td>Strong combined admissions + calendar visibility; the admissions area exposes an Online Application Form, Admissions Policy and Admissions Notice while upcoming calendar events remain visible.</td><td><a href="https://www.stmarysbaldoyle.com/Admissions/Index.html" target="_blank" rel="noopener">https://www.stmarysbaldoyle.com/Admissions/Index.html</a></td></tr><tr><td>Holy Faith Secondary School, Clontarf</td><td>Useful school homepage pattern combining Admissions, Calendar, current news and a clear “Register Now” pathway.</td><td><a href="https://holyfaithclontarf.com/" target="_blank" rel="noopener">https://holyfaithclontarf.com/</a></td></tr><tr><td>Hansfield Educate Together Secondary School</td><td>Good example of surfacing Admissions, Calendar, News, Policies and upcoming events together on the school homepage.</td><td><a href="https://www.hansfieldsecondary.ie/" target="_blank" rel="noopener">https://www.hansfieldsecondary.ie/</a></td></tr><tr><td>Stanhope Secondary School</td><td>Current school news is dated in 2026 and the homepage provides a clear Admissions call-to-action alongside calendar and learning content.</td><td><a href="https://stanhopesecondary.ie/" target="_blank" rel="noopener">https://stanhopesecondary.ie/</a></td></tr><tr><td>Stratford College</td><td>Strong example of combining current School News, Events, Gallery and School Calendar in a single school-news context.</td><td><a href="https://www.stratfordcollege.ie/news/school-news" target="_blank" rel="noopener">https://www.stratfordcollege.ie/news/school-news</a></td></tr></tbody></table></div></section>
+<section class="card"><h2>Design-system / UX boundaries</h2><ul><li><strong>No redesign is prescribed.</strong> Areas of Action describe what needs attention, not how to redesign it.</li><li>Exact visual-token properties such as radius, shadow and pixel-level alignment were not inferred where the crawl could not prove them.</li><li>Mobile, interaction-state and performance items requiring a browser runtime are explicitly marked for verification.</li></ul></section>
+<section class="card"><h2>Source evidence</h2><ul>
+<li><a href="https://exciting-jang.46-22-143-170.plesk.page/" target="_blank" rel="noopener">Live beta homepage</a></li>
+<li><a href="https://exciting-jang.46-22-143-170.plesk.page/news/" target="_blank" rel="noopener">News</a></li><li><a href="https://exciting-jang.46-22-143-170.plesk.page/gallery/" target="_blank" rel="noopener">Gallery</a></li>
+<li><a href="https://exciting-jang.46-22-143-170.plesk.page/our-school/calendar/" target="_blank" rel="noopener">Calendar</a></li><li><a href="https://exciting-jang.46-22-143-170.plesk.page/admissions/" target="_blank" rel="noopener">Admissions</a></li>
+<li><a href="https://exciting-jang.46-22-143-170.plesk.page/admissions/how-to-apply/" target="_blank" rel="noopener">How to Apply</a></li><li><a href="https://exciting-jang.46-22-143-170.plesk.page/our-school/policies/" target="_blank" rel="noopener">Policies</a></li>
+<li><a href="https://exciting-jang.46-22-143-170.plesk.page/our-school/staff/" target="_blank" rel="noopener">Staff</a></li>
+<li><a href="https://exciting-jang.46-22-143-170.plesk.page/wp-content/uploads/2026/06/Accessibility-Statement.pdf" target="_blank" rel="noopener">Accessibility Statement</a></li>
+<li><a href="https://exciting-jang.46-22-143-170.plesk.page/wp-content/uploads/2026/06/Privacy-Policy.pdf" target="_blank" rel="noopener">Privacy Policy</a></li>
+<li><a href="https://exciting-jang.46-22-143-170.plesk.page/wp-content/uploads/2026/06/Cookie-Policy.pdf" target="_blank" rel="noopener">Cookie Policy</a></li>
+<li><a href="https://www.w3.org/TR/WCAG22/" target="_blank" rel="noopener">W3C WCAG 2.2</a></li>
+</ul></section>
+<div class="footer">Prepared against the uploaded evaluation parameters. Editable comments and status are stored locally in this browser using localStorage.</div>
+</main>
+<script>
+const STORAGE_KEY='ccbs_beta_audit_v1';
+function allRows(){return [...document.querySelectorAll('tr[data-id]')];}
+function save(){const data={};allRows().forEach(r=>{data[r.dataset.id]={comment:r.querySelector('.comment')?.value||'',devComment:r.querySelector('.dev-comment')?.value||'',status:r.querySelector('.status')?.value||'Not Fixed'};});localStorage.setItem(STORAGE_KEY,JSON.stringify(data));document.getElementById('saveState').textContent='Saved';}
+function load(){try{const data=JSON.parse(localStorage.getItem(STORAGE_KEY)||'{}');allRows().forEach(r=>{const x=data[r.dataset.id];if(!x)return;if(r.querySelector('.comment'))r.querySelector('.comment').value=x.comment||'';if(r.querySelector('.dev-comment'))r.querySelector('.dev-comment').value=x.devComment||'';if(r.querySelector('.status'))r.querySelector('.status').value=x.status||'Not Fixed';});}catch(e){}}
+document.addEventListener('input',e=>{if(e.target.matches('.comment,.dev-comment,.status')){document.getElementById('saveState').textContent='Saving…';clearTimeout(window.__saveTimer);window.__saveTimer=setTimeout(save,500);}});
+document.addEventListener('change',e=>{if(e.target.matches('.status')){document.getElementById('saveState').textContent='Saving…';clearTimeout(window.__saveTimer);window.__saveTimer=setTimeout(save,300);}});
+function download(name,text,type){const blob=new Blob([text],{type});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);}
+function exportJSON(){const out=[];allRows().forEach(r=>out.push({id:r.dataset.id,category:r.dataset.category,subcategory:r.dataset.sub,severity:r.dataset.severity,comments:r.querySelector('.comment')?.value||'',developerComments:r.querySelector('.dev-comment')?.value||'',status:r.querySelector('.status')?.value||'Not Fixed'}));download('ccbs-beta-audit.json',JSON.stringify({site:'https://exciting-jang.46-22-143-170.plesk.page/',exportedAt:new Date().toISOString(),findings:out},null,2),'application/json');}
+function exportCSV(){const lines=[['ID','Category','Sub-category','Severity','Comments (AI)','Developer Comments','Status']];allRows().forEach(r=>lines.push([r.dataset.id,r.dataset.category,r.dataset.sub,r.dataset.severity,r.querySelector('.comment')?.value||'',r.querySelector('.dev-comment')?.value||'',r.querySelector('.status')?.value||'Not Fixed']));const csv=lines.map(row=>row.map(v=>'"'+String(v).replaceAll('"','""')+'"').join(',')).join('\n');download('ccbs-beta-audit.csv',csv,'text/csv;charset=utf-8');}
+function importJSON(ev){const f=ev.target.files[0];if(!f)return;const reader=new FileReader();reader.onload=()=>{try{const obj=JSON.parse(reader.result),data=obj.findings||obj;data.forEach(x=>{const r=document.querySelector('tr[data-id="'+CSS.escape(String(x.id))+'"]');if(!r)return;if(r.querySelector('.comment'))r.querySelector('.comment').value=x.comments||x.comment||'';if(r.querySelector('.dev-comment'))r.querySelector('.dev-comment').value=x.developerComments||x.devComment||'';if(r.querySelector('.status'))r.querySelector('.status').value=x.status||'Not Fixed';});save();alert('Audit data imported.');}catch(e){alert('Could not import JSON.');}};reader.readAsText(f);}
+function resetAudit(){if(!confirm('Reset all editable comments and statuses?'))return;localStorage.removeItem(STORAGE_KEY);allRows().forEach(r=>{if(r.querySelector('.comment'))r.querySelector('.comment').value='';if(r.querySelector('.dev-comment'))r.querySelector('.dev-comment').value='';if(r.querySelector('.status'))r.querySelector('.status').value='Not Fixed';});document.getElementById('saveState').textContent='Saved';}
+load();
+</script>
+
+<style id="gallery-password-gate-style">
+#gallery-password-overlay { position:fixed; inset:0; z-index:2147483647; display:flex; align-items:center; justify-content:center; padding:24px; background:rgba(245,246,251,.98); backdrop-filter:blur(10px); font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif; color:#202333; }
+#gallery-password-overlay[hidden] { display:none !important; }
+#gallery-password-overlay .gate-card { width:min(100%,410px); padding:30px; border:1px solid #e4e6ef; border-radius:20px; background:#fff; box-shadow:0 20px 70px #2023331c; }
+#gallery-password-overlay .gate-mark { display:grid; place-items:center; width:46px; height:46px; margin-bottom:18px; border-radius:14px; background:#eeedff; color:#5b52d6; font-size:22px; }
+#gallery-password-overlay h1 { margin:0 0 8px; font-size:1.5rem; letter-spacing:-.03em; }
+#gallery-password-overlay p { margin:0 0 20px; color:#73778a; font-size:.92rem; line-height:1.55; }
+#gallery-password-overlay label { display:block; margin-bottom:7px; font-size:.8rem; font-weight:700; }
+#gallery-password-input { width:100%; padding:12px 13px; border:1px solid #dfe2eb; border-radius:10px; font:inherit; outline:none; }
+#gallery-password-input:focus { border-color:#7770ef; box-shadow:0 0 0 3px #7770ef20; }
+#gallery-password-submit { width:100%; margin-top:12px; padding:12px; border:0; border-radius:10px; background:#5b52d6; color:#fff; font:inherit; font-weight:700; cursor:pointer; }
+#gallery-password-error { min-height:1.3em; margin-top:10px !important; color:#b42318 !important; font-size:.82rem !important; }
+#gallery-lock-button { position:fixed; right:14px; bottom:14px; z-index:2147483000; padding:8px 11px; border:1px solid #e0e2eb; border-radius:999px; background:#fff; color:#5149c8; font:600 12px/1.2 Inter,ui-sans-serif,system-ui,sans-serif; box-shadow:0 4px 15px #20233314; cursor:pointer; }
+</style>
+<div id="gallery-password-overlay" role="dialog" aria-modal="true" aria-labelledby="gallery-password-title">
+  <form class="gate-card" id="gallery-password-form">
+    <div class="gate-mark" aria-hidden="true">⌑</div>
+    <h1 id="gallery-password-title">Design Gallery</h1>
+    <p>Enter the gallery password to continue.</p>
+    <label for="gallery-password-input">Password</label>
+    <input id="gallery-password-input" type="password" autocomplete="current-password" required autofocus>
+    <button id="gallery-password-submit" type="submit">Unlock gallery</button>
+    <p id="gallery-password-error" role="status" aria-live="polite"></p>
+  </form>
+</div>
+<button id="gallery-lock-button" type="button" hidden>Lock gallery</button>
+<script id="gallery-password-gate-script">
+(function () {
+  const expectedHash = "ef797c8118f02dfb649607dd5d3f8c7623048c9c063d532cc95c5ed7a898a64f";
+  const storageKey = "designGalleryUnlocked_ef797c8118f02dfb";
+  const overlay = document.getElementById("gallery-password-overlay");
+  const form = document.getElementById("gallery-password-form");
+  const input = document.getElementById("gallery-password-input");
+  const error = document.getElementById("gallery-password-error");
+  const lockButton = document.getElementById("gallery-lock-button");
+  function isUnlocked() { try { return sessionStorage.getItem(storageKey) === "yes"; } catch (_) { return false; } }
+  function showUnlocked(unlocked) {
+    overlay.hidden = unlocked;
+    document.documentElement.style.overflow = unlocked ? "" : "hidden";
+    lockButton.hidden = !unlocked;
+  }
+  async function digest(value) {
+    const bytes = new TextEncoder().encode(value);
+    const hash = await crypto.subtle.digest("SHA-256", bytes);
+    return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, "0")).join("");
+  }
+  showUnlocked(isUnlocked());
+  form.addEventListener("submit", async function (event) {
+    event.preventDefault();
+    error.textContent = "";
+    const submit = document.getElementById("gallery-password-submit");
+    submit.disabled = true;
+    try {
+      if (await digest(input.value) === expectedHash) {
+        try { sessionStorage.setItem(storageKey, "yes"); } catch (_) {}
+        showUnlocked(true);
+      } else {
+        error.textContent = "That password doesn't match. Try again.";
+        input.select();
+      }
+    } catch (_) { error.textContent = "Password check failed in this browser."; }
+    finally { submit.disabled = false; }
+  });
+  lockButton.addEventListener("click", function () {
+    try { sessionStorage.removeItem(storageKey); } catch (_) {}
+    showUnlocked(false);
+    input.value = "";
+    input.focus();
+  });
+})();
+</script>
+</body></html>
