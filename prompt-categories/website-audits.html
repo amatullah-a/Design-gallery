@@ -1,22 +1,97 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1"><title>Website Audits · Prompt Library</title>
 <style>
-:root { font-family:Inter,ui-sans-serif,system-ui,sans-serif;color:#202333;background:#f6f7fb; } * {box-sizing:border-box} body {margin:0}
-header {background:#fff;border-bottom:1px solid #e8eaf1} .wrap {width:min(1000px,calc(100% - 36px));margin:0 auto}
-.head {padding:24px 0} a {color:#5149c8} .back {text-decoration:none;font-weight:650;font-size:.85rem}
+:root {font-family:Inter,ui-sans-serif,system-ui,sans-serif;color:#202333;background:#f6f7fb}
+* {box-sizing:border-box} body {margin:0} header {background:#fff;border-bottom:1px solid #e8eaf1}
+.wrap {width:min(1000px,calc(100% - 36px));margin:0 auto} .head {padding:24px 0}
+a {color:#5149c8} .back {text-decoration:none;font-weight:650;font-size:.85rem}
 h1 {margin:16px 0 6px;font-size:clamp(1.7rem,4vw,2.3rem)} .sub {margin:0;color:#777b8d}
-main {padding:28px 0 48px} .grid {display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:14px}
+main {padding:28px 0 48px} .guide-list {display:grid;gap:14px;margin-bottom:24px}
+.guide-card {padding:22px;background:#fff;border:1px solid #e1e4ee;border-radius:14px}
+.guide-eyebrow {font-size:.72rem;font-weight:750;letter-spacing:.1em;color:#655bd5;margin-bottom:8px}
+.guide-card h2 {margin:0 0 14px;font-size:1.15rem} .guide-content {line-height:1.7;color:#3c4051}
+.guide-content h3 {font-size:1rem;margin:20px 0 8px} .guide-content h4,.guide-content h5 {font-size:.95rem;margin:16px 0 6px}
+.guide-content p {margin:8px 0 12px} .guide-content ul,.guide-content ol {padding-left:24px;margin:8px 0 14px}
+.guide-content li {padding-left:3px;margin:5px 0} .guide-content code {font-family:ui-monospace,Consolas,monospace;background:#f1f2f8;padding:2px 5px;border-radius:4px;font-size:.9em}
+.guide-content hr {border:0;border-top:1px solid #e8eaf1;margin:18px 0}
+.grid {display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:14px}
 .prompt-card {display:flex;gap:14px;padding:18px;background:#fff;border:1px solid #e6e8f0;border-radius:14px}
 .file-icon {display:grid;place-items:center;flex:0 0 42px;height:42px;border-radius:12px;background:#eeedff;color:#5b52d6}
-h2 {margin:0 0 6px;font-size:1rem} p {color:#85899b;font-size:.8rem;overflow-wrap:anywhere} .prompt-card a {display:inline-block;margin-top:6px;padding:8px 10px;border-radius:8px;background:#5b52d6;color:#fff;text-decoration:none;font-size:.8rem}
+.prompt-card h2 {margin:0 0 6px;font-size:1rem} .prompt-card p {color:#85899b;font-size:.8rem;overflow-wrap:anywhere}
+.prompt-card a {display:inline-block;margin-top:6px;padding:8px 10px;border-radius:8px;background:#5b52d6;color:#fff;text-decoration:none;font-size:.8rem}
 .prompt-card a.download-link {background:#eeedff;color:#5149c8;margin-left:4px}
-.empty {padding:26px;background:#fff;border:1px dashed #d7dae5;border-radius:14px;color:#777b8d} footer {padding:20px;text-align:center;color:#9397a6;font-size:.78rem}
+.empty {padding:26px;background:#fff;border:1px dashed #d7dae5;border-radius:14px;color:#777b8d}
+footer {padding:20px;text-align:center;color:#9397a6;font-size:.78rem}
 </style></head><body><header><div class="wrap head"><a class="back" href="../prompts.html">← Back to Prompt Library</a>
-<h1>Website Audits</h1><p class="sub">Prompts in this category: 5</p></div></header>
-<main class="wrap"><section class="grid"><article class="prompt-card"><span class="file-icon">▤</span><div><h2>Component Specific Visual Audit Prompt Updated V3.1</h2><p>Component_Specific_Visual_Audit_Prompt_Updated_v3.1.txt</p><a href="../prompt-pages/component-specific-visual-audit-prompt-updated-v3-1-2aa68ab2f7.html">Open prompt ↗</a> <a class="download-link" href="https://github.com/amatullah-a/Design-gallery/raw/refs/heads/main/designs/Prompt%20Library/Audit%20prompts/Component_Specific_Visual_Audit_Prompt_Updated_v3.1.txt?download=1" download="Component_Specific_Visual_Audit_Prompt_Updated_v3.1.txt">Download ↓</a></div></article>
+<h1>Website Audits</h1><p class="sub">Prompts in this category: 3</p></div></header>
+<main class="wrap"><div class="guide-list"><section class="guide-card"><div class="guide-eyebrow">HOW TO USE</div><h2>Audit prompts instructions</h2><div class="guide-content"><h2>Audit Prompts — How to Use</h2>
+<h3>Why this folder exists</h3>
+<p>This folder contains the component-specific visual audit prompt and the shared visual component rules used to judge SaaS interface components. Use them together when you need an evidence-led review of visible component presentation.</p>
+<h3>Files in this folder</h3>
+<ul>
+<li><strong><code>Component_Specific_Visual_Audit_Prompt_Updated_v3.1.txt</code></strong> — defines the audit boundary, evidence rules, inspection method, and reporting process for a manual component-by-component visual audit.</li>
+<li><strong><code>Skills_File_Visual_Component_Rules_Updated.txt</code></strong> — provides reusable component evaluation principles and rule IDs/categories that can be referenced when judging visible presentation.</li>
+</ul>
+<h3>When to use these prompts</h3>
+<p>Use this set when reviewing a SaaS web application, dashboard, admin panel, management system, or prototype and you need to assess visible component quality and consistency. It is not a substitute for a general UX review, code review, backend test, or functional test.</p>
+<h3>Recommended process</h3>
+<ol>
+<li><strong>Prepare the evidence.</strong> Provide the current rendered prototype, accessible screens, screenshots or recordings, and the relevant viewport sizes/states.</li>
+<li><strong>Provide the rules.</strong> Attach both files in this folder. If the prompt references a component audit specification or another audit prompt, supply it if available.</li>
+<li><strong>State the scope.</strong> Ask for a component-level visual audit. Keep general UX, source-code inspection, backend correctness, and interaction testing out of a visual-only audit.</li>
+<li><strong>Inspect all available components.</strong> Follow the audit prompt's inventory, component-by-component inspection, consistency review, and historical-finding verification steps where applicable.</li>
+<li><strong>Require evidence.</strong> Findings should describe visible symptoms and cite the supplied screen/state or location. Do not infer missing components, hidden states, or technical root causes without evidence.</li>
+<li><strong>Request the specified report.</strong> Follow the output structure required by the prompt. If the required HTML report template is not available, state that limitation and ask for an accessible copy rather than pretending to have used it.</li>
+<li><strong>Review findings.</strong> Separate confirmed visual defects from optional improvements and evidence limitations. Recheck prior findings against the current prototype.</li>
+</ol>
+<h3>Inputs to provide</h3>
+<ul>
+<li>The rendered website/prototype or screenshots/recordings</li>
+<li>Screens and viewport sizes to inspect</li>
+<li>The two files in this folder</li>
+<li>Any referenced component specification, shared report template, or prior audit, if available</li>
+</ul>
+<h3>Expected output</h3>
+<p>An evidence-led component visual audit covering only applicable, observable component properties and consistency. The exact report format should follow the selected audit prompt.</p>
+<h3>Important boundaries</h3>
+<ul>
+<li>The main component audit prompt explicitly excludes source-code/DOM/CSS inspection, backend/API/data correctness, functional testing, broad UX review, and unsupported accessibility claims.</li>
+<li>The shared rules are evaluation criteria, not proof that a defect exists. Apply rules only where relevant to the supplied prototype.</li>
+<li>If a referenced document is missing, the audit must disclose that limitation.</li>
+</ul></div></section>
+<section class="guide-card"><div class="guide-eyebrow">HOW TO USE</div><h2>Website template instructions</h2><div class="guide-content"><h2>Website Template — How to Use</h2>
+<h3>Why this folder exists</h3>
+<p>This folder contains the prompt workflow for reviewing websites using distinct evaluation categories, such as design-system consistency, UI quality, components, layout, and UX.</p>
+<h3>File in this folder</h3>
+<ul>
+<li><strong><code>design-evaluation-prompt.txt</code></strong> — explains how to select and run evaluation prompts and includes individual audit prompts and strict output requirements.</li>
+</ul>
+<h3>Recommended process</h3>
+<ol>
+<li><strong>Set the evaluation objective.</strong> Decide which aspect you need to review: design-system consistency, overall UI, components, layout, UX, or another category provided in the prompt file.</li>
+<li><strong>Choose one audit scope.</strong> Use the relevant prompt section rather than treating all evaluation categories as interchangeable.</li>
+<li><strong>Provide the source.</strong> Supply the wireframe/design, website URL, screenshots, or prototype and any context required by that prompt.</li>
+<li><strong>Provide the report template.</strong> The prompt refers to an HTML report template in a shared Drive folder. Ensure the AI tool can access it; otherwise attach an accessible copy and disclose the limitation.</li>
+<li><strong>Keep the prompt intact.</strong> Follow the selected section's scope, exclusions, table fields, and strict output format.</li>
+<li><strong>Run additional audits sequentially if needed.</strong> Keep their findings within separate scopes, then synthesize the results after each individual audit is complete.</li>
+<li><strong>Check the output.</strong> Confirm that it follows the required HTML/report structure and that findings are specific to the supplied evidence.</li>
+</ol>
+<h3>Inputs to provide</h3>
+<ul>
+<li>The design/wireframe/prototype or accessible website URL</li>
+<li>The evaluation category and audit scope</li>
+<li>Relevant screenshots or viewport evidence</li>
+<li>The referenced HTML report template, if required</li>
+</ul>
+<h3>Expected output</h3>
+<p>The output format specified by the chosen audit section. The file includes strict requirements for downloadable HTML-only output in several audit sections; follow the exact section used.</p>
+<h3>Important notes</h3>
+<ul>
+<li>The Drive link is referenced by the prompt, but its accessibility cannot be guaranteed. Provide the template directly if needed.</li>
+<li>Do not mix scopes or invent findings. Respect the exclusions listed in the selected audit prompt.</li>
+</ul></div></section></div>
+<section class="grid"><article class="prompt-card"><span class="file-icon">▤</span><div><h2>Component Specific Visual Audit Prompt Updated V3.1</h2><p>Component_Specific_Visual_Audit_Prompt_Updated_v3.1.txt</p><a href="../prompt-pages/component-specific-visual-audit-prompt-updated-v3-1-2aa68ab2f7.html">Open prompt ↗</a> <a class="download-link" href="https://github.com/amatullah-a/Design-gallery/raw/refs/heads/main/designs/Prompt%20Library/Audit%20prompts/Component_Specific_Visual_Audit_Prompt_Updated_v3.1.txt?download=1" download="Component_Specific_Visual_Audit_Prompt_Updated_v3.1.txt">Download ↓</a></div></article>
 <article class="prompt-card"><span class="file-icon">▤</span><div><h2>Design Evaluation Prompt</h2><p>design-evaluation-prompt.txt</p><a href="../prompt-pages/design-evaluation-prompt-0a9871f716.html">Open prompt ↗</a> <a class="download-link" href="https://github.com/amatullah-a/Design-gallery/raw/refs/heads/main/designs/Prompt%20Library/Website%20template/design-evaluation-prompt.txt?download=1" download="design-evaluation-prompt.txt">Download ↓</a></div></article>
-<article class="prompt-card"><span class="file-icon">▤</span><div><h2>Readme</h2><p>README.md</p><a href="../prompt-pages/readme-3b43abc87c.html">Open prompt ↗</a> <a class="download-link" href="https://github.com/amatullah-a/Design-gallery/raw/refs/heads/main/designs/Prompt%20Library/Audit%20prompts/README.md?download=1" download="README.md">Download ↓</a></div></article>
-<article class="prompt-card"><span class="file-icon">▤</span><div><h2>Readme</h2><p>README.md</p><a href="../prompt-pages/readme-ede8e42bb8.html">Open prompt ↗</a> <a class="download-link" href="https://github.com/amatullah-a/Design-gallery/raw/refs/heads/main/designs/Prompt%20Library/Website%20template/README.md?download=1" download="README.md">Download ↓</a></div></article>
 <article class="prompt-card"><span class="file-icon">▤</span><div><h2>Skills File Visual Component Rules Updated</h2><p>Skills_File_Visual_Component_Rules_Updated.txt</p><a href="../prompt-pages/skills-file-visual-component-rules-updated-04f5afd6ae.html">Open prompt ↗</a> <a class="download-link" href="https://github.com/amatullah-a/Design-gallery/raw/refs/heads/main/designs/Prompt%20Library/Audit%20prompts/Skills_File_Visual_Component_Rules_Updated.txt?download=1" download="Skills_File_Visual_Component_Rules_Updated.txt">Download ↓</a></div></article></section></main><footer>Design Gallery · Prompt Library</footer>
 <style id="gallery-password-gate-style">
 #gallery-password-overlay { position:fixed; inset:0; z-index:2147483647; display:flex; align-items:center; justify-content:center; padding:24px; background:rgba(245,246,251,.98); backdrop-filter:blur(10px); font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif; color:#202333; }
