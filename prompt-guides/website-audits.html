@@ -61,7 +61,7 @@ main {padding:28px 0 48px} .guide-section {padding:4px 0 24px;margin-bottom:24px
 <li><strong>Set the evaluation objective.</strong> Decide which aspect you need to review: design-system consistency, overall UI, components, layout, UX, or another category provided in the prompt file.</li>
 <li><strong>Choose one audit scope.</strong> Use the relevant prompt section rather than treating all evaluation categories as interchangeable.</li>
 <li><strong>Provide the source.</strong> Supply the wireframe/design, website URL, screenshots, or prototype and any context required by that prompt.</li>
-<li><strong>Provide the report template.</strong> The prompt refers to an HTML report template in a shared Drive folder. Ensure the AI tool can access it; otherwise attach an accessible copy and disclose the limitation.</li>
+<li><strong>Attach the output template.</strong> Attach <code>Audit_Report_Output_Template.html</code> from this folder together with the selected audit prompt and the source design/site. In the AI tool, explicitly ask it to use the attached HTML file as the report structure. If the selected prompt specifies a stricter or different format, follow that prompt and update the template accordingly. The prompt also references a shared Drive folder; use its original template instead if you have access to it and it is the required source.</li>
 <li><strong>Keep the prompt intact.</strong> Follow the selected section's scope, exclusions, table fields, and strict output format.</li>
 <li><strong>Run additional audits sequentially if needed.</strong> Keep their findings within separate scopes, then synthesize the results after each individual audit is complete.</li>
 <li><strong>Check the output.</strong> Confirm that it follows the required HTML/report structure and that findings are specific to the supplied evidence.</li>
@@ -71,13 +71,13 @@ main {padding:28px 0 48px} .guide-section {padding:4px 0 24px;margin-bottom:24px
 <li>The design/wireframe/prototype or accessible website URL</li>
 <li>The evaluation category and audit scope</li>
 <li>Relevant screenshots or viewport evidence</li>
-<li>The referenced HTML report template, if required</li>
+<li><code>Audit_Report_Output_Template.html</code> (attach this with the audit prompt; use the original shared-Drive template instead if available and required)</li>
 </ul>
 <h3>Expected output</h3>
 <p>The output format specified by the chosen audit section. The file includes strict requirements for downloadable HTML-only output in several audit sections; follow the exact section used.</p>
 <h3>Important notes</h3>
 <ul>
-<li>The Drive link is referenced by the prompt, but its accessibility cannot be guaranteed. Provide the template directly if needed.</li>
+<li>The included HTML file is a practical starter template based on the field structure described in the prompt; it has not been verified as the original file stored in the shared Drive folder. If the original template is available, prefer that original.</li>
 <li>Do not mix scopes or invent findings. Respect the exclusions listed in the selected audit prompt.</li>
 </ul></div></section></main><footer>Design Gallery · Prompt Library</footer>
 <style id="gallery-password-gate-style">

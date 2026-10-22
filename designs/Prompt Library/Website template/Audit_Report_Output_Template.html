@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Website Audit Report Template</title>
+  <style>
+    :root { color-scheme: light; --ink:#202536; --muted:#626b7d; --line:#d9deea; --accent:#5146d8; --soft:#f5f6fb; }
+    * { box-sizing:border-box; }
+    body { margin:0; background:#f5f6fa; color:var(--ink); font:15px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif; }
+    main { max-width:1200px; margin:36px auto; padding:32px; background:#fff; border:1px solid var(--line); border-radius:14px; }
+    h1 { margin:0 0 8px; font-size:30px; } h2 { margin-top:32px; font-size:21px; }
+    p { color:var(--muted); } .meta { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; margin:24px 0; }
+    .meta div { padding:12px; background:var(--soft); border-radius:8px; } .label { display:block; font-size:12px; color:var(--muted); text-transform:uppercase; letter-spacing:.06em; }
+    .section-row th { background:#ecebff; color:#302b80; text-align:left; padding:12px; }
+    .table-wrap { overflow-x:auto; } table { width:100%; border-collapse:collapse; font-size:13px; }
+    th,td { border:1px solid var(--line); padding:10px; vertical-align:top; text-align:left; } thead th { background:var(--soft); }
+    .placeholder { color:#737b8d; font-style:italic; } .instructions { padding:14px 18px; background:var(--soft); border-radius:8px; }
+    @media(max-width:700px) { main { margin:12px; padding:18px; } .meta { grid-template-columns:1fr; } }
+  </style>
+</head>
+<body>
+<main>
+  <h1>Website Audit Report</h1>
+  <p>Use this structure as a starting template. Follow the selected audit prompt's exact fields and instructions; do not include sections that its scope excludes.</p>
+  <div class="meta">
+    <div><span class="label">Website / Product</span><span class="placeholder">[Enter name and URL]</span></div>
+    <div><span class="label">Audit type</span><span class="placeholder">[Enter selected audit category]</span></div>
+    <div><span class="label">Audit date</span><span class="placeholder">[Enter date]</span></div>
+  </div>
+  <h2>Findings</h2>
+  <p class="instructions">Replace the example placeholders with evidence-based findings. Add a section header row for each major section, as required by the selected prompt. Do not invent issues, URLs, ratings, or evidence.</p>
+  <div class="table-wrap">
+    <table>
+      <thead><tr>
+        <th>#</th><th>Category</th><th>Sub-Category</th><th>Rating (1–10)</th><th>Key Issue</th><th>Impact</th><th>Area of Action</th><th>Real-World Example</th><th>URL</th><th>Critical (Yes/No)</th>
+      </tr></thead>
+      <tbody>
+        <tr class="section-row"><th colspan="10">[SECTION NAME]</th></tr>
+        <tr>
+          <td class="placeholder">[1]</td><td class="placeholder">[Category]</td><td class="placeholder">[Sub-category]</td><td class="placeholder">[1–10]</td><td class="placeholder">[Observed issue]</td><td class="placeholder">[Impact]</td><td class="placeholder">[Area]</td><td class="placeholder">[Evidence/example]</td><td class="placeholder">[Page URL]</td><td class="placeholder">[Yes/No]</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <h2>Before submitting</h2>
+  <ul>
+    <li>Use the exact output fields and format required by the selected prompt.</li>
+    <li>Keep findings within the chosen audit scope and respect its exclusions.</li>
+    <li>Use specific evidence from the supplied site or design; label unavailable evidence clearly.</li>
+    <li>When the prompt requires HTML-only output, return a downloadable HTML file with no extra text.</li>
+  </ul>
+</main>
+
+<style id="gallery-password-gate-style">
+#gallery-password-overlay { position:fixed; inset:0; z-index:2147483647; display:flex; align-items:center; justify-content:center; padding:24px; background:rgba(245,246,251,.98); backdrop-filter:blur(10px); font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif; color:#202333; }
+#gallery-password-overlay[hidden] { display:none !important; }
+#gallery-password-overlay .gate-card { width:min(100%,410px); padding:30px; border:1px solid #e4e6ef; border-radius:20px; background:#fff; box-shadow:0 20px 70px #2023331c; }
+#gallery-password-overlay .gate-mark { display:grid; place-items:center; width:46px; height:46px; margin-bottom:18px; border-radius:14px; background:#eeedff; color:#5b52d6; font-size:22px; }
+#gallery-password-overlay h1 { margin:0 0 8px; font-size:1.5rem; letter-spacing:-.03em; }
+#gallery-password-overlay p { margin:0 0 20px; color:#73778a; font-size:.92rem; line-height:1.55; }
+#gallery-password-overlay label { display:block; margin-bottom:7px; font-size:.8rem; font-weight:700; }
+#gallery-password-input { width:100%; padding:12px 13px; border:1px solid #dfe2eb; border-radius:10px; font:inherit; outline:none; }
+#gallery-password-input:focus { border-color:#7770ef; box-shadow:0 0 0 3px #7770ef20; }
+#gallery-password-submit { width:100%; margin-top:12px; padding:12px; border:0; border-radius:10px; background:#5b52d6; color:#fff; font:inherit; font-weight:700; cursor:pointer; }
+#gallery-password-error { min-height:1.3em; margin-top:10px !important; color:#b42318 !important; font-size:.82rem !important; }
+#gallery-lock-button { position:fixed; right:14px; bottom:14px; z-index:2147483000; padding:8px 11px; border:1px solid #e0e2eb; border-radius:999px; background:#fff; color:#5149c8; font:600 12px/1.2 Inter,ui-sans-serif,system-ui,sans-serif; box-shadow:0 4px 15px #20233314; cursor:pointer; }
+</style>
+<div id="gallery-password-overlay" role="dialog" aria-modal="true" aria-labelledby="gallery-password-title">
+  <form class="gate-card" id="gallery-password-form">
+    <div class="gate-mark" aria-hidden="true">⌑</div>
+    <h1 id="gallery-password-title">Design Gallery</h1>
+    <p>Enter the gallery password to continue.</p>
+    <label for="gallery-password-input">Password</label>
+    <input id="gallery-password-input" type="password" autocomplete="current-password" required autofocus>
+    <button id="gallery-password-submit" type="submit">Unlock gallery</button>
+    <p id="gallery-password-error" role="status" aria-live="polite"></p>
+  </form>
+</div>
+<button id="gallery-lock-button" type="button" hidden>Lock gallery</button>
+<script id="gallery-password-gate-script">
+(function () {
+  const expectedHash = "ef797c8118f02dfb649607dd5d3f8c7623048c9c063d532cc95c5ed7a898a64f";
+  const storageKey = "designGalleryUnlocked_ef797c8118f02dfb";
+  const overlay = document.getElementById("gallery-password-overlay");
+  const form = document.getElementById("gallery-password-form");
+  const input = document.getElementById("gallery-password-input");
+  const error = document.getElementById("gallery-password-error");
+  const lockButton = document.getElementById("gallery-lock-button");
+  function isUnlocked() { try { return sessionStorage.getItem(storageKey) === "yes"; } catch (_) { return false; } }
+  function showUnlocked(unlocked) {
+    overlay.hidden = unlocked;
+    document.documentElement.style.overflow = unlocked ? "" : "hidden";
+    lockButton.hidden = !unlocked;
+  }
+  async function digest(value) {
+    const bytes = new TextEncoder().encode(value);
+    const hash = await crypto.subtle.digest("SHA-256", bytes);
+    return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, "0")).join("");
+  }
+  showUnlocked(isUnlocked());
+  form.addEventListener("submit", async function (event) {
+    event.preventDefault();
+    error.textContent = "";
+    const submit = document.getElementById("gallery-password-submit");
+    submit.disabled = true;
+    try {
+      if (await digest(input.value) === expectedHash) {
+        try { sessionStorage.setItem(storageKey, "yes"); } catch (_) {}
+        showUnlocked(true);
+      } else {
+        error.textContent = "That password doesn't match. Try again.";
+        input.select();
+      }
+    } catch (_) { error.textContent = "Password check failed in this browser."; }
+    finally { submit.disabled = false; }
+  });
+  lockButton.addEventListener("click", function () {
+    try { sessionStorage.removeItem(storageKey); } catch (_) {}
+    showUnlocked(false);
+    input.value = "";
+    input.focus();
+  });
+})();
+</script>
+</body>
+</html>
