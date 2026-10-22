@@ -1,0 +1,121 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1"><title>How to use Mobile Prompts · Prompt Library</title>
+<style>
+:root {font-family:Inter,ui-sans-serif,system-ui,sans-serif;color:#202333;background:#f6f7fb}
+* {box-sizing:border-box} body {margin:0} header {background:#fff;border-bottom:1px solid #e8eaf1}
+.wrap {width:min(900px,calc(100% - 36px));margin:0 auto} .head {padding:24px 0}
+a {color:#5149c8} .back {text-decoration:none;font-weight:650;font-size:.85rem}
+h1 {margin:16px 0 6px;font-size:clamp(1.7rem,4vw,2.3rem)} .sub {margin:0;color:#777b8d}
+main {padding:28px 0 48px} .guide-section {padding:4px 0 24px;margin-bottom:24px;border-bottom:1px solid #e1e4ee}
+.guide-section h2 {font-size:1.2rem;margin:0 0 12px} .guide-content {line-height:1.7;color:#3c4051}
+.guide-content h3 {font-size:1rem;margin:20px 0 8px} .guide-content h4,.guide-content h5 {font-size:.95rem;margin:16px 0 6px}
+.guide-content p {margin:8px 0 12px} .guide-content ul,.guide-content ol {padding-left:24px;margin:8px 0 14px}
+.guide-content li {padding-left:3px;margin:5px 0} .guide-content code {font-family:ui-monospace,Consolas,monospace;background:#f1f2f8;padding:2px 5px;border-radius:4px;font-size:.9em}
+.guide-content hr {border:0;border-top:1px solid #e8eaf1;margin:18px 0} footer {padding:20px;text-align:center;color:#9397a6;font-size:.78rem}
+</style></head><body><header><div class="wrap head"><a class="back" href="../prompt-categories/mobile-prompts.html">← Back to Mobile Prompts</a>
+<h1>How to use these prompts</h1><p class="sub">Purpose, required inputs and recommended workflow for Mobile Prompts.</p></div></header>
+<main class="wrap"><section class="guide-section"><h2>Mobile template instructions</h2><div class="guide-content"><h2>Mobile Template — How to Use</h2>
+<h3>Why this folder exists</h3>
+<p>This folder groups prompts and reference material for mobile-focused UI work, device-responsive web prototypes, and Expo/React Native-oriented implementation guidance.</p>
+<h3>Files in this folder</h3>
+<ul>
+<li><strong><code>Mobile_Prompt.txt</code></strong> — use for the mobile UI task and workflow described inside the prompt.</li>
+<li><strong><code>Device-responsive.txt</code></strong> — use when the task specifically calls for adapting a prototype to multiple viewport/device sizes.</li>
+<li><strong><code>expo-skills-mobile.txt</code></strong> — use as supporting reference material when the project uses Expo or React Native and the referenced guidance is relevant.</li>
+</ul>
+<h3>How to choose a file</h3>
+<ol>
+<li>For a mobile app design task, start with <code>Mobile_Prompt.txt</code>.</li>
+<li>For a web prototype that must adapt across desktop, tablet and mobile, use <code>Device-responsive.txt</code>.</li>
+<li>For an Expo/React Native implementation, consult <code>expo-skills-mobile.txt</code> as a supporting reference.</li>
+<li>Do not automatically combine all three. Choose the prompt that matches the project and use the reference file only when it applies.</li>
+</ol>
+<h3>Recommended process</h3>
+<ol>
+<li>Identify the target platform and desired deliverable.</li>
+<li>Provide the source material requested by the chosen prompt: screenshots, wireframes, existing code, requirements, user roles, and important workflows as applicable.</li>
+<li>Paste the selected prompt into the AI tool without removing its constraints.</li>
+<li>Include relevant reference material and clearly state any technical or design constraints.</li>
+<li>Review the output against the prompt and check that content and core user flows have been preserved where required.</li>
+<li>Test the result at the intended device sizes and verify real interactions in the browser/device environment.</li>
+</ol>
+<h3>Expected output</h3>
+<p>The deliverable defined by the selected prompt, such as a mobile-oriented UI/prototype or a device-responsive implementation. The Expo reference supports the task; it is not itself a task-specific prompt.</p>
+<h3>Important notes</h3>
+<ul>
+<li>A responsive preview control in the Design Gallery only changes the preview viewport; it does not make a prototype responsive.</li>
+<li>Do not claim responsive support or working interactions until they have been tested.</li>
+<li>Follow the selected prompt's own requirements if they are more specific than this folder guide.</li>
+</ul></div></section></main><footer>Design Gallery · Prompt Library</footer>
+<style id="gallery-password-gate-style">
+#gallery-password-overlay { position:fixed; inset:0; z-index:2147483647; display:flex; align-items:center; justify-content:center; padding:24px; background:rgba(245,246,251,.98); backdrop-filter:blur(10px); font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif; color:#202333; }
+#gallery-password-overlay[hidden] { display:none !important; }
+#gallery-password-overlay .gate-card { width:min(100%,410px); padding:30px; border:1px solid #e4e6ef; border-radius:20px; background:#fff; box-shadow:0 20px 70px #2023331c; }
+#gallery-password-overlay .gate-mark { display:grid; place-items:center; width:46px; height:46px; margin-bottom:18px; border-radius:14px; background:#eeedff; color:#5b52d6; font-size:22px; }
+#gallery-password-overlay h1 { margin:0 0 8px; font-size:1.5rem; letter-spacing:-.03em; }
+#gallery-password-overlay p { margin:0 0 20px; color:#73778a; font-size:.92rem; line-height:1.55; }
+#gallery-password-overlay label { display:block; margin-bottom:7px; font-size:.8rem; font-weight:700; }
+#gallery-password-input { width:100%; padding:12px 13px; border:1px solid #dfe2eb; border-radius:10px; font:inherit; outline:none; }
+#gallery-password-input:focus { border-color:#7770ef; box-shadow:0 0 0 3px #7770ef20; }
+#gallery-password-submit { width:100%; margin-top:12px; padding:12px; border:0; border-radius:10px; background:#5b52d6; color:#fff; font:inherit; font-weight:700; cursor:pointer; }
+#gallery-password-error { min-height:1.3em; margin-top:10px !important; color:#b42318 !important; font-size:.82rem !important; }
+#gallery-lock-button { position:fixed; right:14px; bottom:14px; z-index:2147483000; padding:8px 11px; border:1px solid #e0e2eb; border-radius:999px; background:#fff; color:#5149c8; font:600 12px/1.2 Inter,ui-sans-serif,system-ui,sans-serif; box-shadow:0 4px 15px #20233314; cursor:pointer; }
+</style>
+<div id="gallery-password-overlay" role="dialog" aria-modal="true" aria-labelledby="gallery-password-title">
+  <form class="gate-card" id="gallery-password-form">
+    <div class="gate-mark" aria-hidden="true">⌑</div>
+    <h1 id="gallery-password-title">Design Gallery</h1>
+    <p>Enter the gallery password to continue.</p>
+    <label for="gallery-password-input">Password</label>
+    <input id="gallery-password-input" type="password" autocomplete="current-password" required autofocus>
+    <button id="gallery-password-submit" type="submit">Unlock gallery</button>
+    <p id="gallery-password-error" role="status" aria-live="polite"></p>
+  </form>
+</div>
+<button id="gallery-lock-button" type="button" hidden>Lock gallery</button>
+<script id="gallery-password-gate-script">
+(function () {
+  const expectedHash = "ef797c8118f02dfb649607dd5d3f8c7623048c9c063d532cc95c5ed7a898a64f";
+  const storageKey = "designGalleryUnlocked_ef797c8118f02dfb";
+  const overlay = document.getElementById("gallery-password-overlay");
+  const form = document.getElementById("gallery-password-form");
+  const input = document.getElementById("gallery-password-input");
+  const error = document.getElementById("gallery-password-error");
+  const lockButton = document.getElementById("gallery-lock-button");
+  function isUnlocked() { try { return sessionStorage.getItem(storageKey) === "yes"; } catch (_) { return false; } }
+  function showUnlocked(unlocked) {
+    overlay.hidden = unlocked;
+    document.documentElement.style.overflow = unlocked ? "" : "hidden";
+    lockButton.hidden = !unlocked;
+  }
+  async function digest(value) {
+    const bytes = new TextEncoder().encode(value);
+    const hash = await crypto.subtle.digest("SHA-256", bytes);
+    return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, "0")).join("");
+  }
+  showUnlocked(isUnlocked());
+  form.addEventListener("submit", async function (event) {
+    event.preventDefault();
+    error.textContent = "";
+    const submit = document.getElementById("gallery-password-submit");
+    submit.disabled = true;
+    try {
+      if (await digest(input.value) === expectedHash) {
+        try { sessionStorage.setItem(storageKey, "yes"); } catch (_) {}
+        showUnlocked(true);
+      } else {
+        error.textContent = "That password doesn't match. Try again.";
+        input.select();
+      }
+    } catch (_) { error.textContent = "Password check failed in this browser."; }
+    finally { submit.disabled = false; }
+  });
+  lockButton.addEventListener("click", function () {
+    try { sessionStorage.removeItem(storageKey); } catch (_) {}
+    showUnlocked(false);
+    input.value = "";
+    input.focus();
+  });
+})();
+</script>
+</body></html>
