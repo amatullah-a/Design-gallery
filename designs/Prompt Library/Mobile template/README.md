@@ -1,31 +1,28 @@
-# Mobile Template — How to Use
+# Mobile Prompts — Usage Guide
 
-## Why this folder exists
-This folder groups prompts and reference material for mobile-focused UI work, device-responsive web prototypes, and Expo/React Native-oriented implementation guidance.
+## Purpose
+This folder supports two different tasks: creating a mobile app or app module, and adapting a web-first design to mobile device sizes.
 
-## Files in this folder
-- **`Mobile_Prompt.txt`** — use for the mobile UI task and workflow described inside the prompt.
-- **`Device-responsive.txt`** — use when the task specifically calls for adapting a prototype to multiple viewport/device sizes.
-- **`expo-skills-mobile.txt`** — use as supporting reference material when the project uses Expo or React Native and the referenced guidance is relevant.
+## Files in This Folder
 
-## How to choose a file
-1. For a mobile app design task, start with `Mobile_Prompt.txt`.
-2. For a web prototype that must adapt across desktop, tablet and mobile, use `Device-responsive.txt`.
-3. For an Expo/React Native implementation, consult `expo-skills-mobile.txt` as a supporting reference.
-4. Do not automatically combine all three. Choose the prompt that matches the project and use the reference file only when it applies.
+### `Mobile_Prompt.txt` — Create a Mobile App or Module
+Use this prompt when creating a new mobile app or designing a module within an existing mobile app.
 
-## Recommended process
-1. Identify the target platform and desired deliverable.
-2. Provide the source material requested by the chosen prompt: screenshots, wireframes, existing code, requirements, user roles, and important workflows as applicable.
-3. Paste the selected prompt into the AI tool without removing its constraints.
-4. Include relevant reference material and clearly state any technical or design constraints.
-5. Review the output against the prompt and check that content and core user flows have been preserved where required.
-6. Test the result at the intended device sizes and verify real interactions in the browser/device environment.
+### `Device-responsive.txt` — Adapt a Web-First Design for Mobile
+Use this prompt when an existing design was created for the web and needs to become responsive for mobile devices. Attach the current web design or its source files so the adaptation is based on the existing work.
 
-## Expected output
-The deliverable defined by the selected prompt, such as a mobile-oriented UI/prototype or a device-responsive implementation. The Expo reference supports the task; it is not itself a task-specific prompt.
+### `expo-skills-mobile.txt` — Expo Skills Reference
+This file contains the Expo skills reference. Attach it with either prompt so the relevant guidance can be consulted during the task.
 
-## Important notes
-- A responsive preview control in the Design Gallery only changes the preview viewport; it does not make a prototype responsive.
-- Do not claim responsive support or working interactions until they have been tested.
-- Follow the selected prompt's own requirements if they are more specific than this folder guide.
+## How to Use These Files
+1. Choose **one** task prompt: `Mobile_Prompt.txt` for app/module creation, or `Device-responsive.txt` for adapting a web-first design.
+2. Attach `expo-skills-mobile.txt` as the skills reference.
+3. Attach the relevant task materials, such as a BRD, screenshots, existing designs, source files, or device-size requirements.
+4. In the chat, describe what needs to be created or adapted and specify any important requirements.
+5. Ask the AI to follow the selected prompt and use the attached reference materials.
+
+## Expected Output
+A mobile app or module design, or a mobile-responsive adaptation of an existing web-first design, according to the selected prompt.
+
+## Important
+The two task prompts serve different purposes. Select the one that matches your task; do not use the responsive prompt as a substitute for creating a new mobile app.
