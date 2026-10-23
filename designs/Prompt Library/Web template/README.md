@@ -1,29 +1,34 @@
-# Web Template — How to Use
+# Web Prompts — Usage Guide
 
-## Why this folder exists
-This folder contains web/SaaS visual-design guidance, SaaS design instructions, and a skills reference file.
+## Purpose
+Use the three prompts in this folder together to create or design a website or web-based interface using the requirements and references supplied for the task.
 
-## Files in this folder
-- **`Visual-design.txt`** — use for the visual-design task and constraints defined in the file.
-- **`Saas-design.txt`** — use for the SaaS interface-design task and product UI guidance defined in the file.
-- **`skills.sh.txt`** — a reference list of skills that may support design or implementation work.
+## Files in This Folder
 
-## How to choose a file
-1. Choose `Visual-design.txt` when the task is primarily the visual design direction described in that prompt.
-2. Choose `Saas-design.txt` when the task is specifically about a SaaS product interface.
-3. Consult `skills.sh.txt` for relevant supporting skills; it is a reference list, not a replacement for the main prompt.
+### `Saas-design.txt` — SaaS-Related Guidance
+Use this prompt for the SaaS-related principles and requirements relevant to the design task.
 
-## Recommended process
-1. Define the goal, target users, key screens, and expected deliverable.
-2. Provide the existing UI/screenshots/wireframes or code and all requirements that must be preserved.
-3. Run the selected prompt with the source material and technical constraints.
-4. If using a referenced skill, provide the actual skill content or ensure it is accessible; do not assume a skill has been read merely because it is listed.
-5. Review the output for hierarchy, consistency, content fidelity, responsiveness, and functional requirements relevant to the task.
-6. Test the result in the target browser or application.
+### `skills.sh.txt` — Skills Reference
+Use this file as the skills reference. Attach the relevant `skills.sh` skill materials specified or needed for the task so they can inform the design work.
 
-## Expected output
-A web or SaaS design/prototype matching the selected prompt's requested scope and format.
+### `Visual-design.txt` — Website Visual Design Creation
+Use this prompt for creating the website or web interface itself, based on the requirements and reference materials.
 
-## Important notes
-- Do not combine prompts automatically; use the one that best matches the task.
-- Treat reference files as guidance and preserve any specific constraints in the chosen prompt.
+**Attach all three files together** for the same website-design task.
+
+## Additional Task Materials
+Attach the materials relevant to the task:
+- **BRD:** business requirements, scope, and expected functionality.
+- **Screenshots or visual references:** existing screens or examples of the intended design.
+- **Existing HTML files:** include them when available and relevant.
+- **Other task-specific files:** include any additional materials needed to understand the request.
+
+## How to Use These Files
+1. Attach `Saas-design.txt`, `skills.sh.txt`, and `Visual-design.txt` together.
+2. Attach the BRD and relevant screenshots, existing HTML, and other supporting materials.
+3. In the chat, clearly describe what needs to be created or designed, including requirements and constraints.
+4. Ask for the website or interface to be created according to the three prompts and the attached task materials.
+5. Review the result against the BRD and supplied references.
+
+## Expected Output
+A website or web interface designed according to the three prompts, business requirements, and relevant reference materials.
