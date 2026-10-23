@@ -12,8 +12,9 @@
     main { width: min(1180px, calc(100% - 40px)); margin: 0 auto; padding: 18px 0 28px; }
     .hero h1 { margin: 0 0 4px; font-size: clamp(1.45rem, 2.5vw, 1.9rem); letter-spacing: -.04em; }
     .intro { margin: 0; color: #707589; line-height: 1.4; font-size: .9rem; }
-    .hero-inner { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
-    .prompt-library-cta { display: flex; align-items: center; gap: 11px; min-width: 250px; max-width: 340px; padding: 12px 14px; border: 1px solid #e2dfff; border-radius: 12px; background: linear-gradient(135deg, #fbfaff, #f1efff); color: #302b63; text-decoration: none; box-shadow: 0 3px 10px #4f46e508; transition: transform .16s ease, box-shadow .16s ease; }
+    .hero-inner { display: grid; grid-template-columns: minmax(220px, 1fr) auto; align-items: center; gap: 24px; }
+    .header-actions { display: flex; align-items: stretch; justify-content: flex-end; gap: 12px; }
+    .prompt-library-cta { display: flex; align-items: center; gap: 11px; width: clamp(220px, 22vw, 285px); min-width: 0; padding: 12px 14px; border: 1px solid #e2dfff; border-radius: 12px; background: linear-gradient(135deg, #fbfaff, #f1efff); color: #302b63; text-decoration: none; box-shadow: 0 3px 10px #4f46e508; transition: transform .16s ease, box-shadow .16s ease; }
     .prompt-library-cta:hover { transform: translateY(-2px); box-shadow: 0 8px 20px #4f46e51a; }
     .archive-cta { background: linear-gradient(135deg,#fffdf7,#fff6df); border-color:#f0e4c7; color:#5c4720; }
     .archive-cta .prompt-library-icon { background:#f7e9c8;color:#8a641b; }
@@ -23,13 +24,13 @@
     .prompt-library-cta strong { font-size: .82rem; }
     .prompt-library-cta small { margin-top: 3px; color: #77738f; font-size: .68rem; }
     .prompt-library-arrow { margin-left: auto; color: #5b52d6; font-size: 1rem; }
-    .toolbar { display: flex; gap: 10px; margin: 14px 0 10px; }
+    .toolbar { display: grid; grid-template-columns: minmax(0, 1fr) 260px; gap: 12px; margin: 20px 0 12px; }
     .sort { flex: 0 0 235px; max-width: 100%; padding: 9px 12px; border: 1px solid #dfe2eb; border-radius: 12px; background: #fff; color: inherit; font: inherit; }
     .search { width: 100%; min-width: 0; padding: 9px 12px; border: 1px solid #dfe2eb; border-radius: 12px; background: #fff; color: inherit; font: inherit; outline: none; }
     .search:focus { border-color: #7770ef; box-shadow: 0 0 0 3px #7770ef20; }
     .count { margin: 0 0 10px; color: #777b8d; font-size: .8rem; }
-    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 235px), 1fr)); gap: 12px; align-items: start; }
-    .project-card { min-width: 0; padding: 14px; display: flex; flex-direction: column; background: #fff; border: 1px solid #e7e9f1; border-radius: 12px; box-shadow: 0 3px 12px #20233307; transition: transform .16s ease, box-shadow .16s ease, border-color .16s ease; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 250px), 1fr)); gap: 16px; align-items: stretch; }
+    .project-card { min-width: 0; min-height: 100%; padding: 16px; display: flex; flex-direction: column; background: #fff; border: 1px solid #e7e9f1; border-radius: 12px; box-shadow: 0 3px 12px #20233307; transition: transform .16s ease, box-shadow .16s ease, border-color .16s ease; }
     .project-card:hover { transform: translateY(-3px); border-color: #d5d3ff; box-shadow: 0 12px 28px #20233312; }
     .card-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 10px; }
     .project-icon { display: grid; place-items: center; width: 30px; height: 30px; border-radius: 9px; background: #eeedff; color: #5b52d6; font-size: 1rem; }
@@ -50,8 +51,8 @@
     .empty { padding: 28px; background: white; border: 1px dashed #d7dae5; border-radius: 16px; color: #777b8d; }
     .empty[hidden], .project-card[hidden] { display: none; }
     footer { margin-top: 30px; color: #9397a6; font-size: .78rem; text-align: center; }
-    @media (max-width: 700px) { .hero-inner { align-items: flex-start; flex-direction: column; gap: 12px; } .prompt-library-cta { width: 100%; max-width: 420px; } }
-    @media (max-width: 560px) { main { width: calc(100% - 28px); padding: 16px 0 28px; } .toolbar { margin-top: 12px; } .project-card { padding: 13px; } }
+    @media (max-width: 900px) { .hero-inner { grid-template-columns: 1fr; gap: 16px; } .header-actions { justify-content: flex-start; flex-wrap: wrap; } .prompt-library-cta { width: min(100%, 320px); } }
+    @media (max-width: 560px) { main { width: calc(100% - 28px); padding: 16px 0 28px; } .toolbar { grid-template-columns: 1fr; margin-top: 14px; } .sort { width: 100%; flex-basis: auto; } .header-actions { display: grid; grid-template-columns: 1fr; width: 100%; } .prompt-library-cta { width: 100%; max-width: none; } .project-card { padding: 14px; } }
   </style>
 </head>
 <body>
@@ -59,7 +60,7 @@
     <div class="hero-inner">
       <div><h1>Design Gallery</h1>
       <p class="intro">A collection of visual design projects.</p></div>
-      <a class="prompt-library-cta" href="prompts.html"><span class="prompt-library-icon" aria-hidden="true">✳</span><span><strong>Prompt Library</strong><small>Browse audit prompts and rules</small></span><span class="prompt-library-arrow" aria-hidden="true">↗</span></a><a class="prompt-library-cta archive-cta" href="archive.html"><span class="prompt-library-icon" aria-hidden="true">▣</span><span><strong>Archive</strong><small>Completed and inactive prototypes</small></span><span class="prompt-library-arrow" aria-hidden="true">↗</span></a>
+      <nav class="header-actions" aria-label="Gallery resources"><a class="prompt-library-cta" href="prompts.html"><span class="prompt-library-icon" aria-hidden="true">✳</span><span><strong>Prompt Library</strong><small>Browse audit prompts and rules</small></span><span class="prompt-library-arrow" aria-hidden="true">↗</span></a><a class="prompt-library-cta archive-cta" href="archive.html"><span class="prompt-library-icon" aria-hidden="true">▣</span><span><strong>Archive</strong><small>Completed and inactive prototypes</small></span><span class="prompt-library-arrow" aria-hidden="true">↗</span></a></nav>
     </div>
   </main></header>
   <main>
