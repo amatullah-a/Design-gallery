@@ -10,8 +10,7 @@
     body { margin: 0; }
     .hero { background: #fff; border-bottom: 1px solid #e8eaf1; }
     main { width: min(1180px, calc(100% - 40px)); margin: 0 auto; padding: 18px 0 28px; }
-    .hero h1 { margin: 0; font-size: clamp(1.45rem, 2.5vw, 1.9rem); letter-spacing: -.04em; }
-    .company-name { margin: 3px 0 5px; color: #5149c8; font-size: .78rem; font-weight: 650; letter-spacing: .025em; }
+    .hero h1 { margin: 0 0 4px; font-size: clamp(1.45rem, 2.5vw, 1.9rem); letter-spacing: -.04em; }
     .intro { margin: 0; color: #707589; line-height: 1.4; font-size: .9rem; }
     .hero-inner { display: grid; grid-template-columns: minmax(220px, 1fr) auto; align-items: center; gap: 24px; }
     .header-actions { display: flex; align-items: stretch; justify-content: flex-end; gap: 12px; }
@@ -59,8 +58,8 @@
 <body>
   <header class="hero"><main>
     <div class="hero-inner">
-      <div class="brand-block"><h1>Design Gallery</h1>
-      <p class="company-name">Unique Schools India</p></div>
+      <div><h1>Design Gallery</h1>
+      <p class="intro">A collection of visual design projects.</p></div>
       <nav class="header-actions" aria-label="Gallery resources"><a class="prompt-library-cta" href="prompts.html"><span class="prompt-library-icon" aria-hidden="true">✳</span><span><strong>Prompt Library</strong><small>Browse audit prompts and rules</small></span><span class="prompt-library-arrow" aria-hidden="true">↗</span></a><a class="prompt-library-cta archive-cta" href="archive.html"><span class="prompt-library-icon" aria-hidden="true">▣</span><span><strong>Archive</strong><small>Completed and inactive prototypes</small></span><span class="prompt-library-arrow" aria-hidden="true">↗</span></a></nav>
     </div>
   </main></header>
