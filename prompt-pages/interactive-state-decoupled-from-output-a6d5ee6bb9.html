@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Interactive State Decoupled From Output · Prompt Library</title>
+<style>
+:root { color-scheme:light; font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;color:#202333;background:#f6f7fb; }
+* {box-sizing:border-box} body {margin:0} header {background:#fff;border-bottom:1px solid #e8eaf1}
+.wrap {width:min(900px,calc(100% - 32px));margin:0 auto} .head {padding:22px 0 20px}
+a {color:#5149c8} .back {text-decoration:none;font-size:.85rem;font-weight:650}
+h1 {margin:16px 0 6px;font-size:clamp(1.5rem,4vw,2.15rem);overflow-wrap:anywhere}
+.subtitle {margin:0;color:#777b8d;font-size:.85rem} main {padding:24px 0 44px}
+.content {background:#fff;border:1px solid #e5e7ef;border-radius:14px;padding:clamp(16px,3vw,28px)}
+pre {margin:0;white-space:pre-wrap;overflow-wrap:anywhere;font:.9rem/1.75 ui-monospace,SFMono-Regular,Consolas,monospace}
+.action {display:inline-flex;margin:18px 8px 0 0;padding:9px 12px;border-radius:8px;background:#5b52d6;color:#fff;text-decoration:none;font-size:.82rem;font-weight:650}
+.action.secondary {background:#eeedff;color:#5149c8} footer {padding:0 0 24px;color:#9397a6;text-align:center;font-size:.78rem}
+</style></head><body><header><div class="wrap head">
+<a class="back" href="../prompt-categories/code-review.html">← Back to Code Review</a>
+<h1>Interactive State Decoupled From Output</h1><p class="subtitle">interactive-state-decoupled-from-output.md</p>
+</div></header><main class="wrap"><article class="content"><pre>---
+name: interactive-state-decoupled-from-output
+description: New user-mutable state is introduced but an output that should depend on it reads a static or duplicate source instead
+triggers:
+  files:
+    - &quot;*.tsx&quot;
+    - &quot;*.jsx&quot;
+    - &quot;*.vue&quot;
+    - &quot;*.svelte&quot;
+    - &quot;**/*.tsx&quot;
+    - &quot;**/*.jsx&quot;
+    - &quot;**/*.vue&quot;
+    - &quot;**/*.svelte&quot;
+  hunk_regex: &quot;useState|useReducer|writable\\(|ref\\(|reactive\\(|toggle|setSelected|setChecked|setEnabled|setWatched|setFilter&quot;
+confidence_floor: 0.72
+---
+
+This diff adds a piece of user-mutable state (a `useState` /
+`useReducer` / store `writable` / `ref` / a `toggle*` handler that
+flips a Set or boolean) AND there is an output in the same component
+whose meaning DEPENDS on that state but which is computed from a
+different, static, or duplicate source, so toggling the control in
+the UI has no effect on the output it appears to govern.
+
+The classic shape: a user can star/unstar, select/deselect, enable/
+disable, or filter items, but a derived view (an alert banner, a
+count, a summary, a &quot;what matches&quot; list, a submit payload) is built
+from a constant default list, an unrelated prop, or a separately
+hardcoded copy of the same data, not from the live state the user
+just changed. Each line reads correctly on its own; the bug is the
+MISSING wire between the state and the consumer.
+
+Flag when, in this diff:
+- new interactive state `S` is introduced (and a handler mutates it),
+  AND
+- there is a rendered output or computed value `O` whose
+  semantics clearly should reflect `S` (it is &quot;about&quot; the same thing
+  the user is toggling), BUT
+- `O` is derived from a static constant, a duplicated literal, or a
+  different source, never reading `S`.
+
+Trace it: find every place the new state SHOULD be read (the outputs
+that semantically depend on it) and check each actually reads it. An
+output that reads a static/duplicate source instead of `S` is the
+finding. This also surfaces nearby dead code: a status/variant value
+that no branch ever produces, or the same metric rendered from two
+different sources that can disagree.
+
+Suppress when:
+- the static source is intentional and documented (e.g. the default
+  list is the seed and the toggle layers on top, and the output
+  correctly merges both),
+- the output genuinely should not depend on the state (the
+  resemblance is coincidental),
+- the state is purely presentational (drives only its own control&#x27;s
+  appearance, like a star&#x27;s fill) and no other output is expected to
+  track it.
+
+Severity: `major` when the decoupling makes a user-facing control a
+no-op for the thing it implies it controls (e.g. unwatching a
+category in the UI but the alert still fires for it); `minor` for
+cosmetic-only mismatches.
+
+Example: a &quot;watched categories&quot; toggle drove only
+the star icon while the threshold-breach alert banner was computed
+from a separate static `DEFAULT_WATCHES` constant, so starring /
+unstarring had no effect on which categories tripped the alert.
+</pre>
+<a class="action secondary" href="../prompts.html">Prompt Library</a>
+<a class="action" href="https://github.com/amatullah-a/Design-gallery/raw/refs/heads/main/designs/Prompt%20Library/code-review/references/patterns/interactive-state-decoupled-from-output.md?download=1" download="interactive-state-decoupled-from-output.md">Download file ↓</a>
+</article></main><footer class="wrap">Design Gallery · Prompt Library</footer>
+<style id="gallery-password-gate-style">
+#gallery-password-overlay { position:fixed; inset:0; z-index:2147483647; display:flex; align-items:center; justify-content:center; padding:24px; background:rgba(245,246,251,.98); backdrop-filter:blur(10px); font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif; color:#202333; }
+#gallery-password-overlay[hidden] { display:none !important; }
+#gallery-password-overlay .gate-card { width:min(100%,410px); padding:30px; border:1px solid #e4e6ef; border-radius:20px; background:#fff; box-shadow:0 20px 70px #2023331c; }
+#gallery-password-overlay .gate-mark { display:grid; place-items:center; width:46px; height:46px; margin-bottom:18px; border-radius:14px; background:#eeedff; color:#5b52d6; font-size:22px; }
+#gallery-password-overlay h1 { margin:0 0 8px; font-size:1.5rem; letter-spacing:-.03em; }
+#gallery-password-overlay p { margin:0 0 20px; color:#73778a; font-size:.92rem; line-height:1.55; }
+#gallery-password-overlay label { display:block; margin-bottom:7px; font-size:.8rem; font-weight:700; }
+#gallery-password-input { width:100%; padding:12px 13px; border:1px solid #dfe2eb; border-radius:10px; font:inherit; outline:none; }
+#gallery-password-input:focus { border-color:#7770ef; box-shadow:0 0 0 3px #7770ef20; }
+#gallery-password-submit { width:100%; margin-top:12px; padding:12px; border:0; border-radius:10px; background:#5b52d6; color:#fff; font:inherit; font-weight:700; cursor:pointer; }
+#gallery-password-error { min-height:1.3em; margin-top:10px !important; color:#b42318 !important; font-size:.82rem !important; }
+#gallery-lock-button { position:fixed; right:14px; bottom:14px; z-index:2147483000; padding:8px 11px; border:1px solid #e0e2eb; border-radius:999px; background:#fff; color:#5149c8; font:600 12px/1.2 Inter,ui-sans-serif,system-ui,sans-serif; box-shadow:0 4px 15px #20233314; cursor:pointer; }
+</style>
+<div id="gallery-password-overlay" role="dialog" aria-modal="true" aria-labelledby="gallery-password-title">
+  <form class="gate-card" id="gallery-password-form">
+    <div class="gate-mark" aria-hidden="true">⌑</div>
+    <h1 id="gallery-password-title">Design Gallery</h1>
+    <p>Enter the gallery password to continue.</p>
+    <label for="gallery-password-input">Password</label>
+    <input id="gallery-password-input" type="password" autocomplete="current-password" required autofocus>
+    <button id="gallery-password-submit" type="submit">Unlock gallery</button>
+    <p id="gallery-password-error" role="status" aria-live="polite"></p>
+  </form>
+</div>
+<button id="gallery-lock-button" type="button" hidden>Lock gallery</button>
+<script id="gallery-password-gate-script">
+(function () {
+  const expectedHash = "ef797c8118f02dfb649607dd5d3f8c7623048c9c063d532cc95c5ed7a898a64f";
+  const storageKey = "designGalleryUnlocked_ef797c8118f02dfb";
+  const overlay = document.getElementById("gallery-password-overlay");
+  const form = document.getElementById("gallery-password-form");
+  const input = document.getElementById("gallery-password-input");
+  const error = document.getElementById("gallery-password-error");
+  const lockButton = document.getElementById("gallery-lock-button");
+  function isUnlocked() { try { return sessionStorage.getItem(storageKey) === "yes"; } catch (_) { return false; } }
+  function showUnlocked(unlocked) {
+    overlay.hidden = unlocked;
+    document.documentElement.style.overflow = unlocked ? "" : "hidden";
+    lockButton.hidden = !unlocked;
+  }
+  async function digest(value) {
+    const bytes = new TextEncoder().encode(value);
+    const hash = await crypto.subtle.digest("SHA-256", bytes);
+    return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, "0")).join("");
+  }
+  showUnlocked(isUnlocked());
+  form.addEventListener("submit", async function (event) {
+    event.preventDefault();
+    error.textContent = "";
+    const submit = document.getElementById("gallery-password-submit");
+    submit.disabled = true;
+    try {
+      if (await digest(input.value) === expectedHash) {
+        try { sessionStorage.setItem(storageKey, "yes"); } catch (_) {}
+        showUnlocked(true);
+      } else {
+        error.textContent = "That password doesn't match. Try again.";
+        input.select();
+      }
+    } catch (_) { error.textContent = "Password check failed in this browser."; }
+    finally { submit.disabled = false; }
+  });
+  lockButton.addEventListener("click", function () {
+    try { sessionStorage.removeItem(storageKey); } catch (_) {}
+    showUnlocked(false);
+    input.value = "";
+    input.focus();
+  });
+})();
+</script>
+</body></html>

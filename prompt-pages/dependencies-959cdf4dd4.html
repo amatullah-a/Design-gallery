@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dependencies · Prompt Library</title>
+<style>
+:root { color-scheme:light; font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;color:#202333;background:#f6f7fb; }
+* {box-sizing:border-box} body {margin:0} header {background:#fff;border-bottom:1px solid #e8eaf1}
+.wrap {width:min(900px,calc(100% - 32px));margin:0 auto} .head {padding:22px 0 20px}
+a {color:#5149c8} .back {text-decoration:none;font-size:.85rem;font-weight:650}
+h1 {margin:16px 0 6px;font-size:clamp(1.5rem,4vw,2.15rem);overflow-wrap:anywhere}
+.subtitle {margin:0;color:#777b8d;font-size:.85rem} main {padding:24px 0 44px}
+.content {background:#fff;border:1px solid #e5e7ef;border-radius:14px;padding:clamp(16px,3vw,28px)}
+pre {margin:0;white-space:pre-wrap;overflow-wrap:anywhere;font:.9rem/1.75 ui-monospace,SFMono-Regular,Consolas,monospace}
+.action {display:inline-flex;margin:18px 8px 0 0;padding:9px 12px;border-radius:8px;background:#5b52d6;color:#fff;text-decoration:none;font-size:.82rem;font-weight:650}
+.action.secondary {background:#eeedff;color:#5149c8} footer {padding:0 0 24px;color:#9397a6;text-align:center;font-size:.78rem}
+</style></head><body><header><div class="wrap head">
+<a class="back" href="../prompt-categories/code-review.html">← Back to Code Review</a>
+<h1>Dependencies</h1><p class="subtitle">dependencies.md</p>
+</div></header><main class="wrap"><article class="content"><pre># Dependency, Framework &amp; Version Review
+
+Use this reference when reviewing package manifests, lockfiles, framework versions, runtimes, and third-party libraries.
+
+---
+
+## 1. Scope &amp; Manifest Inspection
+
+Every code review MUST inspect the project&#x27;s dependency manifests and lockfiles:
+
+- **Node.js / JavaScript / TypeScript**: `package.json`, `package-lock.json`, `pnpm-lock.yaml`, `yarn.lock`, `.nvmrc`, `.node-version`
+- **Python**: `requirements.txt`, `Pipfile`, `Pipfile.lock`, `pyproject.toml`, `poetry.lock`
+- **Go**: `go.mod`, `go.sum`
+- **Rust**: `Cargo.toml`, `Cargo.lock`
+- **Java / Kotlin**: `pom.xml`, `build.gradle`, `build.gradle.kts`
+- **Container / Environment**: `Dockerfile`, `docker-compose.yml`, `.tool-versions`
+
+Never assume dependency versions without inspecting the actual manifest files on disk.
+
+---
+
+## 2. Framework Version Auditing
+
+Inspect the declared and resolved versions of primary application frameworks against current active, supported, and LTS release cycles.
+
+### Next.js Auditing (Mandatory for Next.js Codebases)
+When `next` is present in `package.json`:
+1. **Identify Major Version**:
+   - Check `dependencies[&quot;next&quot;]` and resolved version in lockfile.
+2. **Flag Outdated Generations**:
+   - **Next.js 12 or earlier**: Flag as **Major**. Lacks App Router, Turbopack, modern image optimization, and active security maintenance. Forces reliance on legacy patterns (`pages/` directory, `next/legacy/image`, `getInitialProps`).
+   - **Next.js 13**: Flag as **Major** or **Minor**. Early transition era with experimental App Router features, unstable Server Actions, and known memory/caching issues resolved in Next.js 14 and 15.
+   - **Next.js 14 vs 15**: Flag as **Minor** if running Next.js 14 when Next.js 15 is standard, especially if the codebase relies on async request headers/cookies migrations or React 19 capabilities.
+3. **Inspect Associated Framework Imports**:
+   - Look for deprecated imports such as `next/legacy/image`, legacy font loaders, or outdated middleware signatures that signal legacy framework debt.
+
+### React / React-DOM Auditing
+- **React 16 or 17**: Flag as **Major**. Lacks React 18+ concurrent features (`useTransition`, `useDeferredValue`), automatic batching, Server Components, and modern hook capabilities.
+- **React 18 vs 19**: Check for React 19 compatibility when paired with modern Next.js versions.
+
+### Backend &amp; Other Web Frameworks
+- **Express**: Express 4.x with obsolete sub-dependencies vs modern middleware; Express 3 is EOL.
+- **Fastify / NestJS / Django / Flask / Spring**: Check whether the pinned version is actively supported upstream.
+
+---
+
+## 3. End-of-Life (EOL) &amp; Deprecated Runtimes &amp; Packages
+
+### Runtime Environment EOL
+Check `.nvmrc`, `.node-version`, `package.json` (`engines.node`), and Dockerfiles:
+- **Node.js 14, 16, 18**: Node 14 and 16 are completely End-of-Life. Node 18 has reached maintenance/EOL. If the project targets an EOL Node version, raise a **Major** finding under `Dependencies` or `Security`.
+
+### Deprecated NPM Packages
+Inspect dependencies for known abandoned or deprecated packages:
+- `request` → Deprecated; migrate to native `fetch` or `axios`.
+- `moment` → Maintenance mode; migrate to `date-fns`, `dayjs`, or JavaScript `Intl`.
+- `querystring` → Node built-in deprecated; use standard `URLSearchParams`.
+- `node-fetch` / `isomorphic-fetch` → Redundant in modern Node runtimes with native global `fetch`.
+- `uuid` (outdated major versions) or obsolete crypto shims.
+
+---
+
+## 4. Security Vulnerabilities &amp; Advisories (CVEs)
+
+Where security scanner tools or command execution is enabled:
+1. Run `npm audit --json` or equivalent tool (`pnpm audit`, `pip-audit`, `cargo audit`).
+2. Verify reported vulnerabilities:
+   - Identify whether the vulnerable package is in `dependencies` (production runtime) vs `devDependencies` (build-time only).
+   - Trace whether the vulnerable function/export is actually imported and reachable.
+3. Classify:
+   - **Critical**: CVSS $\ge 9.0$, Remote Code Execution (RCE), Prototype Pollution in request parsing, or unauthenticated auth bypass.
+   - **Major**: CVSS $\ge 7.0$ (High) vulnerability in production dependencies.
+   - **Minor**: Moderate vulnerability or devDependency issue.
+
+---
+
+## 5. Peer Dependency &amp; Version Incompatibilities
+
+Check for conflicting peer dependencies:
+- Framework vs Library mismatch (e.g. Next.js 15 paired with a UI component library that strictly requires React $\le 18$).
+- Monorepo package drift (different workspaces using mismatched versions of shared core libraries or TypeScript).
+
+---
+
+## 6. Loose, Wildcard, or Unpinned Version Ranges
+
+Check for risky version specifiers:
+- `*` or `latest` in `dependencies`: Flag as **Minor** (`unpinned-dependency-version`).
+- Missing lockfile (`package-lock.json`, `pnpm-lock.yaml`, etc.) in production applications: Flag as **Major** for non-deterministic builds.
+
+---
+
+## 7. Report Format &amp; Category
+
+### Category Name
+All dependency and version findings MUST use the authoritative category:
+
+`Dependencies`
+
+*(Do not classify framework version or dependency issues as generic `Frontend` or `Backend` unless they describe purely internal application code.)*
+
+### Finding Format
+Each dependency finding must include:
+- **File**: Exact manifest path (e.g. `package.json`).
+- **Line Number**: The exact line where the dependency is declared.
+- **Package Name &amp; Current Version**: e.g., `&quot;next&quot;: &quot;12.3.4&quot;`.
+- **Target / Recommended Version**: e.g., `^15.0.0` (or current LTS/stable).
+- **Impact Description**: Concrete technical breakdown of:
+  - Missing security patches or known CVEs
+  - Deprecated APIs currently in use
+  - Architectural limitations (e.g. lack of Server Actions, modern bundling)
+  - Upgrade considerations and breaking changes
+- **Remediation**: Exact `package.json` diff and package manager update command.
+</pre>
+<a class="action secondary" href="../prompts.html">Prompt Library</a>
+<a class="action" href="https://github.com/amatullah-a/Design-gallery/raw/refs/heads/main/designs/Prompt%20Library/code-review/references/dependencies.md?download=1" download="dependencies.md">Download file ↓</a>
+</article></main><footer class="wrap">Design Gallery · Prompt Library</footer>
+<style id="gallery-password-gate-style">
+#gallery-password-overlay { position:fixed; inset:0; z-index:2147483647; display:flex; align-items:center; justify-content:center; padding:24px; background:rgba(245,246,251,.98); backdrop-filter:blur(10px); font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif; color:#202333; }
+#gallery-password-overlay[hidden] { display:none !important; }
+#gallery-password-overlay .gate-card { width:min(100%,410px); padding:30px; border:1px solid #e4e6ef; border-radius:20px; background:#fff; box-shadow:0 20px 70px #2023331c; }
+#gallery-password-overlay .gate-mark { display:grid; place-items:center; width:46px; height:46px; margin-bottom:18px; border-radius:14px; background:#eeedff; color:#5b52d6; font-size:22px; }
+#gallery-password-overlay h1 { margin:0 0 8px; font-size:1.5rem; letter-spacing:-.03em; }
+#gallery-password-overlay p { margin:0 0 20px; color:#73778a; font-size:.92rem; line-height:1.55; }
+#gallery-password-overlay label { display:block; margin-bottom:7px; font-size:.8rem; font-weight:700; }
+#gallery-password-input { width:100%; padding:12px 13px; border:1px solid #dfe2eb; border-radius:10px; font:inherit; outline:none; }
+#gallery-password-input:focus { border-color:#7770ef; box-shadow:0 0 0 3px #7770ef20; }
+#gallery-password-submit { width:100%; margin-top:12px; padding:12px; border:0; border-radius:10px; background:#5b52d6; color:#fff; font:inherit; font-weight:700; cursor:pointer; }
+#gallery-password-error { min-height:1.3em; margin-top:10px !important; color:#b42318 !important; font-size:.82rem !important; }
+#gallery-lock-button { position:fixed; right:14px; bottom:14px; z-index:2147483000; padding:8px 11px; border:1px solid #e0e2eb; border-radius:999px; background:#fff; color:#5149c8; font:600 12px/1.2 Inter,ui-sans-serif,system-ui,sans-serif; box-shadow:0 4px 15px #20233314; cursor:pointer; }
+</style>
+<div id="gallery-password-overlay" role="dialog" aria-modal="true" aria-labelledby="gallery-password-title">
+  <form class="gate-card" id="gallery-password-form">
+    <div class="gate-mark" aria-hidden="true">⌑</div>
+    <h1 id="gallery-password-title">Design Gallery</h1>
+    <p>Enter the gallery password to continue.</p>
+    <label for="gallery-password-input">Password</label>
+    <input id="gallery-password-input" type="password" autocomplete="current-password" required autofocus>
+    <button id="gallery-password-submit" type="submit">Unlock gallery</button>
+    <p id="gallery-password-error" role="status" aria-live="polite"></p>
+  </form>
+</div>
+<button id="gallery-lock-button" type="button" hidden>Lock gallery</button>
+<script id="gallery-password-gate-script">
+(function () {
+  const expectedHash = "ef797c8118f02dfb649607dd5d3f8c7623048c9c063d532cc95c5ed7a898a64f";
+  const storageKey = "designGalleryUnlocked_ef797c8118f02dfb";
+  const overlay = document.getElementById("gallery-password-overlay");
+  const form = document.getElementById("gallery-password-form");
+  const input = document.getElementById("gallery-password-input");
+  const error = document.getElementById("gallery-password-error");
+  const lockButton = document.getElementById("gallery-lock-button");
+  function isUnlocked() { try { return sessionStorage.getItem(storageKey) === "yes"; } catch (_) { return false; } }
+  function showUnlocked(unlocked) {
+    overlay.hidden = unlocked;
+    document.documentElement.style.overflow = unlocked ? "" : "hidden";
+    lockButton.hidden = !unlocked;
+  }
+  async function digest(value) {
+    const bytes = new TextEncoder().encode(value);
+    const hash = await crypto.subtle.digest("SHA-256", bytes);
+    return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, "0")).join("");
+  }
+  showUnlocked(isUnlocked());
+  form.addEventListener("submit", async function (event) {
+    event.preventDefault();
+    error.textContent = "";
+    const submit = document.getElementById("gallery-password-submit");
+    submit.disabled = true;
+    try {
+      if (await digest(input.value) === expectedHash) {
+        try { sessionStorage.setItem(storageKey, "yes"); } catch (_) {}
+        showUnlocked(true);
+      } else {
+        error.textContent = "That password doesn't match. Try again.";
+        input.select();
+      }
+    } catch (_) { error.textContent = "Password check failed in this browser."; }
+    finally { submit.disabled = false; }
+  });
+  lockButton.addEventListener("click", function () {
+    try { sessionStorage.removeItem(storageKey); } catch (_) {}
+    showUnlocked(false);
+    input.value = "";
+    input.focus();
+  });
+})();
+</script>
+</body></html>

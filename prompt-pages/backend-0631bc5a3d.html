@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Backend · Prompt Library</title>
+<style>
+:root { color-scheme:light; font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;color:#202333;background:#f6f7fb; }
+* {box-sizing:border-box} body {margin:0} header {background:#fff;border-bottom:1px solid #e8eaf1}
+.wrap {width:min(900px,calc(100% - 32px));margin:0 auto} .head {padding:22px 0 20px}
+a {color:#5149c8} .back {text-decoration:none;font-size:.85rem;font-weight:650}
+h1 {margin:16px 0 6px;font-size:clamp(1.5rem,4vw,2.15rem);overflow-wrap:anywhere}
+.subtitle {margin:0;color:#777b8d;font-size:.85rem} main {padding:24px 0 44px}
+.content {background:#fff;border:1px solid #e5e7ef;border-radius:14px;padding:clamp(16px,3vw,28px)}
+pre {margin:0;white-space:pre-wrap;overflow-wrap:anywhere;font:.9rem/1.75 ui-monospace,SFMono-Regular,Consolas,monospace}
+.action {display:inline-flex;margin:18px 8px 0 0;padding:9px 12px;border-radius:8px;background:#5b52d6;color:#fff;text-decoration:none;font-size:.82rem;font-weight:650}
+.action.secondary {background:#eeedff;color:#5149c8} footer {padding:0 0 24px;color:#9397a6;text-align:center;font-size:.78rem}
+</style></head><body><header><div class="wrap head">
+<a class="back" href="../prompt-categories/code-review.html">← Back to Code Review</a>
+<h1>Backend</h1><p class="subtitle">backend.md</p>
+</div></header><main class="wrap"><article class="content"><pre># Backend Review
+
+Use this reference when reviewing backend files, APIs, services, controllers, middleware, database access, and server-side business logic.
+
+## API Correctness
+
+Check:
+
+- HTTP method correctness
+- Request validation
+- Response structure
+- Error handling
+- Status code correctness
+- Authentication enforcement
+- Authorization enforcement
+- Input handling
+- Missing required fields
+- Incorrect assumptions about request data
+- Incorrect assumptions about database responses
+- Inconsistent API behavior
+- Duplicate or unreachable logic
+
+## Validation
+
+Check whether externally supplied input is appropriately validated.
+
+Review:
+- Request bodies
+- Query parameters
+- Route parameters
+- Headers
+- Uploaded files
+- User-controlled identifiers
+
+Look for:
+- Missing validation
+- Weak validation
+- Incorrect type assumptions
+- Validation performed too late
+- Validation that can be bypassed
+
+Do not assume validation exists merely because a type definition exists.
+
+## Error Handling
+
+Check:
+
+- Errors are handled at appropriate boundaries.
+- Internal errors are not exposed unnecessarily.
+- Expected failures return appropriate responses.
+- Unexpected failures do not silently succeed.
+- Async errors are not lost.
+- Errors do not leave partially completed operations in inconsistent states.
+
+## Authentication
+
+Check:
+
+- Authentication is required where appropriate.
+- Authentication tokens are validated correctly.
+- Expiration is handled.
+- Invalid credentials are rejected.
+- Authentication configuration does not silently fall back to insecure behavior.
+
+## Authorization
+
+Check:
+
+- Users can only access resources they are authorized to access.
+- Object/resource identifiers are not trusted solely because they are supplied by the client.
+- Role/permission checks occur at the server boundary.
+- Privileged operations are protected.
+
+## Database
+
+Check:
+
+- Queries are correctly parameterized.
+- User input cannot alter query structure.
+- Missing records are handled.
+- Transactions are used where required for atomicity.
+- Partial updates cannot leave inconsistent state.
+- Database connections are handled correctly.
+- N+1 or repeated queries exist where they create meaningful performance problems.
+- Sensitive information is not unnecessarily retrieved or returned.
+
+## Business Logic
+
+Check for:
+
+- Incorrect conditions
+- Incorrect state transitions
+- Duplicate operations
+- Missing invariants
+- Race conditions
+- Incorrect calculations
+- Incorrect assumptions about data
+- Partial failure scenarios
+- Time/date handling problems
+- Inconsistent behavior between related endpoints
+
+## Secrets and Configuration
+
+Check:
+
+- Hardcoded secrets
+- Default credentials
+- Insecure fallback secrets
+- Sensitive values in source control
+- Secrets exposed in responses or logs
+- Unsafe production defaults
+
+Configuration behavior must be verified from actual code.
+
+Do not assume environment variables are secure merely because they are referenced.
+
+## Logging
+
+Check for:
+
+- Sensitive data in logs
+- Tokens/passwords/secrets in logs
+- Missing useful context for important failures
+- Excessive logging in sensitive paths
+
+## Concurrency and Reliability
+
+Where relevant, inspect:
+
+- Race conditions
+- Duplicate requests
+- Idempotency
+- Concurrent updates
+- Retry behavior
+- Transaction boundaries
+- Resource cleanup
+- Timeout handling
+
+Only report a reliability problem when the implementation provides concrete evidence.
+
+## Runtime and Dependency Versions
+
+Where applicable, inspect:
+
+- Outdated backend framework versions (e.g., Express 3/4 legacy, Fastify, NestJS, Django)
+- End-of-Life (EOL) runtime targets (e.g., Node.js 14, 16, 18 in `.nvmrc`, Dockerfiles, or `engines`)
+- Deprecated network/utility packages (e.g., `request`, `node-fetch` in modern Node, `moment`, `querystring`)
+- See `references/dependencies.md` for full dependency auditing rules.</pre>
+<a class="action secondary" href="../prompts.html">Prompt Library</a>
+<a class="action" href="https://github.com/amatullah-a/Design-gallery/raw/refs/heads/main/designs/Prompt%20Library/code-review/references/backend.md?download=1" download="backend.md">Download file ↓</a>
+</article></main><footer class="wrap">Design Gallery · Prompt Library</footer>
+<style id="gallery-password-gate-style">
+#gallery-password-overlay { position:fixed; inset:0; z-index:2147483647; display:flex; align-items:center; justify-content:center; padding:24px; background:rgba(245,246,251,.98); backdrop-filter:blur(10px); font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif; color:#202333; }
+#gallery-password-overlay[hidden] { display:none !important; }
+#gallery-password-overlay .gate-card { width:min(100%,410px); padding:30px; border:1px solid #e4e6ef; border-radius:20px; background:#fff; box-shadow:0 20px 70px #2023331c; }
+#gallery-password-overlay .gate-mark { display:grid; place-items:center; width:46px; height:46px; margin-bottom:18px; border-radius:14px; background:#eeedff; color:#5b52d6; font-size:22px; }
+#gallery-password-overlay h1 { margin:0 0 8px; font-size:1.5rem; letter-spacing:-.03em; }
+#gallery-password-overlay p { margin:0 0 20px; color:#73778a; font-size:.92rem; line-height:1.55; }
+#gallery-password-overlay label { display:block; margin-bottom:7px; font-size:.8rem; font-weight:700; }
+#gallery-password-input { width:100%; padding:12px 13px; border:1px solid #dfe2eb; border-radius:10px; font:inherit; outline:none; }
+#gallery-password-input:focus { border-color:#7770ef; box-shadow:0 0 0 3px #7770ef20; }
+#gallery-password-submit { width:100%; margin-top:12px; padding:12px; border:0; border-radius:10px; background:#5b52d6; color:#fff; font:inherit; font-weight:700; cursor:pointer; }
+#gallery-password-error { min-height:1.3em; margin-top:10px !important; color:#b42318 !important; font-size:.82rem !important; }
+#gallery-lock-button { position:fixed; right:14px; bottom:14px; z-index:2147483000; padding:8px 11px; border:1px solid #e0e2eb; border-radius:999px; background:#fff; color:#5149c8; font:600 12px/1.2 Inter,ui-sans-serif,system-ui,sans-serif; box-shadow:0 4px 15px #20233314; cursor:pointer; }
+</style>
+<div id="gallery-password-overlay" role="dialog" aria-modal="true" aria-labelledby="gallery-password-title">
+  <form class="gate-card" id="gallery-password-form">
+    <div class="gate-mark" aria-hidden="true">⌑</div>
+    <h1 id="gallery-password-title">Design Gallery</h1>
+    <p>Enter the gallery password to continue.</p>
+    <label for="gallery-password-input">Password</label>
+    <input id="gallery-password-input" type="password" autocomplete="current-password" required autofocus>
+    <button id="gallery-password-submit" type="submit">Unlock gallery</button>
+    <p id="gallery-password-error" role="status" aria-live="polite"></p>
+  </form>
+</div>
+<button id="gallery-lock-button" type="button" hidden>Lock gallery</button>
+<script id="gallery-password-gate-script">
+(function () {
+  const expectedHash = "ef797c8118f02dfb649607dd5d3f8c7623048c9c063d532cc95c5ed7a898a64f";
+  const storageKey = "designGalleryUnlocked_ef797c8118f02dfb";
+  const overlay = document.getElementById("gallery-password-overlay");
+  const form = document.getElementById("gallery-password-form");
+  const input = document.getElementById("gallery-password-input");
+  const error = document.getElementById("gallery-password-error");
+  const lockButton = document.getElementById("gallery-lock-button");
+  function isUnlocked() { try { return sessionStorage.getItem(storageKey) === "yes"; } catch (_) { return false; } }
+  function showUnlocked(unlocked) {
+    overlay.hidden = unlocked;
+    document.documentElement.style.overflow = unlocked ? "" : "hidden";
+    lockButton.hidden = !unlocked;
+  }
+  async function digest(value) {
+    const bytes = new TextEncoder().encode(value);
+    const hash = await crypto.subtle.digest("SHA-256", bytes);
+    return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, "0")).join("");
+  }
+  showUnlocked(isUnlocked());
+  form.addEventListener("submit", async function (event) {
+    event.preventDefault();
+    error.textContent = "";
+    const submit = document.getElementById("gallery-password-submit");
+    submit.disabled = true;
+    try {
+      if (await digest(input.value) === expectedHash) {
+        try { sessionStorage.setItem(storageKey, "yes"); } catch (_) {}
+        showUnlocked(true);
+      } else {
+        error.textContent = "That password doesn't match. Try again.";
+        input.select();
+      }
+    } catch (_) { error.textContent = "Password check failed in this browser."; }
+    finally { submit.disabled = false; }
+  });
+  lockButton.addEventListener("click", function () {
+    try { sessionStorage.removeItem(storageKey); } catch (_) {}
+    showUnlocked(false);
+    input.value = "";
+    input.focus();
+  });
+})();
+</script>
+</body></html>

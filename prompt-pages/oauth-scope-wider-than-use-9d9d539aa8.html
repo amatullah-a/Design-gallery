@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Oauth Scope Wider Than Use · Prompt Library</title>
+<style>
+:root { color-scheme:light; font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;color:#202333;background:#f6f7fb; }
+* {box-sizing:border-box} body {margin:0} header {background:#fff;border-bottom:1px solid #e8eaf1}
+.wrap {width:min(900px,calc(100% - 32px));margin:0 auto} .head {padding:22px 0 20px}
+a {color:#5149c8} .back {text-decoration:none;font-size:.85rem;font-weight:650}
+h1 {margin:16px 0 6px;font-size:clamp(1.5rem,4vw,2.15rem);overflow-wrap:anywhere}
+.subtitle {margin:0;color:#777b8d;font-size:.85rem} main {padding:24px 0 44px}
+.content {background:#fff;border:1px solid #e5e7ef;border-radius:14px;padding:clamp(16px,3vw,28px)}
+pre {margin:0;white-space:pre-wrap;overflow-wrap:anywhere;font:.9rem/1.75 ui-monospace,SFMono-Regular,Consolas,monospace}
+.action {display:inline-flex;margin:18px 8px 0 0;padding:9px 12px;border-radius:8px;background:#5b52d6;color:#fff;text-decoration:none;font-size:.82rem;font-weight:650}
+.action.secondary {background:#eeedff;color:#5149c8} footer {padding:0 0 24px;color:#9397a6;text-align:center;font-size:.78rem}
+</style></head><body><header><div class="wrap head">
+<a class="back" href="../prompt-categories/code-review.html">← Back to Code Review</a>
+<h1>Oauth Scope Wider Than Use</h1><p class="subtitle">oauth-scope-wider-than-use.md</p>
+</div></header><main class="wrap"><article class="content"><pre>---
+name: oauth-scope-wider-than-use
+description: Connector requests an OAuth scope no code path in it actually uses
+triggers:
+  files:
+    - &quot;*.ts&quot;
+    - &quot;*.tsx&quot;
+    - &quot;*.js&quot;
+    - &quot;*.mjs&quot;
+    - &quot;*.py&quot;
+    - &quot;*.rb&quot;
+    - &quot;*.go&quot;
+    - &quot;*.java&quot;
+    - &quot;*.kt&quot;
+    - &quot;*.json&quot;
+    - &quot;*.yaml&quot;
+    - &quot;*.yml&quot;
+    - &quot;**/*.ts&quot;
+    - &quot;**/*.tsx&quot;
+    - &quot;**/*.js&quot;
+    - &quot;**/*.mjs&quot;
+    - &quot;**/*.py&quot;
+    - &quot;**/*.rb&quot;
+    - &quot;**/*.go&quot;
+    - &quot;**/*.java&quot;
+    - &quot;**/*.kt&quot;
+    - &quot;**/*.json&quot;
+    - &quot;**/*.yaml&quot;
+    - &quot;**/*.yml&quot;
+  hunk_regex: &quot;scope=|scopes?\\s*[:=]\\s*[\\[\\(\&quot;&#x27;]|\\.scope\\(|setScope\\(|\&quot;scopes\&quot;\\s*:&quot;
+security: true
+confidence_floor: 0.75
+---
+
+A connector asks the provider for a scope, and nothing in the connector
+ever calls an endpoint that needs it. The declaration is usually one
+string in an authorize URL, a client constructor, or a manifest, written
+once when the integration was built and never narrowed as the feature
+shrank. The cost is real: the token the user grants can do more than
+the product does, so a leaked token, a compromised server, or a bug in
+the connector reaches data and writes the product never intended to
+touch. A `full` scope on a connector that only reads one record is the
+shape.
+
+How to check, before you flag anything:
+
+- Find the scope declaration. Read the whole line and the call it sits
+  in, so you can quote it and say which scopes are requested.
+- Enumerate every provider call the connector makes. Search the
+  connector&#x27;s own directory for the provider&#x27;s base URL, its client
+  class, or the SDK method prefix (search for callers of the client,
+  then for the base URL) and list the endpoints you found.
+- Map each requested scope to the calls that need it, using the
+  provider&#x27;s own scope documentation as the connector states it, not a
+  guess about naming.
+- Report every scope with no call behind it. One finding per unused
+  scope, not one per connector.
+
+What to cite:
+
+- The scope declaration line, with file and line, quoted whole.
+- The provider calls you found, each as a supporting quote with its file
+  and line. This is what makes the finding checkable: without the list,
+  &quot;no call needs this&quot; is an assertion, not evidence.
+
+Suppress when:
+
+- the provider only grants the scope as part of a bundle (some providers
+  have no finer grain than `read`), and the connector says so
+- the scope is used on a path behind a feature flag or an unreleased
+  code path that is still in the tree
+- a sibling connector or a shared client in the same repository uses the
+  same credential, so the calls live outside this directory; widen the
+  search before flagging
+- the connector is a thin proxy whose callers make the provider calls
+
+Severity: medium by default. High when the unused scope grants write,
+delete, or admin access, since the blast radius of the extra grant is
+then the user&#x27;s data rather than a wider read.
+</pre>
+<a class="action secondary" href="../prompts.html">Prompt Library</a>
+<a class="action" href="https://github.com/amatullah-a/Design-gallery/raw/refs/heads/main/designs/Prompt%20Library/code-review/references/patterns/oauth-scope-wider-than-use.md?download=1" download="oauth-scope-wider-than-use.md">Download file ↓</a>
+</article></main><footer class="wrap">Design Gallery · Prompt Library</footer>
+<style id="gallery-password-gate-style">
+#gallery-password-overlay { position:fixed; inset:0; z-index:2147483647; display:flex; align-items:center; justify-content:center; padding:24px; background:rgba(245,246,251,.98); backdrop-filter:blur(10px); font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif; color:#202333; }
+#gallery-password-overlay[hidden] { display:none !important; }
+#gallery-password-overlay .gate-card { width:min(100%,410px); padding:30px; border:1px solid #e4e6ef; border-radius:20px; background:#fff; box-shadow:0 20px 70px #2023331c; }
+#gallery-password-overlay .gate-mark { display:grid; place-items:center; width:46px; height:46px; margin-bottom:18px; border-radius:14px; background:#eeedff; color:#5b52d6; font-size:22px; }
+#gallery-password-overlay h1 { margin:0 0 8px; font-size:1.5rem; letter-spacing:-.03em; }
+#gallery-password-overlay p { margin:0 0 20px; color:#73778a; font-size:.92rem; line-height:1.55; }
+#gallery-password-overlay label { display:block; margin-bottom:7px; font-size:.8rem; font-weight:700; }
+#gallery-password-input { width:100%; padding:12px 13px; border:1px solid #dfe2eb; border-radius:10px; font:inherit; outline:none; }
+#gallery-password-input:focus { border-color:#7770ef; box-shadow:0 0 0 3px #7770ef20; }
+#gallery-password-submit { width:100%; margin-top:12px; padding:12px; border:0; border-radius:10px; background:#5b52d6; color:#fff; font:inherit; font-weight:700; cursor:pointer; }
+#gallery-password-error { min-height:1.3em; margin-top:10px !important; color:#b42318 !important; font-size:.82rem !important; }
+#gallery-lock-button { position:fixed; right:14px; bottom:14px; z-index:2147483000; padding:8px 11px; border:1px solid #e0e2eb; border-radius:999px; background:#fff; color:#5149c8; font:600 12px/1.2 Inter,ui-sans-serif,system-ui,sans-serif; box-shadow:0 4px 15px #20233314; cursor:pointer; }
+</style>
+<div id="gallery-password-overlay" role="dialog" aria-modal="true" aria-labelledby="gallery-password-title">
+  <form class="gate-card" id="gallery-password-form">
+    <div class="gate-mark" aria-hidden="true">⌑</div>
+    <h1 id="gallery-password-title">Design Gallery</h1>
+    <p>Enter the gallery password to continue.</p>
+    <label for="gallery-password-input">Password</label>
+    <input id="gallery-password-input" type="password" autocomplete="current-password" required autofocus>
+    <button id="gallery-password-submit" type="submit">Unlock gallery</button>
+    <p id="gallery-password-error" role="status" aria-live="polite"></p>
+  </form>
+</div>
+<button id="gallery-lock-button" type="button" hidden>Lock gallery</button>
+<script id="gallery-password-gate-script">
+(function () {
+  const expectedHash = "ef797c8118f02dfb649607dd5d3f8c7623048c9c063d532cc95c5ed7a898a64f";
+  const storageKey = "designGalleryUnlocked_ef797c8118f02dfb";
+  const overlay = document.getElementById("gallery-password-overlay");
+  const form = document.getElementById("gallery-password-form");
+  const input = document.getElementById("gallery-password-input");
+  const error = document.getElementById("gallery-password-error");
+  const lockButton = document.getElementById("gallery-lock-button");
+  function isUnlocked() { try { return sessionStorage.getItem(storageKey) === "yes"; } catch (_) { return false; } }
+  function showUnlocked(unlocked) {
+    overlay.hidden = unlocked;
+    document.documentElement.style.overflow = unlocked ? "" : "hidden";
+    lockButton.hidden = !unlocked;
+  }
+  async function digest(value) {
+    const bytes = new TextEncoder().encode(value);
+    const hash = await crypto.subtle.digest("SHA-256", bytes);
+    return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, "0")).join("");
+  }
+  showUnlocked(isUnlocked());
+  form.addEventListener("submit", async function (event) {
+    event.preventDefault();
+    error.textContent = "";
+    const submit = document.getElementById("gallery-password-submit");
+    submit.disabled = true;
+    try {
+      if (await digest(input.value) === expectedHash) {
+        try { sessionStorage.setItem(storageKey, "yes"); } catch (_) {}
+        showUnlocked(true);
+      } else {
+        error.textContent = "That password doesn't match. Try again.";
+        input.select();
+      }
+    } catch (_) { error.textContent = "Password check failed in this browser."; }
+    finally { submit.disabled = false; }
+  });
+  lockButton.addEventListener("click", function () {
+    try { sessionStorage.removeItem(storageKey); } catch (_) {}
+    showUnlocked(false);
+    input.value = "";
+    input.focus();
+  });
+})();
+</script>
+</body></html>
