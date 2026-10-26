@@ -9,12 +9,12 @@
     * { box-sizing: border-box; }
     body { margin: 0; }
     .hero { background: #fff; border-bottom: 1px solid #e8eaf1; }
-    main { width: min(1180px, calc(100% - 40px)); margin: 0 auto; padding: 18px 0 28px; }
-    .hero h1 { margin: 0 0 4px; font-size: clamp(1.45rem, 2.5vw, 1.9rem); letter-spacing: -.04em; }
-    .intro { margin: 0; color: #707589; line-height: 1.4; font-size: .9rem; }
+    main { width: min(1180px, calc(100% - 40px)); margin: 0 auto; padding: 22px 0 34px; }
+    .hero h1 { margin: 0 0 5px; font-size: clamp(1.55rem, 2.6vw, 2rem); line-height: 1.15; letter-spacing: -.045em; }
+    .intro { margin: 0; color: #707589; line-height: 1.5; font-size: .88rem; font-weight: 550; letter-spacing: .01em; }
     .hero-inner { display: grid; grid-template-columns: minmax(220px, 1fr) auto; align-items: center; gap: 24px; }
     .header-actions { display: flex; align-items: stretch; justify-content: flex-end; gap: 12px; }
-    .prompt-library-cta { display: flex; align-items: center; gap: 11px; width: clamp(220px, 22vw, 285px); min-width: 0; padding: 12px 14px; border: 1px solid #e2dfff; border-radius: 12px; background: linear-gradient(135deg, #fbfaff, #f1efff); color: #302b63; text-decoration: none; box-shadow: 0 3px 10px #4f46e508; transition: transform .16s ease, box-shadow .16s ease; }
+    .prompt-library-cta { display: flex; align-items: center; gap: 11px; width: clamp(220px, 22vw, 285px); min-width: 0; padding: 12px 14px; border: 1px solid #e2dfff; border-radius: 14px; background: linear-gradient(135deg, #ffffff, #f3f1ff); color: #302b63; text-decoration: none; box-shadow: 0 4px 14px #4f46e50a; transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease; }
     .prompt-library-cta:hover { transform: translateY(-2px); box-shadow: 0 8px 20px #4f46e51a; }
     .archive-cta { background: linear-gradient(135deg,#fffdf7,#fff6df); border-color:#f0e4c7; color:#5c4720; }
     .archive-cta .prompt-library-icon { background:#f7e9c8;color:#8a641b; }
@@ -27,10 +27,10 @@
     .toolbar { display: grid; grid-template-columns: minmax(0, 1fr) 260px; gap: 12px; margin: 20px 0 12px; }
     .sort { flex: 0 0 235px; max-width: 100%; padding: 9px 12px; border: 1px solid #dfe2eb; border-radius: 12px; background: #fff; color: inherit; font: inherit; }
     .search { width: 100%; min-width: 0; padding: 9px 12px; border: 1px solid #dfe2eb; border-radius: 12px; background: #fff; color: inherit; font: inherit; outline: none; }
-    .search:focus { border-color: #7770ef; box-shadow: 0 0 0 3px #7770ef20; }
+    .search:focus, .sort:focus { outline: none; border-color: #7770ef; box-shadow: 0 0 0 3px #7770ef20; }
     .count { margin: 0 0 10px; color: #777b8d; font-size: .8rem; }
-    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 250px), 1fr)); gap: 16px; align-items: stretch; }
-    .project-card { min-width: 0; min-height: 100%; padding: 16px; display: flex; flex-direction: column; background: #fff; border: 1px solid #e7e9f1; border-radius: 12px; box-shadow: 0 3px 12px #20233307; transition: transform .16s ease, box-shadow .16s ease, border-color .16s ease; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 250px), 1fr)); gap: 18px; align-items: stretch; }
+    .project-card { min-width: 0; min-height: 100%; padding: 18px; display: flex; flex-direction: column; background: #fff; border: 1px solid #e7e9f1; border-radius: 15px; box-shadow: 0 4px 16px #20233308; transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease; }
     .project-card:hover { transform: translateY(-3px); border-color: #d5d3ff; box-shadow: 0 12px 28px #20233312; }
     .card-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 10px; }
     .project-icon { display: grid; place-items: center; width: 30px; height: 30px; border-radius: 9px; background: #eeedff; color: #5b52d6; font-size: 1rem; }
@@ -47,6 +47,8 @@
     .preview-note { margin-bottom: 10px; color: #85899b; font-size: .72rem; }
     .open-project { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-top: auto; padding: 8px 10px; border-radius: 8px; background: #5b52d6; color: white; font-size: .8rem; font-weight: 650; text-decoration: none; }
     .open-project:hover { background: #4940bd; }
+    a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px solid #8d86ff; outline-offset: 3px; }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; } }
     .no-preview { margin-top: auto; color: #85899b; font-size: .85rem; }
     .empty { padding: 28px; background: white; border: 1px dashed #d7dae5; border-radius: 16px; color: #777b8d; }
     .empty[hidden], .project-card[hidden] { display: none; }
@@ -59,7 +61,7 @@
   <header class="hero"><main>
     <div class="hero-inner">
       <div><h1>Design Gallery</h1>
-      <p class="intro">A collection of visual design projects.</p></div>
+      <p class="intro">Unique Schools India</p></div>
       <nav class="header-actions" aria-label="Gallery resources"><a class="prompt-library-cta" href="prompts.html"><span class="prompt-library-icon" aria-hidden="true">✳</span><span><strong>Prompt Library</strong><small>Browse audit prompts and rules</small></span><span class="prompt-library-arrow" aria-hidden="true">↗</span></a><a class="prompt-library-cta archive-cta" href="archive.html"><span class="prompt-library-icon" aria-hidden="true">▣</span><span><strong>Archive</strong><small>Completed and inactive prototypes</small></span><span class="prompt-library-arrow" aria-hidden="true">↗</span></a></nav>
     </div>
   </main></header>
