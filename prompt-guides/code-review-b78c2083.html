@@ -1,0 +1,58 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>code-review README · Prompt Library</title><style>:root {font-family:Inter,ui-sans-serif,system-ui,sans-serif;color:#202333;background:#f6f7fb}* {box-sizing:border-box}body {margin:0}header {background:#fff;border-bottom:1px solid #e8eaf1}.wrap {width:min(900px,calc(100% - 36px));margin:0 auto}.head {padding:24px 0}a {color:#5149c8}.back {text-decoration:none;font-weight:650;font-size:.85rem}h1 {margin:16px 0 6px;font-size:clamp(1.7rem,4vw,2.3rem)}main {padding:28px 0 48px}.guide-content {background:#fff;border:1px solid #e5e7ef;border-radius:14px;padding:clamp(16px,3vw,28px);line-height:1.7}.guide-content h2,.guide-content h3 {margin-top:22px}.guide-content li {margin:5px 0}</style></head><body><header><div class="wrap head"><a class="back" href="../prompt-categories/code-review.html">← Back to Code Review</a><h1>code-review README</h1></div></header><main class="wrap"><article class="guide-content"><h2>Unified Code Review Skill</h2>
+<p>An evidence-driven, comprehensive code review skill for AI coding agents. Combines deep holistic repository audits, incremental git change reviews, 52 battle-tested bug patterns (lenses), framework &amp; dependency version auditing (outdated Next.js/React, EOL runtimes, CVEs), blast radius analysis, multi-format reporting (HTML, Markdown, SARIF 2.1.0), and an interactive terminal remediation loop.</p>
+<hr>
+<h3>Installation</h3>
+<p>Install using Antigravity, Claude Code, or the skills CLI:</p>
+<p>```bash npx skills add DotHrishi/unified-code-review ```</p>
+<hr>
+<h3>Features</h3>
+<ul>
+<li><strong>Dual Review Modes</strong>:</li>
+<li><strong>Full Audit Mode</strong>: Comprehensive 12-phase audit across all in-scope files.</li>
+<li><strong>Incremental / Diff Mode</strong>: Fast pre-push review focused on uncommitted changes, unpushed commits, or pull requests with blast radius analysis.</li>
+<li><strong>52 Curated Bug Patterns (Lenses)</strong>: Built-in detection for subtle concurrency races, React stale closures, SQL migration order issues, Supabase security definer pitfalls, ReDoS, auth vulnerabilities, and framework/dependency version pitfalls.</li>
+<li><strong>Framework &amp; Dependency Version Auditing</strong>: Automatically inspects package manifests (<code>package.json</code>, lockfiles, <code>requirements.txt</code>, etc.) and flags outdated major framework versions (such as older Next.js or React releases), End-of-Life (EOL) runtimes (Node 14/16/18), deprecated libraries (<code>request</code>, <code>moment</code>), and known CVEs.</li>
+<li><strong>Untrusted Code Guard</strong>: Built-in defense against prompt injections inside reviewed code and comments.</li>
+<li><strong>Blast Radius Analysis</strong>: 1-hop and 2-hop downstream caller analysis to catch breaking API changes and return shape mutations.</li>
+<li><strong>Missing Tests Detection</strong>: Flags behavioral branching changes that lack covering unit/integration tests.</li>
+<li><strong>Multi-Format Export</strong>: Generates self-contained interactive <code>report.html</code>, human-readable <code>report.md</code>, and industry-standard <code>report.sarif</code> (ready for GitHub Code Scanning).</li>
+<li><strong>Interactive Remediation Loop</strong>: Summarizes findings in a compact Review Receipt and immediately patches code on demand (<em>"Fix all or tell me which?"</em>).</li>
+</ul>
+<hr>
+<h3>Usage</h3>
+<h4>1. Full Repository Review</h4>
+<p>Paste this prompt into your coding agent chat:</p>
+<p>```text Perform a complete code review of the application located at: &lt;APPLICATION_FOLDER_PATH&gt;</p>
+<p>Follow the Unified Code Review Skill workflow completely:</p>
+<ul>
+<li>Execute all review phases (Scope Discovery through Final Validation).</li>
+<li>Check against references/patterns.md for high-impact bug patterns.</li>
+<li>Perform blast radius and contract breaking checks.</li>
+<li>Generate reviews/report.html (using templates/report.html), reviews/report.md, and reviews/report.sarif.</li>
+<li>Print the Review Receipt and prompt for the interactive remediation loop.</li>
+</ul>
+<p>```</p>
+<h4>2. Pre-Push / Incremental Diff Review</h4>
+<p>Paste this prompt before running <code>git push</code> or when reviewing a pull request:</p>
+<p>```text Review my current git changes with the Unified Code Review Skill.</p>
+<ul>
+<li>Focus on the unpushed commits and uncommitted diff.</li>
+<li>Check modified symbols against 1-hop and 2-hop downstream callers (blast radius).</li>
+<li>Check changed lines against references/patterns.md.</li>
+<li>Check for missing covering tests for modified behavior.</li>
+<li>Generate reviews/report.html, reviews/report.md, and reviews/report.sarif.</li>
+<li>Print the Review Receipt and offer to fix findings.</li>
+</ul>
+<p>```</p>
+<hr>
+<h3>Review Pipeline</h3>
+<p>```text Phase 1  → Setup &amp; Policy Configuration (.codereview.yaml / custom instructions) Phase 2  → Scope Discovery (Full Audit vs. Incremental Diff / Pre-Push) Phase 3  → Complete File Review &amp; Pattern Matching (references/patterns.md) Phase 4  → Testing / Lint / Build, Dependency &amp; Version Audit &amp; Static Scanner Pass Phase 5  → Database &amp; Schema Review Phase 6  → Systemic Architecture &amp; Blast Radius Review Phase 7  → Systemic Security Review Phase 8  → Synthesis + Root-Cause Deduplication (Local vs Systemic) Phase 9  → Consistency Audit Phase 10 → Multi-Format Report Generation (HTML, Markdown, SARIF) Phase 11 → Final Validation Phase 12 → Review Receipt &amp; Interactive Remediation Loop ```</p>
+<hr>
+<h3>Canonical Templates &amp; Standards</h3>
+<ul>
+<li><strong>HTML Report</strong>: [<code>templates/report.html</code>](templates/report.html)</li>
+<li><strong>Markdown Report</strong>: [<code>templates/report.md</code>](templates/report.md)</li>
+<li><strong>SARIF 2.1.0</strong>: [<code>templates/report.sarif</code>](templates/report.sarif) (Compatible with <code>github/codeql-action/upload-sarif</code>)</li>
+<li><strong>Bug Patterns Catalog</strong>: [<code>references/patterns.md</code>](references/patterns.md)</li>
+<li><strong>Dependency &amp; Version Guide</strong>: [<code>references/dependencies.md</code>](references/dependencies.md)</li>
+</ul></article></main></body></html>

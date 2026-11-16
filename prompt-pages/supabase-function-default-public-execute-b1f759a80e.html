@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Supabase Function Default Public Execute · Prompt Library</title>
+<style>
+:root { color-scheme:light; font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;color:#202333;background:#f6f7fb; }
+* {box-sizing:border-box} body {margin:0} header {background:#fff;border-bottom:1px solid #e8eaf1}
+.wrap {width:min(900px,calc(100% - 32px));margin:0 auto} .head {padding:22px 0 20px}
+a {color:#5149c8} .back {text-decoration:none;font-size:.85rem;font-weight:650}
+h1 {margin:16px 0 6px;font-size:clamp(1.5rem,4vw,2.15rem);overflow-wrap:anywhere}
+.subtitle {margin:0;color:#777b8d;font-size:.85rem} main {padding:24px 0 44px}
+.content {background:#fff;border:1px solid #e5e7ef;border-radius:14px;padding:clamp(16px,3vw,28px)}
+pre {margin:0;white-space:pre-wrap;overflow-wrap:anywhere;font:.9rem/1.75 ui-monospace,SFMono-Regular,Consolas,monospace}
+.action {display:inline-flex;margin:18px 8px 0 0;padding:9px 12px;border-radius:8px;background:#5b52d6;color:#fff;text-decoration:none;font-size:.82rem;font-weight:650}
+.action.secondary {background:#eeedff;color:#5149c8} footer {padding:0 0 24px;color:#9397a6;text-align:center;font-size:.78rem}
+</style></head><body><header><div class="wrap head">
+<a class="back" href="../prompt-categories/code-review.html">← Back to Code Review</a>
+<h1>Supabase Function Default Public Execute</h1><p class="subtitle">supabase-function-default-public-execute.md</p>
+</div></header><main class="wrap"><article class="content"><pre>---
+name: supabase-function-default-public-execute
+description: A new/replaced Postgres function exposed via PostgREST is left with the default PUBLIC EXECUTE grant
+triggers:
+  files:
+    - &quot;*.sql&quot;
+    - &quot;**/*.sql&quot;
+  hunk_regex: &#x27;CREATE\s+(OR\s+REPLACE\s+)?FUNCTION&#x27;
+confidence_floor: 0.7
+---
+
+Postgres grants `EXECUTE` to `PUBLIC` by default on every new function.
+In Supabase, PostgREST exposes any function in an exposed schema
+(usually `public`) as an RPC endpoint (`POST /rest/v1/rpc/&lt;fn&gt;`)
+callable by the `anon` and `authenticated` roles. So a `CREATE [OR
+REPLACE] FUNCTION public.&lt;fn&gt;` that returns privileged data or performs
+a privileged action, with no accompanying grant management, is callable
+by anyone holding an anon/JWT key, even if the only intended caller is
+an admin-gated Edge Function using `service_role`.
+
+Flag when this diff adds or replaces a function in an exposed schema AND
+does NOT also `REVOKE EXECUTE ... FROM PUBLIC` (and grant EXECUTE only
+to the intended role, e.g. `service_role` / `authenticated`). The risk
+is highest when:
+- the name or comment signals admin/internal scope (`admin_*`,
+  `internal_*`, &quot;admin-only&quot;, &quot;backend&quot;), or
+- the body reads instance-wide / cross-tenant tables (users, teams,
+  billing, activity, metrics) rather than the caller&#x27;s own rows.
+
+`SECURITY INVOKER` (the default) reduces but does not remove the risk:
+RLS on the base tables only helps if RLS is actually enabled on every
+table the function touches, and the RPC endpoint is still reachable.
+Treat a missing `REVOKE PUBLIC` on a privileged function as a finding;
+recommend `REVOKE EXECUTE ON FUNCTION public.&lt;fn&gt;(...) FROM PUBLIC;`
+plus an explicit `GRANT` to the intended role.
+
+Suppress when:
+- the diff (or the same migration) already revokes PUBLIC and grants the
+  intended role,
+- the function returns only public, non-sensitive data and is meant to
+  be world-callable,
+- the repo has an established global migration / convention that revokes
+  PUBLIC EXECUTE on all functions (verify it exists before staying
+  silent),
+- the change is purely cosmetic (renamed param, comment) on a function
+  whose grants were already managed.
+
+Severity: `major` when an admin/privileged function is left
+PUBLIC-callable; `minor` for defense-in-depth hardening on a
+non-sensitive one.
+</pre>
+<a class="action secondary" href="../prompts.html">Prompt Library</a>
+<a class="action" href="https://github.com/amatullah-a/Design-gallery/raw/refs/heads/main/designs/Prompt%20Library/code-review/references/patterns/supabase-function-default-public-execute.md?download=1" download="supabase-function-default-public-execute.md">Download file ↓</a>
+</article></main><footer class="wrap">Design Gallery · Prompt Library</footer></body></html>

@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Architecture · Prompt Library</title>
+<style>
+:root { color-scheme:light; font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;color:#202333;background:#f6f7fb; }
+* {box-sizing:border-box} body {margin:0} header {background:#fff;border-bottom:1px solid #e8eaf1}
+.wrap {width:min(900px,calc(100% - 32px));margin:0 auto} .head {padding:22px 0 20px}
+a {color:#5149c8} .back {text-decoration:none;font-size:.85rem;font-weight:650}
+h1 {margin:16px 0 6px;font-size:clamp(1.5rem,4vw,2.15rem);overflow-wrap:anywhere}
+.subtitle {margin:0;color:#777b8d;font-size:.85rem} main {padding:24px 0 44px}
+.content {background:#fff;border:1px solid #e5e7ef;border-radius:14px;padding:clamp(16px,3vw,28px)}
+pre {margin:0;white-space:pre-wrap;overflow-wrap:anywhere;font:.9rem/1.75 ui-monospace,SFMono-Regular,Consolas,monospace}
+.action {display:inline-flex;margin:18px 8px 0 0;padding:9px 12px;border-radius:8px;background:#5b52d6;color:#fff;text-decoration:none;font-size:.82rem;font-weight:650}
+.action.secondary {background:#eeedff;color:#5149c8} footer {padding:0 0 24px;color:#9397a6;text-align:center;font-size:.78rem}
+</style></head><body><header><div class="wrap head">
+<a class="back" href="../prompt-categories/code-review.html">← Back to Code Review</a>
+<h1>Architecture</h1><p class="subtitle">architecture.md</p>
+</div></header><main class="wrap"><article class="content"><pre># Architecture Review
+
+## Purpose
+
+Architecture review is a mandatory second-pass review performed after the complete source-file review.
+
+The purpose is to identify problems that cannot be reliably detected by reviewing files independently.
+
+A file can be locally correct while the system is globally incorrect.
+
+Architecture review must therefore answer:
+
+- Does the system behave correctly as a whole?
+- Do components agree on contracts?
+- Are trust boundaries enforced?
+- Is the correct layer responsible for important decisions?
+- Is the source of truth located in the correct place?
+- Can state become inconsistent across layers?
+- Are retries, duplicate requests, and client disconnects handled?
+- Are authentication and authorization enforced end-to-end?
+- Are external systems treated as untrusted boundaries?
+- Do database schemas, seed data, migrations, and application code agree?
+- Are configuration assumptions consistent?
+- Do error paths preserve system integrity?
+
+Architecture review supplements file-level findings. It does not replace them.
+
+---
+
+# 1. Mandatory Architecture Pass
+
+After all in-scope files have been fully reviewed, perform a separate system-level pass.
+
+Do not begin synthesis until this pass is complete.
+
+The architecture pass must inspect the relationships between:
+
+- frontend and backend
+- routes and controllers
+- controllers and services
+- services and database access
+- authentication middleware and authentication consumers
+- registration and login
+- authorization checks and protected operations
+- payment creation and payment fulfillment
+- external payment providers and internal persistence
+- external APIs and application state
+- notifications and business state
+- validation and business logic
+- configuration and runtime behavior
+- schema definitions and application queries
+- seed data and application assumptions
+- error handling and transaction boundaries
+
+Use the actual repository as the source of truth.
+
+Do not infer architecture from filenames alone.
+
+---
+
+# 2. System Flow Tracing
+
+Trace important flows end-to-end.
+
+At minimum, trace all flows that exist in the application:
+
+## Authentication
+
+Trace:
+
+```text
+Registration
+→ validation
+→ password handling
+→ database persistence
+→ login
+→ credential verification
+→ JWT/session creation
+→ token storage
+→ middleware verification
+→ protected endpoint
+```
+
+---
+
+# 3. Blast Radius &amp; Downstream Caller Analysis
+
+Whenever a public function, method, endpoint, type, database model, or utility is added, edited, renamed, or removed:
+
+1. **Identify the Symbol**: Determine the exact symbol name, signature, and export scope.
+2. **1-Hop Caller Analysis**: Search for all direct call sites and importers across the codebase:
+   - Are callers passing the updated parameters?
+   - Do callers handle newly introduced error conditions or return types?
+   - If an optional parameter became required, are all existing callers updated?
+3. **2-Hop Caller Analysis (Propagation)**: Trace where the return value of that caller flows:
+   - Does a change in a repository or service method propagate into a controller and alter the API response shape?
+   - Does a state change in a frontend hook alter downstream rendering in parent components?
+4. **Blast Radius Metric**:
+   - Assess blast radius risk: `Low` (isolated to file/private), `Medium` (affects 1-5 direct callers), or `High` (affects shared utility/framework primitive across many files).
+   - If a breaking change is detected and downstream callers are not migrated within the change, report a **Major** architectural defect.
+
+---
+
+# 4. Return Shape Contract Breaks
+
+Pay specific attention to functions, RPCs, or API endpoints returning structured JSON or database query results:
+
+- **Key Deletions / Renames**: Removing or renaming a key/column from a return payload (`json_build_object`, object literal, `res.json()`, `NextResponse.json()`) breaks consumers silently.
+- **Contract Verification**: Verify that every reader or client component consuming the old key was updated in coordination. If the consumer was not updated, report an architectural contract-break finding.
+- Check against pattern [`return-shape-contract-break`](file:///c:/Users/Hrishikesh%20Kali/Code%20Review%20Skill/references/patterns/return-shape-contract-break.md).</pre>
+<a class="action secondary" href="../prompts.html">Prompt Library</a>
+<a class="action" href="https://github.com/amatullah-a/Design-gallery/raw/refs/heads/main/designs/Prompt%20Library/code-review/references/architecture.md?download=1" download="architecture.md">Download file ↓</a>
+</article></main><footer class="wrap">Design Gallery · Prompt Library</footer></body></html>

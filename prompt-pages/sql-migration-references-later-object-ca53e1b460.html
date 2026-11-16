@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sql Migration References Later Object · Prompt Library</title>
+<style>
+:root { color-scheme:light; font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;color:#202333;background:#f6f7fb; }
+* {box-sizing:border-box} body {margin:0} header {background:#fff;border-bottom:1px solid #e8eaf1}
+.wrap {width:min(900px,calc(100% - 32px));margin:0 auto} .head {padding:22px 0 20px}
+a {color:#5149c8} .back {text-decoration:none;font-size:.85rem;font-weight:650}
+h1 {margin:16px 0 6px;font-size:clamp(1.5rem,4vw,2.15rem);overflow-wrap:anywhere}
+.subtitle {margin:0;color:#777b8d;font-size:.85rem} main {padding:24px 0 44px}
+.content {background:#fff;border:1px solid #e5e7ef;border-radius:14px;padding:clamp(16px,3vw,28px)}
+pre {margin:0;white-space:pre-wrap;overflow-wrap:anywhere;font:.9rem/1.75 ui-monospace,SFMono-Regular,Consolas,monospace}
+.action {display:inline-flex;margin:18px 8px 0 0;padding:9px 12px;border-radius:8px;background:#5b52d6;color:#fff;text-decoration:none;font-size:.82rem;font-weight:650}
+.action.secondary {background:#eeedff;color:#5149c8} footer {padding:0 0 24px;color:#9397a6;text-align:center;font-size:.78rem}
+</style></head><body><header><div class="wrap head">
+<a class="back" href="../prompt-categories/code-review.html">← Back to Code Review</a>
+<h1>Sql Migration References Later Object</h1><p class="subtitle">sql-migration-references-later-object.md</p>
+</div></header><main class="wrap"><article class="content"><pre>---
+name: sql-migration-references-later-object
+description: A migration references a column/table/function created by a later-timestamped migration (fails on fresh apply)
+triggers:
+    # Both forms: &quot;**/&quot; compiles to &quot;.*/&quot;, which requires a slash before
+    # &quot;migrations&quot;, so it covers nested dirs (supabase/migrations/...,
+    # db/migrations/...) but NOT a root-level migrations/ dir. The bare
+    # &quot;migrations/*.sql&quot; pattern catches that case, same dual-pattern
+    # convention the *.sql / **/*.sql lenses use.
+  files:
+    - &quot;migrations/*.sql&quot;
+    - &quot;**/migrations/*.sql&quot;
+  hunk_regex: &#x27;@include|\breferences\b|\balter\s+table\b|\badd\s+column\b|\bcreate\s+(or\s+replace\s+)?(view|function|trigger|policy)\b|\bjoin\b&#x27;
+confidence_floor: 0.75
+---
+
+Migrations apply in timestamp (filename) order. Code that runs fine
+against an already-migrated database can still break a fresh apply
+(`supabase db reset`, a clean prod deploy, CI) if a migration references
+a schema object (a column, table, type, function, policy) that is only
+created by a migration with a LATER timestamp. The bug is invisible
+locally because the object already exists; it only surfaces on a
+from-scratch run.
+
+This is especially easy to introduce with `@include`-style migrations: a
+migration that `@include`s a function file inherits every object that
+function selects/joins. If that function references a column added in a
+later migration, this migration fails first.
+
+Flag when a migration in this diff (or a function/file it `@include`s)
+references an object whose creating/altering statement lives in a
+migration timestamped AFTER this one. To check: identify the referenced
+columns/tables/functions, then search the migrations directory for where
+each is created (`ADD COLUMN`, `CREATE TABLE/FUNCTION/TYPE`) and compare
+filename timestamps. Use your tools; this needs reading files outside
+the diff.
+
+Suppress when:
+- every referenced object is created in an earlier or same-timestamp
+  migration,
+- the object is a Postgres built-in, an extension object, or created
+  outside the migrations dir (e.g. a baseline/squash schema that always
+  applies first),
+- the reference is inside a string/comment, not executed SQL.
+
+Severity: `major`: a deterministic fresh-apply / CI failure, not a
+runtime edge case.
+</pre>
+<a class="action secondary" href="../prompts.html">Prompt Library</a>
+<a class="action" href="https://github.com/amatullah-a/Design-gallery/raw/refs/heads/main/designs/Prompt%20Library/code-review/references/patterns/sql-migration-references-later-object.md?download=1" download="sql-migration-references-later-object.md">Download file ↓</a>
+</article></main><footer class="wrap">Design Gallery · Prompt Library</footer></body></html>

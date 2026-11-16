@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>React Dangerously Set Inner Html · Prompt Library</title>
+<style>
+:root { color-scheme:light; font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;color:#202333;background:#f6f7fb; }
+* {box-sizing:border-box} body {margin:0} header {background:#fff;border-bottom:1px solid #e8eaf1}
+.wrap {width:min(900px,calc(100% - 32px));margin:0 auto} .head {padding:22px 0 20px}
+a {color:#5149c8} .back {text-decoration:none;font-size:.85rem;font-weight:650}
+h1 {margin:16px 0 6px;font-size:clamp(1.5rem,4vw,2.15rem);overflow-wrap:anywhere}
+.subtitle {margin:0;color:#777b8d;font-size:.85rem} main {padding:24px 0 44px}
+.content {background:#fff;border:1px solid #e5e7ef;border-radius:14px;padding:clamp(16px,3vw,28px)}
+pre {margin:0;white-space:pre-wrap;overflow-wrap:anywhere;font:.9rem/1.75 ui-monospace,SFMono-Regular,Consolas,monospace}
+.action {display:inline-flex;margin:18px 8px 0 0;padding:9px 12px;border-radius:8px;background:#5b52d6;color:#fff;text-decoration:none;font-size:.82rem;font-weight:650}
+.action.secondary {background:#eeedff;color:#5149c8} footer {padding:0 0 24px;color:#9397a6;text-align:center;font-size:.78rem}
+</style></head><body><header><div class="wrap head">
+<a class="back" href="../prompt-categories/code-review.html">← Back to Code Review</a>
+<h1>React Dangerously Set Inner Html</h1><p class="subtitle">react-dangerously-set-inner-html.md</p>
+</div></header><main class="wrap"><article class="content"><pre>---
+name: react-dangerously-set-inner-html
+description: dangerouslySetInnerHTML fed by untrusted / unsanitized input
+triggers:
+  files:
+    - &quot;*.tsx&quot;
+    - &quot;*.jsx&quot;
+    - &quot;**/*.tsx&quot;
+    - &quot;**/*.jsx&quot;
+  hunk_regex: &quot;dangerouslySetInnerHTML&quot;
+security: true
+confidence_floor: 0.7
+---
+
+`dangerouslySetInnerHTML` bypasses React&#x27;s HTML escaping. Any value
+that traces back to user input, a network response, or
+markdown/HTML rendered without sanitization is a stored or reflected
+XSS sink.
+
+Flag when the `__html` value&#x27;s provenance is unsanitized: a prop or
+state variable that came from `fetch`, `URLSearchParams`, `params`,
+form input, comment / post / message content, or any markdown
+rendered without an escaping pipeline.
+
+Suppress when:
+- the value is run through `DOMPurify.sanitize` /
+  `sanitize-html` / equivalent immediately before the assignment
+- the value is a literal string from the component itself (build-time
+  constant, not user-derived)
+- the value is the output of a markdown library configured with
+  HTML disabled (`marked` with `sanitize: true`, `remark-html` with
+  `sanitize` plugin, `markdown-it` without `html: true`)
+</pre>
+<a class="action secondary" href="../prompts.html">Prompt Library</a>
+<a class="action" href="https://github.com/amatullah-a/Design-gallery/raw/refs/heads/main/designs/Prompt%20Library/code-review/references/patterns/react-dangerously-set-inner-html.md?download=1" download="react-dangerously-set-inner-html.md">Download file ↓</a>
+</article></main><footer class="wrap">Design Gallery · Prompt Library</footer></body></html>

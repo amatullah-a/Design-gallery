@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Donation App · Prompt Library</title>
+<style>
+:root { color-scheme:light; font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;color:#202333;background:#f6f7fb; }
+* {box-sizing:border-box} body {margin:0} header {background:#fff;border-bottom:1px solid #e8eaf1}
+.wrap {width:min(900px,calc(100% - 32px));margin:0 auto} .head {padding:22px 0 20px}
+a {color:#5149c8} .back {text-decoration:none;font-size:.85rem;font-weight:650}
+h1 {margin:16px 0 6px;font-size:clamp(1.5rem,4vw,2.15rem);overflow-wrap:anywhere}
+.subtitle {margin:0;color:#777b8d;font-size:.85rem} main {padding:24px 0 44px}
+.content {background:#fff;border:1px solid #e5e7ef;border-radius:14px;padding:clamp(16px,3vw,28px)}
+pre {margin:0;white-space:pre-wrap;overflow-wrap:anywhere;font:.9rem/1.75 ui-monospace,SFMono-Regular,Consolas,monospace}
+.action {display:inline-flex;margin:18px 8px 0 0;padding:9px 12px;border-radius:8px;background:#5b52d6;color:#fff;text-decoration:none;font-size:.82rem;font-weight:650}
+.action.secondary {background:#eeedff;color:#5149c8} footer {padding:0 0 24px;color:#9397a6;text-align:center;font-size:.78rem}
+</style></head><body><header><div class="wrap head">
+<a class="back" href="../prompt-categories/code-review.html">← Back to Code Review</a>
+<h1>Donation App</h1><p class="subtitle">donation-app.md</p>
+</div></header><main class="wrap"><article class="content"><pre># Donation App — Skill Test
+
+## Purpose
+
+Use the Donation App as the baseline repository for validating the Unified Code Review skill.
+
+## Test Objectives
+
+The skill must:
+
+- Establish an authoritative review scope.
+- Review every in-scope file or explicitly defer it.
+- Detect concrete frontend issues.
+- Detect accessibility issues.
+- Detect backend/API issues.
+- Detect security issues.
+- Detect systemic patterns across multiple files.
+- Execute available test/lint commands.
+- Verify all reported line numbers and snippets.
+- Deduplicate findings with the same root cause.
+- Generate `audited_findings.json`.
+- Generate `audit_log.json`.
+- Generate a Markdown report.
+- Generate a self-contained HTML report.
+
+## Expected Behavior
+
+The new unified review should preserve the strengths of both previous review systems:
+
+### Architecture/System Level
+
+The review should identify:
+
+- systemic security issues
+- architectural problems
+- shared implementation patterns
+- root causes
+- cross-file inconsistencies
+
+### Granular/File Level
+
+The review should identify:
+
+- specific implementation issues
+- frontend issues
+- accessibility issues
+- testing/lint issues
+- file-level evidence
+
+### Deduplication
+
+Multiple instances of the same root cause should be connected using a shared `pattern_id`.
+
+The review must not treat every occurrence as an unrelated root cause.
+
+## Regression Comparison
+
+Compare the unified review against the previous:
+
+1. Claude Markdown review
+2. Six-prompt HTML review
+
+The purpose is not to reproduce the exact issue count.
+
+Instead verify:
+
+- important findings were retained
+- duplicate findings were consolidated appropriately
+- systemic issues remain visible
+- granular file-level evidence remains visible
+- accessibility findings remain categorized correctly
+- test/lint results are evidence-based
+- no unsupported findings were introduced
+
+## Acceptance Criteria
+
+The skill passes this test when:
+
+- scope accounting is correct
+- findings are evidence-backed
+- line references are verified
+- test/lint results are real
+- systemic patterns are identified
+- duplicates are synthesized
+- Markdown output is generated
+- HTML output is generated
+- final reports contain only audited data</pre>
+<a class="action secondary" href="../prompts.html">Prompt Library</a>
+<a class="action" href="https://github.com/amatullah-a/Design-gallery/raw/refs/heads/main/designs/Prompt%20Library/code-review/tests/donation-app.md?download=1" download="donation-app.md">Download file ↓</a>
+</article></main><footer class="wrap">Design Gallery · Prompt Library</footer></body></html>

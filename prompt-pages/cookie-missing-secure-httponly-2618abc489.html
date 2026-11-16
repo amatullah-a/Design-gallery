@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cookie Missing Secure Httponly · Prompt Library</title>
+<style>
+:root { color-scheme:light; font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;color:#202333;background:#f6f7fb; }
+* {box-sizing:border-box} body {margin:0} header {background:#fff;border-bottom:1px solid #e8eaf1}
+.wrap {width:min(900px,calc(100% - 32px));margin:0 auto} .head {padding:22px 0 20px}
+a {color:#5149c8} .back {text-decoration:none;font-size:.85rem;font-weight:650}
+h1 {margin:16px 0 6px;font-size:clamp(1.5rem,4vw,2.15rem);overflow-wrap:anywhere}
+.subtitle {margin:0;color:#777b8d;font-size:.85rem} main {padding:24px 0 44px}
+.content {background:#fff;border:1px solid #e5e7ef;border-radius:14px;padding:clamp(16px,3vw,28px)}
+pre {margin:0;white-space:pre-wrap;overflow-wrap:anywhere;font:.9rem/1.75 ui-monospace,SFMono-Regular,Consolas,monospace}
+.action {display:inline-flex;margin:18px 8px 0 0;padding:9px 12px;border-radius:8px;background:#5b52d6;color:#fff;text-decoration:none;font-size:.82rem;font-weight:650}
+.action.secondary {background:#eeedff;color:#5149c8} footer {padding:0 0 24px;color:#9397a6;text-align:center;font-size:.78rem}
+</style></head><body><header><div class="wrap head">
+<a class="back" href="../prompt-categories/code-review.html">← Back to Code Review</a>
+<h1>Cookie Missing Secure Httponly</h1><p class="subtitle">cookie-missing-secure-httponly.md</p>
+</div></header><main class="wrap"><article class="content"><pre>---
+name: cookie-missing-secure-httponly
+description: Auth / session cookie set without HttpOnly + Secure + SameSite
+triggers:
+  files:
+    - &quot;*.ts&quot;
+    - &quot;*.tsx&quot;
+    - &quot;*.js&quot;
+    - &quot;*.jsx&quot;
+    - &quot;*.mjs&quot;
+    - &quot;*.cjs&quot;
+    - &quot;*.py&quot;
+    - &quot;*.go&quot;
+    - &quot;*.rb&quot;
+    - &quot;**/*.ts&quot;
+    - &quot;**/*.tsx&quot;
+    - &quot;**/*.js&quot;
+    - &quot;**/*.jsx&quot;
+    - &quot;**/*.mjs&quot;
+    - &quot;**/*.cjs&quot;
+    - &quot;**/*.py&quot;
+    - &quot;**/*.go&quot;
+    - &quot;**/*.rb&quot;
+  hunk_regex: &quot;Set-Cookie\\b|res\\.cookie\\b|c\\.cookie\\b|reply\\.setCookie\\b|response\\.setHeader\\(.{0,40}cookie&quot;
+security: true
+confidence_floor: 0.7
+---
+
+A `Set-Cookie` for a session / auth / refresh / CSRF cookie is
+emitted without `HttpOnly` (JS-readable, stealable via XSS),
+without `Secure` (sent over plain HTTP), or without a `SameSite`
+attribute (allows CSRF via cross-site form submits in older
+browsers / strict-mode-off contexts).
+
+Flag when a cookie name containing `session|sid|auth|token|refresh`
+is set with options that omit `httpOnly: true`, `secure: true`, or
+`sameSite: &#x27;strict&#x27;|&#x27;lax&#x27;`.
+
+Suppress when:
+- the cookie is intentionally JS-readable (e.g. a CSRF token cookie
+  paired with a header-based defense pattern), but check that
+  `secure + sameSite` are still set
+- the environment is dev/test and the env-gated config explicitly
+  disables `secure` for local HTTP only
+- a wrapper / framework default applies these attributes globally
+  (look for the wrapper&#x27;s defaults before raising)
+</pre>
+<a class="action secondary" href="../prompts.html">Prompt Library</a>
+<a class="action" href="https://github.com/amatullah-a/Design-gallery/raw/refs/heads/main/designs/Prompt%20Library/code-review/references/patterns/cookie-missing-secure-httponly.md?download=1" download="cookie-missing-secure-httponly.md">Download file ↓</a>
+</article></main><footer class="wrap">Design Gallery · Prompt Library</footer></body></html>

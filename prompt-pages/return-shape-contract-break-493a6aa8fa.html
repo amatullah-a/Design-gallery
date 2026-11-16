@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Return Shape Contract Break · Prompt Library</title>
+<style>
+:root { color-scheme:light; font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;color:#202333;background:#f6f7fb; }
+* {box-sizing:border-box} body {margin:0} header {background:#fff;border-bottom:1px solid #e8eaf1}
+.wrap {width:min(900px,calc(100% - 32px));margin:0 auto} .head {padding:22px 0 20px}
+a {color:#5149c8} .back {text-decoration:none;font-size:.85rem;font-weight:650}
+h1 {margin:16px 0 6px;font-size:clamp(1.5rem,4vw,2.15rem);overflow-wrap:anywhere}
+.subtitle {margin:0;color:#777b8d;font-size:.85rem} main {padding:24px 0 44px}
+.content {background:#fff;border:1px solid #e5e7ef;border-radius:14px;padding:clamp(16px,3vw,28px)}
+pre {margin:0;white-space:pre-wrap;overflow-wrap:anywhere;font:.9rem/1.75 ui-monospace,SFMono-Regular,Consolas,monospace}
+.action {display:inline-flex;margin:18px 8px 0 0;padding:9px 12px;border-radius:8px;background:#5b52d6;color:#fff;text-decoration:none;font-size:.82rem;font-weight:650}
+.action.secondary {background:#eeedff;color:#5149c8} footer {padding:0 0 24px;color:#9397a6;text-align:center;font-size:.78rem}
+</style></head><body><header><div class="wrap head">
+<a class="back" href="../prompt-categories/code-review.html">← Back to Code Review</a>
+<h1>Return Shape Contract Break</h1><p class="subtitle">return-shape-contract-break.md</p>
+</div></header><main class="wrap"><article class="content"><pre>---
+name: return-shape-contract-break
+description: A function/endpoint that returns a structured object drops or renames a key/column its callers read
+triggers:
+  files:
+    - &quot;*.sql&quot;
+    - &quot;**/*.sql&quot;
+    - &quot;*.ts&quot;
+    - &quot;*.tsx&quot;
+    - &quot;*.js&quot;
+    - &quot;*.jsx&quot;
+    - &quot;**/*.ts&quot;
+    - &quot;**/*.tsx&quot;
+    - &quot;**/*.js&quot;
+    - &quot;**/*.jsx&quot;
+  hunk_regex: &quot;jsonb_build_object|json_build_object|jsonb_agg|json_agg|RETURNS\\s+(jsonb|json|TABLE|record|setof)|return\\s+\\{|res\\.json\\(|c\\.json\\(|\\bNextResponse\\.json\\(&quot;
+confidence_floor: 0.7
+---
+
+A function, RPC, or endpoint that returns a structured payload (a
+`jsonb_build_object` / `json_agg` in SQL, a returned object literal,
+a `res.json(...)` / `c.json(...)` / `NextResponse.json(...)` body, a
+`RETURNS TABLE`/composite shape) has the SET OF KEYS it returns
+CHANGED by this diff: a key or column present on the `-` side is gone
+or renamed on the `+` side. Removing or renaming a field from a
+payload something already consumes is a silent breaking change: every
+reader that referenced the old key now gets `undefined` / `NULL`, and
+nothing in the producing file errors, so the diff reads clean in
+isolation.
+
+This is the highest-recall way to miss a real bug on an otherwise
+tidy refactor. The evidence is the SHAPE of the returned document
+across the diff, not the logic inside it: compare the keys emitted on
+the `-` side against the `+` side, key by key.
+
+Flag when this diff:
+- removes a key from a `jsonb_build_object` / object literal /
+  response body that the previous version emitted, OR
+- renames such a key (old name vanishes, new name appears), OR
+- drops a column from a `RETURNS TABLE` / view / `SELECT *`-feeding
+  shape,
+
+AND you cannot see, within the diff, that every consumer of the old
+key was also removed. Trace the consumer when you can (search for the
+key name, the RPC/function name, or the endpoint path); a removed key
+that is still read downstream is a `major` breaking change. When the
+consumer is out of the diff and you cannot confirm it was updated,
+still raise it; default to &quot;this breaks a contract&quot; rather than
+assuming the caller was migrated.
+
+A strong corroborating signal: the diff also DELETES a comment or
+doc that asserted the contract (e.g. a comment promising keys are
+&quot;additive&quot; / &quot;kept for back-compat&quot; / &quot;stable&quot;). When a PR removes
+language that promised stability and the code then breaks it, that is
+a high-confidence flag; read the removed comments, not just the
+removed code.
+
+Suppress when:
+- the diff also removes (or the change description states it
+  removes) every consumer of the dropped key; a coordinated removal is not a
+  break,
+- the key is renamed AND the diff updates the readers in the same
+  change,
+- the payload is brand-new in this change (no prior `-` side), so there
+  is no existing contract to break,
+- the field is internal/never-serialized (e.g. a temp variable in a
+  CTE that was never part of the returned object).
+
+Severity: `major` when a removed/renamed key is consumed by code
+outside the diff (real break); `minor` when the consumer is unclear
+but the field plausibly mattered.
+</pre>
+<a class="action secondary" href="../prompts.html">Prompt Library</a>
+<a class="action" href="https://github.com/amatullah-a/Design-gallery/raw/refs/heads/main/designs/Prompt%20Library/code-review/references/patterns/return-shape-contract-break.md?download=1" download="return-shape-contract-break.md">Download file ↓</a>
+</article></main><footer class="wrap">Design Gallery · Prompt Library</footer></body></html>

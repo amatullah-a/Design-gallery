@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Supabase Security Definer No Search Path · Prompt Library</title>
+<style>
+:root { color-scheme:light; font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;color:#202333;background:#f6f7fb; }
+* {box-sizing:border-box} body {margin:0} header {background:#fff;border-bottom:1px solid #e8eaf1}
+.wrap {width:min(900px,calc(100% - 32px));margin:0 auto} .head {padding:22px 0 20px}
+a {color:#5149c8} .back {text-decoration:none;font-size:.85rem;font-weight:650}
+h1 {margin:16px 0 6px;font-size:clamp(1.5rem,4vw,2.15rem);overflow-wrap:anywhere}
+.subtitle {margin:0;color:#777b8d;font-size:.85rem} main {padding:24px 0 44px}
+.content {background:#fff;border:1px solid #e5e7ef;border-radius:14px;padding:clamp(16px,3vw,28px)}
+pre {margin:0;white-space:pre-wrap;overflow-wrap:anywhere;font:.9rem/1.75 ui-monospace,SFMono-Regular,Consolas,monospace}
+.action {display:inline-flex;margin:18px 8px 0 0;padding:9px 12px;border-radius:8px;background:#5b52d6;color:#fff;text-decoration:none;font-size:.82rem;font-weight:650}
+.action.secondary {background:#eeedff;color:#5149c8} footer {padding:0 0 24px;color:#9397a6;text-align:center;font-size:.78rem}
+</style></head><body><header><div class="wrap head">
+<a class="back" href="../prompt-categories/code-review.html">← Back to Code Review</a>
+<h1>Supabase Security Definer No Search Path</h1><p class="subtitle">supabase-security-definer-no-search-path.md</p>
+</div></header><main class="wrap"><article class="content"><pre>---
+name: supabase-security-definer-no-search-path
+description: A SECURITY DEFINER function omits a pinned SET search_path, allowing search_path hijack / privilege escalation
+triggers:
+  files:
+    - &quot;*.sql&quot;
+    - &quot;**/*.sql&quot;
+  hunk_regex: &#x27;SECURITY\s+DEFINER&#x27;
+confidence_floor: 0.7
+---
+
+A `SECURITY DEFINER` function runs with the privileges of its owner, not
+the caller. If it does not pin its `search_path`, a caller can set their
+own `search_path` so that unqualified object references inside the
+function resolve to attacker-controlled objects (a shadowing table,
+function, or operator) in a schema the caller can write, executed with
+the owner&#x27;s elevated rights. This is the Postgres privilege-escalation
+footgun that Supabase&#x27;s own linter flags as
+`function_search_path_mutable`.
+
+Flag a `CREATE [OR REPLACE] FUNCTION ... SECURITY DEFINER` added or
+modified in this diff that does NOT include a fixed
+`SET search_path = ...` (e.g. `SET search_path = pg_catalog, public` or
+`= &#x27;&#x27;` with fully-qualified references). Also flag when `search_path` is
+set to something a caller can still influence.
+
+Suppress when:
+- the function pins `SET search_path` to a fixed value, OR
+- every object reference in the body is already fully schema-qualified
+  AND `search_path` is set, OR
+- the function is `SECURITY INVOKER` (the default); invoker functions
+  run as the caller, so this escalation doesn&#x27;t apply.
+
+Severity: `major` (privilege escalation on a definer function).
+</pre>
+<a class="action secondary" href="../prompts.html">Prompt Library</a>
+<a class="action" href="https://github.com/amatullah-a/Design-gallery/raw/refs/heads/main/designs/Prompt%20Library/code-review/references/patterns/supabase-security-definer-no-search-path.md?download=1" download="supabase-security-definer-no-search-path.md">Download file ↓</a>
+</article></main><footer class="wrap">Design Gallery · Prompt Library</footer></body></html>

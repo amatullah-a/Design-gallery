@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Known Vulnerable Dependency · Prompt Library</title>
+<style>
+:root { color-scheme:light; font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;color:#202333;background:#f6f7fb; }
+* {box-sizing:border-box} body {margin:0} header {background:#fff;border-bottom:1px solid #e8eaf1}
+.wrap {width:min(900px,calc(100% - 32px));margin:0 auto} .head {padding:22px 0 20px}
+a {color:#5149c8} .back {text-decoration:none;font-size:.85rem;font-weight:650}
+h1 {margin:16px 0 6px;font-size:clamp(1.5rem,4vw,2.15rem);overflow-wrap:anywhere}
+.subtitle {margin:0;color:#777b8d;font-size:.85rem} main {padding:24px 0 44px}
+.content {background:#fff;border:1px solid #e5e7ef;border-radius:14px;padding:clamp(16px,3vw,28px)}
+pre {margin:0;white-space:pre-wrap;overflow-wrap:anywhere;font:.9rem/1.75 ui-monospace,SFMono-Regular,Consolas,monospace}
+.action {display:inline-flex;margin:18px 8px 0 0;padding:9px 12px;border-radius:8px;background:#5b52d6;color:#fff;text-decoration:none;font-size:.82rem;font-weight:650}
+.action.secondary {background:#eeedff;color:#5149c8} footer {padding:0 0 24px;color:#9397a6;text-align:center;font-size:.78rem}
+</style></head><body><header><div class="wrap head">
+<a class="back" href="../prompt-categories/code-review.html">← Back to Code Review</a>
+<h1>Known Vulnerable Dependency</h1><p class="subtitle">known-vulnerable-dependency.md</p>
+</div></header><main class="wrap"><article class="content"><pre>---
+name: known-vulnerable-dependency
+description: A declared library version has known publicly disclosed security vulnerabilities (CVEs) or active security advisories
+triggers:
+  files:
+    - &quot;package.json&quot;
+    - &quot;package-lock.json&quot;
+    - &quot;pnpm-lock.yaml&quot;
+    - &quot;yarn.lock&quot;
+    - &quot;requirements.txt&quot;
+    - &quot;Cargo.lock&quot;
+  hunk_regex: &quot;audit|cve|vulnerability&quot;
+confidence_floor: 0.90
+---
+
+A project dependency contains a version that matches an active, publicly disclosed Common Vulnerabilities and Exposures (CVE) identifier or package security advisory.
+
+### Detection Method
+1. Inspect `package.json` and lockfiles for known high-risk packages with unpatched security flaws.
+2. If `npm audit`, `pnpm audit`, `cargo audit`, or `pip-audit` can be safely executed or scanner logs are available, record the exact CVE / advisory ID.
+3. Validate whether the vulnerable function or module is actually reachable or imported within the codebase.
+
+### Why this matters
+- Vulnerable dependencies introduce remote code execution (RCE), SQL/command injection, prototype pollution, cross-site scripting (XSS), or authentication bypass directly into the application runtime.
+- Automated vulnerability scanners and automated exploit scripts routinely target known vulnerable library versions.
+
+### Calibrated Severity
+- **Critical**: Vulnerability has a published CVSS $\ge 9.0$, involves remote code execution (RCE), unauthenticated bypass, or is directly reachable in production code.
+- **Major**: Vulnerability has a CVSS $\ge 7.0$ (High severity) with feasible attack vectors.
+- **Minor**: Low/Moderate vulnerability or devDependency issue with zero production runtime exposure.
+
+### Suppression Conditions
+Suppress when:
+- The advisory strictly affects an optional sub-feature or CLI utility that is confirmed not to be packaged or invoked in the production build.
+- The advisory is for a pure build-time development tool (e.g. documentation generator) where untrusted input is never processed.
+</pre>
+<a class="action secondary" href="../prompts.html">Prompt Library</a>
+<a class="action" href="https://github.com/amatullah-a/Design-gallery/raw/refs/heads/main/designs/Prompt%20Library/code-review/references/patterns/known-vulnerable-dependency.md?download=1" download="known-vulnerable-dependency.md">Download file ↓</a>
+</article></main><footer class="wrap">Design Gallery · Prompt Library</footer></body></html>

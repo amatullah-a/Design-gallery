@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>React State Set In Render · Prompt Library</title>
+<style>
+:root { color-scheme:light; font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;color:#202333;background:#f6f7fb; }
+* {box-sizing:border-box} body {margin:0} header {background:#fff;border-bottom:1px solid #e8eaf1}
+.wrap {width:min(900px,calc(100% - 32px));margin:0 auto} .head {padding:22px 0 20px}
+a {color:#5149c8} .back {text-decoration:none;font-size:.85rem;font-weight:650}
+h1 {margin:16px 0 6px;font-size:clamp(1.5rem,4vw,2.15rem);overflow-wrap:anywhere}
+.subtitle {margin:0;color:#777b8d;font-size:.85rem} main {padding:24px 0 44px}
+.content {background:#fff;border:1px solid #e5e7ef;border-radius:14px;padding:clamp(16px,3vw,28px)}
+pre {margin:0;white-space:pre-wrap;overflow-wrap:anywhere;font:.9rem/1.75 ui-monospace,SFMono-Regular,Consolas,monospace}
+.action {display:inline-flex;margin:18px 8px 0 0;padding:9px 12px;border-radius:8px;background:#5b52d6;color:#fff;text-decoration:none;font-size:.82rem;font-weight:650}
+.action.secondary {background:#eeedff;color:#5149c8} footer {padding:0 0 24px;color:#9397a6;text-align:center;font-size:.78rem}
+</style></head><body><header><div class="wrap head">
+<a class="back" href="../prompt-categories/code-review.html">← Back to Code Review</a>
+<h1>React State Set In Render</h1><p class="subtitle">react-state-set-in-render.md</p>
+</div></header><main class="wrap"><article class="content"><pre>---
+name: react-state-set-in-render
+description: useState setter called during render body, infinite loop
+triggers:
+  files:
+    - &quot;*.tsx&quot;
+    - &quot;*.jsx&quot;
+    - &quot;**/*.tsx&quot;
+    - &quot;**/*.jsx&quot;
+  hunk_regex: &quot;\\bset[A-Z]\\w*\\s*\\(&quot;
+confidence_floor: 0.75
+---
+
+A `useState` setter called from the top-level render body (not inside
+an event handler, effect, or callback) triggers a re-render, which
+calls the component again, which calls the setter again: an infinite
+re-render. React 18+ throws &quot;Too many re-renders&quot; but only at runtime,
+and only when the path is actually hit; conditional set-in-render
+escapes static analysis.
+
+Flag a `setX(...)` call placed:
+- at the top level of a functional component body
+- inside an `if` / ternary / short-circuit that has a chance of
+  evaluating to true on first render
+
+Suppress when the call is inside:
+- a `useEffect` / `useLayoutEffect` body
+- a handler returned from JSX (`onClick={() =&gt; setX(...)}`)
+- a `useState` initial-value function (`useState(() =&gt; ...)`)
+- the conditional `if (cond) { setX(prev =&gt; ...) }` &quot;derive state from
+  props&quot; pattern, where `cond` compares the prop to existing state
+  and is provably guarded (this is the React-docs-blessed escape
+  hatch; raise only if the guard looks broken)
+</pre>
+<a class="action secondary" href="../prompts.html">Prompt Library</a>
+<a class="action" href="https://github.com/amatullah-a/Design-gallery/raw/refs/heads/main/designs/Prompt%20Library/code-review/references/patterns/react-state-set-in-render.md?download=1" download="react-state-set-in-render.md">Download file ↓</a>
+</article></main><footer class="wrap">Design Gallery · Prompt Library</footer></body></html>

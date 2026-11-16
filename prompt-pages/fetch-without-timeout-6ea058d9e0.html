@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fetch Without Timeout · Prompt Library</title>
+<style>
+:root { color-scheme:light; font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;color:#202333;background:#f6f7fb; }
+* {box-sizing:border-box} body {margin:0} header {background:#fff;border-bottom:1px solid #e8eaf1}
+.wrap {width:min(900px,calc(100% - 32px));margin:0 auto} .head {padding:22px 0 20px}
+a {color:#5149c8} .back {text-decoration:none;font-size:.85rem;font-weight:650}
+h1 {margin:16px 0 6px;font-size:clamp(1.5rem,4vw,2.15rem);overflow-wrap:anywhere}
+.subtitle {margin:0;color:#777b8d;font-size:.85rem} main {padding:24px 0 44px}
+.content {background:#fff;border:1px solid #e5e7ef;border-radius:14px;padding:clamp(16px,3vw,28px)}
+pre {margin:0;white-space:pre-wrap;overflow-wrap:anywhere;font:.9rem/1.75 ui-monospace,SFMono-Regular,Consolas,monospace}
+.action {display:inline-flex;margin:18px 8px 0 0;padding:9px 12px;border-radius:8px;background:#5b52d6;color:#fff;text-decoration:none;font-size:.82rem;font-weight:650}
+.action.secondary {background:#eeedff;color:#5149c8} footer {padding:0 0 24px;color:#9397a6;text-align:center;font-size:.78rem}
+</style></head><body><header><div class="wrap head">
+<a class="back" href="../prompt-categories/code-review.html">← Back to Code Review</a>
+<h1>Fetch Without Timeout</h1><p class="subtitle">fetch-without-timeout.md</p>
+</div></header><main class="wrap"><article class="content"><pre>---
+name: fetch-without-timeout
+description: Outbound HTTP request without timeout / abort signal, request thread hang
+triggers:
+  files:
+    - &quot;*.ts&quot;
+    - &quot;*.tsx&quot;
+    - &quot;*.js&quot;
+    - &quot;*.jsx&quot;
+    - &quot;*.mjs&quot;
+    - &quot;*.cjs&quot;
+    - &quot;**/*.ts&quot;
+    - &quot;**/*.tsx&quot;
+    - &quot;**/*.js&quot;
+    - &quot;**/*.jsx&quot;
+    - &quot;**/*.mjs&quot;
+    - &quot;**/*.cjs&quot;
+  hunk_regex: &quot;\\bfetch\\s*\\(|axios\\.(get|post|put|patch|delete|request)|got\\(|undici|ky\\(|node-fetch&quot;
+security: true
+confidence_floor: 0.7
+---
+
+A server-side outbound HTTP call (fetch / axios / got / ky / undici)
+is made without a timeout or `AbortSignal`. The upstream can take
+seconds to minutes to time out at the network layer; meanwhile the
+request handler is blocked, downstream callers stack up, and one
+slow third party can drag the whole API into cascading latency.
+
+Flag when:
+- the call is `fetch(url)` with no `signal:` option
+- `axios.get(...)` / `axios.request(...)` with no `timeout:` option
+- the call is to a third-party host (not the same service / not
+  localhost)
+
+Suppress when:
+- `signal: AbortSignal.timeout(N)` is passed
+- `timeout: N` is set
+- the project-wide HTTP client wrapper applies a default timeout
+  (look for the wrapper before raising)
+- the call is to a local sidecar / same-pod service where timeouts
+  are explicitly managed at the platform layer (rare in app code)
+</pre>
+<a class="action secondary" href="../prompts.html">Prompt Library</a>
+<a class="action" href="https://github.com/amatullah-a/Design-gallery/raw/refs/heads/main/designs/Prompt%20Library/code-review/references/patterns/fetch-without-timeout.md?download=1" download="fetch-without-timeout.md">Download file ↓</a>
+</article></main><footer class="wrap">Design Gallery · Prompt Library</footer></body></html>

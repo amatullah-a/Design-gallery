@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Auth Role From User Input · Prompt Library</title>
+<style>
+:root { color-scheme:light; font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;color:#202333;background:#f6f7fb; }
+* {box-sizing:border-box} body {margin:0} header {background:#fff;border-bottom:1px solid #e8eaf1}
+.wrap {width:min(900px,calc(100% - 32px));margin:0 auto} .head {padding:22px 0 20px}
+a {color:#5149c8} .back {text-decoration:none;font-size:.85rem;font-weight:650}
+h1 {margin:16px 0 6px;font-size:clamp(1.5rem,4vw,2.15rem);overflow-wrap:anywhere}
+.subtitle {margin:0;color:#777b8d;font-size:.85rem} main {padding:24px 0 44px}
+.content {background:#fff;border:1px solid #e5e7ef;border-radius:14px;padding:clamp(16px,3vw,28px)}
+pre {margin:0;white-space:pre-wrap;overflow-wrap:anywhere;font:.9rem/1.75 ui-monospace,SFMono-Regular,Consolas,monospace}
+.action {display:inline-flex;margin:18px 8px 0 0;padding:9px 12px;border-radius:8px;background:#5b52d6;color:#fff;text-decoration:none;font-size:.82rem;font-weight:650}
+.action.secondary {background:#eeedff;color:#5149c8} footer {padding:0 0 24px;color:#9397a6;text-align:center;font-size:.78rem}
+</style></head><body><header><div class="wrap head">
+<a class="back" href="../prompt-categories/code-review.html">← Back to Code Review</a>
+<h1>Auth Role From User Input</h1><p class="subtitle">auth-role-from-user-input.md</p>
+</div></header><main class="wrap"><article class="content"><pre>---
+name: auth-role-from-user-input
+description: Role / permission / isAdmin value taken from request body or query
+triggers:
+  files:
+    - &quot;*.ts&quot;
+    - &quot;*.tsx&quot;
+    - &quot;*.js&quot;
+    - &quot;*.jsx&quot;
+    - &quot;*.mjs&quot;
+    - &quot;*.cjs&quot;
+    - &quot;*.py&quot;
+    - &quot;*.go&quot;
+    - &quot;*.rb&quot;
+    - &quot;**/*.ts&quot;
+    - &quot;**/*.tsx&quot;
+    - &quot;**/*.js&quot;
+    - &quot;**/*.jsx&quot;
+    - &quot;**/*.mjs&quot;
+    - &quot;**/*.cjs&quot;
+    - &quot;**/*.py&quot;
+    - &quot;**/*.go&quot;
+    - &quot;**/*.rb&quot;
+  hunk_regex: &quot;(role|permission|isAdmin|is_admin|tier|plan|scopes?)\\b&quot;
+security: true
+confidence_floor: 0.75
+---
+
+A role / permission / `isAdmin` / tier / plan value is being read
+from request input (`req.body`, `req.query`, form data, JSON
+payload) and used for an authorization check OR written to a
+persistent record. This is the classic privilege-escalation bug:
+the attacker passes `{&quot;role&quot;: &quot;admin&quot;}` in the POST and the system
+trusts it.
+
+Flag when:
+- a string/bool from request input is assigned to a `role` /
+  `permission` / `isAdmin` column on an `INSERT` / `UPDATE`
+- a check like `if (req.body.role === &#x27;admin&#x27;)` gates an action
+- a JWT / session is created with a `role` claim copied from input
+
+Suppress when:
+- the role assignment is explicitly gated by an admin-only
+  authorization check earlier in the function (look for
+  `requireRole(&#x27;admin&#x27;)` / `ctx.user.isAdmin`)
+- the input goes through an allow-list AND the user is already an
+  admin (e.g. an admin promoting another user)
+- the value is being compared to derive a STRING used for routing /
+  filtering (not for an authorization decision)
+</pre>
+<a class="action secondary" href="../prompts.html">Prompt Library</a>
+<a class="action" href="https://github.com/amatullah-a/Design-gallery/raw/refs/heads/main/designs/Prompt%20Library/code-review/references/patterns/auth-role-from-user-input.md?download=1" download="auth-role-from-user-input.md">Download file ↓</a>
+</article></main><footer class="wrap">Design Gallery · Prompt Library</footer></body></html>

@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Crypto Jwt Verify Without Algo Allowlist · Prompt Library</title>
+<style>
+:root { color-scheme:light; font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;color:#202333;background:#f6f7fb; }
+* {box-sizing:border-box} body {margin:0} header {background:#fff;border-bottom:1px solid #e8eaf1}
+.wrap {width:min(900px,calc(100% - 32px));margin:0 auto} .head {padding:22px 0 20px}
+a {color:#5149c8} .back {text-decoration:none;font-size:.85rem;font-weight:650}
+h1 {margin:16px 0 6px;font-size:clamp(1.5rem,4vw,2.15rem);overflow-wrap:anywhere}
+.subtitle {margin:0;color:#777b8d;font-size:.85rem} main {padding:24px 0 44px}
+.content {background:#fff;border:1px solid #e5e7ef;border-radius:14px;padding:clamp(16px,3vw,28px)}
+pre {margin:0;white-space:pre-wrap;overflow-wrap:anywhere;font:.9rem/1.75 ui-monospace,SFMono-Regular,Consolas,monospace}
+.action {display:inline-flex;margin:18px 8px 0 0;padding:9px 12px;border-radius:8px;background:#5b52d6;color:#fff;text-decoration:none;font-size:.82rem;font-weight:650}
+.action.secondary {background:#eeedff;color:#5149c8} footer {padding:0 0 24px;color:#9397a6;text-align:center;font-size:.78rem}
+</style></head><body><header><div class="wrap head">
+<a class="back" href="../prompt-categories/code-review.html">← Back to Code Review</a>
+<h1>Crypto Jwt Verify Without Algo Allowlist</h1><p class="subtitle">crypto-jwt-verify-without-algo-allowlist.md</p>
+</div></header><main class="wrap"><article class="content"><pre>---
+name: crypto-jwt-verify-without-algo-allowlist
+description: jwt.verify called without an explicit algorithms allowlist
+triggers:
+  files:
+    - &quot;*.ts&quot;
+    - &quot;*.tsx&quot;
+    - &quot;*.js&quot;
+    - &quot;*.jsx&quot;
+    - &quot;*.mjs&quot;
+    - &quot;*.cjs&quot;
+    - &quot;**/*.ts&quot;
+    - &quot;**/*.tsx&quot;
+    - &quot;**/*.js&quot;
+    - &quot;**/*.jsx&quot;
+    - &quot;**/*.mjs&quot;
+    - &quot;**/*.cjs&quot;
+  hunk_regex: &quot;jwt(\\.|.{0,40})verify\\s*\\(|jsonwebtoken|jose&quot;
+security: true
+confidence_floor: 0.75
+---
+
+A JWT is verified without passing an explicit `algorithms` option.
+The `jsonwebtoken` library historically accepted whatever the token
+header declared, which lets an attacker switch to `alg: &quot;none&quot;`
+(no signature) or downgrade an RSA-signed token to an HMAC verify
+where the public key gets reused as the HMAC secret. Recent
+versions tightened defaults but the attack returns the moment the
+project pins an older version or uses an alternate library with
+permissive defaults.
+
+Flag when `jwt.verify(token, secret)` is called without `{
+algorithms: [&#x27;HS256&#x27;|&#x27;RS256&#x27;|...] }` in the third argument.
+
+Suppress when:
+- `algorithms: [...]` is passed (with a concrete allow-list, not
+  e.g. `[&#x27;none&#x27;, ...]`)
+- the library is `jose` and the call form already enforces alg via
+  the key object&#x27;s `alg` field
+- the verify is inside a wrapper that lints algorithms internally
+  (look for the wrapper definition before raising)
+</pre>
+<a class="action secondary" href="../prompts.html">Prompt Library</a>
+<a class="action" href="https://github.com/amatullah-a/Design-gallery/raw/refs/heads/main/designs/Prompt%20Library/code-review/references/patterns/crypto-jwt-verify-without-algo-allowlist.md?download=1" download="crypto-jwt-verify-without-algo-allowlist.md">Download file ↓</a>
+</article></main><footer class="wrap">Design Gallery · Prompt Library</footer></body></html>

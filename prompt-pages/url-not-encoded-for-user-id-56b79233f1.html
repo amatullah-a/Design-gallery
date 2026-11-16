@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Url Not Encoded For User Id · Prompt Library</title>
+<style>
+:root { color-scheme:light; font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;color:#202333;background:#f6f7fb; }
+* {box-sizing:border-box} body {margin:0} header {background:#fff;border-bottom:1px solid #e8eaf1}
+.wrap {width:min(900px,calc(100% - 32px));margin:0 auto} .head {padding:22px 0 20px}
+a {color:#5149c8} .back {text-decoration:none;font-size:.85rem;font-weight:650}
+h1 {margin:16px 0 6px;font-size:clamp(1.5rem,4vw,2.15rem);overflow-wrap:anywhere}
+.subtitle {margin:0;color:#777b8d;font-size:.85rem} main {padding:24px 0 44px}
+.content {background:#fff;border:1px solid #e5e7ef;border-radius:14px;padding:clamp(16px,3vw,28px)}
+pre {margin:0;white-space:pre-wrap;overflow-wrap:anywhere;font:.9rem/1.75 ui-monospace,SFMono-Regular,Consolas,monospace}
+.action {display:inline-flex;margin:18px 8px 0 0;padding:9px 12px;border-radius:8px;background:#5b52d6;color:#fff;text-decoration:none;font-size:.82rem;font-weight:650}
+.action.secondary {background:#eeedff;color:#5149c8} footer {padding:0 0 24px;color:#9397a6;text-align:center;font-size:.78rem}
+</style></head><body><header><div class="wrap head">
+<a class="back" href="../prompt-categories/code-review.html">← Back to Code Review</a>
+<h1>Url Not Encoded For User Id</h1><p class="subtitle">url-not-encoded-for-user-id.md</p>
+</div></header><main class="wrap"><article class="content"><pre>---
+name: url-not-encoded-for-user-id
+description: URL string built by concatenating a user-supplied identifier without encodeURIComponent
+triggers:
+  files:
+    - &quot;*.ts&quot;
+    - &quot;*.tsx&quot;
+    - &quot;*.js&quot;
+    - &quot;*.jsx&quot;
+    - &quot;*.mjs&quot;
+    - &quot;*.cjs&quot;
+    - &quot;**/*.ts&quot;
+    - &quot;**/*.tsx&quot;
+    - &quot;**/*.js&quot;
+    - &quot;**/*.jsx&quot;
+    - &quot;**/*.mjs&quot;
+    - &quot;**/*.cjs&quot;
+  hunk_regex: &quot;https?://|`/[a-z]|/api/|/users?/|/teams?/|/projects?/|\\?[a-z_]+=&quot;
+security: true
+confidence_floor: 0.8
+---
+
+A URL is built by string concatenation or template-string
+interpolation of an identifier (uuid, slug, user id, email,
+search query, encoded token) without `encodeURIComponent`. When
+the substituted value contains a reserved character (`#`, `?`,
+`&amp;`, `/`, `=`, `+`, space) the URL silently breaks: the trailing
+path becomes a fragment, query params merge into the previous one,
+or the slash splits the route. Worst case it&#x27;s a one-character
+SSRF if the substituted value can contain `@` (rewrites the host)
+or a `..` segment that escapes the intended subdirectory.
+
+Flag when a URL string in this diff:
+- is built with `+ var`, `${var}`, or `concat(var)` where `var` is
+  named like an identifier (`id`, `userId`, `slug`, `email`,
+  `token`, `name`, `query`, `searchTerm`, `*_id`, `*_uuid`),
+- AND the substitution happens in a path segment or query value
+  position,
+- AND there is no `encodeURIComponent(var)` / `encodeURI(var)` /
+  `new URL(...).searchParams.set(...)` / equivalent encode call
+  on the way in,
+- AND `var` is not a hardcoded constant from earlier in the
+  function.
+
+Examples that should fire:
+- `` `${baseUrl}/users/${userId}` `` where userId can hold `+`
+- `` `https://analytics.example.com/people/${authUserId}` ``
+- `fetch(&quot;/api/teams/&quot; + slug + &quot;/members&quot;)`
+- `` `?q=${searchTerm}` ``
+
+Suppress when:
+- the substitution is wrapped in `encodeURIComponent(...)`,
+- the URL is built with `url.searchParams.set(name, value)`;
+  the URLSearchParams encoder handles reserved chars (including
+  `/`, `=`, `&amp;`) in the value,
+- the value is encoded per-segment first and only then assembled
+  into a pathname (e.g. `url.pathname = &quot;/users/&quot; +
+  encodeURIComponent(userId)`),
+- the substituted value is a literal / module-level constant /
+  enum member (compile-time-known safe),
+- the substituted value is already known to be opaque-encoded
+  upstream (e.g. JWT, base64url); note the encoding source if
+  the diff makes that visible.
+
+DO NOT suppress on `new URL(...)` alone. The URL constructor
+parses; it does NOT encode reserved characters inside a
+pre-assembled path. Likewise `url.pathname = &quot;/users/&quot; + userId`
+does NOT encode `/` (or other reserved chars) within the path
+segment: if the substituted `userId` contains a `/`, the route
+still splits exactly as the lens is meant to catch. The
+URL-class suppression only applies when the encoding happens at
+the per-segment / per-param boundary, not at pathname assignment
+time.
+
+Severity: `minor` for display URLs that just break visually,
+`major` when the unencoded value reaches the network layer and
+could redirect a request to a different host or path (the `..`
+and `@` escape cases).
+</pre>
+<a class="action secondary" href="../prompts.html">Prompt Library</a>
+<a class="action" href="https://github.com/amatullah-a/Design-gallery/raw/refs/heads/main/designs/Prompt%20Library/code-review/references/patterns/url-not-encoded-for-user-id.md?download=1" download="url-not-encoded-for-user-id.md">Download file ↓</a>
+</article></main><footer class="wrap">Design Gallery · Prompt Library</footer></body></html>

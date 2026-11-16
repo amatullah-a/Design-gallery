@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Unpinned Dependency Version · Prompt Library</title>
+<style>
+:root { color-scheme:light; font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;color:#202333;background:#f6f7fb; }
+* {box-sizing:border-box} body {margin:0} header {background:#fff;border-bottom:1px solid #e8eaf1}
+.wrap {width:min(900px,calc(100% - 32px));margin:0 auto} .head {padding:22px 0 20px}
+a {color:#5149c8} .back {text-decoration:none;font-size:.85rem;font-weight:650}
+h1 {margin:16px 0 6px;font-size:clamp(1.5rem,4vw,2.15rem);overflow-wrap:anywhere}
+.subtitle {margin:0;color:#777b8d;font-size:.85rem} main {padding:24px 0 44px}
+.content {background:#fff;border:1px solid #e5e7ef;border-radius:14px;padding:clamp(16px,3vw,28px)}
+pre {margin:0;white-space:pre-wrap;overflow-wrap:anywhere;font:.9rem/1.75 ui-monospace,SFMono-Regular,Consolas,monospace}
+.action {display:inline-flex;margin:18px 8px 0 0;padding:9px 12px;border-radius:8px;background:#5b52d6;color:#fff;text-decoration:none;font-size:.82rem;font-weight:650}
+.action.secondary {background:#eeedff;color:#5149c8} footer {padding:0 0 24px;color:#9397a6;text-align:center;font-size:.78rem}
+</style></head><body><header><div class="wrap head">
+<a class="back" href="../prompt-categories/code-review.html">← Back to Code Review</a>
+<h1>Unpinned Dependency Version</h1><p class="subtitle">unpinned-dependency-version.md</p>
+</div></header><main class="wrap"><article class="content"><pre>---
+name: unpinned-dependency-version
+description: A dependency is declared using a wildcard (*), &#x27;latest&#x27;, or unbounded version constraint, leading to non-deterministic builds
+triggers:
+  files:
+    - &quot;package.json&quot;
+    - &quot;requirements.txt&quot;
+    - &quot;Pipfile&quot;
+    - &quot;Cargo.toml&quot;
+  hunk_regex: &quot;\&quot;\\*\&quot;|\&quot;latest\&quot;|&gt;=0\\.&quot;
+confidence_floor: 0.85
+---
+
+A dependency in a package manifest is specified with an unbounded wildcard (`*`), tag (`latest`), or loose unbounded range instead of a deterministic semver range (e.g. `^1.2.3`, `~1.2.3`, or exact `1.2.3`).
+
+### Why this matters
+- **Non-Deterministic Builds**: Two consecutive CI builds or developer installs may resolve completely different codebases if upstream publishes a breaking major release.
+- **Supply Chain Risks**: Wildcard or `latest` tags instantly pull newly published upstream packages, increasing exposure to supply-chain attacks or compromised upstream releases before they are vetted.
+- **Debugging Complexity**: Production crashes cannot be reproduced reliably if the installed package version silently drifts.
+
+### Calibrated Severity
+- **Minor**: Wildcard or unbounded version used in production dependencies (`dependencies`).
+- **Nitpick**: Unpinned or `latest` tag used in development dependencies (`devDependencies`).
+
+### Suppression Conditions
+Suppress when:
+- The package is an internal workspace package referenced within a monorepo (`workspace:*`).
+</pre>
+<a class="action secondary" href="../prompts.html">Prompt Library</a>
+<a class="action" href="https://github.com/amatullah-a/Design-gallery/raw/refs/heads/main/designs/Prompt%20Library/code-review/references/patterns/unpinned-dependency-version.md?download=1" download="unpinned-dependency-version.md">Download file ↓</a>
+</article></main><footer class="wrap">Design Gallery · Prompt Library</footer></body></html>

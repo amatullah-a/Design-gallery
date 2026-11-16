@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Async Promise All Swallows Errors · Prompt Library</title>
+<style>
+:root { color-scheme:light; font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;color:#202333;background:#f6f7fb; }
+* {box-sizing:border-box} body {margin:0} header {background:#fff;border-bottom:1px solid #e8eaf1}
+.wrap {width:min(900px,calc(100% - 32px));margin:0 auto} .head {padding:22px 0 20px}
+a {color:#5149c8} .back {text-decoration:none;font-size:.85rem;font-weight:650}
+h1 {margin:16px 0 6px;font-size:clamp(1.5rem,4vw,2.15rem);overflow-wrap:anywhere}
+.subtitle {margin:0;color:#777b8d;font-size:.85rem} main {padding:24px 0 44px}
+.content {background:#fff;border:1px solid #e5e7ef;border-radius:14px;padding:clamp(16px,3vw,28px)}
+pre {margin:0;white-space:pre-wrap;overflow-wrap:anywhere;font:.9rem/1.75 ui-monospace,SFMono-Regular,Consolas,monospace}
+.action {display:inline-flex;margin:18px 8px 0 0;padding:9px 12px;border-radius:8px;background:#5b52d6;color:#fff;text-decoration:none;font-size:.82rem;font-weight:650}
+.action.secondary {background:#eeedff;color:#5149c8} footer {padding:0 0 24px;color:#9397a6;text-align:center;font-size:.78rem}
+</style></head><body><header><div class="wrap head">
+<a class="back" href="../prompt-categories/code-review.html">← Back to Code Review</a>
+<h1>Async Promise All Swallows Errors</h1><p class="subtitle">async-promise-all-swallows-errors.md</p>
+</div></header><main class="wrap"><article class="content"><pre>---
+name: async-promise-all-swallows-errors
+description: Promise.all over fire-and-forget side effects loses partial failures
+triggers:
+  files:
+    - &quot;*.ts&quot;
+    - &quot;*.tsx&quot;
+    - &quot;*.js&quot;
+    - &quot;*.jsx&quot;
+    - &quot;*.mjs&quot;
+    - &quot;*.cjs&quot;
+    - &quot;**/*.ts&quot;
+    - &quot;**/*.tsx&quot;
+    - &quot;**/*.js&quot;
+    - &quot;**/*.jsx&quot;
+    - &quot;**/*.mjs&quot;
+    - &quot;**/*.cjs&quot;
+  hunk_regex: &quot;Promise\\.all\\s*\\(&quot;
+confidence_floor: 0.7
+---
+
+`Promise.all([...])` rejects on the FIRST rejection and silently
+discards the results of every later promise, even ones that
+succeeded after rejection. When the array members are independent
+side-effects (insert N rows, fire N webhooks, send N emails), the
+caller only sees one error but several side-effects may have run
+and several may have silently not run. Recovery / retry becomes
+impossible because the caller can&#x27;t tell which ones happened.
+
+Flag a `Promise.all([...])` where each item is an INDEPENDENT
+side-effect (call to db/insert, http POST, message publish, file
+write) and the caller doesn&#x27;t:
+- use `Promise.allSettled` to inspect each result, OR
+- wrap each item in `.catch` to translate rejections into per-item
+  status
+
+Suppress when:
+- the items are reads (the all-or-nothing semantic matches &quot;I need
+  every value to proceed&quot;)
+- the wrapper IS `Promise.allSettled`
+- the items are wrapped individually with `.catch` so the all sees
+  only fulfilled promises
+</pre>
+<a class="action secondary" href="../prompts.html">Prompt Library</a>
+<a class="action" href="https://github.com/amatullah-a/Design-gallery/raw/refs/heads/main/designs/Prompt%20Library/code-review/references/patterns/async-promise-all-swallows-errors.md?download=1" download="async-promise-all-swallows-errors.md">Download file ↓</a>
+</article></main><footer class="wrap">Design Gallery · Prompt Library</footer></body></html>

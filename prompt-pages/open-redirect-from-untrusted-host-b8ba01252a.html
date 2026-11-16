@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Open Redirect From Untrusted Host · Prompt Library</title>
+<style>
+:root { color-scheme:light; font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;color:#202333;background:#f6f7fb; }
+* {box-sizing:border-box} body {margin:0} header {background:#fff;border-bottom:1px solid #e8eaf1}
+.wrap {width:min(900px,calc(100% - 32px));margin:0 auto} .head {padding:22px 0 20px}
+a {color:#5149c8} .back {text-decoration:none;font-size:.85rem;font-weight:650}
+h1 {margin:16px 0 6px;font-size:clamp(1.5rem,4vw,2.15rem);overflow-wrap:anywhere}
+.subtitle {margin:0;color:#777b8d;font-size:.85rem} main {padding:24px 0 44px}
+.content {background:#fff;border:1px solid #e5e7ef;border-radius:14px;padding:clamp(16px,3vw,28px)}
+pre {margin:0;white-space:pre-wrap;overflow-wrap:anywhere;font:.9rem/1.75 ui-monospace,SFMono-Regular,Consolas,monospace}
+.action {display:inline-flex;margin:18px 8px 0 0;padding:9px 12px;border-radius:8px;background:#5b52d6;color:#fff;text-decoration:none;font-size:.82rem;font-weight:650}
+.action.secondary {background:#eeedff;color:#5149c8} footer {padding:0 0 24px;color:#9397a6;text-align:center;font-size:.78rem}
+</style></head><body><header><div class="wrap head">
+<a class="back" href="../prompt-categories/code-review.html">← Back to Code Review</a>
+<h1>Open Redirect From Untrusted Host</h1><p class="subtitle">open-redirect-from-untrusted-host.md</p>
+</div></header><main class="wrap"><article class="content"><pre>---
+name: open-redirect-from-untrusted-host
+description: HTTP redirect using a URL/host taken from query / body without allow-list
+triggers:
+  files:
+    - &quot;*.ts&quot;
+    - &quot;*.tsx&quot;
+    - &quot;*.js&quot;
+    - &quot;*.jsx&quot;
+    - &quot;*.mjs&quot;
+    - &quot;*.cjs&quot;
+    - &quot;*.py&quot;
+    - &quot;*.go&quot;
+    - &quot;*.rb&quot;
+    - &quot;*.java&quot;
+    - &quot;*.kt&quot;
+    - &quot;**/*.ts&quot;
+    - &quot;**/*.tsx&quot;
+    - &quot;**/*.js&quot;
+    - &quot;**/*.jsx&quot;
+    - &quot;**/*.mjs&quot;
+    - &quot;**/*.cjs&quot;
+    - &quot;**/*.py&quot;
+    - &quot;**/*.go&quot;
+    - &quot;**/*.rb&quot;
+    - &quot;**/*.java&quot;
+    - &quot;**/*.kt&quot;
+  hunk_regex: &quot;redirect\\s*\\(|res\\.redirect\\b|Location:|http\\.Redirect\\b|return\\s+redirect|RedirectView\\b|return\\s+[\&quot;&#x27;]redirect:&quot;
+security: true
+confidence_floor: 0.7
+---
+
+A redirect target is constructed from request input (`?next=...`,
+`?returnTo=...`, form field, JSON body) without validating that the
+host belongs to a known allow-list. Phishing attacks chain
+`/login?next=https://attacker.example/fake-login` so the trusted
+host is the first thing the user sees in the URL bar.
+
+Flag when a `redirect(url)` / `res.redirect(url)` / `Location:`
+header is built from a request-derived URL string that isn&#x27;t
+validated against a list of allowed hosts or constrained to a
+relative path.
+
+Suppress when:
+- the redirect target is constrained to a same-origin pathname
+  (starts with `/`, no scheme / host)
+- the URL is parsed and checked against an allow-list of hosts
+  before redirect
+- the value is the OUTPUT of a server-controlled flow (OAuth state
+  recovered from session, post-payment URL from a payment provider
+  the project controls)
+
+In Java and Kotlin the idiom is `response.sendRedirect(target)`, a
+Spring `RedirectView`, or a controller returning the string
+`&quot;redirect:&quot;` with a request value appended.
+</pre>
+<a class="action secondary" href="../prompts.html">Prompt Library</a>
+<a class="action" href="https://github.com/amatullah-a/Design-gallery/raw/refs/heads/main/designs/Prompt%20Library/code-review/references/patterns/open-redirect-from-untrusted-host.md?download=1" download="open-redirect-from-untrusted-host.md">Download file ↓</a>
+</article></main><footer class="wrap">Design Gallery · Prompt Library</footer></body></html>
